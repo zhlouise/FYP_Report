@@ -1,4 +1,5 @@
-\documentclass[12pt, a4paper]{report}
+\documentclass[12pt, a4paper]{article}
+
 
 % --- Packages ---
 \usepackage[utf8]{inputenc}
@@ -11,13 +12,16 @@
 \usepackage{cite}
 \usepackage{graphicx}
 
+
 % --- Settings ---
 \doublespacing % Applies double spacing to the document
-\chapterfont{\normalsize}
 \sectionfont{\normalsize}
-\subsectionfont{\normalsize}
+\subsectionfont{\normalsize\it\bfseries}
+\subsubsectionfont{\normalsize\it}
+
 
 \begin{document}
+
 
 % --- Title Page ---
 \begin{titlepage}
@@ -30,45 +34,168 @@
     {\huge \textbf{Intelligent UAV Systems for GNSS-Based Remote Sensing on
     Vegetation} \par}
     \vfill
-    {\large [AAE] ZHOU Jiayi (22099961D) \par} 
-    {\large [AAE] MAHMUD Md Sahat (22097159D) \par} 
-    {\large [EEE] GAMAGE Sashenka (22097129D) \par} 
-    {\large [ME] TAN Qing Lin (22101126D) \par}
+    {\large [AAE] ZHOU Jiayi (22099961D) \par} {\large [AAE] MAHMUD Md Sahat
+    (22097159D) \par} {\large [EEE] GAMAGE Sashenka (22097129D) \par} {\large
+    [ME] TAN Qing Lin (22101126D) \par}
     \vfill
-    {\large \textbf{Chief Supervisor: } [AAE] Prof. Guohao ZHANG \par} 
-    {\large \textbf{Co-Supervisor: } [AAE] Prof. Li-Ta HSU \par}
+    {\large \textbf{Chief Supervisor: } [AAE] Prof. Guohao ZHANG \par} {\large
+    \textbf{Co-Supervisor: } [AAE] Prof. Li-Ta HSU \par}
     \vspace{1cm}
     {\large \textbf{Date of Submission: } 2026 January 18 \par}
 \end{titlepage}
+
 
 % --- Table of Contents ---
 \pagenumbering{roman}
 \tableofcontents
 \newpage
 
+
 % --- Main Content ---
 \pagenumbering{arabic}
 
-\chapter{Introduction}
-This is your first chapter. Because the document is set to \texttt{double
-spacing}, all text here will automatically follow the 2.5cm margin and line
-spacing requirements.
 
-\section{Background}
-Insert your background information here. To compile this, you can use online
-editors like [Overleaf](www.overleaf.com) or local distributions like
-[MiKTeX](miktex.org).
+% --- Abstract ---
+\section{Abstract}
+Placeholder text
 
-\chapter{Methodology}
-Detail your methods in this section. 
+% --- Introduction ---
+\section{Introduction}
+Placeholder text
 
-\section{Data Collection}
-Information about how data was gathered goes here.
 
-\chapter{Results}
-Present your findings here.
+% --- Literature Review ---
+\section{Literature Review}
+Placeholder text
 
-\chapter{Conclusion}
-Summarize your report and final thoughts.
+\subsection{Path Planning}
+Placeholder text
+
+\subsection{GNSS-R}
+Placeholder text
+
+\subsection{Machine Learning}
+Placeholder text
+
+\subsection{LiDAR SLAM}
+Placeholder text
+
+
+% --- Methodology ---
+\section{Methodology}
+Placeholder text
+
+\subsection{UAV Platform}
+Placeholder text
+
+\subsection{System Architecture}
+Placeholder text
+
+\subsection{Path Planning}
+Placeholder text
+
+\subsection{GNSS-R}
+Placeholder text
+
+\subsection{Machine Learning}
+Placeholder text
+
+\subsection{LiDAR SLAM}
+Placeholder text
+
+
+% --- Experiments ---
+\section{Experiments}
+Placeholder text
+
+\subsection{Experiment Workflow}
+Placeholder text
+
+\subsection{Summary of Experiments Conducted}
+Placeholder text
+
+\subsection{Key Experiment 1}
+Placeholder text
+
+\subsection{Key Experiment 2}
+Placeholder text
+
+
+% --- Results and Discussion ---
+\section{Results and Discussion}
+Placeholder text
+
+\subsection{Path Planning}
+Placeholder text
+
+\subsection{GNSS-R}
+Placeholder text
+
+\subsection{Machine Learning}
+Placeholder text
+
+\subsection{LiDAR SLAM}
+Placeholder text
+
+
+% --- Conclusion ---
+\section{Conclusion}
+Placeholder text
+
+
+% --- Future Works ---
+\section{Future Works}
+Placeholder text
+
+\subsection{Path Planning}
+Placeholder text
+
+\subsection{GNSS-R}
+Placeholder text
+
+\subsection{Machine Learning}
+Placeholder text
+
+\subsection{LiDAR SLAM}
+Placeholder text
+
+
+% --- Project Management ---
+\section{Project Management}
+Placeholder text
+
+\subsection{Gantt Chart}
+Placeholder text
+
+\subsection{Project Difficulties and Solutions}
+Placeholder text
+
+\subsubsection{Path Planning}
+Placeholder text
+
+\subsubsection{GNSS-R}
+Placeholder text
+
+\subsubsection{Machine Learning}
+Placeholder text
+
+\subsubsection{LiDAR SLAM}
+Placeholder text
+
+
+% --- Appendix ---
+\newpage
+\addcontentsline{toc}{section}{Appendix}
+\section*{Appendix}
+Placeholder text
+
+
+% --- References ---
+\newpage
+\addcontentsline{toc}{section}{References}
+\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{References.bib} 
+
 
 \end{document}
