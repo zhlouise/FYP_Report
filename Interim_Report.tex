@@ -133,7 +133,8 @@ remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
 remote sensing systems such as an UAV. 
 
 \hl{May need some intro for path planning and lidar here. The above is from
-Louise's project proposal, so need further editing.}
+Louise's project proposal, so need further editing. (Also need to mention 
+the full name of SLAM somewhere)}
 
 In this project, the technique of GNSS-R will be integrated onto an UAV platform
 to achieve an intelligent and structured remote sensing system for vegetation
@@ -159,13 +160,74 @@ work, and Section 9 summarizes project management details.
 
 % --- Literature Review ---
 \section{Literature Review}
-Placeholder text
+To achieve the project objectives, this literature review comprehensively examines
+the contemporary research in four domains, each associated with one project objective.
+\hl{First, existing path planning methodologies are reviewed to \dots}
+Subsequently, the existing techniques of GNSS-R are explored, with a focus on its
+prior applications in vegetation parameter retrieval. 
+\hl{Then, machine learning \dots}
+\hl{Finally, LiDAR-based SLAM techniques \dots}
+Consequently, this review identifies the existing gaps in each domain for the 
+objective of vegetation monitoring, which will inform the integrated project 
+methodologies.
 
 \subsection{Path Planning}
 Placeholder text
 
 \subsection{GNSS-R}
-Placeholder text
+The concept of using GNSS-R for remote sensing was first proposed in 1993, where
+the correlation between direct and scattered GNSS signals were proven promising
+for the application of ocean altimetry \cite{MartnNeira1993APR}. Today, apart
+from the originally proposed application, GNSS-R techniques has been extensively
+used for Earth observations and land information retrieval, including ocean
+salinity, soil moisture, and ice thickness \cite{RodriguezAlvarez2011}. However,
+research on vegetation parameter retrieval remains limited to preliminary
+analyses \cite{Jia2018}. 
+
+In a previous study, the capabilities of monitoring vegetation through GNSS-R
+were demonstrated through a theoretical simulation of GNSS scattering
+characteristics \cite{Ferrazzoli2011}. Furthermore, this study revealed that the
+sensitivity of GNSS-R signals can be influenced by incidence angle, soil
+parameters, and tree size, while signals with lower elevation angles and RL
+polarization (transmission of right-hand circular polarization (RHCP) signal,
+reception of left-hand circular polarization (LHCP) signal) appeared to be ideal
+for forest monitoring \cite{Ferrazzoli2011}. In another study, the polarization
+scattering properties of GNSS-R signals in forest canopies were modeled, where
+simulations revealed that tree trunk scattering effects would dominate total
+scattering response, while satellite azimuth angles are significantly correlated
+to the signal polarization \cite{Wu2014}. 
+
+Aside from simulated approaches, empirical or semi-empirical studies regarding GNSS-R
+remote sensing of vegetation were also reviewed. In a study by Yueh et al.,
+GNSS-R data onboard the Cyclone GNSS (CYGNSS) satellite were analyzed against
+the vegetation water content estimated through the satellite-derived Normalized
+Difference Vegetation Index (NDVI) \cite{Yueh2022}. The results demonstrated
+near-linear relationship between vegetation water content and GNSS-R signal
+attenuation, while the CYGNSS data also suggested the existence of volume
+scattering within complex forest components \cite{Yueh2022}. Similarly, another
+study analyzing GNSS-R data from TechDemoSat-1 demonstrated reduced sensitivity
+to soil moisture retrieval due to vegetation attenuation, which could be
+effectively compensated using NDVI data, indicating a correlation between signal
+attenuation and vegetation water content \cite{Camps2016}. Additionally, the
+interference pattern between direct and reflected GNSS signals from the Earth's
+surface was used in estimating vegetation height and land topography
+\cite{RodriguezAlvarez2011}. Through using a Soil Moisture Interference-pattern
+GNSS Observations at L-band (SMIGOL) reflectometer, the instantaneous power of
+the direct and reflected signals were coherently added, in which the resulting
+power oscillations present notches that are correlated to vegetation layer
+thickness and the reflection geometry \cite{RodriguezAlvarez2011}. As a result,
+an RMSE of 3-5 cm in estimating the height of vegetation with simple geometrical
+structures (barley and wheat) could be achieved \cite{RodriguezAlvarez2011}.
+Yet, despite the effort in prior studies, the use of GNSS-R techniques in
+vegetation remote sensing and monitoring is far from developed. Most
+importantly, existing research relies heavily on space-borne or static
+ground-based platforms, while the use of high spatial resolution and flexibility
+platforms - such as an UAV - remains underexplored. Therefore, it is critical to
+develop a systematic framework for an UAV-based GNSS-R system, in which
+correlations between GNSS-R signal features and vegetation condition parameters
+are comprehensively assessed and modeled. Additionally, with adequate dataset size,
+the GNSS-R framework could be complemented by machine learning-based modelling
+approaches, further enhancing the system robustness. \hl{Connection to ML part}
 
 \subsection{Machine Learning}
 Placeholder text
