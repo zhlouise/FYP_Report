@@ -11,6 +11,8 @@
 \usepackage{sectsty}
 \usepackage{cite}
 \usepackage{graphicx}
+\usepackage{soul}
+\usepackage{color}
 
 
 % --- Settings ---
@@ -59,9 +61,100 @@
 \section{Abstract}
 Placeholder text
 
+
 % --- Introduction ---
 \section{Introduction}
-Placeholder text
+Vegetation is a critical asset to the environment and the human civilization.
+Not only does vegetation produce essential societal resources, but its
+distribution and productivity also greatly impacts the terrestrial ecosystems
+and the global climate \cite{Richardson2013}. Therefore, the continuous and
+accurate monitoring of vegetation is essential for sustainable resource
+management \cite{Wallace2006}, ecosystem preservation \cite{Zeng2022}, and
+climate change modeling \cite{Richardson2013}. 
+
+Traditionally, methods of vegetation monitoring involved manual field
+assessments of site characteristics, extracting vegetation condition indicators
+such as species composition, geometrical structure, and biochemical activities
+\cite{Gibbons2006}. However, the accuracy and efficiency of such monitoring
+methods are highly dependent on the available expertise and resources, as the
+site assessments often required the assessor to possess reasonable levels of
+field knowledge prior to surveying \cite{Parkes2003}. To address the limitations
+of manual assessments and to accommodate for the increasing large-scale
+monitoring demands, remote sensing systems emerged as an essential tool for
+ecological monitoring \cite{Li2023}. 
+
+Remote sensing refers to the acquisition of an object's information through
+measurements obtained without coming into direct contact with said object,
+effectively minimizing the need for manual involvement on-site
+\cite{campbell2011introduction}. Specifically, remote sensing relies on
+information derived from different measurements of energy reflected from the
+object of interest \cite{campbell2011introduction}. In the context of surveying
+terrestrial vegetation, the remote sensing methods could be classified into two
+categories based on the distance between the target object and the measurement
+sensor: 1) space-borne and 2) airborne remote sensing. Space-borne remote
+sensing involves the use of instruments onboard orbiting satellites, including
+spectral and hyperspectral cameras \cite{Qian2022}, synthetic aperture radar
+(SAR) \cite{Hu2025}, and space-borne Light Detection And Ranging (LiDAR) sensors
+\cite{Bergen2009}. Due to the wide coverage and availability of space-borne
+data, large-scale terrestrial changes over time could be captured, enabling the
+continuous monitoring of macro-scale ecosystems \cite{Khan2024}. Compared to
+space-borne systems, airborne remote sensing can provide significantly improved
+spatial resolution and assessment flexibility through the integration of sensors
+onboard manned aircraft or unmanned aerial vehicles (UAVs) \cite{Khan2024}.
+Although limited by coverage area, airborne remote sensing can provide timely
+information for addressing regional emergencies such as pest \cite{Wulder2006}
+or wildfire \cite{Arroyo2008} outspreads since the systems could be deployed
+on-demand. In UAV-based remote sensing particularly, this temporal flexibility
+is further complemented with the benefit of low operational cost, rendering it
+an ideal platform for monitoring regional and urban vegetation \cite{Tang2015}. 
+
+Conventionally, UAV remote sensing platforms carry similar instruments to that
+of other remote sensing systems, including radar, LiDAR, and multi-spectral or
+hyperspectral imagery sensors \cite{Tang2015}. However, while imaging
+instruments are susceptible to the influence of lighting and weather
+\cite{Wu2024}, LiDAR devices tend to face difficulties penetrating through dense
+canopy \cite{Su2007}. Therefore, it is critical to explore a robust sensing
+technique that is suitable for UAVs in terms of payload and power consumption to
+complement the existing instruments. Recently, the technique of Global
+Navigation Satellite System Reflectometry (GNSS-R) is receiving increasing
+interest in the field of remote sensing. GNSS-R exploits the L-band signals
+transmitted from Global Navigation Satellite Systems (GNSS) that are then
+scattered on different terrain surfaces of the Earth \cite{Jin2024}. Then, the
+reception of reflected GNSS signals can provide information regarding the
+properties of the signal reflector on land \cite{Jin2024}. As signals of
+opportunity conventionally dedicated to Positioning, Navigation, and Timing
+(PNT) applications, GNSS is capable of providing real-time measurements
+regardless of time, location, and weather \cite{Jin2024}. Additionally, as a
+bi-static system where signal transmitters are separated from receivers, GNSS-R
+is exempt from the need of dedicated transmitter-receiver instruments that are
+crucial to mono-static radar systems \cite{Jin2010}. Instead, any consumer-grade
+receivers capable of receiving reflected GNSS signals could be used for GNSS-R
+remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
+remote sensing systems such as an UAV. 
+
+\hl{May need some intro for path planning and lidar here. The above is from
+Louise's project proposal, so need further editing.}
+
+In this project, the technique of GNSS-R will be integrated onto an UAV platform
+to achieve an intelligent and structured remote sensing system for vegetation
+monitoring. The main objectives of this project are as follows:
+\begin{enumerate}
+\item To introduce an autonomous path planning framework onboard the UAV platform
+for optimized GNSS-R remote sensing.
+\item To analyze and model the correlations between signal propagation parameters
+retrieved through GNSS-R and ground vegetation conditions.
+\item To classify signals reflected by vegetation and predict vegetation parameters
+based on raw GNSS data using machine learning-based approach.
+\item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
+spatial validation reference for the 2D vegetation features detected by GNSS-R.
+\end{enumerate}
+
+This report is structured as follows: Section 3 reviews contemporary research in
+UAV path planning, GNSS-R, machine learning, and LiDAR SLAM, while Section 4
+outlines the project's methodologies. The subsequent sections cover the
+experiments conducted (Section 5), a discussion of current results (Section 6),
+and the project conclusions (Section 7). Finally, Section 8 explores future
+work, and Section 9 summarizes project management details. 
 
 
 % --- Literature Review ---
@@ -193,7 +286,6 @@ Placeholder text
 % --- References ---
 \newpage
 \addcontentsline{toc}{section}{References}
-\nocite{*}
 \bibliographystyle{IEEEtran}
 \bibliography{References.bib} 
 
