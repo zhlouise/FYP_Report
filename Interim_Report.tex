@@ -13,6 +13,7 @@
 \usepackage{graphicx}
 \usepackage{soul}
 \usepackage{color}
+\usepackage{amsmath}
 
 
 % --- Settings ---
@@ -250,6 +251,67 @@ Placeholder text
 Placeholder text
 
 \subsection{GNSS-R}
+The GNSS-R framework takes in raw GNSS data collected from the onboard receivers
+and runs the data through the steps of GNSS measurement extraction, Fresnel zone
+analysis, and GNSS measurement level modelling. 
+
+\subsubsection{GNSS Measurement Extraction}
+Two major GNSS measurements are extracted from the collected data: carrier to
+noise ratio ($C/N_0$) and pseudorange error. 
+
+\paragraph{Carrier to Noise Ratio} ~\\
+Carrier to noise ratio refers to the power of received carrier signal relative
+to the noise power per unit bandwidth, usually expressed in decibel-Hertz (dB-Hz)
+\cite{joseph2010gnss}. $C/N_0$ can be readily obtained from the receiver, and it 
+is calculated using the following equation:
+\begin{equation}
+    C/N_0 = C - (N - BW)
+\end{equation}
+where $C$ refers to the carrier power in dBm or dBW; $N$ refers to the noise power
+in dBm or dBW; and $BW$ refers to the bandwidth of the observation in Hz.
+
+\paragraph{Pseudorange Error} ~\\
+In GNSS, pseudorange refers to the "apparent" distance between a satellite and a
+receiver, which includes the true geometric range plus various biases and delays.
+For the $i$th satellite, its pseudorange $\rho^i$ could be expressed as the following 
+\cite{kaplan2017understanding}:
+\begin{equation}
+    \rho^i = R^i + \Delta t_r + \Delta t_s^i + I^i + T^i + \epsilon^i
+\end{equation}
+where $R^i$ refers to the true geometric distance between the satellite and the receiver;
+$\Delta t_r$ refers to the receiver clock bias; $\Delta t_s^i$ refers to the satellite
+clock bias; $I^i$ refers to the ionospheric delay; $T^i$ refers to the tropospheric 
+delay; and $\epsilon^i$ refers to the pseudorange error, which is mainly
+introduced through signal reflections. Among all the signals received at a given
+instant, a satellite $m$ with the highest elevation angle is selected as the
+master satellite, where the assumption that the master satellite is free of reflections
+is applied \cite{hsu2018analysis}:
+\begin{equation}
+    \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
+\end{equation}
+Assuming $\Delta t_s^i$ and $\Delta t_s^m$ can be effectively removed by 
+satellite-broadcasted parameters, $I^i$ and $I^m$ can be effectively removed by the
+Klobuchar model, and $T^i$ and $T^m$ can be effectively removed by the Saastamoinen model,
+the pseudorange equations can be approximated as \cite{kaplan2017understanding}:
+\begin{equation}
+    \rho^i = R^i + \Delta t_r + \epsilon^i,
+\label{ith satellite pseudorange}
+\end{equation}
+\begin{equation}
+    \rho^m = R^m + \Delta t_r.
+\label{master satellite pseudorange}
+\end{equation}
+Finally, taking the difference between \eqref{ith satellite pseudorange} and 
+\eqref{master satellite pseudorange} and rearranging the equation will result in the
+pseudorange error:
+\begin{equation}
+    \epsilon^i = \rho^i - \rho^m - R^i + R^m.
+\end{equation}
+
+\subsubsection{Fresnel Zone Analysis}
+Placeholder text
+
+\subsubsection{GNSS Measurement Level Model}
 Placeholder text
 
 \subsection{Machine Learning}
