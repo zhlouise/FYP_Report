@@ -256,7 +256,27 @@ Placeholder text
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+\subsubsection{Frontend: LiDAR-Inertial Odometry}
+For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
+is used to build a map effectively within a short amount of time. To do this,
+Iterative Extended Kalman Filter (IEKF) is used to fuse the data between IMU and LiDAR
+point clouds to create an odometry of the environment. 
+
+Iterative Extended Kalman Filter (IEKF) follows the core of Bayesian Recursion
+to estimate the state of the robot through the prediction and measurement update
+step. In the prediction step, IEKF assumes that the state of the system at time
+$k$ evolved from the prior state at time $k-1$ is shown as follows:
+\begin{equation}
+x_k = f(x_{k-1}) + w_{k-1} \label{eq:einstein}
+\end{equation}
+
+Where $x_k$ is the state vector containing the terms of interest for the system
+at time k. The $f(.)$ represents a non-linear state function that is used to
+forecast current state data from prior state data. We can approximate $w_k-1$ as
+$N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
+$Q_k$.
+
+The IEKF is initialized with 
 
 
 % --- Experiments ---
