@@ -14,7 +14,14 @@
 \usepackage{soul}
 \usepackage{color}
 \usepackage{amsmath}
-
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath} 
+\usepackage{float}
 
 % --- Settings ---
 \doublespacing % Applies double spacing to the document
@@ -248,7 +255,172 @@ Placeholder text
 Placeholder text
 
 \subsection{Path Planning}
-Placeholder text
+As mentioned in the system architecture, path planning in our system focuses on
+two different methods: waypoint-based navigation and coverage path planning.
+These methods are crucial in observing various aspects of dense forests, such as
+hovering over trees and surveying over a dense canopy to obtain dynamic data for
+LiDAR SLAM.
+
+
+\subsubsection{Waypoint-based navigation}
+
+Waypoint-based navigation can achieved in various approaches such as
+search-based algorithms, graph-based algorithms, and Artificial
+Intelligence-based algorithms. Since our system is designed to hover over dense
+vegetation environments, indentifying potential Fresnel zones, we primarily need
+to fly outdoor high altitude open spaces. In order to find the optimal algorithm
+to build an intelligent UAV system, we conducted a baseline comparison among the
+Djikstra algorithm, the A* algorithm, and the RRT algorithm. 
+
+\begin{table}[ht]
+    \centering
+    \renewcommand{\arraystretch}{1.3} % Adds a little vertical padding for readability
+    % 'l' = left align, 'X' = auto-wrap column
+    \begin{tabularx}{\textwidth}{@{} l l X X @{}} 
+    \toprule
+    \textbf{Category} & \textbf{Algorithm} & \textbf{Advantages} & \textbf{Disadvantages} \\ 
+    \midrule
+
+    % SEARCH BASED SECTION
+    \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Shortest path is guaranteed for a given heuristic map.
+        \item Reduces computation power and search space compared to Dijkstra.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item High computational cost in large or continuous spaces.
+        \item Poor scalability in dynamic environments.
+    \end{itemize} \\ 
+    \cmidrule{2-4}
+    
+    & \textbf{Dijkstra} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Designed to find the optimal path. 
+        \item Simple to implement.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Computationally expensive.
+        \item Impractical for real-time UAV planning.
+    \end{itemize} \\ 
+    \midrule
+
+    % SAMPLING BASED SECTION
+    \textbf{Sampling-based} & \textbf{RRT} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Fast exploration of high-dimensional spaces.
+        \item Perform well in unknown or partially known maps.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Does not guarantee the shortest/optimal path.
+        \item Paths are often jagged and require smoothing.
+    \end{itemize} \\ 
+    \bottomrule
+    \end{tabularx}
+    \caption{Comparison of Path Planning Algorithms}
+    \label{tab:algorithms}
+\end{table}
+
+As a result, the comparison shows that the A* algorithm is suitable for offline
+path planning, for a given occupancy grid map. Therefore, our system is designed
+to perform offline path planning using A* algorithm. On the other hand, RRT
+performs well in dynamic unknown environments, which is suitable for online path
+planning. 
+
+\paragraph{A* Algorithm Implementation} ~\\
+
+A* algorithm is a heuristic, search based algorithm which calculates the
+shortest path from a starting point to an end goal. The algorithm will first
+divide the map into nodes, where each node represents a possible position for
+the robot to move. These positions depend with the gird architectures such as
+4-way connected or 8-way connected grids. In addition to the conevtional grid
+architecture, novel grid mapping approaches such as NavMeshes are widely used in
+3D simulation softwares. These mapping techniques let the algorithm connects the
+locations of the movable agent to the surface (mesh) and stores the surfaces as
+convex polygonals. 
+
+In our research, we will be focusing on regular grids which connects nodes
+across 26-directions in 3-D space. Each node will be assigned a cost based on the
+starting and ending node for a given path. The 2-D path illustration of an A*
+algorithm is shown in Figure \ref{fig:astar}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/A-starmap.jpg}
+    \caption{Map Highlighting Shortest Path from Node A through Node K}
+    \label{fig:astar}
+\end{figure}
+
+The cost function $f(n)$ for each node $n$ is calculated as follows:
+\begin{equation}
+    f(n) = g(n) + h(n)  
+\end{equation}
+where:
+\begin{itemize}
+    \item $g(n)$ is the cost from the starting node to the current node $n$.
+    \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
+    \item $f(n)$ is the total estimated cost of the shortest path node $n$.
+\end{itemize}
+
+In our implementation the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
+between the starting node and the current node $n$.
+
+The Euclidean distance can be calculated as follows:
+\begin{equation}
+    g(n) = \sqrt{(x_n - x_{start})^2 + (y_n - y_{start})^2 + (z_n - z_{start})^2}  
+\end{equation}
+
+where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
+$(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
+
+The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
+node) is implemented using the diagonal heuristic function. 
+
+Below is the psuedocode for the diagonal heuristic function:
+\begin{center}
+    % Change 0.8 to 0.6 or 0.7 to make it even narrower
+    \begin{minipage}{0.6\linewidth} 
+\begin{algorithm}[H]
+\caption{Diagonal Heuristic (3D)}
+\label{alg:diagonal_heuristic}
+\begin{algorithmic}[1] % The [1] turns on line numbering
+    \Require $node_1, node_2$: Current and Goal GridNodes
+    \Ensure $h$: Estimated cost to goal
+    
+    \Function{DiagonalHeuristic}{$node_1, node_2$}
+        \State $dx \gets |node_1.x - node_2.x|$
+        \State $dy \gets |node_1.y - node_2.y|$
+        \State $dz \gets |node_1.z - node_2.z|$
+        
+        \State \Comment{Find the minimum for 3-D diagonal movement}
+        \State $diag_{3d} \gets \min(dx, dy, dz)$
+        \State $dx \gets dx - diag_{3d}$
+        \State $dy \gets dy - diag_{3d}$
+        \State $dz \gets dz - diag_{3d}$
+        
+        \State $h \gets \sqrt{3} \cdot diag_{3d}$
+        
+        \State \Comment{Handle remaining 2-D movement}
+        \If{$dx = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dy, dz) + |dy - dz|$
+        \ElsIf{$dy = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dx, dz) + |dx - dz|$
+        \ElsIf{$dz = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dx, dy) + |dx - dy|$
+        \Else
+            \State \Comment{General case (if dimensions remain)}
+            \State $diag_{2d} \gets \min(dx, dy, dz)$
+            \State $h \gets h + \sqrt{2} \cdot diag_{2d}$
+            \State $remaining \gets (dx - diag_{2d}) + (dy - diag_{2d}) + (dz - diag_{2d})$
+            \State $h \gets h + remaining$
+        \EndIf
+        
+        \State \Return $h$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm} 
+
+\end{minipage}
+\end{center}
 
 \subsection{GNSS-R}
 The GNSS-R framework takes in raw GNSS data collected from the onboard receivers
