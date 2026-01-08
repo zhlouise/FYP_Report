@@ -1,8 +1,8 @@
 ## Interdepartmental FYP Interim Report (AAE Group) ##
 
-# IMPORTANT! Please only commit the .tex, .bib file and any included images/figures. DO NOT COMMIT THE PDF as it will make the final merging difficult! #
+### IMPORTANT! Please only commit the .tex, .bib file and any included images/figures. DO NOT COMMIT THE PDF as it will make the final merging difficult! ###
 
-** How to set up LaTeX in VS Code! **
+**How to set up LaTeX in VS Code!**
 > Please refer to the following Google Doc for the tutorial on how to write LaTeX in VS Code
 > https://docs.google.com/document/d/1diXbOar0NMglcetQoo9DeLgRatnNHXXMHl9PIH__MDg/edit?usp=sharing
 
