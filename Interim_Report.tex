@@ -14,6 +14,7 @@
 \usepackage{soul}
 \usepackage{color}
 \usepackage{amsmath}
+\usepackage{float}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{multirow}
@@ -423,9 +424,12 @@ Below is the psuedocode for the diagonal heuristic function:
 \end{center}
 
 \subsection{GNSS-R}
-The GNSS-R framework takes in raw GNSS data collected from the onboard receivers
-and runs the data through the steps of GNSS measurement extraction, Fresnel zone
-analysis, and GNSS measurement level modelling. 
+The GNSS-R framework takes in raw GNSS data collected from the onboard receivers,
+extracts raw GNSS measurements, and analyzes the characteristics of such measurements
+with respect to the ground features that falls within the Fresnel zones. Ultimately,
+the correlation between GNSS measurement features and vegetation properties would be 
+systematically summarized and modeled. The theories of retrieving GNSS measurements and
+the Fresnel zone is briefly outlined in the following two sections.
 
 \subsubsection{GNSS Measurement Extraction}
 Two major GNSS measurements are extracted from the collected data: carrier to
@@ -481,10 +485,49 @@ pseudorange error:
 \end{equation}
 
 \subsubsection{Fresnel Zone Analysis}
-Placeholder text
-
-\subsubsection{GNSS Measurement Level Model}
-Placeholder text
+Following the extraction of GNSS measurements observed onboard the UAV, the reflected
+signal would be particularly analyzed with respect to the 2-dimensional ground region 
+that it is reflected from. Within this region, a specular reflection point could be found,
+where the angle of incidence is equal to the angle of reflection. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
+    \caption{Schematic diagram of GNSS-R signal scattering geometry.}
+\end{figure}
+The primary scattering area around the specular point in which reflected signals
+arrive at the receiver in coherence is called the first Fresnel zone (FFZ). By
+definition, it is an ellipse for which the signal phase change across is within
+$\frac{\lambda}{2}$ radians, where $\lambda$ refers to the signal wavelength
+\cite{Jia2018}. Given the incidence angle $\theta$ and the height of the
+receiver $H$, the semi-major axis $a$ and the semi-minor axis $b$ of the FFZ can
+be calculated as the following \cite{yu2021theory}: 
+\begin{equation}
+    a = \frac{\sqrt{\lambda H sin(\theta)+\frac{\lambda^2}{4}}}{(sin(\theta))^2},
+\end{equation}
+\begin{equation}
+    b = \frac{\sqrt{\lambda H sin(\theta)+\frac{\lambda^2}{4}}}{sin(\theta)}.
+\end{equation}
+To calculate the location of the FFZ center, a local coordinate system is
+defined. The origin is the receiver's ground projection, while the y-axis aligns
+with the ground projection of the receiver-to-satellite vector. The z-axis
+follows the local East-North-Up (ENU) "up" direction, and the x-axis completes
+the right-handed system by remaining orthogonal to both x and y axes. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
+    \caption{Schematic diagram of the local coordinate system defined.}
+\end{figure}
+In this coordinate system, the location of the FFZ center could be expressed as
+$(x_c, y_c, z_c)$, where \cite{yu2021theory}:
+\begin{equation}
+    x_c = 0
+\end{equation}
+\begin{equation}
+    y_c = (\frac{\lambda}{2}+H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2})
+\end{equation}
+\begin{equation}
+    z_c = 0
+\end{equation}
 
 \subsection{Machine Learning}
 Placeholder text
@@ -501,7 +544,7 @@ to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
 $k$ evolved from the prior state at time $k-1$ is shown as follows:
 \begin{equation}
-x_k = f(x_{k-1}) + w_{k-1} \label{eq:einstein}
+x_k = f(x_{k-1}) + w_{k-1}
 \end{equation}
 
 Where $x_k$ is the state vector containing the terms of interest for the system
