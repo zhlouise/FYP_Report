@@ -21,14 +21,15 @@
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{amsmath} 
-\usepackage{float}
+\usepackage{parskip}
+
 
 % --- Settings ---
 \doublespacing % Applies double spacing to the document
 \sectionfont{\normalsize}
 \subsectionfont{\normalsize\it\bfseries}
 \subsubsectionfont{\normalsize\it}
+\setlength{\parindent}{0pt}
 
 
 \begin{document}
@@ -265,10 +266,10 @@ LiDAR SLAM.
 
 \subsubsection{Waypoint-based navigation}
 
-Waypoint-based navigation can achieved in various approaches such as
+Waypoint-based navigation can be achieved in various approaches such as
 search-based algorithms, graph-based algorithms, and Artificial
 Intelligence-based algorithms. Since our system is designed to hover over dense
-vegetation environments, indentifying potential Fresnel zones, we primarily need
+vegetation environments, identifying potential Fresnel zones, we primarily need
 to fly outdoor high altitude open spaces. In order to find the optimal algorithm
 to build an intelligent UAV system, we conducted a baseline comparison among the
 Djikstra algorithm, the A* algorithm, and the RRT algorithm. 
@@ -328,14 +329,13 @@ performs well in dynamic unknown environments, which is suitable for online path
 planning. 
 
 \paragraph{A* Algorithm Implementation} ~\\
-
 A* algorithm is a heuristic, search based algorithm which calculates the
 shortest path from a starting point to an end goal. The algorithm will first
 divide the map into nodes, where each node represents a possible position for
-the robot to move. These positions depend with the gird architectures such as
-4-way connected or 8-way connected grids. In addition to the conevtional grid
+the robot to move. These positions depend on the gird architectures such as
+4-way connected or 8-way connected grids. In addition to the conventional grid
 architecture, novel grid mapping approaches such as NavMeshes are widely used in
-3D simulation softwares. These mapping techniques let the algorithm connects the
+3D simulation software. These mapping techniques let the algorithm connects the
 locations of the movable agent to the surface (mesh) and stores the surfaces as
 convex polygonals. 
 
@@ -347,7 +347,7 @@ algorithm is shown in Figure \ref{fig:astar}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/A-starmap.jpg}
-    \caption{Map Highlighting Shortest Path from Node A through Node K}
+    \caption{Map Highlighting Shortest Path from Node A to Node K}
     \label{fig:astar}
 \end{figure}
 
@@ -369,7 +369,6 @@ The Euclidean distance can be calculated as follows:
 \begin{equation}
     g(n) = \sqrt{(x_n - x_{start})^2 + (y_n - y_{start})^2 + (z_n - z_{start})^2}  
 \end{equation}
-
 where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
 
@@ -379,7 +378,7 @@ node) is implemented using the diagonal heuristic function.
 Below is the psuedocode for the diagonal heuristic function:
 \begin{center}
     % Change 0.8 to 0.6 or 0.7 to make it even narrower
-    \begin{minipage}{0.6\linewidth} 
+    \begin{minipage}{0.8\linewidth} 
 \begin{algorithm}[H]
 \caption{Diagonal Heuristic (3D)}
 \label{alg:diagonal_heuristic}
@@ -523,7 +522,7 @@ $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
     x_c = 0
 \end{equation}
 \begin{equation}
-    y_c = (\frac{\lambda}{2}+H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2})
+    y_c = (\frac{\lambda}{2}+H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2}
 \end{equation}
 \begin{equation}
     z_c = 0
