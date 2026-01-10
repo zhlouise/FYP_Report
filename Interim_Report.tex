@@ -21,6 +21,9 @@
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{amsmath} 
+\usepackage{float}
+\usepackage{url}
 \usepackage{parskip}
 
 
@@ -322,8 +325,8 @@ Djikstra algorithm, the A* algorithm, and the RRT algorithm.
     \label{tab:algorithms}
 \end{table}
 
-As a result, the comparison shows that the A* algorithm is suitable for offline
-path planning, for a given occupancy grid map. Therefore, our system is designed
+As a result, for a given occupancy grid map, the comparison shows that the A* algorithm is suitable for offline
+path planning. Therefore, our system is designed
 to perform offline path planning using A* algorithm. On the other hand, RRT
 performs well in dynamic unknown environments, which is suitable for online path
 planning. 
@@ -351,6 +354,44 @@ algorithm is shown in Figure \ref{fig:astar}.
     \label{fig:astar}
 \end{figure}
 
+\paragraph{A* Algorithm Grid Definition} ~\\
+
+In our system the grid map is defined in 3-D spaces having 26 movable
+directions, diagonally and straight. However, during the testing phase of
+algorithm, we will be using 2-D grids with 8 movable directions for simplicity.
+We first convert the coordinates of the given map into gridnode indexes using
+\texttt{coord\_to\_index} function. The coordinates can be defined as world coordinates or
+image coordinates for a given map image.
+An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/image_coordinates.png}
+    \caption{Image Coordinates System}
+    \label{fig:image_coordinates}
+\end{figure}
+Below is the psuedocode for the \texttt{coord\_to\_index} function:
+\begin{algorithm}[H]
+\caption{Coordinate to Grid Index Conversion}
+\label{alg:coord_to_index}
+\begin{algorithmic}[1]
+    \Require $pos$: Real-world coordinate vector $(x, y, z)$
+    \Ensure $index$: Integer grid indices $(i, j, k)$
+    
+    \Function{CoordToIndex}{$pos$}
+        \State \Comment{Calculate position relative to the map center}
+        \State $pos_{relative} \gets pos - pos_{center}$
+        
+        \State \Comment{Scale by resolution and round to nearest integer}
+        \State $index \gets \text{round}(pos_{relative} \cdot step_{inv})$
+        
+        \State \Comment{Apply the center index offset}
+        \State $index \gets index + index_{center}$
+        
+        \State \Return $index$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}
+\paragraph{A* Algorithm Cost Function Implementation} ~\\
 The cost function $f(n)$ for each node $n$ is calculated as follows:
 \begin{equation}
     f(n) = g(n) + h(n)  
@@ -361,10 +402,8 @@ where:
     \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
     \item $f(n)$ is the total estimated cost of the shortest path node $n$.
 \end{itemize}
-
 In our implementation the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
 between the starting node and the current node $n$.
-
 The Euclidean distance can be calculated as follows:
 \begin{equation}
     g(n) = \sqrt{(x_n - x_{start})^2 + (y_n - y_{start})^2 + (z_n - z_{start})^2}  
@@ -373,7 +412,38 @@ where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
 
 The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
-node) is implemented using the diagonal heuristic function. 
+node) is implemented using the diagonal heuristic function. The function has five key steps as follows:
+
+\begin{enumerate}
+    \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
+    \item Determines the direction with the minimum change in distance.
+    \item The heuristic cost starts at zero and will increment by $\sqrt{3} \cdot \min(dx, dy, dz)$ to account for diagonal movement in 3D space.
+    \item The function checks which dimensions still have remaining distance to cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$ equals zero), it calculates the remaining cost using 2D diagonal movement and straight-line movement.
+    \item If the three dimensions still have remaining distance, it calculates the cost using a combination of 2D diagonal movement and straight-line movement for the remaining distances.
+\end{enumerate}
+
+Below is an example of calculating heuristic cost in 3 dimensional space:
+
+\noindent Go from $(0,0,0)$ to $(5,3,2)$. \\
+Initial differences: $dx=5, dy=3, dz=2$.
+
+\begin{itemize}
+    \item \textbf{Step 1: 3D diagonal movement} \\
+    Calculate the shared 3D distance:
+    \[ diag_{3d} = \min(5, 3, 2) = 2 \]
+    Cost for 2 steps diagonally in 3D:
+    \[ \text{Cost} = \sqrt{3} \times 2 \approx 3.464 \]
+    \textit{Remaining:} $dx=3, dy=1, dz=0$.
+
+    \item \textbf{Step 2: Handle remaining} (since $dz=0$) \\
+    Calculate 2D diagonal in X-Y ($\min(3,1) = 1$ step):
+    \[ \text{Cost} = \sqrt{2} \times 1 \approx 1.414 \]
+    Calculate Straight line ($|3-1| = 2$ steps):
+    \[ \text{Cost} = 2.0 \]
+\end{itemize}
+
+\noindent \textbf{Total estimated cost:}
+\[ 3.464 + 1.414 + 2.0 = 6.878 \]
 
 Below is the psuedocode for the diagonal heuristic function:
 \begin{center}
@@ -421,6 +491,161 @@ Below is the psuedocode for the diagonal heuristic function:
 
 \end{minipage}
 \end{center}
+
+\paragraph{A* Algorithm Core Logic Implementation} ~\\
+The core logic of A* algorithm involves determining the neighbouring nodes,
+checking the occupancy of the neighbouring nodes, calculating their costs, and
+adding the nodes to a separate list that deviates from unexplored nodes. The
+algorithm is also responsible to update its list by adding or removing
+neighbouring nodes, if a better path is found. The core logic works according to the
+following steps:
+
+\begin{enumerate}
+    \item Initialize the grid, convert the start and end coordinates to grid
+    indices, and adjust the indices if the start and end nodes are inside
+    obstacles.
+    \item Initialize the heapfile to store the exploring nodes, check the node with lowest \texttt{f\_score}, skip if already explored.
+    \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
+    \item If not, check the neighbouring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
+    \item If a node is already in the open set but a better path is found,
+    update the parent node, adjust the \texttt{g\_score} to the lowest cost, and add to
+    the queue again with  new priority.
+    \item Repeat steps 2-5 until the goal node is reached or no path is found.
+\end{enumerate}
+
+Below is the flow chart illustrating the core logic of A* algorithm:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/Astar_flowchart.png}
+    \caption{A* Algorithm Core Logic Flowchart}
+    \label{fig:astar_flowchart}
+\end{figure}
+
+\paragraph{Evaluating the A* Algorithm Performance} ~\\
+
+In order to evaluate the performance of the algorithm, we conducted a series of
+test runs in different categories of vegetation density maps. The maps were
+obtained by QGround Control software satellite imagery and then imported to an
+image processing pipeline. The image processing pipeline can be elaborated in following steps:
+\begin{enumerate}
+    \item Convert the satellite imagery to grayscale images.
+    \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
+    Conversion to identify greenery, and NDVI Index to measure vegetation
+    health.
+    \item The images are categorized into three vegetation types: Dense tree
+    canopy, grassland and short vegetation, and cropland and agricultural fields.
+    \item Apply edge detection such as canny detection to identify buildings and non vegetation areas.
+    \item Plot the series of processed images as occupancy grid maps.
+\end{enumerate}
+
+Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/densecanopy_map.png}
+    \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
+    \label{fig:dense_canopy_map}
+\end{figure}
+
+\paragraph{Normalized Difference Vegetation Index} ~\\
+Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
+the difference between near-infrared (which vegetation strongly reflects) and
+red light (which vegetation absorbs). Below is the equation to calculate NDVI:
+\begin{equation}
+    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
+    \label{eq:ndvi}
+\end{equation}
+The Normalized Difference Vegetation Index is calculated using Equation
+\ref{eq:ndvi}, where \text{NIR} represents the near-infrared band and \text{Red}
+represents the red visible light band.
+
+If a vegetation is healthy it reflects more near-infrared and green light
+(chlorophyll), while absorbing more red and blue lights.
+
+\subsubsection{Coverage Path Planning}
+Coverage Path Planning (CPP) is essential for surveying in dense vegetation
+areas and obtaining dynamic data for LiDAR SLAM. In this research, the CPP
+algorithm that will be implemented is called Boustrophedon Cell Decomposition.
+The Boustrophedon Cell Decomposition algorithm works by decomposing the map into
+cells based on the polygonal shape of the map and the obstacles present. After
+decomposing the map into cells, the algorithm will then generate a sweeping path
+in each cell based on the given parameters \ref{fig:boustrophedon}. Having this
+sweeping technique in all the cells will ensure that the entire area is covered.
+Below is the detail explanation of now the boustrophedon cell decomposition is
+implemented, using the framework developed by Autonomous Systems Lab at ETH
+Zurich \cite{B_hnemann_2021}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/boustrophedon_path.png}
+    \caption{Boustrophedon Cell Decomposition Path Planning Example}
+    \label{fig:boustrophedon}
+\end{figure}
+
+\paragraph{Boustrophedon Cell Decomposition Implementation} ~\\
+
+The algorithm decomposite the map (polygonal area) into cells based on three key events:
+\begin{itemize} 
+    \item \textbf{In Event}: When the sweep line encounters the start of an
+    obstacle, the current cell is divided into two new cells. The algorithm is
+    defined by an if-else loop that compares the points of the vertexes of the
+    obstacle and the sweep line intersection. IN event moves the intersecting
+    vertexes as the same direction as the sweep line.
+
+    The if else logic in an IN event can be interpreted as follows:
+    \begin{equation}
+        \text{If } target\_upper > source\_upper \text{ and } target\_lower > source\_lower
+    \end{equation}
+Figure \ref{fig:in_event} illustrates an example of an IN event:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
+        \caption{Boustrophedon Cell Decomposition IN Event Example}
+        \label{fig:in_event}
+    \end{figure}
+
+    \item \textbf{Middle Event}: When the sweep line passes through the obstacle
+    and updates it cell status.
+    \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
+    and two cells are merged into one cell. The algorithm is defined by an
+    if-else loop that compares the points of the vertexes of the obstacle and the 
+    sweep line intersection. OUT event moves the intersecting vertexes as the
+    opposite direction as the sweep line.
+
+    The if else logic in an OUT event can be interpreted as follows:
+    \begin{equation}    
+        \text{If } target\_upper < source\_upper \text{ and } target\_lower < source\_lower
+    \end{equation}
+Figure \ref{fig:out_event} illustrates an example of an OUT event:
+    \begin{figure}[H]   
+        \centering
+        \includegraphics[width=0.6\linewidth]{Included_Images/out_event.png}
+        \caption{Boustrophedon Cell Decomposition OUT Event Example}
+        \label{fig:out_event}
+        \end{figure}
+\end{itemize}
+
+After decomposition of the map into cells, the algorithm will visit each and
+every cell based on depth-first search (DFS) technique. The algorithm will
+choose a random cell to visit at first and then proceed the neighboring cells of
+the chosen cell. The algorithm will also backpropagate through the visited cells, to ensure all the cells are visited. 
+
+When visiting each cell, the algorithm will generate a sweeping path based on
+the given parameters such as sweep direction and sweep distance. The sweeping
+path can be performed in horizontal, vertical. The angle of the sweep line can
+also be adjusted to fit the obstacle edges. The sweep distance is defined as the
+distance between each sweep line. Figure \ref{fig:sweep_parameters} illustrates
+the sweeping in each cell. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
+    \caption{Boustrophedon Cell Decomposition Sweeping}
+    \label{fig:sweep_parameters}
+\end{figure}
+
+The practical implications of the algorithm usage is shown in the experiment
+setup section and the detailed results of the Boustrophedon Cell Decomposition
+algorithm is discussed in the discussion section.
+
 
 \subsection{GNSS-R}
 The GNSS-R framework takes in raw GNSS data collected from the onboard receivers,
