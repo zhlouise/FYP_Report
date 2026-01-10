@@ -14,6 +14,7 @@
 \usepackage{soul}
 \usepackage{color}
 \usepackage{amsmath}
+\usepackage{float}
 
 
 % --- Settings ---
@@ -318,7 +319,7 @@ Placeholder text
 Placeholder text
 
 \subsection{LiDAR SLAM}
-\subsubsection{Frontend: LiDAR-Inertial Odometry}
+\subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
 is used to build a map effectively within a short amount of time. To do this,
 Iterative Extended Kalman Filter (IEKF) is used to fuse the data between IMU and LiDAR
@@ -329,16 +330,113 @@ to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
 $k$ evolved from the prior state at time $k-1$ is shown as follows:
 \begin{equation}
-x_k = f(x_{k-1}) + w_{k-1} \label{eq:einstein}
+    x_k = f(x_{k-1}) + w_{k-1} 
 \end{equation}
 
 Where $x_k$ is the state vector containing the terms of interest for the system
-at time k. The $f(.)$ represents a non-linear state function that is used to
-forecast current state data from prior state data. We can approximate $w_k-1$ as
+at time $k$. The $f(.)$ represents a non-linear state function that is used to
+forecast current state data from prior state data. We can approximate $w_{k-1}$ as
 $N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
 $Q_k$.
 
-The IEKF is initialized with 
+To know the uncertainty of the prediction model, error covariance matrix $P^f_k$
+is defined as shown:
+\begin{align}
+    P_k^f &= E\left(e_k^f(e_k^f)^T\right) \nonumber \\
+    &\approx F_k E(e_{k-1}e_{k-1}^T)F_k^T + E(w_{k-1}w_{k-1}^T) \nonumber \\
+    &= F_kP_{k-1}F_k^T + Q_{k-1}
+\end{align}
+
+Where $e$ is the prediction error, $F$ is the Jacobian matrix of the linearized
+state transition function $f(.)$ evaluated at the previous estimate
+$x_{k-1}$, and $Q$ is the process noise covariance matrix representing the
+uncertainty of the physical model.
+
+Even so, the predicted state alone is prone to errors due to various
+factors such as inaccurate prediction function and further source of noise. This
+issue can be solved by taking sensor measurements to improve the predicted state
+accuracy. Hence the observation model is defined as shown:
+\begin{equation}
+    z_k = h(x_k) + v_k
+\end{equation} 
+
+Where $z_k$ represents the expected sensor measurements based on the predicted
+state $x_k$ expressed by a non-linear function $h(.)$, and the observation noise
+$v_k$ is assumed as $N(0,R_k)$ where it has zero mean with covariance matrix $R_k$.
+
+To further improve the accuracy for the nonlinear system, an iteration index
+$K$ is added to repeat the measurement update at time step $k$ as shown:
+\begin{equation}
+    x^a_{k,K=0} = x^f_k
+\end{equation}
+
+Where $x^a$ is the state estimate after corrected by sensor measurement and
+$x^f$ is the predictive distribution before looking at the lidar data. In this
+case, the iteration $K$ is repeated until the change in the state estimate
+$|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$. 
+
+As actual measurements from sensors will typically differ from this prediction
+due to sensor noise and model inaccuracies, it is incorporated into the state
+estimate by computing the difference between the actual measurements and the
+predicted measurement based on the current iterative estimate $K$:
+\begin{equation}
+    z_{k, K} = z_k - h(x^a_{k, K})
+\end{equation}
+Where $h(x^a_{k, K})$ is the non-linear observation function evaluated at the
+most recent estimate. To balance the uncertainty of the prediction against the
+new sensor data, the Kalman Gain $K_{k,K}$ is calculated using the state-space
+dimension formula \cite{xu2021fast}.
+\begin{equation} 
+    K_{k, K} = (H_{k, K}^T R_k^{-1} H_{k, K} + (P_k^f)^{-1})^{-1} H_{k, K}^T R_k^{-1} 
+\end{equation}
+
+Where $H_{k, K}$ is the Jacobian of the observation function re-evaluated
+at the current iterative estimate $x^a_{k, K}$. This gain is then used
+to compute the next refined state estimate:
+\begin{equation}
+    x^a_{k,K+1} = x^a_{k, K} + K_{k, K} (z_{k, K}) - (I - K_{k, K} H_{k, K})(x^a_{k, K} - x_k^f)
+\end{equation}
+
+After updating the state estimate, the updated covariance of the state
+distribution is given as:
+\begin{equation} 
+    P_k = (I - K_{k, K} H_{k, K}) P_k^f 
+\end{equation}
+
+While the IEKF provides a high-frequency estimate of the current state, the
+overall SLAM problem can be generalized as a Maximum A Posteriori (MAP)
+estimation. Bayes Filter is then used to recursively perform the state
+prediction and measurement update steps to minimizes linearization errors for
+robust localization. In this case, MAP can be expressed as:
+\begin{equation}
+    P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1})
+\end{equation}
+
+Where $P(X|Z, U)$ is the refined state estimate, $P(x_0)$ is the initial
+condition, $P(z_k|x_k)$ is the sensor measurement and $P(x_k|x_{k-1}, u_{k-1})$
+is the predicted state.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/Kalman Filter.png}
+    \caption{The red distribution in the figure represents the predicted state $x^f_k$ with its uncertainty $P^f_k$. The blue distribution represents the noisy sensor measurement $z_k$, and the green distribution illustrates the refined state estimate $x^a_k$ after the iterative update with the reduction of uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
+\end{figure}
+
+\subsubsection{Graph-Based SLAM}
+As LiDAR odometry does not include loop closure, iSAM2 pose graph optimization
+architecture is used to optimize the point cloud map. This technique is rooted
+from the factor graph optimization algorithm where the joint posterior
+probability of the robot trajectory X is factorized based on the Maximum A Posteriori (MAP)estimate:
+
+\begin{equation} 
+    P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1}) 
+\end{equation}
+
+
+ 
+
+
+
 
 
 % --- Experiments ---
