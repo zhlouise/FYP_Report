@@ -146,6 +146,19 @@ crucial to mono-static radar systems \cite{Jin2010}. Instead, any consumer-grade
 receivers capable of receiving reflected GNSS signals could be used for GNSS-R
 remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
 remote sensing systems such as an UAV. 
+%added by sashenka 
+
+Recent research has demonstrated the potential of integrating GNSS-R with UAVs
+by developing a UAV-based GNSS-R system for water body detection and flood
+mapping \cite{UAV-water}. This showcases how low-altitude UAV platforms can give
+high-resolution and flexible measurements. Their work established UAV-mounted
+GNSS-R as a promising tool for monitoring dynamic environmental conditions.
+However, due to the challenges in optimal flight trajectories planning and
+coverage planning, this research does not provide an autonomous navigation
+application. Addressing the above challenges requires autonomous path planning
+algorithms, dynamic obstacle avoidance, and environment mapping and
+localization. As a result, our research provides a unique opportunity to enhance
+the UAV and GNSS-R combination by integrating autonomous navigation. 
 
 \hl{May need some intro for path planning and lidar here. The above is from
 Louise's project proposal, so need further editing. (Also need to mention 
@@ -187,7 +200,50 @@ objective of vegetation monitoring, which will inform the integrated project
 methodologies.
 
 \subsection{Path Planning}
-Placeholder text
+Path planning is the technique that used in navigating a robot autonomously from
+a starting goal to an ending point based on a collision-free route. Path
+planning is mainly a geometric problem that generates a path according to a
+given sequence of waypoints. It does not consider the variation with time;
+however, in trajectory planning the path is defined as a function of time, which
+assigns a time function to the geometric path \cite{gasparetto2015path}. At the
+current stage, our research is focusing on implementing path planning to
+navigate an Unmanned Aerial Vehicle (UAV) autonomously in an outdoor
+environment. Consequently, we are focusing on path planning methods and will be
+focusing on trajectory planning and optimization in the future based on our
+needs.
+Earliest sensor-based obstacle avoiding path planning algorithms are
+known as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms
+will first go around the obstacles and then determine the shortest path to the
+goal based on the shape of the obstacle (Figure \ref{fig:bug_algorithms}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
+    \caption{Bug1 and Bug2 Path Planning Algorithms}
+    \cite{choset2005principles}
+    \label{fig:bug_algorithms}  
+\end{figure}
+However, these algorithms are used in scenarios where the robot has no map
+(unknown environment), and these algorithm does not guarantee the optimal path.
+With the rise of SLAM (Simultaneous Localization and Mapping) techniques, we are
+able to create maps of the navigation environment, which enabled the transition
+to use map-based path planning methods. Therefore, in our system we are using
+commonly found grid-based path planning algorithms, which enables us to create
+an intelligent UAV system that can identify potential vegetation areas using
+GNSS-R. 
+
+Most GNSS-R studies remain satellite-based, which limits spatial resolution and
+adaptability to localized environments such as fragmented urban forests. To
+alleviate this problem, we decided to use UAV-borne GNSS-R systems as a
+promising solution. UAVs can fly at lower altitudes, enabling high-resolution,
+flexible, and scalable vegetation monitoring missions. However, deploying GNSS-R
+on UAVs can be challenging in implementing optimal flight trajectories and
+spatial coverage. Therefore, our system introduces autonomous path planning,
+dynamic obstacle avoidance, and SLAM for environment mapping and localization.  
+
+
+
+
+
 
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
@@ -506,11 +562,11 @@ following steps:
     \item Initialize the grid, convert the start and end coordinates to grid
     indices, and adjust the indices if the start and end nodes are inside
     obstacles.
-    \item Initialize the heapfile to store the exploring nodes, check the node with lowest \texttt{f\_score}, skip if already explored.
+    \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighbouring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
     \item If a node is already in the open set but a better path is found,
-    update the parent node, adjust the \texttt{g\_score} to the lowest cost, and add to
+    update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
     \item Repeat steps 2-5 until the goal node is reached or no path is found.
 \end{enumerate}
@@ -551,7 +607,7 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 \paragraph{Normalized Difference Vegetation Index} ~\\
 Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
 the difference between near-infrared (which vegetation strongly reflects) and
-red light (which vegetation absorbs). Below is the equation to calculate NDVI:
+red light (which vegetation absorbs) \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
     \label{eq:ndvi}
@@ -563,23 +619,27 @@ represents the red visible light band.
 If a vegetation is healthy it reflects more near-infrared and green light
 (chlorophyll), while absorbing more red and blue lights.
 
+Test run results of the A* algorithm in different vegetation density maps are
+shown in the results and discussion section.
+
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
-areas and obtaining dynamic data for LiDAR SLAM. In this research, the CPP
-algorithm that will be implemented is called Boustrophedon Cell Decomposition.
-The Boustrophedon Cell Decomposition algorithm works by decomposing the map into
-cells based on the polygonal shape of the map and the obstacles present. After
-decomposing the map into cells, the algorithm will then generate a sweeping path
-in each cell based on the given parameters \ref{fig:boustrophedon}. Having this
-sweeping technique in all the cells will ensure that the entire area is covered.
-Below is the detail explanation of now the boustrophedon cell decomposition is
-implemented, using the framework developed by Autonomous Systems Lab at ETH
-Zurich \cite{B_hnemann_2021}.
+areas and obtaining dynamic data for LiDAR SLAM. In this research, we
+implemented Boustrophedon Cell Decomposition as the CPP algorithm. The Boustrophedon Cell
+Decomposition algorithm works by decomposing the map into cells based on the
+polygonal shape of the map and the obstacles present. After decomposing the map
+into cells, the algorithm will then generate a sweeping path in each cell based
+on the given parameters (refer to Figure \ref{fig:boustrophedon}). Having this sweeping technique
+in all the cells will ensure that the entire area is covered. Below is the
+detail explanation of now the boustrophedon cell decomposition is implemented,
+using the framework developed by Autonomous Systems Lab at ETH Zurich
+\cite{B_hnemann_2021}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/boustrophedon_path.png}
     \caption{Boustrophedon Cell Decomposition Path Planning Example}
+    \cite{Choset-1997-16422}
     \label{fig:boustrophedon}
 \end{figure}
 
@@ -610,8 +670,8 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
     and two cells are merged into one cell. The algorithm is defined by an
     if-else loop that compares the points of the vertexes of the obstacle and the 
-    sweep line intersection. OUT event moves the intersecting vertexes as the
-    opposite direction as the sweep line.
+    sweep line intersection. OUT event moves the intersecting vertexes in the
+    opposite direction of the sweep direction.
 
     The if else logic in an OUT event can be interpreted as follows:
     \begin{equation}    
@@ -621,7 +681,7 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
     \begin{figure}[H]   
         \centering
         \includegraphics[width=0.6\linewidth]{Included_Images/out_event.png}
-        \caption{Boustrophedon Cell Decomposition OUT Event Example}
+        \caption{Boustrophedon Cell Decomposition OUT Event Example}    \cite{Choset-1997-16422}
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
@@ -641,6 +701,7 @@ the sweeping in each cell.
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
     \caption{Boustrophedon Cell Decomposition Sweeping}
+     \cite{Choset-1997-16422}
     \label{fig:sweep_parameters}
 \end{figure}
 
