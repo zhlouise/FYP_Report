@@ -25,6 +25,7 @@
 \usepackage{float}
 \usepackage{url}
 \usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
 
 
 % --- Settings ---
@@ -33,6 +34,7 @@
 \subsectionfont{\normalsize\it\bfseries}
 \subsubsectionfont{\normalsize\it}
 \setlength{\parindent}{0pt}
+\urlstyle{same}
 
 
 \begin{document}
@@ -709,16 +711,33 @@ algorithm is discussed in the discussion section.
 
 
 \subsection{GNSS-R}
-The GNSS-R framework takes in raw GNSS data collected from the onboard receivers,
-extracts raw GNSS measurements, and analyzes the characteristics of such measurements
-with respect to the ground features that falls within the Fresnel zones. Ultimately,
-the correlation between GNSS measurement features and vegetation properties would be 
-systematically summarized and modeled. The theories of retrieving GNSS measurements and
-the Fresnel zone is briefly outlined in the following two sections.
+The GNSS-R framework takes in raw GNSS data collected from the onboard
+receivers, extracts raw GNSS measurements, and analyzes the characteristics of
+such measurements with respect to the ground features that falls within the
+Fresnel zones. Ultimately, the correlation between GNSS measurement features and
+vegetation properties would be systematically summarized and modeled. The method
+used for retrieving GNSS measurements and the Fresnel zone from collected raw data
+is briefly outlined in the following two sections, while the MATLAB code for the 
+GNSS-R framework is presented in the Appendix.
 
 \subsubsection{GNSS Measurement Extraction}
-Two major GNSS measurements are extracted from the collected data: carrier to
-noise ratio ($C/N_0$) and pseudorange error. 
+Two raw data sources are necessary for the extraction of key GNSS measurements
+used in this project: the raw binary GNSS data and the Pixhawk controller log.
+First, the binary GNSS data is converted into readable observation files using
+RTKCONV \cite{takasu2009rtklib}, and together with the satellite ephemeris data
+downloaded from \url{https://cddis.nasa.gov/archive/gnss/data/}, measurements
+such as the satellite elevation angle, pseudorange, and carrier to noise ratio
+could be extracted using the MatRTKLIB library \cite{taroz:matrtklib}. From the
+Pixhawk controller log, the UAV position, which is a filtered positioning result
+from various onboard sensors, is obtained and regarded as the ground truth
+assuming that the positioning error is small. Ultimately, two major GNSS
+measurement are taken for further analysis: carrier to noise ratio ($C/N_0$) and
+pseudorange error. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
+    \caption{Flowchart of extracting GNSS measurements from raw data.}
+\end{figure}
 
 \paragraph{Carrier to Noise Ratio} ~\\
 Carrier to noise ratio refers to the power of received carrier signal relative
@@ -770,7 +789,7 @@ pseudorange error:
 \end{equation}
 
 \subsubsection{Fresnel Zone Analysis}
-Following the extraction of GNSS measurements observed onboard the UAV, the reflected
+Following the extraction of GNSS measurements observed onboard the UAV, the GNSS
 signal would be particularly analyzed with respect to the 2-dimensional ground region 
 that it is reflected from. Within this region, a specular reflection point could be found,
 where the angle of incidence is equal to the angle of reflection. 
@@ -813,6 +832,20 @@ $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
 \begin{equation}
     z_c = 0
 \end{equation}
+The flowchart for calculating the FFZ shape and location is outlined in the
+figure below. Here, since the UAV true position is given in the global
+coordinate of latitude, longitude, and height (LLH) in the Pixhawk log data, the
+terrain height shall be subtracted to obtain the UAV height above ground, $H$.
+This terrain height is obtained through the Hong Kong Digital Terrain Model
+(\url{https://data.gov.hk/en-data/dataset/hk-landsd-openmap-5m-grid-dtm}), which
+shows the topographical information in 5 meter by 5 meter grids with an accuracy of
+$\pm$ 5 meters \cite{dataDigitalTerrain}. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/FFZ_Flow.png}
+    \caption{Flowchart of calculating FFZ shape and location from collected data.}
+\end{figure}
+
 
 \subsection{Machine Learning}
 Placeholder text
@@ -924,7 +957,13 @@ Placeholder text
 \newpage
 \addcontentsline{toc}{section}{Appendix}
 \section*{Appendix}
-Placeholder text
+
+\subsubsection*{GitHub Repositories}
+The code scripts of this project are organized in various GitHub repositories, which
+aligns with different frameworks of this project. Specifically: 
+\begin{itemize}
+    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+\end{itemize}
 
 
 % --- References ---
