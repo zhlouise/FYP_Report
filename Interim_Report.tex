@@ -15,6 +15,12 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{float}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
+
 
 
 % --- Settings ---
@@ -235,7 +241,13 @@ approaches, further enhancing the system robustness. \hl{Connection to ML part}
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+In recent years, autonomous robots have been widely implemented to carry out
+repetitive tasks or take part in site surveys to ensure human safety or even
+reduce operational cost. To carry out remote sensing via UAV, mapping is
+essential to allow robots to create a spatial understanding of the site in order
+to create efficient flight paths as well as avoid obstacles. 
+
+
 
 
 % --- Methodology ---
@@ -330,12 +342,12 @@ to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
 $k$ evolved from the prior state at time $k-1$ is shown as follows:
 \begin{equation}
-    x_k = f(x_{k-1}) + w_{k-1} 
+    x_k = f(x_{k-1},u_k) + w_{k} 
 \end{equation}
 
 Where $x_k$ is the state vector containing the terms of interest for the system
 at time $k$. The $f(.)$ represents a non-linear state function that is used to
-forecast current state data from prior state data. We can approximate $w_{k-1}$ as
+forecast current state data from prior state data $x_{k-1}$ and $u_k$ is a control vector. We can approximate $w_{k-1}$ as
 $N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
 $Q_k$.
 
@@ -412,29 +424,178 @@ robust localization. In this case, MAP can be expressed as:
     P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1})
 \end{equation}
 
-Where $P(X|Z, U)$ is the refined state estimate, $P(x_0)$ is the initial
-condition, $P(z_k|x_k)$ is the sensor measurement and $P(x_k|x_{k-1}, u_{k-1})$
-is the predicted state.
+Where $P(X|Z, U)$ is the refined state estimate, $P(x_0)$ is the prior,
+$P(z_k|x_k)$ is the sensor measurement and $P(x_k|x_{k-1}, u_{k-1})$ is the
+predicted state.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/Kalman Filter.png}
-    \caption{The red distribution in the figure represents the predicted state $x^f_k$ with its uncertainty $P^f_k$. The blue distribution represents the noisy sensor measurement $z_k$, and the green distribution illustrates the refined state estimate $x^a_k$ after the iterative update with the reduction of uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
+    \caption{The red distribution in the figure represents the predicted step $P(x_k|x_{k-1}, u_{k-1})$  which results in predictive distribution  $x^f_k$ .The blue distribution represents likelihood $P(z_k|x_k)$ derived from the noisy sensor measurement $z_k$. The green distribution illustrates the refined state estimate $x^a_k$, showing the reduction in the uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
 \end{figure}
 
 \subsubsection{Graph-Based SLAM}
-As LiDAR odometry does not include loop closure, iSAM2 pose graph optimization
-architecture is used to optimize the point cloud map. This technique is rooted
-from the factor graph optimization algorithm where the joint posterior
-probability of the robot trajectory X is factorized based on the Maximum A Posteriori (MAP)estimate:
+As LiDAR odometry is used in the front end to provide high-rate local pose
+estimates without global constrains, iSAM2 pose graph optimization architecture
+is used for the back end to further optimize the point cloud map for higher
+accuracy. This technique is rooted from the factor graph optimization algorithm
+where Maximum A Posteriori (MAP) is also used to factorize the joint posterior
+probability of the robot trajectory X as shown  \cite{wen2021factor}:
 
 \begin{equation} 
     P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1}) 
 \end{equation}
 
+Where $P(x_0)$ is the prior, $P(z_k|x_k)$ represents the Update Factors from
+LiDAR measurements, and $P(x_k|x_{k-1}, u_{k-1})$ represents the Propagation
+Factors derived from the IEKF prediction. The purpose of this is to decompose
+the complex problem of estimating a full trajectory into smaller, simpler pieces
+called 'factors'. By breaking down the trajectory into these discrete
+components, this allows iSAM2 to optimize specific parts of the trajectory
+affected by new information or loop closures instead of resolving the entire
+global map every time the robot moves. This ensures that global consistency is
+maintained without the computational burden of a full-batch optimization.
 
- 
+To do this, the Gaussian noise is factorized into exponential functions. Unlike
+a standard filter that only estimates the current state $x_k$, the factorized
+graph maintains the entire trajectory history $X$ = ($x_0, x_1, \dots, x_k$) to
+minimize the sum of squared errors. The Gaussian noise from the IEKF motion
+prediction is expressed as:
+\begin{equation}
+    P(x_k|x_{k-1},u_{k-1}) = \exp(-||f_k(x_{k-1}, u_k)-x_k||^2_{\Sigma_{u,k}})
+\end{equation}
 
+Similarly, the Gaussian noise from lidar measurements is factorized into the following equation:
+\begin{equation}
+    P(z_k | x_k) = \exp(-||h_k(x_k) - z_k||^2_{\Sigma_{z,k}})
+\end{equation}
+
+The factorization is crucial to transform MAP estimation from a product
+of probability distributions into a Non-linear Least Squares (NLS) optimization
+problem. By taking the negative logarithm of the posterior, we convert the task
+of finding the maximum probability into finding the minimum of an error function
+$e(\mathcal{X})$ as shown:
+\begin{equation}
+    \hat{\chi} = \arg\max_{\chi} \prod_{k} F_k(x_k) = \arg\min_{\chi} e(\chi)
+\end{equation}
+\begin{equation}
+    e(\chi) \doteq \sum_{k} ||h_k(x_k) - z_k||^2_{\Sigma_k} + \sum_{k} ||f_k(x_{k-1}, u_k) - x_k||^2_{\Sigma_k}
+\end{equation}
+
+To solve the non-linear least squares problem defined by $e(\mathcal{X})$, the
+system iteratively refines the trajectory estimate to find the optimal solution
+$\hat{\mathcal{X}}$. The error function is linearized using a first-order Taylor
+expansion around the current estimate $\mathcal{X}^{(i)}$ where the state is
+then uploaded incrementally:
+\begin{equation}
+    \mathcal{X}^{(i+1)} = \mathcal{X}^{(i)} + \Delta \mathcal{X}
+\end{equation}
+
+\hl{Where $\Delta \mathcal{X}$ is the optimal step calculated to move the current estimate toward the minimum of the "error
+valley".This optimization process relies on the Jacobian matrix $\mathbf{J}_R$,
+which represents the first-order partial derivatives of the residuals with
+respect to the state variables. In the context of LiDAR-Inertial integration,
+the Jacobian is composed of two primary components: the partial derivatives of
+the LiDAR measurement residuals and the propagation model
+residuals: (EQUATIONS)
+
+By setting the gradient of the error function to zero, the system solves for
+$\Delta \mathcal{X}$ through the normal equations, typically using the
+Gauss-Newton method. Unlike the IEKF, which only iterates on the current state
+at time $k$, this graph-based optimization allows the system to re-linearize the
+entire trajectory history—or a sliding window of it—ensuring that local sensor
+noise does not lead to permanent global map distortion }
+
+\begin{equation}
+    \mathbf{J}_R = \frac{\partial(\mathbf{H}(\mathcal{X}) - \mathbf{Z})}{\partial \mathcal{X}} + \frac{\partial(\mathbf{F}(\mathcal{X}, \mathbf{U}) - \mathcal{X})}{\partial \mathcal{X}}
+\end{equation}
+
+\subsubsection{System Architecture}
+In this project, a modular SLAM system is used with the front end having a
+Fast-LIO lidar odometry to carry out mapping in real time, while Pose Graph
+Optimization (PGO) coupled with GPS is used for the back end. During
+implementation, both Fast-Lio and PGO are initialized. The point cloud data will
+first be processed by Fast-LIO to create an odometry, and the odometry will then
+be passed to the PGO to further optimize the point clouds to increase accuracy.
+In the meantime, GPS data is passed into PGO to provide constraints to the SLAM
+if large drifts occur. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Included_Images/SLAM flowchart.png}
+    \caption{Flowchart of the modular SLAM system}
+\end{figure}
+
+This project builds upon an open-source implementation
+that integrates Fast-LIO with PGO for GPS-aided SLAM:
+\url{https://github.com/yxw027/FAST_LIO_GPS} 
+
+The pseudocode of the front-end and back-end of the modular SLAM can be shown below:
+
+{
+    \singlespacing
+    \begin{algorithm}[H]
+    \caption{Front-End: FAST-LIO with MAVLink TimeSync}
+    \begin{algorithmic}[1]
+    \State \textbf{Initialize:} IEKF state $\mathbf{x}$ and covariance $\mathbf{P}$
+    \State \textbf{Initialize:} ikd-Tree for incremental mapping
+    \While{ROS is active}
+        \State Sync LiDAR and IMU buffers based on GPS-aligned timestamps
+        \If{IMU not initialized}
+            \State Perform \textit{IMU\_init} (Gravity/Bias estimation)
+            \State \textbf{continue}
+        \EndIf
+        \State \textbf{State Prediction:} $\hat{\mathbf{x}} \leftarrow$ IMU forward propagation
+        \State \textbf{Undistortion:} Compensate point motion using $\hat{\mathbf{x}}$
+        \For{$iter = 1$ \textbf{to} $NUM\_MAX\_ITERATIONS$}
+            \State Find point-to-plane correspondences in ikd-Tree
+            \State Compute measurement residual $\mathbf{z}$ and Jacobian $\mathbf{H}$
+            \State \textbf{Update:} Correct state $\mathbf{x}$ using IEKF update rule
+            \If{converged} \State \textbf{break} \EndIf
+        \EndFor
+        \State \textbf{ikd-Tree Update:} Add new features to the spatial map
+        \State Publish Odometry to Back-End
+    \EndWhile
+    \end{algorithmic}
+    \end{algorithm}
+}
+
+{
+    \singlespacing
+    \begin{algorithm}[H]
+    \caption{Back-End Pose Graph Optimization (PGO)}
+    \begin{algorithmic}[1]
+    \State \textbf{Initialize:} GTSAM Factor Graph and ISAM2 optimizer
+    \State \textbf{Initialize:} Noise models (Odometry, GPS, Loop Closure)
+    \While{ROS is active}
+        \If{New Front-End Odometry received}
+            \State Calculate delta movement since last Keyframe
+            \If{movement $>$ $KeyframeThreshold$}
+                \State Create new Node $n_t$ in Pose Graph
+                \State \textbf{Propagation Factor:} Add \textit{BetweenFactor}($x_{k-1}, x_k, \Delta Odom$)
+                \If{GPS matched for $n_t$}
+                    \State Transform GPS Lat/Lon to UTM coordinates
+                    \State \textbf{GPS Factor:} Add \textit{GPSFactor}($x_k, UTM_{xyz}$)
+                \EndIf
+                \State \textbf{Loop Closure:} Search for matches using Scan Context
+                \If{Loop detected with $n_{\text{old}}$}
+                    \State Calculate relative transform via ICP
+                    \State \textbf{Loop Factor:} Add \textit{BetweenFactor}($x_{\text{old}}, x_t, T_{\text{ICP}}$)
+                \EndIf
+                \State Perform ISAM2 global optimization
+                \State Update trajectory with optimized poses
+            \EndIf
+        \EndIf
+    \EndWhile
+    \end{algorithmic}
+    \end{algorithm}
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
+    \caption{Interactions of different ROS topics in the SLAM system}
+\end{figure}
 
 
 
@@ -470,8 +631,90 @@ Placeholder text
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+\subsubsection{Stage 1: Modular SLAM Implementation without GPS}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_fastlio.png}
+    \caption{Fast-LIO LiDAR Odometry}
+    \label{fig:stg1_fastlio}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_pgo.png}
+    \caption{PGO with FPFH and ICP}
+    \label{fig:stg1_pgo}
+\end{figure}
+The implementation of modular SLAM is first done without the integration of GPS
+to make sure the architecture works. When comparing \autoref{fig:stg1_fastlio}
+and \autoref{fig:stg1_pgo}, it is observed that there is less drifting in the
+point clouds in the PGO SLAM. This is because the PGO SLAM uses Fast Point
+Feature Histograms (FPFH) method to have an initial guess to align the point
+clouds and uses Iterative Closest Point (ICP) for further refinement. FPFH can
+effectively represent the local geometry around key points in a point cloud which
+makes it robust against changes in viewpoints. Since FPFH is better at aligning
+point clouds that are far away for global robustness, it is then passed to ICP
+for further precise refinement with millimeter-level precision
+\cite{song2025robotic}. 
 
+On the other hand, Fast-LIO only uses Iterated Extended Kalman Filter (IEKF) to
+align the point clouds. In this case, we can see that the dual layer of point
+cloud alignment in PGO further increase the accuracy in SLAM.
+
+\subsubsection{Stage 2: Modular SLAM Implementation with GPS}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg2_pgomis.png}
+    \caption{PGO SLAM after integration of GPS. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
+    \label{fig:stg2_pgo}
+\end{figure}
+Once gps is being integrated to the PGO SLAM, we can see in \autoref{fig:stg2_pgo} that there
+are two different trajectories and the point clouds are very misaligned. First
+of all, both trajectories are not aligned as the position of the LiDAR and the
+GPS on the drone itself are different, hence having two different frames. Second of all, the point clouds are misaligned as GPS
+has a high gain in the SLAM and some issues related to the transformation of the
+GPS to LiDAR odometry. 
+
+To solve the misalignments of both trajectories, extrinsic calibration is
+carried out between IMU from Pixhawk that is connected to the GPS and the LiDAR
+point clouds to align both frames together. In this case, HKU Mars calibration
+system is used for the extrinsic calibration:
+\url{https://github.com/hku-mars/LiDAR_IMU_Init/issues} 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_fastlio.png}
+    \caption{Fast-LIO LiDAR Odometry}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_pgo.png}
+    \caption{PGO SLAM with GPS and odometry trajectory aligned. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
+    \label{fig:stg3_pgo}
+\end{figure}
+
+Based on \autoref{fig:stg3_pgo}, despite both odometry and GPS trajectory and aligned, we can
+still observe that the point clouds in PGO are still misaligned. Aside from having high
+gain for GPS in the SLAM, the misalignment is due to the issues regarding the coordinate
+frame rotation between GPS and LiDAR Odometry, and GPS transformation logic which
+needs to be solved in later stage. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/withgps.png}
+    \caption{PGO with GPS integration}
+    \label{fig:withgps}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/nogps.png}
+    \caption{PGO without GPS integration}
+    \label{fig:nogps}
+\end{figure}
+
+\autoref{fig:withgps} and \autoref{fig:nogps} shows the difference between
+the PGO SLAM with and without GPS integration when using the same architecture. In
+this case we can confirm that GPS is the main issue that causes the point cloud
+distortion.
 
 % --- Conclusion ---
 \section{Conclusion}
