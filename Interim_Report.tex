@@ -21,6 +21,17 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb}
 
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath} 
+\usepackage{float}
+\usepackage{url}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
 
 
 % --- Settings ---
@@ -28,6 +39,8 @@
 \sectionfont{\normalsize}
 \subsectionfont{\normalsize\it\bfseries}
 \subsubsectionfont{\normalsize\it}
+\setlength{\parindent}{0pt}
+\urlstyle{same}
 
 
 \begin{document}
@@ -139,6 +152,19 @@ crucial to mono-static radar systems \cite{Jin2010}. Instead, any consumer-grade
 receivers capable of receiving reflected GNSS signals could be used for GNSS-R
 remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
 remote sensing systems such as an UAV. 
+%added by sashenka 
+
+Recent research has demonstrated the potential of integrating GNSS-R with UAVs
+by developing a UAV-based GNSS-R system for water body detection and flood
+mapping \cite{UAV-water}. This showcases how low-altitude UAV platforms can give
+high-resolution and flexible measurements. Their work established UAV-mounted
+GNSS-R as a promising tool for monitoring dynamic environmental conditions.
+However, due to the challenges in optimal flight trajectories planning and
+coverage planning, this research does not provide an autonomous navigation
+application. Addressing the above challenges requires autonomous path planning
+algorithms, dynamic obstacle avoidance, and environment mapping and
+localization. As a result, our research provides a unique opportunity to enhance
+the UAV and GNSS-R combination by integrating autonomous navigation. 
 
 \hl{May need some intro for path planning and lidar here. The above is from
 Louise's project proposal, so need further editing. (Also need to mention 
@@ -180,7 +206,50 @@ objective of vegetation monitoring, which will inform the integrated project
 methodologies.
 
 \subsection{Path Planning}
-Placeholder text
+Path planning is the technique that used in navigating a robot autonomously from
+a starting goal to an ending point based on a collision-free route. Path
+planning is mainly a geometric problem that generates a path according to a
+given sequence of waypoints. It does not consider the variation with time;
+however, in trajectory planning the path is defined as a function of time, which
+assigns a time function to the geometric path \cite{gasparetto2015path}. At the
+current stage, our research is focusing on implementing path planning to
+navigate an Unmanned Aerial Vehicle (UAV) autonomously in an outdoor
+environment. Consequently, we are focusing on path planning methods and will be
+focusing on trajectory planning and optimization in the future based on our
+needs.
+Earliest sensor-based obstacle avoiding path planning algorithms are
+known as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms
+will first go around the obstacles and then determine the shortest path to the
+goal based on the shape of the obstacle (Figure \ref{fig:bug_algorithms}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
+    \caption{Bug1 and Bug2 Path Planning Algorithms}
+    \cite{choset2005principles}
+    \label{fig:bug_algorithms}  
+\end{figure}
+However, these algorithms are used in scenarios where the robot has no map
+(unknown environment), and these algorithm does not guarantee the optimal path.
+With the rise of SLAM (Simultaneous Localization and Mapping) techniques, we are
+able to create maps of the navigation environment, which enabled the transition
+to use map-based path planning methods. Therefore, in our system we are using
+commonly found grid-based path planning algorithms, which enables us to create
+an intelligent UAV system that can identify potential vegetation areas using
+GNSS-R. 
+
+Most GNSS-R studies remain satellite-based, which limits spatial resolution and
+adaptability to localized environments such as fragmented urban forests. To
+alleviate this problem, we decided to use UAV-borne GNSS-R systems as a
+promising solution. UAVs can fly at lower altitudes, enabling high-resolution,
+flexible, and scalable vegetation monitoring missions. However, deploying GNSS-R
+on UAVs can be challenging in implementing optimal flight trajectories and
+spatial coverage. Therefore, our system introduces autonomous path planning,
+dynamic obstacle avoidance, and SLAM for environment mapping and localization.  
+
+
+
+
+
 
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
@@ -261,16 +330,426 @@ Placeholder text
 Placeholder text
 
 \subsection{Path Planning}
-Placeholder text
+As mentioned in the system architecture, path planning in our system focuses on
+two different methods: waypoint-based navigation and coverage path planning.
+These methods are crucial in observing various aspects of dense forests, such as
+hovering over trees and surveying over a dense canopy to obtain dynamic data for
+LiDAR SLAM.
+
+
+\subsubsection{Waypoint-based navigation}
+
+Waypoint-based navigation can be achieved in various approaches such as
+search-based algorithms, graph-based algorithms, and Artificial
+Intelligence-based algorithms. Since our system is designed to hover over dense
+vegetation environments, identifying potential Fresnel zones, we primarily need
+to fly outdoor high altitude open spaces. In order to find the optimal algorithm
+to build an intelligent UAV system, we conducted a baseline comparison among the
+Djikstra algorithm, the A* algorithm, and the RRT algorithm. 
+
+\begin{table}[ht]
+    \centering
+    \renewcommand{\arraystretch}{1.3} % Adds a little vertical padding for readability
+    % 'l' = left align, 'X' = auto-wrap column
+    \begin{tabularx}{\textwidth}{@{} l l X X @{}} 
+    \toprule
+    \textbf{Category} & \textbf{Algorithm} & \textbf{Advantages} & \textbf{Disadvantages} \\ 
+    \midrule
+
+    % SEARCH BASED SECTION
+    \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Shortest path is guaranteed for a given heuristic map.
+        \item Reduces computation power and search space compared to Dijkstra.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item High computational cost in large or continuous spaces.
+        \item Poor scalability in dynamic environments.
+    \end{itemize} \\ 
+    \cmidrule{2-4}
+    
+    & \textbf{Dijkstra} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Designed to find the optimal path. 
+        \item Simple to implement.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Computationally expensive.
+        \item Impractical for real-time UAV planning.
+    \end{itemize} \\ 
+    \midrule
+
+    % SAMPLING BASED SECTION
+    \textbf{Sampling-based} & \textbf{RRT} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Fast exploration of high-dimensional spaces.
+        \item Perform well in unknown or partially known maps.
+    \end{itemize} & 
+    \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
+        \item Does not guarantee the shortest/optimal path.
+        \item Paths are often jagged and require smoothing.
+    \end{itemize} \\ 
+    \bottomrule
+    \end{tabularx}
+    \caption{Comparison of Path Planning Algorithms}
+    \label{tab:algorithms}
+\end{table}
+
+As a result, for a given occupancy grid map, the comparison shows that the A* algorithm is suitable for offline
+path planning. Therefore, our system is designed
+to perform offline path planning using A* algorithm. On the other hand, RRT
+performs well in dynamic unknown environments, which is suitable for online path
+planning. 
+
+\paragraph{A* Algorithm Implementation} ~\\
+A* algorithm is a heuristic, search based algorithm which calculates the
+shortest path from a starting point to an end goal. The algorithm will first
+divide the map into nodes, where each node represents a possible position for
+the robot to move. These positions depend on the gird architectures such as
+4-way connected or 8-way connected grids. In addition to the conventional grid
+architecture, novel grid mapping approaches such as NavMeshes are widely used in
+3D simulation software. These mapping techniques let the algorithm connects the
+locations of the movable agent to the surface (mesh) and stores the surfaces as
+convex polygonals. 
+
+In our research, we will be focusing on regular grids which connects nodes
+across 26-directions in 3-D space. Each node will be assigned a cost based on the
+starting and ending node for a given path. The 2-D path illustration of an A*
+algorithm is shown in Figure \ref{fig:astar}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/A-starmap.jpg}
+    \caption{Map Highlighting Shortest Path from Node A to Node K}
+    \label{fig:astar}
+\end{figure}
+
+\paragraph{A* Algorithm Grid Definition} ~\\
+
+In our system the grid map is defined in 3-D spaces having 26 movable
+directions, diagonally and straight. However, during the testing phase of
+algorithm, we will be using 2-D grids with 8 movable directions for simplicity.
+We first convert the coordinates of the given map into gridnode indexes using
+\texttt{coord\_to\_index} function. The coordinates can be defined as world coordinates or
+image coordinates for a given map image.
+An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/image_coordinates.png}
+    \caption{Image Coordinates System}
+    \label{fig:image_coordinates}
+\end{figure}
+Below is the psuedocode for the \texttt{coord\_to\_index} function:
+\begin{algorithm}[H]
+\caption{Coordinate to Grid Index Conversion}
+\label{alg:coord_to_index}
+\begin{algorithmic}[1]
+    \Require $pos$: Real-world coordinate vector $(x, y, z)$
+    \Ensure $index$: Integer grid indices $(i, j, k)$
+    
+    \Function{CoordToIndex}{$pos$}
+        \State \Comment{Calculate position relative to the map center}
+        \State $pos_{relative} \gets pos - pos_{center}$
+        
+        \State \Comment{Scale by resolution and round to nearest integer}
+        \State $index \gets \text{round}(pos_{relative} \cdot step_{inv})$
+        
+        \State \Comment{Apply the center index offset}
+        \State $index \gets index + index_{center}$
+        
+        \State \Return $index$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}
+\paragraph{A* Algorithm Cost Function Implementation} ~\\
+The cost function $f(n)$ for each node $n$ is calculated as follows:
+\begin{equation}
+    f(n) = g(n) + h(n)  
+\end{equation}
+where:
+\begin{itemize}
+    \item $g(n)$ is the cost from the starting node to the current node $n$.
+    \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
+    \item $f(n)$ is the total estimated cost of the shortest path node $n$.
+\end{itemize}
+In our implementation the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
+between the starting node and the current node $n$.
+The Euclidean distance can be calculated as follows:
+\begin{equation}
+    g(n) = \sqrt{(x_n - x_{start})^2 + (y_n - y_{start})^2 + (z_n - z_{start})^2}  
+\end{equation}
+where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
+$(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
+
+The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
+node) is implemented using the diagonal heuristic function. The function has five key steps as follows:
+
+\begin{enumerate}
+    \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
+    \item Determines the direction with the minimum change in distance.
+    \item The heuristic cost starts at zero and will increment by $\sqrt{3} \cdot \min(dx, dy, dz)$ to account for diagonal movement in 3D space.
+    \item The function checks which dimensions still have remaining distance to cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$ equals zero), it calculates the remaining cost using 2D diagonal movement and straight-line movement.
+    \item If the three dimensions still have remaining distance, it calculates the cost using a combination of 2D diagonal movement and straight-line movement for the remaining distances.
+\end{enumerate}
+
+Below is an example of calculating heuristic cost in 3 dimensional space:
+
+\noindent Go from $(0,0,0)$ to $(5,3,2)$. \\
+Initial differences: $dx=5, dy=3, dz=2$.
+
+\begin{itemize}
+    \item \textbf{Step 1: 3D diagonal movement} \\
+    Calculate the shared 3D distance:
+    \[ diag_{3d} = \min(5, 3, 2) = 2 \]
+    Cost for 2 steps diagonally in 3D:
+    \[ \text{Cost} = \sqrt{3} \times 2 \approx 3.464 \]
+    \textit{Remaining:} $dx=3, dy=1, dz=0$.
+
+    \item \textbf{Step 2: Handle remaining} (since $dz=0$) \\
+    Calculate 2D diagonal in X-Y ($\min(3,1) = 1$ step):
+    \[ \text{Cost} = \sqrt{2} \times 1 \approx 1.414 \]
+    Calculate Straight line ($|3-1| = 2$ steps):
+    \[ \text{Cost} = 2.0 \]
+\end{itemize}
+
+\noindent \textbf{Total estimated cost:}
+\[ 3.464 + 1.414 + 2.0 = 6.878 \]
+
+Below is the psuedocode for the diagonal heuristic function:
+\begin{center}
+    % Change 0.8 to 0.6 or 0.7 to make it even narrower
+    \begin{minipage}{0.8\linewidth} 
+\begin{algorithm}[H]
+\caption{Diagonal Heuristic (3D)}
+\label{alg:diagonal_heuristic}
+\begin{algorithmic}[1] % The [1] turns on line numbering
+    \Require $node_1, node_2$: Current and Goal GridNodes
+    \Ensure $h$: Estimated cost to goal
+    
+    \Function{DiagonalHeuristic}{$node_1, node_2$}
+        \State $dx \gets |node_1.x - node_2.x|$
+        \State $dy \gets |node_1.y - node_2.y|$
+        \State $dz \gets |node_1.z - node_2.z|$
+        
+        \State \Comment{Find the minimum for 3-D diagonal movement}
+        \State $diag_{3d} \gets \min(dx, dy, dz)$
+        \State $dx \gets dx - diag_{3d}$
+        \State $dy \gets dy - diag_{3d}$
+        \State $dz \gets dz - diag_{3d}$
+        
+        \State $h \gets \sqrt{3} \cdot diag_{3d}$
+        
+        \State \Comment{Handle remaining 2-D movement}
+        \If{$dx = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dy, dz) + |dy - dz|$
+        \ElsIf{$dy = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dx, dz) + |dx - dz|$
+        \ElsIf{$dz = 0$}
+            \State $h \gets h + \sqrt{2} \cdot \min(dx, dy) + |dx - dy|$
+        \Else
+            \State \Comment{General case (if dimensions remain)}
+            \State $diag_{2d} \gets \min(dx, dy, dz)$
+            \State $h \gets h + \sqrt{2} \cdot diag_{2d}$
+            \State $remaining \gets (dx - diag_{2d}) + (dy - diag_{2d}) + (dz - diag_{2d})$
+            \State $h \gets h + remaining$
+        \EndIf
+        
+        \State \Return $h$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm} 
+
+\end{minipage}
+\end{center}
+
+\paragraph{A* Algorithm Core Logic Implementation} ~\\
+The core logic of A* algorithm involves determining the neighbouring nodes,
+checking the occupancy of the neighbouring nodes, calculating their costs, and
+adding the nodes to a separate list that deviates from unexplored nodes. The
+algorithm is also responsible to update its list by adding or removing
+neighbouring nodes, if a better path is found. The core logic works according to the
+following steps:
+
+\begin{enumerate}
+    \item Initialize the grid, convert the start and end coordinates to grid
+    indices, and adjust the indices if the start and end nodes are inside
+    obstacles.
+    \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
+    \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
+    \item If not, check the neighbouring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
+    \item If a node is already in the open set but a better path is found,
+    update the parent node, adjust the $g(n)$ to the lowest cost, and add to
+    the queue again with  new priority.
+    \item Repeat steps 2-5 until the goal node is reached or no path is found.
+\end{enumerate}
+
+Below is the flow chart illustrating the core logic of A* algorithm:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/Astar_flowchart.png}
+    \caption{A* Algorithm Core Logic Flowchart}
+    \label{fig:astar_flowchart}
+\end{figure}
+
+\paragraph{Evaluating the A* Algorithm Performance} ~\\
+
+In order to evaluate the performance of the algorithm, we conducted a series of
+test runs in different categories of vegetation density maps. The maps were
+obtained by QGround Control software satellite imagery and then imported to an
+image processing pipeline. The image processing pipeline can be elaborated in following steps:
+\begin{enumerate}
+    \item Convert the satellite imagery to grayscale images.
+    \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
+    Conversion to identify greenery, and NDVI Index to measure vegetation
+    health.
+    \item The images are categorized into three vegetation types: Dense tree
+    canopy, grassland and short vegetation, and cropland and agricultural fields.
+    \item Apply edge detection such as canny detection to identify buildings and non vegetation areas.
+    \item Plot the series of processed images as occupancy grid maps.
+\end{enumerate}
+
+Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/densecanopy_map.png}
+    \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
+    \label{fig:dense_canopy_map}
+\end{figure}
+
+\paragraph{Normalized Difference Vegetation Index} ~\\
+Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
+the difference between near-infrared (which vegetation strongly reflects) and
+red light (which vegetation absorbs) \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
+\begin{equation}
+    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
+    \label{eq:ndvi}
+\end{equation}
+The Normalized Difference Vegetation Index is calculated using Equation
+\ref{eq:ndvi}, where \text{NIR} represents the near-infrared band and \text{Red}
+represents the red visible light band.
+
+If a vegetation is healthy it reflects more near-infrared and green light
+(chlorophyll), while absorbing more red and blue lights.
+
+Test run results of the A* algorithm in different vegetation density maps are
+shown in the results and discussion section.
+
+\subsubsection{Coverage Path Planning}
+Coverage Path Planning (CPP) is essential for surveying in dense vegetation
+areas and obtaining dynamic data for LiDAR SLAM. In this research, we
+implemented Boustrophedon Cell Decomposition as the CPP algorithm. The Boustrophedon Cell
+Decomposition algorithm works by decomposing the map into cells based on the
+polygonal shape of the map and the obstacles present. After decomposing the map
+into cells, the algorithm will then generate a sweeping path in each cell based
+on the given parameters (refer to Figure \ref{fig:boustrophedon}). Having this sweeping technique
+in all the cells will ensure that the entire area is covered. Below is the
+detail explanation of now the boustrophedon cell decomposition is implemented,
+using the framework developed by Autonomous Systems Lab at ETH Zurich
+\cite{B_hnemann_2021}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/boustrophedon_path.png}
+    \caption{Boustrophedon Cell Decomposition Path Planning Example}
+    \cite{Choset-1997-16422}
+    \label{fig:boustrophedon}
+\end{figure}
+
+\paragraph{Boustrophedon Cell Decomposition Implementation} ~\\
+
+The algorithm decomposite the map (polygonal area) into cells based on three key events:
+\begin{itemize} 
+    \item \textbf{In Event}: When the sweep line encounters the start of an
+    obstacle, the current cell is divided into two new cells. The algorithm is
+    defined by an if-else loop that compares the points of the vertexes of the
+    obstacle and the sweep line intersection. IN event moves the intersecting
+    vertexes as the same direction as the sweep line.
+
+    The if else logic in an IN event can be interpreted as follows:
+    \begin{equation}
+        \text{If } target\_upper > source\_upper \text{ and } target\_lower > source\_lower
+    \end{equation}
+Figure \ref{fig:in_event} illustrates an example of an IN event:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
+        \caption{Boustrophedon Cell Decomposition IN Event Example}
+        \label{fig:in_event}
+    \end{figure}
+
+    \item \textbf{Middle Event}: When the sweep line passes through the obstacle
+    and updates it cell status.
+    \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
+    and two cells are merged into one cell. The algorithm is defined by an
+    if-else loop that compares the points of the vertexes of the obstacle and the 
+    sweep line intersection. OUT event moves the intersecting vertexes in the
+    opposite direction of the sweep direction.
+
+    The if else logic in an OUT event can be interpreted as follows:
+    \begin{equation}    
+        \text{If } target\_upper < source\_upper \text{ and } target\_lower < source\_lower
+    \end{equation}
+Figure \ref{fig:out_event} illustrates an example of an OUT event:
+    \begin{figure}[H]   
+        \centering
+        \includegraphics[width=0.6\linewidth]{Included_Images/out_event.png}
+        \caption{Boustrophedon Cell Decomposition OUT Event Example}    \cite{Choset-1997-16422}
+        \label{fig:out_event}
+        \end{figure}
+\end{itemize}
+
+After decomposition of the map into cells, the algorithm will visit each and
+every cell based on depth-first search (DFS) technique. The algorithm will
+choose a random cell to visit at first and then proceed the neighboring cells of
+the chosen cell. The algorithm will also backpropagate through the visited cells, to ensure all the cells are visited. 
+
+When visiting each cell, the algorithm will generate a sweeping path based on
+the given parameters such as sweep direction and sweep distance. The sweeping
+path can be performed in horizontal, vertical. The angle of the sweep line can
+also be adjusted to fit the obstacle edges. The sweep distance is defined as the
+distance between each sweep line. Figure \ref{fig:sweep_parameters} illustrates
+the sweeping in each cell. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
+    \caption{Boustrophedon Cell Decomposition Sweeping}
+     \cite{Choset-1997-16422}
+    \label{fig:sweep_parameters}
+\end{figure}
+
+The practical implications of the algorithm usage is shown in the experiment
+setup section and the detailed results of the Boustrophedon Cell Decomposition
+algorithm is discussed in the discussion section.
+
 
 \subsection{GNSS-R}
-The GNSS-R framework takes in raw GNSS data collected from the onboard receivers
-and runs the data through the steps of GNSS measurement extraction, Fresnel zone
-analysis, and GNSS measurement level modelling. 
+The GNSS-R framework takes in raw GNSS data collected from the onboard
+receivers, extracts raw GNSS measurements, and analyzes the characteristics of
+such measurements with respect to the ground features that falls within the
+Fresnel zones. Ultimately, the correlation between GNSS measurement features and
+vegetation properties would be systematically summarized and modeled. The method
+used for retrieving GNSS measurements and the Fresnel zone from collected raw data
+is briefly outlined in the following two sections, while the MATLAB code for the 
+GNSS-R framework is presented in the Appendix.
 
 \subsubsection{GNSS Measurement Extraction}
-Two major GNSS measurements are extracted from the collected data: carrier to
-noise ratio ($C/N_0$) and pseudorange error. 
+Two raw data sources are necessary for the extraction of key GNSS measurements
+used in this project: the raw binary GNSS data and the Pixhawk controller log.
+First, the binary GNSS data is converted into readable observation files using
+RTKCONV \cite{takasu2009rtklib}, and together with the satellite ephemeris data
+downloaded from \url{https://cddis.nasa.gov/archive/gnss/data/}, measurements
+such as the satellite elevation angle, pseudorange, and carrier to noise ratio
+could be extracted using the MatRTKLIB library \cite{taroz:matrtklib}. From the
+Pixhawk controller log, the UAV position, which is a filtered positioning result
+from various onboard sensors, is obtained and regarded as the ground truth
+assuming that the positioning error is small. Ultimately, two major GNSS
+measurement are taken for further analysis: carrier to noise ratio ($C/N_0$) and
+pseudorange error. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
+    \caption{Flowchart of extracting GNSS measurements from raw data.}
+\end{figure}
 
 \paragraph{Carrier to Noise Ratio} ~\\
 Carrier to noise ratio refers to the power of received carrier signal relative
@@ -322,10 +801,63 @@ pseudorange error:
 \end{equation}
 
 \subsubsection{Fresnel Zone Analysis}
-Placeholder text
+Following the extraction of GNSS measurements observed onboard the UAV, the GNSS
+signal would be particularly analyzed with respect to the 2-dimensional ground region 
+that it is reflected from. Within this region, a specular reflection point could be found,
+where the angle of incidence is equal to the angle of reflection. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
+    \caption{Schematic diagram of GNSS-R signal scattering geometry.}
+\end{figure}
+The primary scattering area around the specular point in which reflected signals
+arrive at the receiver in coherence is called the first Fresnel zone (FFZ). By
+definition, it is an ellipse for which the signal phase change across is within
+$\frac{\lambda}{2}$ radians, where $\lambda$ refers to the signal wavelength
+\cite{Jia2018}. Given the incidence angle $\theta$ and the height of the
+receiver $H$, the semi-major axis $a$ and the semi-minor axis $b$ of the FFZ can
+be calculated as the following \cite{yu2021theory}: 
+\begin{equation}
+    a = \frac{\sqrt{\lambda H sin(\theta)+\frac{\lambda^2}{4}}}{(sin(\theta))^2},
+\end{equation}
+\begin{equation}
+    b = \frac{\sqrt{\lambda H sin(\theta)+\frac{\lambda^2}{4}}}{sin(\theta)}.
+\end{equation}
+To calculate the location of the FFZ center, a local coordinate system is
+defined. The origin is the receiver's ground projection, while the y-axis aligns
+with the ground projection of the receiver-to-satellite vector. The z-axis
+follows the local East-North-Up (ENU) "up" direction, and the x-axis completes
+the right-handed system by remaining orthogonal to both x and y axes. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
+    \caption{Schematic diagram of the local coordinate system defined.}
+\end{figure}
+In this coordinate system, the location of the FFZ center could be expressed as
+$(x_c, y_c, z_c)$, where \cite{yu2021theory}:
+\begin{equation}
+    x_c = 0
+\end{equation}
+\begin{equation}
+    y_c = (\frac{\lambda}{2}+H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2}
+\end{equation}
+\begin{equation}
+    z_c = 0
+\end{equation}
+The flowchart for calculating the FFZ shape and location is outlined in the
+figure below. Here, since the UAV true position is given in the global
+coordinate of latitude, longitude, and height (LLH) in the Pixhawk log data, the
+terrain height shall be subtracted to obtain the UAV height above ground, $H$.
+This terrain height is obtained through the Hong Kong Digital Terrain Model
+(\url{https://data.gov.hk/en-data/dataset/hk-landsd-openmap-5m-grid-dtm}), which
+shows the topographical information in 5 meter by 5 meter grids with an accuracy of
+$\pm$ 5 meters \cite{dataDigitalTerrain}. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/FFZ_Flow.png}
+    \caption{Flowchart of calculating FFZ shape and location from collected data.}
+\end{figure}
 
-\subsubsection{GNSS Measurement Level Model}
-Placeholder text
 
 \subsection{Machine Learning}
 Placeholder text
@@ -765,7 +1297,13 @@ Placeholder text
 \newpage
 \addcontentsline{toc}{section}{Appendix}
 \section*{Appendix}
-Placeholder text
+
+\subsubsection*{GitHub Repositories}
+The code scripts of this project are organized in various GitHub repositories, which
+aligns with different frameworks of this project. Specifically: 
+\begin{itemize}
+    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+\end{itemize}
 
 
 % --- References ---
