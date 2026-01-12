@@ -21,11 +21,9 @@
 \usepackage{enumitem}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{amsmath} 
-\usepackage{float}
-\usepackage{url}
 \usepackage{parskip}
 \usepackage[hidelinks]{hyperref}
+\usepackage{subcaption}
 
 
 % --- Settings ---
@@ -785,7 +783,6 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
     \caption{Flowchart of calculating FFZ shape and location from collected data.}
 \end{figure}
 
-
 \subsection{Machine Learning}
 Placeholder text
 
@@ -838,7 +835,56 @@ Placeholder text
 Placeholder text
 
 \subsection{GNSS-R}
-Placeholder text
+After the successful execution of the path planning algorithms onboard the UAV, the GNSS
+measurements from both the zenith and nadir antenna are recorded and post-processed. 
+Particularly, the ratio of the nadir $C/N_0$ and the zenith $C/N_0$ are analyzed with 
+respect to the FFZ locations. Here, the FFZs from \hl{experiment (a) and (b)} are plotted
+onto the satellite image map, with the colors representing the ratio of 
+$\frac{C/N_{0, reflected signal}}{C/N_{0,direct signal}}$.
+\begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_1.png}
+        \caption{Experiment (a)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_2.png}
+        \caption{Experiment (b)}
+    \end{subfigure}
+    \caption{Plot of FFZs on satellite imagery, colored by $C/N_0$ ratios.}
+\end{figure}
+From the above, it could be seen that, when the FFZ is over water/bare ground, the
+$C/N_0$ ratio between the reflected signal and the direct signal tends to be higher. 
+This indicates stronger reflections tends to occur when the FFZ is over water or bare
+ground compared to when the FFZ is over trees.
+
+Yet, when the UAV hovers over trees, more reflected signals could be observed, as shown in
+Figure \ref{Pr_Error Distribution} below. By definition, since the majority of pseudorange
+error is contributed by signal reflections, the signals received under a non-obstructed open
+sky environment should have a near-zero mean pseudorange error. However, while the zenith 
+antenna is pointed toward the open sky, the pseudorange error distribution displays a small
+bump centered at large positive psuedorange errors, indicating that a signal reflected from
+the ground is received. Moreover, this "bump" is more significant on plot (b), indicating 
+more ground reflections observed. 
+\begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Bare_Ground_Pr_Error.png}
+        \caption{UAV hovering over bare ground.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Tree_Pr_Error.png}
+        \caption{UAV hovering over trees.}
+    \end{subfigure}
+    \caption{Normalized distributions of psuedorange errors for both antennas in 
+    two different flight scenarios.}
+    \label{Pr_Error Distribution}
+\end{figure}
+
+While the above analysis presents key differences in the GNSS measurements that
+could be used to distinguish tree-reflected signals thus be able to used for
+identifying vegetated areas, it also presents a crucial assumption in this study
+that is necessary to be eliminated: 
 
 \subsection{Machine Learning}
 Placeholder text
