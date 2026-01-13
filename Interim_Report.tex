@@ -15,7 +15,6 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{float}
-\usepackage[utf8]{inputenc}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
@@ -1058,10 +1057,65 @@ over trees and UAV hovering over bare ground. These features are outlined below:
     distinguishable from those reflected from bare ground. For the case of bare ground, 
     the doppler values for up and down antenna are almost identical. However, for 
     the case of UAV hovering over vegetation, the doppler distribution is more
-    spread out, 
+    spread out, ranging from approximately -5000 dbHz to 4000 dbHz. This indicates
+    that reflections caused by trees introduce additional frequency shifts in the received 
+    signals. The figure below illustrates the distribution of doppler values for signals
+    reflected from trees and bare ground.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width= 1\textwidth]{Included_Images/doppler.png}
+        \caption{Distribution of doppler for signals reflected from trees and bare ground.}
+    \end{figure}
     
-    \item\textbf{Carrier Phase}:
+    \item\textbf{Carrier Phase}: Carrier phase refers to the precise range observables that are derived 
+     from the accumulated phase cycles of the GNSS carrier wave. From the figure below, 
+     it can be observed that the carrier phase values for signals reflected from trees
+     exhibit 2.5 times broader carrier phase spread compared to thos reflected from bare 
+     ground, reflecting multipath induced phase delays versus the concentrated phase coherence of bare 
+     ground reflections. This indicated that vegetation introduces additional phase 
+     shifts in the received signals. The figure below illustrates the distribution of
+     carrier phase values for signals reflected from trees and bare ground.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width= 1\textwidth]{Included_Images/Carrier Phase.png}
+        \caption{Distribution of carrier phase for signals reflected from trees and bare ground.}
+    \end{figure}
 \end{itemize}
+\subsubsection{Dataset Construction}
+Data was collected from muliple locations with different environmental settings, in order to have 
+a diverese dataset that captures the three classes of signals. The scenariors include:
+(1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/opensky.png}
+        \caption{Open Sky}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.43\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/bareground.png}
+        \caption{UAV hovering over bare ground}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/overtrees.png}
+        \caption{UAV hovering over trees}
+    \end{subfigure}
+    \caption{Data collection scenarios.}
+\end{figure}
+The data was then labeled based on the collection scenarios, where data collected 
+from open sky mostly contains direct signals, data collected from UAV hovering over bare ground 
+mostly contains signals reflected from ground, and data collected from UAV hovering over trees
+mostly contains signals reflected from trees.
+\subsubsection{Model Selection}
+For the classification task, a LightGBM model was selected due to its advantages with native 
+support for NaN values. This feature of the model is particularly important for our case as 
+raw GNSS data often contains missing values due to signal blocckages or reveiver limitations. Cleaning the
+data by removing the NaN values would lead to sinificant loss of data, as cleaning process would have to be carried
+out either row wise of column wise. Replacing the NaN values with zeros or mean values would introduce bias to the dataset, 
+which would potentially affect the performance of the model. Therefore, using a model with native support for NaN 
+values was the most suitable approach for our case. 
+\subsubsection{Model Training}
 
 \subsection{LiDAR SLAM}
 \subsubsection{LiDAR-Inertial Odometry}
