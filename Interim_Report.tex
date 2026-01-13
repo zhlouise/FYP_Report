@@ -1323,7 +1323,15 @@ antenna only receives the direct signal while the nadir antenna only receives th
 reflected signal. However, as shown in Figure \ref{Pr_Error Distribution}, this is not
 the case. To further investigate this, the distribution of difference between the absolute
 value of nadir pseudorange error and zenith pseudorange error is plotted in Figure
-\ref{Pr_Error Difference}. First, since many observations has a near-zero
+\ref{Pr_Error Difference}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
+    \caption{Normalized distribution of difference between the absolute pseudorange errors of the 
+    nadir antenna and the zenith antenna.}
+    \label{Pr_Error Difference}
+\end{figure}
+First, since many observations has a near-zero
 difference between nadir and zenith antenna pseudorange error, the nadir antenna pseudorange
 error have similar values compared to the zenith antenna pseudorange error in such observations.
 To achieve this, two possible scenarios could occur: 
@@ -1340,15 +1348,73 @@ To achieve this, two possible scenarios could occur:
 Furthermore, Figure \ref{Pr_Error Difference} shows the existence of
 observations where the zenith pseudorange error is much greater than the nadir
 pseudorange error, indicating the reception of reflected signals by the zenith
-antenna. 
+antenna. Since the zenith antenna is a RHCP antenna and the nadir antenna is an 
+LHCP antenna, this also indicates that a GNSS RHCP antenna is able to receive
+LHCP signals and vice versa. To further investigate this observation, both antenna
+are tested in an open sky environment and their respective received carrier to noise 
+ratio are plotted into distribution curves as shown in Figure \ref{Antenna Testing Open Sky}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
-    \caption{Normalized distribution of difference between the absolute pseudorange errors of the 
-    nadir antenna and the zenith antenna.}
-    \label{Pr_Error Difference}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Open_Sky_Setup.jpg}
+        \caption{Set up of antenna testing experiment.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{Included_Images/Open_Sky_Fisheye.png}
+        \caption{Fisheye view of the experiment environment.}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.75\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Distribution.png}
+        \caption{Normalized $C/N_0$ distributions of both antenna.}
+    \end{subfigure}
+    \caption{Antenna testing in open sky environment.}
+    \label{Antenna Testing Open Sky}
 \end{figure}
-
+Assuming all signals received under the open sky environment is non-reflected thus RHCP,
+it is clear that the LHCP antenna (in orange) can indeed receive RHCP signals, just at a 
+lower $C/N_0$ compared to the RHCP antenna due to lower gains. This phenomenon is more 
+pronounced in a further experiment, where both antenna were being lifted in the air. In the 
+first five minutes, both antenna face upward; in the last five minutes, both antenna face 
+downward. The corresponding received $C/N_0$s are plotted against observation time (epochs)
+in the figure below.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.8\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/RHCP_CNR.png}
+        \caption{RHCP Antenna}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.8\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Included_Images/LHCP_CNR.png}
+        \caption{LHCP Antenna}
+    \end{subfigure}
+    \caption{Temporal plot of $C/N_0$s received by both antenna.}
+\end{figure}
+The above observations could be qualitatively summarized in the table below:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+     & \textbf{Direct Signal} & \textbf{Reflected Signal} \\
+    \hline
+    \textbf{RHCP Antenna} & High $C/N_0$ & Low $C/N_0$ \\
+    \hline
+    \textbf{LHCP Antenna} & Low $C/N_0$ & High $C/N_0$ \\
+    \hline
+    \end{tabular}
+    \caption{Summary of $C/N_0$ behaviors for different antenna under different
+    signal reception scenarios.}
+\end{table}
+Since both direct signals and reflected signals can be received by both the zenith RHCP 
+antenna and the nadir LHCP antenna, and that their signal properties differ when received
+by different antenna, it is crucial to classify them to distinguish the reflected signals
+from the direct signals to facilitate a more accurate GNSS-R framework. This could be easily
+achieved through machine learning approaches, which will be discussed in detail in the next
+section.   
 
 \subsection{Machine Learning}
 Placeholder text
