@@ -23,10 +23,9 @@
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{enumitem}
-\usepackage{amsmath} 
-\usepackage{url}
 \usepackage{parskip}
 \usepackage[hidelinks]{hyperref}
+\usepackage{subcaption}
 
 
 % --- Settings ---
@@ -158,8 +157,8 @@ However, due to the challenges in optimal flight trajectories planning and
 coverage planning, this research does not provide an autonomous navigation
 application. Addressing the above challenges requires autonomous path planning
 algorithms, dynamic obstacle avoidance, and environment mapping and
-localization. As a result, our research provides a unique opportunity to enhance
-the UAV and GNSS-R combination by integrating autonomous navigation. 
+localization. As a result, our research provides a unique solution by enhancing
+the UAV and GNSS-R combination with the integration of autonomous navigation. 
 
 \hl{May need some intro for path planning and lidar here. The above is from
 Louise's project proposal, so need further editing. (Also need to mention 
@@ -203,21 +202,23 @@ objective of vegetation monitoring, which will inform the integrated project
 methodologies.
 
 \subsection{Path Planning}
-Path planning is the technique that used in navigating a robot autonomously from
-a starting goal to an ending point based on a collision-free route. Path
-planning is mainly a geometric problem that generates a path according to a
-given sequence of waypoints. It does not consider the variation with time;
-however, in trajectory planning the path is defined as a function of time, which
-assigns a time function to the geometric path \cite{gasparetto2015path}. At the
-current stage, our research is focusing on implementing path planning to
-navigate an Unmanned Aerial Vehicle (UAV) autonomously in an outdoor
-environment. Consequently, we are focusing on path planning methods and will be
-focusing on trajectory planning and optimization in the future based on our
-needs.
-Earliest sensor-based obstacle avoiding path planning algorithms are
-known as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms
-will first go around the obstacles and then determine the shortest path to the
-goal based on the shape of the obstacle (Figure \ref{fig:bug_algorithms}).
+Path planning is a term affiliated with fields, such as robotics, artificial
+intelligence, and control systems. In robotics, path planning is a technique that
+is used in navigating a robot autonomously from an origin to a destination via a
+collision-free route. Path planning is primarily a geometric problem that
+generates a path according to a given sequence of waypoints, without accounting
+for variations over time. In contrast, trajectory planning defines the path as a
+function of time, assigning specific timing to the geometric route
+\cite{gasparetto2015path}. Currently, our research focuses on implementing path
+planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
+outdoor environments. Consequently, we prioritize path planning methodologies in
+this work, reserving trajectory planning and optimization for future
+investigation.
+
+The earliest sensor-based, obstacle-avoiding path planning algorithms are known
+as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms are
+designed to first navigate around the an obstacle and then determine the
+shortest path around the obstacle to reach the goal (shown in Figure \ref{fig:bug_algorithms}).
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
@@ -225,28 +226,148 @@ goal based on the shape of the obstacle (Figure \ref{fig:bug_algorithms}).
     \cite{choset2005principles}
     \label{fig:bug_algorithms}  
 \end{figure}
-However, these algorithms are used in scenarios where the robot has no map
-(unknown environment), and these algorithm does not guarantee the optimal path.
-With the rise of SLAM (Simultaneous Localization and Mapping) techniques, we are
-able to create maps of the navigation environment, which enabled the transition
-to use map-based path planning methods. Therefore, in our system we are using
-commonly found grid-based path planning algorithms, which enables us to create
-an intelligent UAV system that can identify potential vegetation areas using
-GNSS-R. 
+However, both bug1 and bug2 algorithms are used in scenarios where the robot has
+no map (i.e., an unknown environment). Additionally, these algorithms do not
+guarantee the optimal path. With the rise of SLAM (Simultaneous Localization and
+Mapping) techniques, we are able to create maps of the navigation environment,
+which enabled the transition to use map-based path planning methods. Therefore,
+in our system, we are using commonly found grid-based path planning algorithms,
+which enables us to create an intelligent UAV system that can identify potential
+vegetation areas using GNSS-R. 
 
-Most GNSS-R studies remain satellite-based, which limits spatial resolution and
-adaptability to localized environments such as fragmented urban forests. To
-alleviate this problem, we decided to use UAV-borne GNSS-R systems as a
-promising solution. UAVs can fly at lower altitudes, enabling high-resolution,
-flexible, and scalable vegetation monitoring missions. However, deploying GNSS-R
-on UAVs can be challenging in implementing optimal flight trajectories and
-spatial coverage. Therefore, our system introduces autonomous path planning,
-dynamic obstacle avoidance, and SLAM for environment mapping and localization.  
+One of the primary reasons for utilizing autonomous navigation and path planning
+in our UAV system is that it is scalable across vegetation monitoring, providing
+accurate and precise navigation in fragmented urban forests. To develop path
+planning mechanisms, we conducted our literature review across three different
+path planning approaches. 
 
+\begin{enumerate} 
+    \item \textbf{Search-based algorithms}: Dijkstra algorithm and A* algorithm.
+    \item \textbf{Sampling-based algorithms}: RRT (Rapidly-exploring Random Tree)
+    algorithm, RRT*, and PRM (Probabilistic Roadmap) algorithm.
+    \item \textbf{Artificial Intelligence-based algorithms}: Soft-Actor-Critic.
+    \item \textbf{Cell Decomposition Algorithms}: Boustrophedon Cell Decomposition.
+\end{enumerate}
 
+\paragraph{Search-based algorithms} ~\\
+Dijkstra's algorithm solves the problem of finding the shortest path from a
+given starting point to a given ending point. The algorithm explores this path
+by simultaneously finding the shortest path from a given starting node to all
+points in the graph \cite{javaid2013understanding}. As a result, the algorithm is known to perform the
+guaranteed shortest path across two points. However, finding the shortest path
+across all the points in the map consumes high computational cost, and
+therefore, it is impractical to use for real-time UAV path planning. The update rule \ref{alg:dijkstra} illustrates the
+pathfinding process of Dijkstra's algorithm.
+\begin{algorithm}[H]
+\caption{Dijkstra's Algorithm (Relaxation Step)}
+\label{alg:dijkstra}
 
+\begin{algorithmic}[1]
+  \State $d[u] \gets$ current known shortest distance from start to node $u$
+  \State $w(u,v) \gets$ weight (cost) of edge from $u$ to $v$
+  \State \textbf{The core update rule is:}
+  \State $d[v] \gets \min(d[v], d[u] + w(u,v))$
+\end{algorithmic}
+\end{algorithm}
+To address the limitations of Dijkstra’s algorithm, scientists developed another
+search-based algorithm called the A* (A-star) algorithm. A* algorithm is one of
+the most common path planning algorithms, which can be applied to grid-based or
+topological configuration spaces \cite{Astar_simulation}. This algorithm
+combines the shortest path calculation in Dijkstra’s algorithm and heuristic
+searching. The heuristic cost is known as the estimated cost from the current
+node to the end node. A* algorithm is better in terms of reducing the search
+space compared to the Dijkstra algorithm. However, it requires accurate
+heuristics to determine the shortest path and has a large computation time
+depending on the number of cells in the map.   \cite{DUCHON201459}.  
 
+\paragraph{Sampling-based algorithms} ~\\
+As previously discussed, search-based algorithms consume an excessive amount of
+computational power in high-dimensional spaces and with a large number of
+obstacles \cite{RRT_star}.  To avoid such burnout, sampling-based algorithms have been proposed
+and have performed effectively in high-dimensional spaces, attracting
+significant attention across several decades \cite{Kavraki},\cite{kavraki_etal}. One of the most common
+sampling-based algorithms is RRTs and PRMs, which sample points randomly from
+the given map. 
 
+The RRT algorithm works by selecting a random available cell and randomly
+checking its neighboring nodes. As a result, there is no need to assign nodes at
+every point in the path. The algorithm spreads like a tree from the random
+neighboring nodes and eventually will reach the endpoint. Additionally, RRT
+effectively handles systems with differential constraints \cite{anytimeRRT},
+making it a suitable algorithm for state-of-the-art robotics. Although RRT
+quickly computes the path between the starting and ending points, it does not
+guarantee the shortest path.This was also proven by Karaman and Frazzoli
+\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing that the
+probability of the RRT algorithm converging to an optimal solution is zero.
+Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/rrt_vs_rrtstar.png}
+    \caption{RRT vs RRT* Path Planning Algorithms}
+    \label{fig:rrt_vs_rrtstar}
+\end{figure}
+In RRT*, the algorithm considers neighboring nodes within a window of radius r
+and examines the shortest path by comparing nodes in the window
+\ref{fig:rrt_vs_rrtstar}. RRT* has the same properties as RRT, but with
+near-neighbor search and tree rewriting operations
+\cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As the number of
+iterations increases, RRT* performance improves, while the path becomes more
+jagged with each iteration \cite{noreen2016comparison}. Moreover, PRM is another
+type of sampling-based algorithm that has a network of possible paths in the
+freely available space. By creating a network among the available spaces, the
+PRM increases the path-finding speed by converting the map into a graph.
+\cite{PRM}.
+
+\paragraph{AI-based algorithms} ~\\
+In recent years, deep reinforcement learning methods have been employed to
+address task allocation and path planning problems in autonomous vehicles
+\cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
+multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent studies have merged the
+Soft-Actor-Critic (SAC) reinforcement learning algorithm with a sampling-based
+path planning algorithm to design adaptively informed trees (AIT*) \cite{ait}. The network
+structure of the hybrid path planner is shown in the Figure \ref{fig:sac_ait}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/sac_ait.png}
+    \caption{SAC Network Structure}
+    \cite{SAC-path-planning}
+    \label{fig:sac_ait}
+\end{figure}
+
+SAC learns a policy that specifies a given state and the corresponding action to
+be taken. In other words, “given my current state (position, velocity, sensor
+readings), what action (thrust, roll, yaw, pitch) should I take?” With the
+correct reward design (e.g., penalties for collisions, rewards for reaching the
+goal), SAC can learn to generate collision-free trajectories. The data needed
+for each state should be stored in a replay buffer, including the state at a
+given time, the action taken at that time, the reward received after taking that
+action, and the next state after the action.
+
+\paragraph{Decomposition-based algorithms} ~\\
+One of the primary reasons for using cell decomposition methods in our project
+is to cover fragmented areas in the vegetation environment. In cell
+decomposition methods, the robot's free space is subdivided into several
+regions, called cells \cite{gasparetto2015path}. The decomposition process can be explained as follows:
+subdivision of space into numbered polygons, creation of a connectivity graph,
+identification of regions to be crossed, and generation of the path.  The figure
+\ref{fig:cell_decomposition} shows the detailed steps of the exact cell
+decomposition process. In our system, we utilize exact cell decomposition,
+specifically boustrophedon decomposition, for coverage path planning. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/cell_decomposition.png}
+    \caption{Exact Cell Decomposition Process}
+    \cite{choset2005principles}
+    \label{fig:cell_decomposition}
+\end{figure}
+The boustrophedon cellular decomposition is a common algorithm that breaks down
+the robot’s free space into cells and covers each cell with a motion of back and
+forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the UAV to constantly learn,
+resulting in an unstable antenna, using boustrophedon keeps the drone stable
+while covering the area. Similarly, in wavefront algorithms, having zig-zag
+patterns often provides a jagged path, whereas boustrophedon provides the
+kinematic feasibility. The detailed implementation of the boustrophedon
+algorithm is discussed in the methodology section.
 
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
@@ -357,21 +478,20 @@ Placeholder text
 
 \subsection{Path Planning}
 As mentioned in the system architecture, path planning in our system focuses on
-two different methods: waypoint-based navigation and coverage path planning.
-These methods are crucial in observing various aspects of dense forests, such as
-hovering over trees and surveying over a dense canopy to obtain dynamic data for
-LiDAR SLAM.
-
+two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
+are crucial for observing dense forests, such as hovering over trees and
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM.
 
 \subsubsection{Waypoint-based navigation}
 
-Waypoint-based navigation can be achieved in various approaches such as
+Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
 Intelligence-based algorithms. Since our system is designed to hover over dense
-vegetation environments, identifying potential Fresnel zones, we primarily need
-to fly outdoor high altitude open spaces. In order to find the optimal algorithm
-to build an intelligent UAV system, we conducted a baseline comparison among the
-Djikstra algorithm, the A* algorithm, and the RRT algorithm. 
+vegetation environments and identify potential Fresnel Zones, we primarily need
+to fly in outdoor, high-altitude, open spaces. To determine the optimal
+algorithm for building an intelligent UAV system, we conducted a baseline
+comparison among the Dijkstra algorithm, the A* algorithm, and the RRT
+algorithm.
 
 \begin{table}[ht]
     \centering
@@ -421,27 +541,26 @@ Djikstra algorithm, the A* algorithm, and the RRT algorithm.
     \label{tab:algorithms}
 \end{table}
 
-As a result, for a given occupancy grid map, the comparison shows that the A* algorithm is suitable for offline
-path planning. Therefore, our system is designed
-to perform offline path planning using A* algorithm. On the other hand, RRT
-performs well in dynamic unknown environments, which is suitable for online path
-planning. 
+As a result, for a given occupancy grid map, the comparison shows that the A*
+algorithm is suitable for offline path planning. Therefore, our system is
+designed to perform offline path planning using the A* algorithm. On the other
+hand, RRT performs well in dynamic, unknown environments and is suitable for
+online path planning. 
 
 \paragraph{A* Algorithm Implementation} ~\\
-A* algorithm is a heuristic, search based algorithm which calculates the
-shortest path from a starting point to an end goal. The algorithm will first
-divide the map into nodes, where each node represents a possible position for
-the robot to move. These positions depend on the gird architectures such as
-4-way connected or 8-way connected grids. In addition to the conventional grid
-architecture, novel grid mapping approaches such as NavMeshes are widely used in
-3D simulation software. These mapping techniques let the algorithm connects the
-locations of the movable agent to the surface (mesh) and stores the surfaces as
-convex polygonals. 
+The A* algorithm is a heuristic, search-based algorithm that calculates the
+shortest path from a starting point to a goal. The algorithm first divides the
+map into nodes, where each node represents a possible position for the robot to
+move. These positions depend on the grid architecture, such as 4-way or 8-way
+connected grids. In addition to the conventional grid architecture, novel grid
+mapping approaches such as NavMeshes are widely used in 3D simulation software.
+These mapping techniques connect the locations of the movable agent to the
+surface (mesh) and store the surfaces as convex polygons.  
 
-In our research, we will be focusing on regular grids which connects nodes
-across 26-directions in 3-D space. Each node will be assigned a cost based on the
-starting and ending node for a given path. The 2-D path illustration of an A*
-algorithm is shown in Figure \ref{fig:astar}.
+In our research, we will focus on regular grids that connect nodes across 26
+directions in 3-D space. Each node will be assigned a cost based on the starting
+and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
+shown in Figure \ref{fig:astar}.
 
 \begin{figure}[ht]
     \centering
@@ -452,12 +571,13 @@ algorithm is shown in Figure \ref{fig:astar}.
 
 \paragraph{A* Algorithm Grid Definition} ~\\
 
-In our system the grid map is defined in 3-D spaces having 26 movable
-directions, diagonally and straight. However, during the testing phase of
-algorithm, we will be using 2-D grids with 8 movable directions for simplicity.
-We first convert the coordinates of the given map into gridnode indexes using
-\texttt{coord\_to\_index} function. The coordinates can be defined as world coordinates or
-image coordinates for a given map image.
+
+Our system utilizes a grid map defined in 3D space, featuring 26-connectivity,
+which allows for movement in all straight and diagonal directions. However, to
+simplify the initial validation, the algorithm is currently evaluated using a 2D
+grid with 8-connectivity. We first convert the coordinates of the given map into
+grid node indexes using the \texttt{coord\_to\_index} function. The coordinates
+can be defined as world coordinates or image coordinates for a given map image.
 An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
 \begin{figure}[H]
     \centering
@@ -589,12 +709,12 @@ Below is the psuedocode for the diagonal heuristic function:
 \end{center}
 
 \paragraph{A* Algorithm Core Logic Implementation} ~\\
-The core logic of A* algorithm involves determining the neighbouring nodes,
-checking the occupancy of the neighbouring nodes, calculating their costs, and
-adding the nodes to a separate list that deviates from unexplored nodes. The
-algorithm is also responsible to update its list by adding or removing
-neighbouring nodes, if a better path is found. The core logic works according to the
-following steps:
+The core logic of the A* algorithm involves determining the neighboring nodes,
+checking the occupancy of the neighboring nodes, calculating their costs, and
+adding the nodes to a separate list that deviates from the list of unexplored
+nodes. The algorithm is also responsible for updating its list by adding or
+removing neighboring nodes if a better path is found. The core logic works
+according to the following steps:
 
 \begin{enumerate}
     \item Initialize the grid, convert the start and end coordinates to grid
@@ -619,10 +739,10 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 
-In order to evaluate the performance of the algorithm, we conducted a series of
-test runs in different categories of vegetation density maps. The maps were
-obtained by QGround Control software satellite imagery and then imported to an
-image processing pipeline. The image processing pipeline can be elaborated in following steps:
+To evaluate the algorithm's performance, we conducted a series of test runs
+using vegetation density maps in different categories. The maps were obtained
+using QGround Control software from satellite imagery and then imported into an
+image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
     \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
@@ -662,15 +782,15 @@ shown in the results and discussion section.
 
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
-areas and obtaining dynamic data for LiDAR SLAM. In this research, we
-implemented Boustrophedon Cell Decomposition as the CPP algorithm. The Boustrophedon Cell
-Decomposition algorithm works by decomposing the map into cells based on the
+areas and for obtaining dynamic data for LiDAR SLAM. In this research, we
+implemented Boustrophedon Cell Decomposition as the CPP algorithm. The
+decomposition algorithm works by dividing the map into cells based on the
 polygonal shape of the map and the obstacles present. After decomposing the map
-into cells, the algorithm will then generate a sweeping path in each cell based
-on the given parameters (refer to Figure \ref{fig:boustrophedon}). Having this sweeping technique
-in all the cells will ensure that the entire area is covered. Below is the
-detail explanation of now the boustrophedon cell decomposition is implemented,
-using the framework developed by Autonomous Systems Lab at ETH Zurich
+into cells, the algorithm generates a sweeping path in each cell based on the
+given parameters (refer to Figure \ref{fig:boustrophedon}). This sweeping
+technique in all the cells ensures that the entire area is covered. Below is a
+detailed explanation of how the Boustrophedon Cell Decomposition is implemented
+using the framework developed by the Autonomous Systems Lab at ETH Zurich
 \cite{B_hnemann_2021}.
 
 \begin{figure}[H]
@@ -687,9 +807,9 @@ The algorithm decomposite the map (polygonal area) into cells based on three key
 \begin{itemize} 
     \item \textbf{In Event}: When the sweep line encounters the start of an
     obstacle, the current cell is divided into two new cells. The algorithm is
-    defined by an if-else loop that compares the points of the vertexes of the
-    obstacle and the sweep line intersection. IN event moves the intersecting
-    vertexes as the same direction as the sweep line.
+    defined by an if-else loop that compares the vertices of the obstacle and
+    the sweep line intersection. In the IN event, the intersecting vertices move
+    in the same direction as the sweep line.
 
     The if else logic in an IN event can be interpreted as follows:
     \begin{equation}
@@ -706,12 +826,11 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
     and updates it cell status.
     \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
-    and two cells are merged into one cell. The algorithm is defined by an
-    if-else loop that compares the points of the vertexes of the obstacle and the 
-    sweep line intersection. OUT event moves the intersecting vertexes in the
-    opposite direction of the sweep direction.
-
-    The if else logic in an OUT event can be interpreted as follows:
+    and two cells merge into one cell. The algorithm is defined by an if-else
+    loop that compares the points of the obstacle's vertices and the
+    intersection of the sweep line. In the OUT event, intersecting vertices move
+    in the opposite direction of the sweep direction. The if else logic in an
+    OUT event can be interpreted as follows:
     \begin{equation}    
         \text{If } target\_upper < source\_upper \text{ and } target\_lower < source\_lower
     \end{equation}
@@ -724,17 +843,16 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \end{figure}
 \end{itemize}
 
-After decomposition of the map into cells, the algorithm will visit each and
-every cell based on depth-first search (DFS) technique. The algorithm will
-choose a random cell to visit at first and then proceed the neighboring cells of
-the chosen cell. The algorithm will also backpropagate through the visited cells, to ensure all the cells are visited. 
-
-When visiting each cell, the algorithm will generate a sweeping path based on
-the given parameters such as sweep direction and sweep distance. The sweeping
-path can be performed in horizontal, vertical. The angle of the sweep line can
-also be adjusted to fit the obstacle edges. The sweep distance is defined as the
-distance between each sweep line. Figure \ref{fig:sweep_parameters} illustrates
-the sweeping in each cell. 
+After decomposing the map into cells, the algorithm will visit each cell using a
+depth-first search (DFS). It will choose a random cell to visit first and then
+visit the neighboring cells of that cell. It will also backpropagate through the
+visited cells to ensure all cells are visited. When visiting each cell, the
+algorithm generates a sweeping path based on the given parameters, such as the
+sweeping direction and sweep distance. The sweeping path can be performed
+horizontally or vertically. The angle of the sweep line can also be adjusted to
+fit the edges of the obstacles. The sweep distance is defined as the distance
+between each sweep line. Figure \ref{fig:sweep_parameters} illustrates sweeping
+in each cell. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
@@ -743,9 +861,9 @@ the sweeping in each cell.
     \label{fig:sweep_parameters}
 \end{figure}
 
-The practical implications of the algorithm usage is shown in the experiment
-setup section and the detailed results of the Boustrophedon Cell Decomposition
-algorithm is discussed in the discussion section.
+The practical implications of the algorithm's use are shown in the experiment
+setup section, and the detailed results of the Boustrophedon Cell Decomposition
+algorithm are discussed in the discussion section.
 
 
 \subsection{GNSS-R}
@@ -883,7 +1001,6 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
     \includegraphics[width=0.75\textwidth]{Included_Images/FFZ_Flow.png}
     \caption{Flowchart of calculating FFZ shape and location from collected data.}
 \end{figure}
-
 
 \subsection{Machine Learning}
 The projects aims to utilize machine learning algorithms for two purposes:
@@ -1241,7 +1358,152 @@ Placeholder text
 Placeholder text
 
 \subsection{GNSS-R}
-Placeholder text
+After the successful execution of the path planning algorithms onboard the UAV, the GNSS
+measurements from both the zenith and nadir antenna are recorded and post-processed. 
+Particularly, the ratio of the nadir $C/N_0$ and the zenith $C/N_0$ are analyzed with 
+respect to the FFZ locations. Here, the FFZs from \hl{experiment (a) and (b)} are plotted
+onto the satellite image map, with the colors representing the ratio of 
+$\frac{C/N_{0, reflected signal}}{C/N_{0,direct signal}}$.
+\begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_1.png}
+        \caption{Experiment (a)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_2.png}
+        \caption{Experiment (b)}
+    \end{subfigure}
+    \caption{Plot of FFZs on satellite imagery, colored by $C/N_0$ ratios.}
+\end{figure}
+From the above, it could be seen that, when the FFZ is over water/bare ground, the
+$C/N_0$ ratio between the reflected signal and the direct signal tends to be higher. 
+This indicates stronger reflections tends to occur when the FFZ is over water or bare
+ground compared to when the FFZ is over trees.
+
+Yet, when the UAV hovers over trees, more reflected signals could be observed, as shown in
+Figure \ref{Pr_Error Distribution} below. By definition, since the majority of pseudorange
+error is contributed by signal reflections, the signals received under a non-obstructed open
+sky environment should have a near-zero mean pseudorange error. However, while the zenith 
+antenna is pointed toward the open sky, the pseudorange error distribution displays a small
+bump centered at large positive psuedorange errors, indicating that a signal reflected from
+the ground is received. Moreover, this "bump" is more significant on plot (b), indicating 
+more ground reflections observed. 
+\begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Bare_Ground_Pr_Error.png}
+        \caption{UAV hovering over bare ground.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Tree_Pr_Error.png}
+        \caption{UAV hovering over trees.}
+    \end{subfigure}
+    \caption{Normalized distributions of psuedorange errors for both antennas in 
+    two different flight scenarios.}
+    \label{Pr_Error Distribution}
+\end{figure}
+
+While the above analysis presents key differences in the GNSS measurements that
+could be used to distinguish tree-reflected signals thus be able to used for
+identifying vegetated areas, it also presents a crucial assumption in this study
+that is necessary to be eliminated. Till this point, it was assumed that the zenith
+antenna only receives the direct signal while the nadir antenna only receives the 
+reflected signal. However, as shown in Figure \ref{Pr_Error Distribution}, this is not
+the case. To further investigate this, the distribution of difference between the absolute
+value of nadir pseudorange error and zenith pseudorange error is plotted in Figure
+\ref{Pr_Error Difference}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
+    \caption{Normalized distribution of difference between the absolute pseudorange errors of the 
+    nadir antenna and the zenith antenna.}
+    \label{Pr_Error Difference}
+\end{figure}
+First, since many observations has a near-zero
+difference between nadir and zenith antenna pseudorange error, the nadir antenna pseudorange
+error have similar values compared to the zenith antenna pseudorange error in such observations.
+To achieve this, two possible scenarios could occur: 
+\begin{enumerate}
+    \item The zenith antenna receives ground-reflected signals, which has a
+    large pseudorange error comparable to that of the nadir antenna. This
+    further validates the previous discussion on Figure \ref{Pr_Error
+    Distribution}.
+    \item The nadir antenna receives direct propagated signals, which has a small pseudorange
+    error comparable to that of the zenith antenna. The possibility of this happening is
+    also validated in Figure \ref{Pr_Error Distribution}, where near-zero values of pseudorange
+    error exists in the distributions for nadir antenna.
+\end{enumerate}
+Furthermore, Figure \ref{Pr_Error Difference} shows the existence of
+observations where the zenith pseudorange error is much greater than the nadir
+pseudorange error, indicating the reception of reflected signals by the zenith
+antenna. Since the zenith antenna is a RHCP antenna and the nadir antenna is an 
+LHCP antenna, this also indicates that a GNSS RHCP antenna is able to receive
+LHCP signals and vice versa. To further investigate this observation, both antenna
+are tested in an open sky environment and their respective received carrier to noise 
+ratio are plotted into distribution curves as shown in Figure \ref{Antenna Testing Open Sky}.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Open_Sky_Setup.jpg}
+        \caption{Set up of antenna testing experiment.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.75\textwidth]{Included_Images/Open_Sky_Fisheye.png}
+        \caption{Fisheye view of the experiment environment.}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.75\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/CNR_Distribution.png}
+        \caption{Normalized $C/N_0$ distributions of both antenna.}
+    \end{subfigure}
+    \caption{Antenna testing in open sky environment.}
+    \label{Antenna Testing Open Sky}
+\end{figure}
+Assuming all signals received under the open sky environment is non-reflected thus RHCP,
+it is clear that the LHCP antenna (in orange) can indeed receive RHCP signals, just at a 
+lower $C/N_0$ compared to the RHCP antenna due to lower gains. This phenomenon is more 
+pronounced in a further experiment, where both antenna were being lifted in the air. In the 
+first five minutes, both antenna face upward; in the last five minutes, both antenna face 
+downward. The corresponding received $C/N_0$s are plotted against observation time (epochs)
+in the figure below.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.8\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/RHCP_CNR.png}
+        \caption{RHCP Antenna}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.8\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Included_Images/LHCP_CNR.png}
+        \caption{LHCP Antenna}
+    \end{subfigure}
+    \caption{Temporal plot of $C/N_0$s received by both antenna.}
+\end{figure}
+The above observations could be qualitatively summarized in the table below:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+     & \textbf{Direct Signal} & \textbf{Reflected Signal} \\
+    \hline
+    \textbf{RHCP Antenna} & High $C/N_0$ & Low $C/N_0$ \\
+    \hline
+    \textbf{LHCP Antenna} & Low $C/N_0$ & High $C/N_0$ \\
+    \hline
+    \end{tabular}
+    \caption{Summary of $C/N_0$ behaviors for different antenna under different
+    signal reception scenarios.}
+\end{table}
+Since both direct signals and reflected signals can be received by both the zenith RHCP 
+antenna and the nadir LHCP antenna, and that their signal properties differ when received
+by different antenna, it is crucial to classify them to distinguish the reflected signals
+from the direct signals to facilitate a more accurate GNSS-R framework. This could be easily
+achieved through machine learning approaches, which will be discussed in detail in the next
+section.   
 
 \subsection{Machine Learning}
 Placeholder text
