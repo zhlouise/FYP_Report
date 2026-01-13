@@ -884,7 +884,37 @@ more ground reflections observed.
 While the above analysis presents key differences in the GNSS measurements that
 could be used to distinguish tree-reflected signals thus be able to used for
 identifying vegetated areas, it also presents a crucial assumption in this study
-that is necessary to be eliminated: 
+that is necessary to be eliminated. Till this point, it was assumed that the zenith
+antenna only receives the direct signal while the nadir antenna only receives the 
+reflected signal. However, as shown in Figure \ref{Pr_Error Distribution}, this is not
+the case. To further investigate this, the distribution of difference between the absolute
+value of nadir pseudorange error and zenith pseudorange error is plotted in Figure
+\ref{Pr_Error Difference}. First, since many observations has a near-zero
+difference between nadir and zenith antenna pseudorange error, the nadir antenna pseudorange
+error have similar values compared to the zenith antenna pseudorange error in such observations.
+To achieve this, two possible scenarios could occur: 
+\begin{enumerate}
+    \item The zenith antenna receives ground-reflected signals, which has a
+    large pseudorange error comparable to that of the nadir antenna. This
+    further validates the previous discussion on Figure \ref{Pr_Error
+    Distribution}.
+    \item The nadir antenna receives direct propagated signals, which has a small pseudorange
+    error comparable to that of the zenith antenna. The possibility of this happening is
+    also validated in Figure \ref{Pr_Error Distribution}, where near-zero values of pseudorange
+    error exists in the distributions for nadir antenna.
+\end{enumerate}
+Furthermore, Figure \ref{Pr_Error Difference} shows the existence of
+observations where the zenith pseudorange error is much greater than the nadir
+pseudorange error, indicating the reception of reflected signals by the zenith
+antenna. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
+    \caption{Normalized distribution of difference between the absolute pseudorange errors of the 
+    nadir antenna and the zenith antenna.}
+    \label{Pr_Error Difference}
+\end{figure}
+
 
 \subsection{Machine Learning}
 Placeholder text
