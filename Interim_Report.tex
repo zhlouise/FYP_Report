@@ -15,12 +15,14 @@
 \usepackage{color}
 \usepackage{amsmath}
 \usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{multirow}
 \usepackage{enumitem}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 \usepackage{parskip}
 \usepackage[hidelinks]{hyperref}
 \usepackage{subcaption}
@@ -144,6 +146,19 @@ crucial to mono-static radar systems \cite{Jin2010}. Instead, any consumer-grade
 receivers capable of receiving reflected GNSS signals could be used for GNSS-R
 remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
 remote sensing systems such as an UAV. 
+%added by sashenka 
+
+Recent research has demonstrated the potential of integrating GNSS-R with UAVs
+by developing a UAV-based GNSS-R system for water body detection and flood
+mapping \cite{UAV-water}. This showcases how low-altitude UAV platforms can give
+high-resolution and flexible measurements. Their work established UAV-mounted
+GNSS-R as a promising tool for monitoring dynamic environmental conditions.
+However, due to the challenges in optimal flight trajectories planning and
+coverage planning, this research does not provide an autonomous navigation
+application. Addressing the above challenges requires autonomous path planning
+algorithms, dynamic obstacle avoidance, and environment mapping and
+localization. As a result, our research provides a unique solution by enhancing
+the UAV and GNSS-R combination with the integration of autonomous navigation. 
 
 \hl{May need some intro for path planning and lidar here. The above is from
 Louise's project proposal, so need further editing. (Also need to mention 
@@ -185,7 +200,172 @@ objective of vegetation monitoring, which will inform the integrated project
 methodologies.
 
 \subsection{Path Planning}
-Placeholder text
+Path planning is a term affiliated with fields, such as robotics, artificial
+intelligence, and control systems. In robotics, path planning is a technique that
+is used in navigating a robot autonomously from an origin to a destination via a
+collision-free route. Path planning is primarily a geometric problem that
+generates a path according to a given sequence of waypoints, without accounting
+for variations over time. In contrast, trajectory planning defines the path as a
+function of time, assigning specific timing to the geometric route
+\cite{gasparetto2015path}. Currently, our research focuses on implementing path
+planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
+outdoor environments. Consequently, we prioritize path planning methodologies in
+this work, reserving trajectory planning and optimization for future
+investigation.
+
+The earliest sensor-based, obstacle-avoiding path planning algorithms are known
+as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms are
+designed to first navigate around the an obstacle and then determine the
+shortest path around the obstacle to reach the goal (shown in Figure \ref{fig:bug_algorithms}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
+    \caption{Bug1 and Bug2 Path Planning Algorithms}
+    \cite{choset2005principles}
+    \label{fig:bug_algorithms}  
+\end{figure}
+However, both bug1 and bug2 algorithms are used in scenarios where the robot has
+no map (i.e., an unknown environment). Additionally, these algorithms do not
+guarantee the optimal path. With the rise of SLAM (Simultaneous Localization and
+Mapping) techniques, we are able to create maps of the navigation environment,
+which enabled the transition to use map-based path planning methods. Therefore,
+in our system, we are using commonly found grid-based path planning algorithms,
+which enables us to create an intelligent UAV system that can identify potential
+vegetation areas using GNSS-R. 
+
+One of the primary reasons for utilizing autonomous navigation and path planning
+in our UAV system is that it is scalable across vegetation monitoring, providing
+accurate and precise navigation in fragmented urban forests. To develop path
+planning mechanisms, we conducted our literature review across three different
+path planning approaches. 
+
+\begin{enumerate} 
+    \item \textbf{Search-based algorithms}: Dijkstra algorithm and A* algorithm.
+    \item \textbf{Sampling-based algorithms}: RRT (Rapidly-exploring Random Tree)
+    algorithm, RRT*, and PRM (Probabilistic Roadmap) algorithm.
+    \item \textbf{Artificial Intelligence-based algorithms}: Soft-Actor-Critic.
+    \item \textbf{Cell Decomposition Algorithms}: Boustrophedon Cell Decomposition.
+\end{enumerate}
+
+\paragraph{Search-based algorithms} ~\\
+Dijkstra's algorithm solves the problem of finding the shortest path from a
+given starting point to a given ending point. The algorithm explores this path
+by simultaneously finding the shortest path from a given starting node to all
+points in the graph \cite{javaid2013understanding}. As a result, the algorithm is known to perform the
+guaranteed shortest path across two points. However, finding the shortest path
+across all the points in the map consumes high computational cost, and
+therefore, it is impractical to use for real-time UAV path planning. The update rule \ref{alg:dijkstra} illustrates the
+pathfinding process of Dijkstra's algorithm.
+\begin{algorithm}[H]
+\caption{Dijkstra's Algorithm (Relaxation Step)}
+\label{alg:dijkstra}
+
+\begin{algorithmic}[1]
+  \State $d[u] \gets$ current known shortest distance from start to node $u$
+  \State $w(u,v) \gets$ weight (cost) of edge from $u$ to $v$
+  \State \textbf{The core update rule is:}
+  \State $d[v] \gets \min(d[v], d[u] + w(u,v))$
+\end{algorithmic}
+\end{algorithm}
+To address the limitations of Dijkstra’s algorithm, scientists developed another
+search-based algorithm called the A* (A-star) algorithm. A* algorithm is one of
+the most common path planning algorithms, which can be applied to grid-based or
+topological configuration spaces \cite{Astar_simulation}. This algorithm
+combines the shortest path calculation in Dijkstra’s algorithm and heuristic
+searching. The heuristic cost is known as the estimated cost from the current
+node to the end node. A* algorithm is better in terms of reducing the search
+space compared to the Dijkstra algorithm. However, it requires accurate
+heuristics to determine the shortest path and has a large computation time
+depending on the number of cells in the map.   \cite{DUCHON201459}.  
+
+\paragraph{Sampling-based algorithms} ~\\
+As previously discussed, search-based algorithms consume an excessive amount of
+computational power in high-dimensional spaces and with a large number of
+obstacles \cite{RRT_star}.  To avoid such burnout, sampling-based algorithms have been proposed
+and have performed effectively in high-dimensional spaces, attracting
+significant attention across several decades \cite{Kavraki},\cite{kavraki_etal}. One of the most common
+sampling-based algorithms is RRTs and PRMs, which sample points randomly from
+the given map. 
+
+The RRT algorithm works by selecting a random available cell and randomly
+checking its neighboring nodes. As a result, there is no need to assign nodes at
+every point in the path. The algorithm spreads like a tree from the random
+neighboring nodes and eventually will reach the endpoint. Additionally, RRT
+effectively handles systems with differential constraints \cite{anytimeRRT},
+making it a suitable algorithm for state-of-the-art robotics. Although RRT
+quickly computes the path between the starting and ending points, it does not
+guarantee the shortest path.This was also proven by Karaman and Frazzoli
+\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing that the
+probability of the RRT algorithm converging to an optimal solution is zero.
+Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Included_Images/rrt_vs_rrtstar.png}
+    \caption{RRT vs RRT* Path Planning Algorithms}
+    \label{fig:rrt_vs_rrtstar}
+\end{figure}
+In RRT*, the algorithm considers neighboring nodes within a window of radius r
+and examines the shortest path by comparing nodes in the window
+\ref{fig:rrt_vs_rrtstar}. RRT* has the same properties as RRT, but with
+near-neighbor search and tree rewriting operations
+\cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As the number of
+iterations increases, RRT* performance improves, while the path becomes more
+jagged with each iteration \cite{noreen2016comparison}. Moreover, PRM is another
+type of sampling-based algorithm that has a network of possible paths in the
+freely available space. By creating a network among the available spaces, the
+PRM increases the path-finding speed by converting the map into a graph.
+\cite{PRM}.
+
+\paragraph{AI-based algorithms} ~\\
+In recent years, deep reinforcement learning methods have been employed to
+address task allocation and path planning problems in autonomous vehicles
+\cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
+multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent studies have merged the
+Soft-Actor-Critic (SAC) reinforcement learning algorithm with a sampling-based
+path planning algorithm to design adaptively informed trees (AIT*) \cite{ait}. The network
+structure of the hybrid path planner is shown in the Figure \ref{fig:sac_ait}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/sac_ait.png}
+    \caption{SAC Network Structure}
+    \cite{SAC-path-planning}
+    \label{fig:sac_ait}
+\end{figure}
+
+SAC learns a policy that specifies a given state and the corresponding action to
+be taken. In other words, “given my current state (position, velocity, sensor
+readings), what action (thrust, roll, yaw, pitch) should I take?” With the
+correct reward design (e.g., penalties for collisions, rewards for reaching the
+goal), SAC can learn to generate collision-free trajectories. The data needed
+for each state should be stored in a replay buffer, including the state at a
+given time, the action taken at that time, the reward received after taking that
+action, and the next state after the action.
+
+\paragraph{Decomposition-based algorithms} ~\\
+One of the primary reasons for using cell decomposition methods in our project
+is to cover fragmented areas in the vegetation environment. In cell
+decomposition methods, the robot's free space is subdivided into several
+regions, called cells \cite{gasparetto2015path}. The decomposition process can be explained as follows:
+subdivision of space into numbered polygons, creation of a connectivity graph,
+identification of regions to be crossed, and generation of the path.  The figure
+\ref{fig:cell_decomposition} shows the detailed steps of the exact cell
+decomposition process. In our system, we utilize exact cell decomposition,
+specifically boustrophedon decomposition, for coverage path planning. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/cell_decomposition.png}
+    \caption{Exact Cell Decomposition Process}
+    \cite{choset2005principles}
+    \label{fig:cell_decomposition}
+\end{figure}
+The boustrophedon cellular decomposition is a common algorithm that breaks down
+the robot’s free space into cells and covers each cell with a motion of back and
+forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the UAV to constantly learn,
+resulting in an unstable antenna, using boustrophedon keeps the drone stable
+while covering the area. Similarly, in wavefront algorithms, having zig-zag
+patterns often provides a jagged path, whereas boustrophedon provides the
+kinematic feasibility. The detailed implementation of the boustrophedon
+algorithm is discussed in the methodology section.
 
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
@@ -246,7 +426,13 @@ approaches, further enhancing the system robustness. \hl{Connection to ML part}
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+In recent years, autonomous robots have been widely implemented to carry out
+repetitive tasks or take part in site surveys to ensure human safety or even
+reduce operational cost. To carry out remote sensing via UAV, mapping is
+essential to allow robots to create a spatial understanding of the site in order
+to create efficient flight paths as well as avoid obstacles. 
+
+
 
 
 % --- Methodology ---
@@ -261,21 +447,20 @@ Placeholder text
 
 \subsection{Path Planning}
 As mentioned in the system architecture, path planning in our system focuses on
-two different methods: waypoint-based navigation and coverage path planning.
-These methods are crucial in observing various aspects of dense forests, such as
-hovering over trees and surveying over a dense canopy to obtain dynamic data for
-LiDAR SLAM.
-
+two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
+are crucial for observing dense forests, such as hovering over trees and
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM.
 
 \subsubsection{Waypoint-based navigation}
 
-Waypoint-based navigation can be achieved in various approaches such as
+Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
 Intelligence-based algorithms. Since our system is designed to hover over dense
-vegetation environments, identifying potential Fresnel zones, we primarily need
-to fly outdoor high altitude open spaces. In order to find the optimal algorithm
-to build an intelligent UAV system, we conducted a baseline comparison among the
-Djikstra algorithm, the A* algorithm, and the RRT algorithm. 
+vegetation environments and identify potential Fresnel Zones, we primarily need
+to fly in outdoor, high-altitude, open spaces. To determine the optimal
+algorithm for building an intelligent UAV system, we conducted a baseline
+comparison among the Dijkstra algorithm, the A* algorithm, and the RRT
+algorithm.
 
 \begin{table}[ht]
     \centering
@@ -325,27 +510,26 @@ Djikstra algorithm, the A* algorithm, and the RRT algorithm.
     \label{tab:algorithms}
 \end{table}
 
-As a result, for a given occupancy grid map, the comparison shows that the A* algorithm is suitable for offline
-path planning. Therefore, our system is designed
-to perform offline path planning using A* algorithm. On the other hand, RRT
-performs well in dynamic unknown environments, which is suitable for online path
-planning. 
+As a result, for a given occupancy grid map, the comparison shows that the A*
+algorithm is suitable for offline path planning. Therefore, our system is
+designed to perform offline path planning using the A* algorithm. On the other
+hand, RRT performs well in dynamic, unknown environments and is suitable for
+online path planning. 
 
 \paragraph{A* Algorithm Implementation} ~\\
-A* algorithm is a heuristic, search based algorithm which calculates the
-shortest path from a starting point to an end goal. The algorithm will first
-divide the map into nodes, where each node represents a possible position for
-the robot to move. These positions depend on the gird architectures such as
-4-way connected or 8-way connected grids. In addition to the conventional grid
-architecture, novel grid mapping approaches such as NavMeshes are widely used in
-3D simulation software. These mapping techniques let the algorithm connects the
-locations of the movable agent to the surface (mesh) and stores the surfaces as
-convex polygonals. 
+The A* algorithm is a heuristic, search-based algorithm that calculates the
+shortest path from a starting point to a goal. The algorithm first divides the
+map into nodes, where each node represents a possible position for the robot to
+move. These positions depend on the grid architecture, such as 4-way or 8-way
+connected grids. In addition to the conventional grid architecture, novel grid
+mapping approaches such as NavMeshes are widely used in 3D simulation software.
+These mapping techniques connect the locations of the movable agent to the
+surface (mesh) and store the surfaces as convex polygons.  
 
-In our research, we will be focusing on regular grids which connects nodes
-across 26-directions in 3-D space. Each node will be assigned a cost based on the
-starting and ending node for a given path. The 2-D path illustration of an A*
-algorithm is shown in Figure \ref{fig:astar}.
+In our research, we will focus on regular grids that connect nodes across 26
+directions in 3-D space. Each node will be assigned a cost based on the starting
+and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
+shown in Figure \ref{fig:astar}.
 
 \begin{figure}[ht]
     \centering
@@ -356,12 +540,13 @@ algorithm is shown in Figure \ref{fig:astar}.
 
 \paragraph{A* Algorithm Grid Definition} ~\\
 
-In our system the grid map is defined in 3-D spaces having 26 movable
-directions, diagonally and straight. However, during the testing phase of
-algorithm, we will be using 2-D grids with 8 movable directions for simplicity.
-We first convert the coordinates of the given map into gridnode indexes using
-\texttt{coord\_to\_index} function. The coordinates can be defined as world coordinates or
-image coordinates for a given map image.
+
+Our system utilizes a grid map defined in 3D space, featuring 26-connectivity,
+which allows for movement in all straight and diagonal directions. However, to
+simplify the initial validation, the algorithm is currently evaluated using a 2D
+grid with 8-connectivity. We first convert the coordinates of the given map into
+grid node indexes using the \texttt{coord\_to\_index} function. The coordinates
+can be defined as world coordinates or image coordinates for a given map image.
 An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
 \begin{figure}[H]
     \centering
@@ -493,22 +678,22 @@ Below is the psuedocode for the diagonal heuristic function:
 \end{center}
 
 \paragraph{A* Algorithm Core Logic Implementation} ~\\
-The core logic of A* algorithm involves determining the neighbouring nodes,
-checking the occupancy of the neighbouring nodes, calculating their costs, and
-adding the nodes to a separate list that deviates from unexplored nodes. The
-algorithm is also responsible to update its list by adding or removing
-neighbouring nodes, if a better path is found. The core logic works according to the
-following steps:
+The core logic of the A* algorithm involves determining the neighboring nodes,
+checking the occupancy of the neighboring nodes, calculating their costs, and
+adding the nodes to a separate list that deviates from the list of unexplored
+nodes. The algorithm is also responsible for updating its list by adding or
+removing neighboring nodes if a better path is found. The core logic works
+according to the following steps:
 
 \begin{enumerate}
     \item Initialize the grid, convert the start and end coordinates to grid
     indices, and adjust the indices if the start and end nodes are inside
     obstacles.
-    \item Initialize the heapfile to store the exploring nodes, check the node with lowest \texttt{f\_score}, skip if already explored.
+    \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighbouring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
     \item If a node is already in the open set but a better path is found,
-    update the parent node, adjust the \texttt{g\_score} to the lowest cost, and add to
+    update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
     \item Repeat steps 2-5 until the goal node is reached or no path is found.
 \end{enumerate}
@@ -523,10 +708,10 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 
-In order to evaluate the performance of the algorithm, we conducted a series of
-test runs in different categories of vegetation density maps. The maps were
-obtained by QGround Control software satellite imagery and then imported to an
-image processing pipeline. The image processing pipeline can be elaborated in following steps:
+To evaluate the algorithm's performance, we conducted a series of test runs
+using vegetation density maps in different categories. The maps were obtained
+using QGround Control software from satellite imagery and then imported into an
+image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
     \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
@@ -549,7 +734,7 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 \paragraph{Normalized Difference Vegetation Index} ~\\
 Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
 the difference between near-infrared (which vegetation strongly reflects) and
-red light (which vegetation absorbs). Below is the equation to calculate NDVI:
+red light (which vegetation absorbs) \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
     \label{eq:ndvi}
@@ -561,23 +746,27 @@ represents the red visible light band.
 If a vegetation is healthy it reflects more near-infrared and green light
 (chlorophyll), while absorbing more red and blue lights.
 
+Test run results of the A* algorithm in different vegetation density maps are
+shown in the results and discussion section.
+
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
-areas and obtaining dynamic data for LiDAR SLAM. In this research, the CPP
-algorithm that will be implemented is called Boustrophedon Cell Decomposition.
-The Boustrophedon Cell Decomposition algorithm works by decomposing the map into
-cells based on the polygonal shape of the map and the obstacles present. After
-decomposing the map into cells, the algorithm will then generate a sweeping path
-in each cell based on the given parameters \ref{fig:boustrophedon}. Having this
-sweeping technique in all the cells will ensure that the entire area is covered.
-Below is the detail explanation of now the boustrophedon cell decomposition is
-implemented, using the framework developed by Autonomous Systems Lab at ETH
-Zurich \cite{B_hnemann_2021}.
+areas and for obtaining dynamic data for LiDAR SLAM. In this research, we
+implemented Boustrophedon Cell Decomposition as the CPP algorithm. The
+decomposition algorithm works by dividing the map into cells based on the
+polygonal shape of the map and the obstacles present. After decomposing the map
+into cells, the algorithm generates a sweeping path in each cell based on the
+given parameters (refer to Figure \ref{fig:boustrophedon}). This sweeping
+technique in all the cells ensures that the entire area is covered. Below is a
+detailed explanation of how the Boustrophedon Cell Decomposition is implemented
+using the framework developed by the Autonomous Systems Lab at ETH Zurich
+\cite{B_hnemann_2021}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/boustrophedon_path.png}
     \caption{Boustrophedon Cell Decomposition Path Planning Example}
+    \cite{Choset-1997-16422}
     \label{fig:boustrophedon}
 \end{figure}
 
@@ -587,9 +776,9 @@ The algorithm decomposite the map (polygonal area) into cells based on three key
 \begin{itemize} 
     \item \textbf{In Event}: When the sweep line encounters the start of an
     obstacle, the current cell is divided into two new cells. The algorithm is
-    defined by an if-else loop that compares the points of the vertexes of the
-    obstacle and the sweep line intersection. IN event moves the intersecting
-    vertexes as the same direction as the sweep line.
+    defined by an if-else loop that compares the vertices of the obstacle and
+    the sweep line intersection. In the IN event, the intersecting vertices move
+    in the same direction as the sweep line.
 
     The if else logic in an IN event can be interpreted as follows:
     \begin{equation}
@@ -606,12 +795,11 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
     and updates it cell status.
     \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
-    and two cells are merged into one cell. The algorithm is defined by an
-    if-else loop that compares the points of the vertexes of the obstacle and the 
-    sweep line intersection. OUT event moves the intersecting vertexes as the
-    opposite direction as the sweep line.
-
-    The if else logic in an OUT event can be interpreted as follows:
+    and two cells merge into one cell. The algorithm is defined by an if-else
+    loop that compares the points of the obstacle's vertices and the
+    intersection of the sweep line. In the OUT event, intersecting vertices move
+    in the opposite direction of the sweep direction. The if else logic in an
+    OUT event can be interpreted as follows:
     \begin{equation}    
         \text{If } target\_upper < source\_upper \text{ and } target\_lower < source\_lower
     \end{equation}
@@ -619,32 +807,32 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
     \begin{figure}[H]   
         \centering
         \includegraphics[width=0.6\linewidth]{Included_Images/out_event.png}
-        \caption{Boustrophedon Cell Decomposition OUT Event Example}
+        \caption{Boustrophedon Cell Decomposition OUT Event Example}    \cite{Choset-1997-16422}
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
 
-After decomposition of the map into cells, the algorithm will visit each and
-every cell based on depth-first search (DFS) technique. The algorithm will
-choose a random cell to visit at first and then proceed the neighboring cells of
-the chosen cell. The algorithm will also backpropagate through the visited cells, to ensure all the cells are visited. 
-
-When visiting each cell, the algorithm will generate a sweeping path based on
-the given parameters such as sweep direction and sweep distance. The sweeping
-path can be performed in horizontal, vertical. The angle of the sweep line can
-also be adjusted to fit the obstacle edges. The sweep distance is defined as the
-distance between each sweep line. Figure \ref{fig:sweep_parameters} illustrates
-the sweeping in each cell. 
+After decomposing the map into cells, the algorithm will visit each cell using a
+depth-first search (DFS). It will choose a random cell to visit first and then
+visit the neighboring cells of that cell. It will also backpropagate through the
+visited cells to ensure all cells are visited. When visiting each cell, the
+algorithm generates a sweeping path based on the given parameters, such as the
+sweeping direction and sweep distance. The sweeping path can be performed
+horizontally or vertically. The angle of the sweep line can also be adjusted to
+fit the edges of the obstacles. The sweep distance is defined as the distance
+between each sweep line. Figure \ref{fig:sweep_parameters} illustrates sweeping
+in each cell. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
     \caption{Boustrophedon Cell Decomposition Sweeping}
+     \cite{Choset-1997-16422}
     \label{fig:sweep_parameters}
 \end{figure}
 
-The practical implications of the algorithm usage is shown in the experiment
-setup section and the detailed results of the Boustrophedon Cell Decomposition
-algorithm is discussed in the discussion section.
+The practical implications of the algorithm's use are shown in the experiment
+setup section, and the detailed results of the Boustrophedon Cell Decomposition
+algorithm are discussed in the discussion section.
 
 
 \subsection{GNSS-R}
@@ -787,7 +975,7 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
 Placeholder text
 
 \subsection{LiDAR SLAM}
-\subsubsection{Frontend: LiDAR-Inertial Odometry}
+\subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
 is used to build a map effectively within a short amount of time. To do this,
 Iterative Extended Kalman Filter (IEKF) is used to fuse the data between IMU and LiDAR
@@ -798,16 +986,262 @@ to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
 $k$ evolved from the prior state at time $k-1$ is shown as follows:
 \begin{equation}
-x_k = f(x_{k-1}) + w_{k-1}
+    x_k = f(x_{k-1},u_k) + w_{k} 
 \end{equation}
 
 Where $x_k$ is the state vector containing the terms of interest for the system
-at time k. The $f(.)$ represents a non-linear state function that is used to
-forecast current state data from prior state data. We can approximate $w_k-1$ as
+at time $k$. The $f(.)$ represents a non-linear state function that is used to
+forecast current state data from prior state data $x_{k-1}$ and $u_k$ is a control vector. We can approximate $w_{k-1}$ as
 $N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
 $Q_k$.
 
-The IEKF is initialized with 
+To know the uncertainty of the prediction model, error covariance matrix $P^f_k$
+is defined as shown:
+\begin{align}
+    P_k^f &= E\left(e_k^f(e_k^f)^T\right) \nonumber \\
+    &\approx F_k E(e_{k-1}e_{k-1}^T)F_k^T + E(w_{k-1}w_{k-1}^T) \nonumber \\
+    &= F_kP_{k-1}F_k^T + Q_{k-1}
+\end{align}
+
+Where $e$ is the prediction error, $F$ is the Jacobian matrix of the linearized
+state transition function $f(.)$ evaluated at the previous estimate
+$x_{k-1}$, and $Q$ is the process noise covariance matrix representing the
+uncertainty of the physical model.
+
+Even so, the predicted state alone is prone to errors due to various
+factors such as inaccurate prediction function and further source of noise. This
+issue can be solved by taking sensor measurements to improve the predicted state
+accuracy. Hence the observation model is defined as shown:
+\begin{equation}
+    z_k = h(x_k) + v_k
+\end{equation} 
+
+Where $z_k$ represents the expected sensor measurements based on the predicted
+state $x_k$ expressed by a non-linear function $h(.)$, and the observation noise
+$v_k$ is assumed as $N(0,R_k)$ where it has zero mean with covariance matrix $R_k$.
+
+To further improve the accuracy for the nonlinear system, an iteration index
+$K$ is added to repeat the measurement update at time step $k$ as shown:
+\begin{equation}
+    x^a_{k,K=0} = x^f_k
+\end{equation}
+
+Where $x^a$ is the state estimate after corrected by sensor measurement and
+$x^f$ is the predictive distribution before looking at the lidar data. In this
+case, the iteration $K$ is repeated until the change in the state estimate
+$|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$. 
+
+As actual measurements from sensors will typically differ from this prediction
+due to sensor noise and model inaccuracies, it is incorporated into the state
+estimate by computing the difference between the actual measurements and the
+predicted measurement based on the current iterative estimate $K$:
+\begin{equation}
+    z_{k, K} = z_k - h(x^a_{k, K})
+\end{equation}
+Where $h(x^a_{k, K})$ is the non-linear observation function evaluated at the
+most recent estimate. To balance the uncertainty of the prediction against the
+new sensor data, the Kalman Gain $K_{k,K}$ is calculated using the state-space
+dimension formula \cite{xu2021fast}.
+\begin{equation} 
+    K_{k, K} = (H_{k, K}^T R_k^{-1} H_{k, K} + (P_k^f)^{-1})^{-1} H_{k, K}^T R_k^{-1} 
+\end{equation}
+
+Where $H_{k, K}$ is the Jacobian of the observation function re-evaluated
+at the current iterative estimate $x^a_{k, K}$. This gain is then used
+to compute the next refined state estimate:
+\begin{equation}
+    x^a_{k,K+1} = x^a_{k, K} + K_{k, K} (z_{k, K}) - (I - K_{k, K} H_{k, K})(x^a_{k, K} - x_k^f)
+\end{equation}
+
+After updating the state estimate, the updated covariance of the state
+distribution is given as:
+\begin{equation} 
+    P_k = (I - K_{k, K} H_{k, K}) P_k^f 
+\end{equation}
+
+While the IEKF provides a high-frequency estimate of the current state, the
+overall SLAM problem can be generalized as a Maximum A Posteriori (MAP)
+estimation. Bayes Filter is then used to recursively perform the state
+prediction and measurement update steps to minimizes linearization errors for
+robust localization. In this case, MAP can be expressed as:
+\begin{equation}
+    P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1})
+\end{equation}
+
+Where $P(X|Z, U)$ is the refined state estimate, $P(x_0)$ is the prior,
+$P(z_k|x_k)$ is the sensor measurement and $P(x_k|x_{k-1}, u_{k-1})$ is the
+predicted state.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/Kalman Filter.png}
+    \caption{The red distribution in the figure represents the predicted step $P(x_k|x_{k-1}, u_{k-1})$  which results in predictive distribution  $x^f_k$ .The blue distribution represents likelihood $P(z_k|x_k)$ derived from the noisy sensor measurement $z_k$. The green distribution illustrates the refined state estimate $x^a_k$, showing the reduction in the uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
+\end{figure}
+
+\subsubsection{Graph-Based SLAM}
+As LiDAR odometry is used in the front end to provide high-rate local pose
+estimates without global constrains, iSAM2 pose graph optimization architecture
+is used for the back end to further optimize the point cloud map for higher
+accuracy. This technique is rooted from the factor graph optimization algorithm
+where Maximum A Posteriori (MAP) is also used to factorize the joint posterior
+probability of the robot trajectory X as shown  \cite{wen2021factor}:
+
+\begin{equation} 
+    P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1}) 
+\end{equation}
+
+Where $P(x_0)$ is the prior, $P(z_k|x_k)$ represents the Update Factors from
+LiDAR measurements, and $P(x_k|x_{k-1}, u_{k-1})$ represents the Propagation
+Factors derived from the IEKF prediction. The purpose of this is to decompose
+the complex problem of estimating a full trajectory into smaller, simpler pieces
+called 'factors'. By breaking down the trajectory into these discrete
+components, this allows iSAM2 to optimize specific parts of the trajectory
+affected by new information or loop closures instead of resolving the entire
+global map every time the robot moves. This ensures that global consistency is
+maintained without the computational burden of a full-batch optimization.
+
+To do this, the Gaussian noise is factorized into exponential functions. Unlike
+a standard filter that only estimates the current state $x_k$, the factorized
+graph maintains the entire trajectory history $X$ = ($x_0, x_1, \dots, x_k$) to
+minimize the sum of squared errors. The Gaussian noise from the IEKF motion
+prediction is expressed as:
+\begin{equation}
+    P(x_k|x_{k-1},u_{k-1}) = \exp(-||f_k(x_{k-1}, u_k)-x_k||^2_{\Sigma_{u,k}})
+\end{equation}
+
+Similarly, the Gaussian noise from lidar measurements is factorized into the following equation:
+\begin{equation}
+    P(z_k | x_k) = \exp(-||h_k(x_k) - z_k||^2_{\Sigma_{z,k}})
+\end{equation}
+
+The factorization is crucial to transform MAP estimation from a product
+of probability distributions into a Non-linear Least Squares (NLS) optimization
+problem. By taking the negative logarithm of the posterior, we convert the task
+of finding the maximum probability into finding the minimum of an error function
+$e(\mathcal{X})$ as shown:
+\begin{equation}
+    \hat{\chi} = \arg\max_{\chi} \prod_{k} F_k(x_k) = \arg\min_{\chi} e(\chi)
+\end{equation}
+\begin{equation}
+    e(\chi) \doteq \sum_{k} ||h_k(x_k) - z_k||^2_{\Sigma_k} + \sum_{k} ||f_k(x_{k-1}, u_k) - x_k||^2_{\Sigma_k}
+\end{equation}
+
+To solve the non-linear least squares problem defined by $e(\mathcal{X})$, the
+system iteratively refines the trajectory estimate to find the optimal solution
+$\hat{\mathcal{X}}$. The error function is linearized using a first-order Taylor
+expansion around the current estimate $\mathcal{X}^{(i)}$ where the state is
+then uploaded incrementally:
+\begin{equation}
+    \mathcal{X}^{(i+1)} = \mathcal{X}^{(i)} + \Delta \mathcal{X}
+\end{equation}
+
+\hl{Where $\Delta \mathcal{X}$ is the optimal step calculated to move the current estimate toward the minimum of the "error
+valley".This optimization process relies on the Jacobian matrix $\mathbf{J}_R$,
+which represents the first-order partial derivatives of the residuals with
+respect to the state variables. In the context of LiDAR-Inertial integration,
+the Jacobian is composed of two primary components: the partial derivatives of
+the LiDAR measurement residuals and the propagation model
+residuals: (EQUATIONS)
+
+By setting the gradient of the error function to zero, the system solves for
+$\Delta \mathcal{X}$ through the normal equations, typically using the
+Gauss-Newton method. Unlike the IEKF, which only iterates on the current state
+at time $k$, this graph-based optimization allows the system to re-linearize the
+entire trajectory history—or a sliding window of it—ensuring that local sensor
+noise does not lead to permanent global map distortion }
+
+\begin{equation}
+    \mathbf{J}_R = \frac{\partial(\mathbf{H}(\mathcal{X}) - \mathbf{Z})}{\partial \mathcal{X}} + \frac{\partial(\mathbf{F}(\mathcal{X}, \mathbf{U}) - \mathcal{X})}{\partial \mathcal{X}}
+\end{equation}
+
+\subsubsection{System Architecture}
+In this project, a modular SLAM system is used with the front end having a
+Fast-LIO lidar odometry to carry out mapping in real time, while Pose Graph
+Optimization (PGO) coupled with GPS is used for the back end. During
+implementation, both Fast-Lio and PGO are initialized. The point cloud data will
+first be processed by Fast-LIO to create an odometry, and the odometry will then
+be passed to the PGO to further optimize the point clouds to increase accuracy.
+In the meantime, GPS data is passed into PGO to provide constraints to the SLAM
+if large drifts occur. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Included_Images/SLAM flowchart.png}
+    \caption{Flowchart of the modular SLAM system}
+\end{figure}
+
+This project builds upon an open-source implementation
+that integrates Fast-LIO with PGO for GPS-aided SLAM:
+\url{https://github.com/yxw027/FAST_LIO_GPS} 
+
+The pseudocode of the front-end and back-end of the modular SLAM can be shown below:
+
+{
+    \singlespacing
+    \begin{algorithm}[H]
+    \caption{Front-End: FAST-LIO with MAVLink TimeSync}
+    \begin{algorithmic}[1]
+    \State \textbf{Initialize:} IEKF state $\mathbf{x}$ and covariance $\mathbf{P}$
+    \State \textbf{Initialize:} ikd-Tree for incremental mapping
+    \While{ROS is active}
+        \State Sync LiDAR and IMU buffers based on GPS-aligned timestamps
+        \If{IMU not initialized}
+            \State Perform \textit{IMU\_init} (Gravity/Bias estimation)
+            \State \textbf{continue}
+        \EndIf
+        \State \textbf{State Prediction:} $\hat{\mathbf{x}} \leftarrow$ IMU forward propagation
+        \State \textbf{Undistortion:} Compensate point motion using $\hat{\mathbf{x}}$
+        \For{$iter = 1$ \textbf{to} $NUM\_MAX\_ITERATIONS$}
+            \State Find point-to-plane correspondences in ikd-Tree
+            \State Compute measurement residual $\mathbf{z}$ and Jacobian $\mathbf{H}$
+            \State \textbf{Update:} Correct state $\mathbf{x}$ using IEKF update rule
+            \If{converged} \State \textbf{break} \EndIf
+        \EndFor
+        \State \textbf{ikd-Tree Update:} Add new features to the spatial map
+        \State Publish Odometry to Back-End
+    \EndWhile
+    \end{algorithmic}
+    \end{algorithm}
+}
+
+{
+    \singlespacing
+    \begin{algorithm}[H]
+    \caption{Back-End Pose Graph Optimization (PGO)}
+    \begin{algorithmic}[1]
+    \State \textbf{Initialize:} GTSAM Factor Graph and ISAM2 optimizer
+    \State \textbf{Initialize:} Noise models (Odometry, GPS, Loop Closure)
+    \While{ROS is active}
+        \If{New Front-End Odometry received}
+            \State Calculate delta movement since last Keyframe
+            \If{movement $>$ $KeyframeThreshold$}
+                \State Create new Node $n_t$ in Pose Graph
+                \State \textbf{Propagation Factor:} Add \textit{BetweenFactor}($x_{k-1}, x_k, \Delta Odom$)
+                \If{GPS matched for $n_t$}
+                    \State Transform GPS Lat/Lon to UTM coordinates
+                    \State \textbf{GPS Factor:} Add \textit{GPSFactor}($x_k, UTM_{xyz}$)
+                \EndIf
+                \State \textbf{Loop Closure:} Search for matches using Scan Context
+                \If{Loop detected with $n_{\text{old}}$}
+                    \State Calculate relative transform via ICP
+                    \State \textbf{Loop Factor:} Add \textit{BetweenFactor}($x_{\text{old}}, x_t, T_{\text{ICP}}$)
+                \EndIf
+                \State Perform ISAM2 global optimization
+                \State Update trajectory with optimized poses
+            \EndIf
+        \EndIf
+    \EndWhile
+    \end{algorithmic}
+    \end{algorithm}
+}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
+    \caption{Interactions of different ROS topics in the SLAM system}
+\end{figure}
+
+
 
 
 % --- Experiments ---
@@ -920,8 +1354,90 @@ antenna.
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+\subsubsection{Stage 1: Modular SLAM Implementation without GPS}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_fastlio.png}
+    \caption{Fast-LIO LiDAR Odometry}
+    \label{fig:stg1_fastlio}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_pgo.png}
+    \caption{PGO with FPFH and ICP}
+    \label{fig:stg1_pgo}
+\end{figure}
+The implementation of modular SLAM is first done without the integration of GPS
+to make sure the architecture works. When comparing \autoref{fig:stg1_fastlio}
+and \autoref{fig:stg1_pgo}, it is observed that there is less drifting in the
+point clouds in the PGO SLAM. This is because the PGO SLAM uses Fast Point
+Feature Histograms (FPFH) method to have an initial guess to align the point
+clouds and uses Iterative Closest Point (ICP) for further refinement. FPFH can
+effectively represent the local geometry around key points in a point cloud which
+makes it robust against changes in viewpoints. Since FPFH is better at aligning
+point clouds that are far away for global robustness, it is then passed to ICP
+for further precise refinement with millimeter-level precision
+\cite{song2025robotic}. 
 
+On the other hand, Fast-LIO only uses Iterated Extended Kalman Filter (IEKF) to
+align the point clouds. In this case, we can see that the dual layer of point
+cloud alignment in PGO further increase the accuracy in SLAM.
+
+\subsubsection{Stage 2: Modular SLAM Implementation with GPS}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg2_pgomis.png}
+    \caption{PGO SLAM after integration of GPS. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
+    \label{fig:stg2_pgo}
+\end{figure}
+Once gps is being integrated to the PGO SLAM, we can see in \autoref{fig:stg2_pgo} that there
+are two different trajectories and the point clouds are very misaligned. First
+of all, both trajectories are not aligned as the position of the LiDAR and the
+GPS on the drone itself are different, hence having two different frames. Second of all, the point clouds are misaligned as GPS
+has a high gain in the SLAM and some issues related to the transformation of the
+GPS to LiDAR odometry. 
+
+To solve the misalignments of both trajectories, extrinsic calibration is
+carried out between IMU from Pixhawk that is connected to the GPS and the LiDAR
+point clouds to align both frames together. In this case, HKU Mars calibration
+system is used for the extrinsic calibration:
+\url{https://github.com/hku-mars/LiDAR_IMU_Init/issues} 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_fastlio.png}
+    \caption{Fast-LIO LiDAR Odometry}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_pgo.png}
+    \caption{PGO SLAM with GPS and odometry trajectory aligned. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
+    \label{fig:stg3_pgo}
+\end{figure}
+
+Based on \autoref{fig:stg3_pgo}, despite both odometry and GPS trajectory and aligned, we can
+still observe that the point clouds in PGO are still misaligned. Aside from having high
+gain for GPS in the SLAM, the misalignment is due to the issues regarding the coordinate
+frame rotation between GPS and LiDAR Odometry, and GPS transformation logic which
+needs to be solved in later stage. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/withgps.png}
+    \caption{PGO with GPS integration}
+    \label{fig:withgps}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/nogps.png}
+    \caption{PGO without GPS integration}
+    \label{fig:nogps}
+\end{figure}
+
+\autoref{fig:withgps} and \autoref{fig:nogps} shows the difference between
+the PGO SLAM with and without GPS integration when using the same architecture. In
+this case we can confirm that GPS is the main issue that causes the point cloud
+distortion.
 
 % --- Conclusion ---
 \section{Conclusion}
