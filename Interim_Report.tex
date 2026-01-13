@@ -192,8 +192,10 @@ To achieve the project objectives, this literature review comprehensively examin
 the contemporary research in four domains, each associated with one project objective.
 \hl{First, existing path planning methodologies are reviewed to \dots}
 Subsequently, the existing techniques of GNSS-R are explored, with a focus on its
-prior applications in vegetation parameter retrieval. 
-\hl{Then, machine learning \dots}
+prior applications in vegetation parameter retrieval. Then machine learning based 
+techniques are investigated for the purpose of classification of reflected and direct 
+signals. Further investigation is conducted on machine learning based approaches for predicting 
+vegetation parameters from raw GNSS data.
 \hl{Finally, LiDAR-based SLAM techniques \dots}
 Consequently, this review identifies the existing gaps in each domain for the 
 objective of vegetation monitoring, which will inform the integrated project 
@@ -423,7 +425,36 @@ the GNSS-R framework could be complemented by machine learning-based modelling
 approaches, further enhancing the system robustness. \hl{Connection to ML part}
 
 \subsection{Machine Learning}
-Placeholder text
+A part of this project will be to develop a deep learning based model that can process 
+collected GNSS-R data dna address two main topics: (1) Classification of the received signals into 
+direct and reflected signals, and (2) Prediction of vegetation parameters from the raw GNSS data.
+The goal will be to develop and test tree based and neural network based models that 
+take GNSS-R geatures, bith publicly available and collected by our UAV system, as inputs and
+output the desired results. The model training will be optimized for highest computational 
+efficiency and accurac on python based PyTorch framework. Past research has demonstrated that
+GNSS-R can sense vegetation as the reflected signal power and modulation depends on
+vegetation cover and moisture. For example, a study by Small et al. (2010) and others found 
+that the amplitude of the reflected GNSS signal to Noise Ratio (SNR) oscilations over
+crops correlated linearly with Vegetation Water Content (VWC) \cite{small2010sensing}. A study 
+by Chen et al. (2024) recently derived a new GNSS-R vegetation index and used Artificial 
+Neural Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of approximately
+0.94 with reference measurements \cite{chen2024new}. Other studies have trained deep
+learning models on GNSS-R features. One study trained a ANN on Delay Doppler Maps (DMMs), 
+SNR, signal incidence angle and geographic data to predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}.
+Prior GNSS-R vegetation retrieval efforts have focuesed on parameters like biomass, soil moisture,
+and VWC. For example. SNR that has been reflected from wheat was used to estimate the height
+and water content of wheat, which signifies that strong vegetation attenuates the reflected 
+signals \cite{zhang2017use}. Polarimetric GNSS features have also been used in previous studies.
+Cross polarization ratios and co polarized reflection coefficients were found to be sensitive
+to vegetation biomass and moisture \cite{wu2021recent}. 
+
+Most existing studies have used spaceborne or terestrial platforms, while UAV based GNSS-r
+remains underexplored. The few existing UAV based works demonstrate feasibility but do not 
+address vegetation mapping \cite{wu2021recent,chen2024new}. Moreover, classfication of difference signals
+is not a well studied topic. However, existing study suggests that GNSS-R features can inform vegetation 
+parameters \cite{small2010sensing}. But the gap is clear: GNSS-R with UAVs for vegetation 
+mappinh and signal classification has not been demonstrated. This project will bridge the gap by developing
+ML models tailored for UAV scale GNSS-R data and the specific tasks of vegetation detection and parameters estimation. 
 
 \subsection{LiDAR SLAM}
 In recent years, autonomous robots have been widely implemented to carry out
@@ -972,7 +1003,65 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
 \end{figure}
 
 \subsection{Machine Learning}
-Placeholder text
+The projects aims to utilize machine learning algorithms for two purposes:
+(1) to classify the received signals into three classes: reflected from ground,
+direct to down antenna and reflected from trees, and (2) to predict vegetation 
+properties based on the features extracted from GNSS measurements.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Included_Images/Classes.png}
+    \caption{Classes of signals to be classified.}
+\end{figure}
+So far, only the first part has been attempted. A supervised learning approach was takes, where a dataset was 
+constructed from collected GNSS data with labels assigned based on the collection scenarios. 
+The collected data was analyzed and features were then selected to train a classification model. 
+The details of the feature analysis, dataset construction, feature selection and model training 
+are outlined in the following sections.
+
+\subsubsection{Feature Analysis}
+Before constructing and training a classification model, the collected GNSS 
+measurements were analyzed to identify potential features that could help
+distinguish between reflected and direct signals. Four major features were
+found to have different distributions between the two scenarios, which are UAV hovering 
+over trees and UAV hovering over bare ground. These features are outlined below:
+\begin{itemize}
+    \item\textbf{Carrier to Noise Ratio (C/N0)}: From the figures below, It can 
+    be observed that the $C/N_0$ values for signals reflected from trees are
+    generally lower than those for signals getting reflected from the bare ground. 
+    This indicated that vegetation attenuated the GNS signal quality. The figures also 
+    illustrate a wider spread of $C/N_0$ values for signals reflected from trees compared
+    to those from bare ground, in which case the signal distribution is more 
+    concentrated. 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width= 1\textwidth]{Included_Images/CNR.png}
+        \caption{Distribution of $C/N_0$ for signals reflected from trees and bare ground.}
+    \end{figure}
+    
+    \item\textbf{Pseudorange}: Similar to $C/N_0$, the pseudorange values for signals
+    reflected from trees display an increased pseudorange bias and variance, which produces a
+    ckear decision boundary for the classifier than that of bare ground signals.
+    Some of the pseudorange values for signals reflected from trees are extremely high, which 
+    might be due to the multipath effect caused by dense vegetation. The figures below
+    illustrate the distribution of pseudorange values for signals reflected from trees
+    and bare ground.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width= 1\textwidth]{Included_Images/Pseudorange.png}
+        \caption{Distribution of pseudorange for signals reflected from trees and bare ground.}
+    \end{figure}
+    
+    \item\textbf{Doppler measurement}: Dopple measurement refers to the instantaneous
+    shift in frequency of the received GNSS carrier signal due to the relative 
+    velocity between the satellite and the receiver. As can be seen from the 
+    figures below, the doppler values for signal reflected from trees are clearly
+    distinguishable from those reflected from bare ground. For the case of bare ground, 
+    the doppler values for up and down antenna are almost identical. However, for 
+    the case of UAV hovering over vegetation, the doppler distribution is more
+    spread out, 
+    
+    \item\textbf{Carrier Phase}:
+\end{itemize}
 
 \subsection{LiDAR SLAM}
 \subsubsection{LiDAR-Inertial Odometry}
