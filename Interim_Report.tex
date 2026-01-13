@@ -25,6 +25,8 @@
 \usepackage{parskip}
 \usepackage[hidelinks]{hyperref}
 \usepackage{subcaption}
+\usepackage{colortbl}
+\usepackage{xcolor}
 
 
 % --- Settings ---
@@ -1114,9 +1116,83 @@ raw GNSS data often contains missing values due to signal blocckages or reveiver
 data by removing the NaN values would lead to sinificant loss of data, as cleaning process would have to be carried
 out either row wise of column wise. Replacing the NaN values with zeros or mean values would introduce bias to the dataset, 
 which would potentially affect the performance of the model. Therefore, using a model with native support for NaN 
-values was the most suitable approach for our case. 
-\subsubsection{Model Training}
+values was the most suitable approach for our case. Below is a brief introduction to LightGBM model.
+\paragraph{LightGBM Model} ~\\
+LightGBM (Light Gradient Boosting Machine) is a highly efficient framework 
+for gradient boosting decision trees (GBDT) which was developed by Microsoft
+\cite{ke2017lightgbm}. The model it similar to popular GBDT such as XGBoost, 
+however it addresses some of the limitations of these models in terms of effieciency 
+and scalability for large datasets with high dimensional feautures \cite{ke2017lightgbm}.
 
+Unlike level wise tree growth that can be seen in traditional GBDT models, 
+LightGBM uses a leaf wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
+    \caption{Leaf wise tree growth strategy.}
+\end{figure}
+It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
+\begin{equation}
+V_{j|o}(d) = \frac{1}{n_o} \left( \frac{ \left( \sum_{ {x_i \in O: x_{ij} \leq d} } g_i \right)^2 }{ n_l^o(d) } + \frac{ \left( \sum_{ {x_i \in O: x_{ij} > d} } g_i \right)^2 }{ n_r^o(d) } \right),
+\end{equation}
+where $V_{j|o}(d)$ is the variance gain, $g_i$ are the gradients, $n_o$ is the number of samples in the parent node. This approach 
+optimizes boosting and leads to faster congergence when combined with gradient based sampling. 
+
+LightGBM also provides native support for NaN values through optimal 
+directional assignment during splits. This helps to avoid manual imputation 
+of data that could introduce bias. 
+\subsubsection{Model Training}
+In order to train the LightGBM model, the dataset was first split into training
+testing and validation sets with a ration of 60:20:20 respectively. A total of 70,125 
+labeled samples were used for training the model. The training features included Pseudorange, 
+Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
+The tuning of hyperparameters was then performed using a grid search approach and the used 
+hyperparameters are shown in the table below. 
+\begin{table}[htbp]
+\centering
+\label{tab:lgbm-hyperparams}
+\renewcommand{\arraystretch}{1.2} % Increase row height for better readability
+\begin{tabular}{ll}
+\toprule
+\rowcolor{lightgray}
+\textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+objective & multiclass \\
+n\_estimators & 2000 \\
+\rowcolor{gray!10}
+num\_leaves & 96 \\
+learning\_rate & 0.02 \\
+\rowcolor{gray!10}
+boosting\_type & gbdt \\
+max\_depth & -1 \\
+\rowcolor{gray!10}
+min\_child\_samples & 20 \\
+min\_child\_weight & 1e-3 \\
+\rowcolor{gray!10}
+reg\_alpha & 0.5 \\
+reg\_lambda & 1.0 \\
+\rowcolor{gray!10}
+subsample & 0.8 \\
+subsample\_freq & 1 \\
+\rowcolor{gray!10}
+colsample\_bytree & 0.8 \\
+class\_weight & balanced \\
+\rowcolor{gray!10}
+random\_state & 42 \\
+\bottomrule
+\end{tabular}
+\caption{Hyperparameters for LGBMClassifier}
+\end{table}
+
+The model converged well and the loss curves for training and validation sets are shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Included_Images/LossCurve.png}
+    \caption{Loss curves for training and validation sets.}
+\end{figure}
+From the figure above, it is clear that the model did not overfit as the training and validation 
+loss curves are close to each other and decreases steadily. Further performance assessment results 
+of the model are presented in the results and discussion section. 
 \subsection{LiDAR SLAM}
 \subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
