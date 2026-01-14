@@ -235,39 +235,37 @@ spatial references. Consequently, this review identifies the existing gaps in
 each domain for the objective of vegetation monitoring, which will inform the
 integrated project methodologies.
 
+
 \subsection{Path Planning}
-Path planning is a term affiliated with fields, such as robotics, artificial
-intelligence, and control systems. In robotics, path planning is a technique that
-is used in navigating a robot autonomously from an origin to a destination via a
-collision-free route. Path planning is primarily a geometric problem that
-generates a path according to a given sequence of waypoints, without accounting
-for variations over time. In contrast, trajectory planning defines the path as a
-function of time, assigning specific timing to the geometric route
-\cite{gasparetto2015path}. Currently, our research focuses on implementing path
-planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
-outdoor environments. Consequently, we prioritize path planning methodologies in
-this work, reserving trajectory planning and optimization for future
-investigation.
+Path planning is a term affiliated with fields such as robotics, artificial
+intelligence, and control systems. In robotics, path planning is a technique
+that is used in navigating a robot autonomously from an origin to a destination
+via a collision-free route. Therefore, path planning is primarily a geometric
+problem that generates a path according to a given sequence of waypoints,
+without accounting for variations over time. \hl{In contrast, trajectory planning
+defines the path as a function of time, assigning specific timing to the
+geometric route} \cite{gasparetto2015path}. \hl{Currently, our research focuses on
+implementing path planning for the autonomous navigation of an Unmanned Aerial
+Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
+methodologies in this work, reserving trajectory planning and optimization for
+future investigation. (Really need to say trajectory planning?)}
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
-as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms are
-designed to first navigate around an obstacle and then determine the
-shortest path around the obstacle to reach the goal (shown in Figure \ref{fig:bug_algorithms}).
+as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
+first navigate around an obstacle and then determine the shortest path around
+the obstacle to reach the goal (Figure \ref{fig:bug_algorithms}).
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
-    \caption{Bug1 and Bug2 Path Planning Algorithms}
-    \cite{choset2005principles}
+    \caption{Bug1 and Bug2 path planning algorithms \cite{choset2005principles}.}
     \label{fig:bug_algorithms}  
 \end{figure}
-However, both bug1 and bug2 algorithms are used in scenarios where the robot has
+However, both Bug1 and Bug2 algorithms are used in scenarios where the robot has
 no map (i.e., an unknown environment). Additionally, these algorithms do not
-guarantee the optimal path. With the rise of SLAM (Simultaneous Localization and
-Mapping) techniques, we are able to create maps of the navigation environment,
-which enabled the transition to use map-based path planning methods. Therefore,
-in our system, we are using commonly found grid-based path planning algorithms,
-which enables us to create an intelligent UAV system that can identify potential
-vegetation areas using GNSS-R. 
+guarantee the optimal path. With the rise of SLAM techniques, maps of the navigation
+environment can be generated, which enabled the transition to map-based path planning methods. Therefore, the conventional grid-based path planning algorithms will be 
+integrated in this project, which enables the identification of potential vegetated
+areas for further GNSS-R surveying.
 
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
