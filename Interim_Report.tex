@@ -427,7 +427,7 @@ sampling-based, and AI-based path planning algorithms.
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item Learns adaptive policies.
         \item Handles continuous control.
-        \item RRobust in dynamic, uncertain environments.
+        \item Robust in dynamic, uncertain environments.
         \item No explicit map needed.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -1854,7 +1854,7 @@ The algorithm then pruned the number of nodes to 42. In summary, the
 boustrophedon decomposition was tested locally on polygonal maps with and
 without obstacles. 
 
-\paragraph{Covergae Path Planning in QGround Control} ~\\
+\paragraph{Coverage Path Planning in QGround Control} ~\\
 First we defined the important parameters, such as waypoints, speed, trigger
 distance and altitude, using the Graphical User Interface in QGround Control.
 The trigger distance is a parameter that specifies the space between each sweep
@@ -1885,19 +1885,19 @@ After successful execution of the path planning algorithms onboard the UAV, GNSS
 measurements from both the zenith and nadir antenna are recorded and
 post-processed. Specifically, the ratio of the nadir $C/N_0$ and the zenith
 $C/N_0$ is analyzed with respect to the FFZ locations. In the figure below, the
-FFZs from \hl{experiment (a) and (b)} are plotted onto a satellite image map,
-with colors representing the ratio of $\frac{C/N_{0, reflected
-signal}}{C/N_{0,direct signal}}$.
+FFZs from experiment (j) and (i) from Table \ref{Experiment Summary} are plotted
+onto a satellite image map, with colors representing the ratio of $\frac{C/N_{0,
+reflected signal}}{C/N_{0,direct signal}}$.
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_1.png}
-        \caption{Experiment (a)}
+        \caption{Experiment (j)}
     \end{subfigure}
     \vfill
     \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_2.png}
-        \caption{Experiment (b)}
+        \caption{Experiment (i)}
     \end{subfigure}
     \caption{Plot of FFZs on satellite imagery, colored by $C/N_0$ ratios.}
 \end{figure}
