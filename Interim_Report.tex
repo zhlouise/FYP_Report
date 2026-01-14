@@ -1670,7 +1670,13 @@ Placeholder text
 Placeholder text
 
 \subsection{GNSS-R}
-Placeholder text
+In the next half of the project, the GNSS-R framework will integrate with the 
+machine learning classification results to effectively distinguish between reflected 
+and directly propagated signals. Then, the sensitivity of GNSS carrier phase measurements
+for FFZs covering the trees would be explored. Lastly, a model of identified correlations
+between GNSS measurements and ground features would be summarized to achieve the
+ultimate objective of this project.
+
 
 \subsection{Machine Learning}
 Placeholder text
@@ -1693,7 +1699,25 @@ Placeholder text
 Placeholder text
 
 \subsubsection{GNSS-R}
-Placeholder text
+Through processing the data collected during the first half of this project, one of the 
+most important issue that arose was the fact that some results did not indicate obvious
+conclusions. For example, as demonstrated in Figure \ref{GNSS-R Confusing Result}, the
+FFZs of $C/N_0$ ratios do not display clear and conclusive results, as opposed to the
+observations shown in the Results and Discussion section of the report. This is partially
+caused by the fact that not all the FFZs shown here actually exist due to non-reflected
+signals received by the bottom antenna assumed to be reflected from the ground. To solve 
+this issue, machine learning approaches will be employed to extract only the reflected
+signals from the nadir antenna observations.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/GNSS_R_FFZ_Confusing_Result.png}
+    \caption{Example of inconclusive results.}
+    \label{GNSS-R Confusing Result}
+\end{figure}
+Another issue that occurred was the fact that some dataset was too large to be able to be
+plotted onto the satellite image map. Therefore, for such datasets, key moments will be 
+selected out for analysis individually, while the code for processing those datasets will
+also be optimized with the help of GenAI tools.
 
 \subsubsection{Machine Learning}
 Placeholder text
