@@ -1645,8 +1645,58 @@ Machine learning approaches offer an effective solution, which will be detailed
 in the following section. 
 
 \subsection{Machine Learning}
-Placeholder text
-
+As classification of the reflected and direct signals is required for robust GNSS-R
+implementation, the LightGBM model is trained to classify the signals based on  
+the features extracted from both antennas. The data collection, dataset preparation and model
+selection has been explained in the methodology section. The performance of the model is
+evaluated based on various metrics including accuracy, precision, recall and F1-score. The subsections 
+below present the evaluation results and discussion.
+\subsubsection{F1-score}
+The F1-score is a mean of precision and recall of a classification model. Precision of a model indicates
+the ability of a model to not label a negative sample as positive and recall indicates the ability of a model to 
+find all the positive samples. The F1-score is calculated as follows from precision and recall:
+\begin{equation}
+    F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
+\end{equation}
+The F1-score for the LightGBM model on the test dataset is shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/F1.png}
+    \caption{F1-score for LightGBM model on test dataset}
+\end{figure}
+From the firgure above, it is observed that the LightGBM model achieves a F1 score of approximately 
+0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
+is effective in classifying different classes of signals. 
+\subsubsection{Confusion matrix}
+Confusion matrix is a table that is used to describe the performance of a classification model on a set of test data
+for which the true values are known. The diagonal elements of a confusion matrix the correctly classified samples 
+while the off-diagonal values indicate misclassified ones. The confusion matrix for our signal classification 
+LightGBM model is shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/Confusion-matrix.png}
+    \caption{Confusion matrix for LightGBM model on test dataset}
+\end{figure}
+From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
+of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
+tree reflection. As can be observed from the confusion matrix, 1110 and 1008 samples of direct and ground reflected
+signals repectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
+signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
+This results are acceptable as the model will later be usef to identify vegetation reflected signals mostly.
+\subsubsection{Receiver Operating Characteristic (ROC) Curve}
+A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
+binary classification model at various threshold settings. It plots plots the True Positive Rate (TPR) against the False Positive
+Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC values is 
+closer to 1, it basically indicates that the model has good ability to distinguish between classes. However, a value near
+0.5 indicates that the model has no discrimination ability. For the LightGBM model trained for classification of signals, 
+the ROC curve is shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/ROC.png}
+    \caption{ROC curve for LightGBM model on test dataset}
+\end{figure}
+The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning 
+that the model has high abiity to distinguish between signal classes.
 \subsection{LiDAR SLAM}
 \subsubsection{Stage 1: Modular SLAM Implementation without GPS}
 \begin{figure}[H]
