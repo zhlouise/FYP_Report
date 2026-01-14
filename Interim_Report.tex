@@ -220,7 +220,7 @@ investigation.
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
 as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms are
-designed to first navigate around the an obstacle and then determine the
+designed to first navigate around an obstacle and then determine the
 shortest path around the obstacle to reach the goal (shown in Figure \ref{fig:bug_algorithms}).
 \begin{figure}[H]
     \centering
@@ -299,7 +299,7 @@ neighboring nodes and eventually will reach the endpoint. Additionally, RRT
 effectively handles systems with differential constraints \cite{anytimeRRT},
 making it a suitable algorithm for state-of-the-art robotics. Although RRT
 quickly computes the path between the starting and ending points, it does not
-guarantee the shortest path.This was also proven by Karaman and Frazzoli
+guarantee the shortest path. This was also proven by Karaman and Frazzoli
 \cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing that the
 probability of the RRT algorithm converging to an optimal solution is zero.
 Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
@@ -433,12 +433,13 @@ sampling-based, and AI-based path planning algorithms.
 One of the primary reasons for using cell decomposition methods in our project
 is to cover fragmented areas in the vegetation environment. In cell
 decomposition methods, the robot's free space is subdivided into several
-regions, called cells \cite{gasparetto2015path}. The decomposition process can be explained as follows:
-subdivision of space into numbered polygons, creation of a connectivity graph,
-identification of regions to be crossed, and generation of the path.  The figure
-\ref{fig:cell_decomposition} shows the detailed steps of the exact cell
-decomposition process. In our system, we utilize exact cell decomposition,
-specifically boustrophedon decomposition, for coverage path planning. 
+regions, called cells \cite{gasparetto2015path}. The decomposition process can
+be explained as follows: subdivision of space into numbered polygons, creation
+of a connectivity graph, identification of regions to be crossed, and generation
+of the path.  The figure \ref{fig:cell_decomposition} shows the detailed steps
+of the exact cell decomposition process. In our system, we utilize exact cell
+decomposition, specifically boustrophedon decomposition, for coverage path
+planning. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/cell_decomposition.png}
@@ -450,7 +451,7 @@ The boustrophedon cellular decomposition is a common algorithm that breaks down
 the robot’s free space into cells and covers each cell with a motion of back and
 forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the UAV to constantly learn,
 resulting in an unstable antenna, using boustrophedon keeps the drone stable
-while covering the area. Similarly, in wavefront algorithms, having zig-zag
+while covering the area. Similarly, in wavefront algorithms, having zigzag
 patterns often provides a jagged path, whereas boustrophedon provides the
 kinematic feasibility. The detailed implementation of the boustrophedon
 algorithm is discussed in the methodology section.
@@ -511,36 +512,43 @@ the GNSS-R framework could be complemented by machine learning-based modelling
 approaches, further enhancing the system robustness. \hl{Connection to ML part}
 
 \subsection{Machine Learning}
-A part of this project will be to develop a deep learning based model that can process 
-collected GNSS-R data dna address two main topics: (1) Classification of the received signals into 
-direct and reflected signals, and (2) Prediction of vegetation parameters from the raw GNSS data.
-The goal will be to develop and test tree based and neural network based models that 
-take GNSS-R geatures, bith publicly available and collected by our UAV system, as inputs and
-output the desired results. The model training will be optimized for highest computational 
-efficiency and accurac on python based PyTorch framework. Past research has demonstrated that
-GNSS-R can sense vegetation as the reflected signal power and modulation depends on
-vegetation cover and moisture. For example, a study by Small et al. (2010) and others found 
-that the amplitude of the reflected GNSS signal to Noise Ratio (SNR) oscilations over
-crops correlated linearly with Vegetation Water Content (VWC) \cite{small2010sensing}. A study 
-by Chen et al. (2024) recently derived a new GNSS-R vegetation index and used Artificial 
-Neural Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of approximately
-0.94 with reference measurements \cite{chen2024new}. Other studies have trained deep
-learning models on GNSS-R features. One study trained a ANN on Delay Doppler Maps (DMMs), 
-SNR, signal incidence angle and geographic data to predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}.
-Prior GNSS-R vegetation retrieval efforts have focuesed on parameters like biomass, soil moisture,
-and VWC. For example. SNR that has been reflected from wheat was used to estimate the height
-and water content of wheat, which signifies that strong vegetation attenuates the reflected 
-signals \cite{zhang2017use}. Polarimetric GNSS features have also been used in previous studies.
-Cross polarization ratios and co polarized reflection coefficients were found to be sensitive
-to vegetation biomass and moisture \cite{wu2021recent}. 
+A part of this project will be to develop a deep learning based model that can
+process collected GNSS-R data and address two main topics: (1) Classification of
+the received signals into direct and reflected signals, and (2) Prediction of
+vegetation parameters from the raw GNSS data. The goal will be to develop and
+test tree based and neural network based models that take GNSS-R features, both
+publicly available and collected by our UAV system, as inputs and output the
+desired results. The model training will be optimized for highest computational
+efficiency and accuracy on python based PyTorch framework. Past research has
+demonstrated that GNSS-R can sense vegetation as the reflected signal power and
+modulation depends on vegetation cover and moisture. For example, a study by
+Small et al. (2010) and others found that the amplitude of the reflected GNSS
+signal to Noise Ratio (SNR) oscillations over crops correlated linearly with
+Vegetation Water Content (VWC) \cite{small2010sensing}. A study by Chen et al.
+(2024) recently derived a new GNSS-R vegetation index and used Artificial Neural
+Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of
+approximately 0.94 with reference measurements \cite{chen2024new}. Other studies
+have trained deep learning models on GNSS-R features. One study trained a ANN on
+Delay Doppler Maps (DMMs), SNR, signal incidence angle and geographic data to
+predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}. Prior GNSS-R
+vegetation retrieval efforts have focused on parameters like biomass, soil
+moisture, and VWC. For example. SNR that has been reflected from wheat was used
+to estimate the height and water content of wheat, which signifies that strong
+vegetation attenuates the reflected signals \cite{zhang2017use}. Polarimetric
+GNSS features have also been used in previous studies. Cross polarization ratios
+and co polarized reflection coefficients were found to be sensitive to
+vegetation biomass and moisture \cite{wu2021recent}. 
 
-Most existing studies have used spaceborne or terestrial platforms, while UAV based GNSS-r
-remains underexplored. The few existing UAV based works demonstrate feasibility but do not 
-address vegetation mapping \cite{wu2021recent,chen2024new}. Moreover, classfication of difference signals
-is not a well studied topic. However, existing study suggests that GNSS-R features can inform vegetation 
-parameters \cite{small2010sensing}. But the gap is clear: GNSS-R with UAVs for vegetation 
-mappinh and signal classification has not been demonstrated. This project will bridge the gap by developing
-ML models tailored for UAV scale GNSS-R data and the specific tasks of vegetation detection and parameters estimation. 
+Most existing studies have used spaceborne or terrestrial platforms, while UAV
+based GNSS-r remains underexplored. The few existing UAV based works demonstrate
+feasibility but do not address vegetation mapping
+\cite{wu2021recent,chen2024new}. Moreover, classification of difference signals
+is not a well studied topic. However, existing study suggests that GNSS-R
+features can inform vegetation parameters \cite{small2010sensing}. But the gap
+is clear: GNSS-R with UAVs for vegetation mapping and signal classification has
+not been demonstrated. This project will bridge the gap by developing ML models
+tailored for UAV scale GNSS-R data and the specific tasks of vegetation
+detection and parameters estimation. 
 
 \subsection{LiDAR SLAM}
 In recent years, autonomous robots have been widely implemented to carry out
@@ -548,8 +556,6 @@ repetitive tasks or take part in site surveys to ensure human safety or even
 reduce operational cost. To carry out remote sensing via UAV, mapping is
 essential to allow robots to create a spatial understanding of the site in order
 to create efficient flight paths as well as avoid obstacles. 
-
-
 
 
 % --- Methodology ---
@@ -560,7 +566,13 @@ Placeholder text
 Placeholder text
 
 \subsection{System Architecture}
-Placeholder text
+The system architecture adapted in this project is as shown below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
+    \caption{System Architecture}
+    \label{System Architecture}
+\end{figure}
 
 \subsection{Path Planning}
 As mentioned in the system architecture, path planning in our system focuses on
@@ -726,7 +738,7 @@ node) is implemented using the diagonal heuristic function. The function has fiv
     \item If the three dimensions still have remaining distance, it calculates the cost using a combination of 2D diagonal movement and straight-line movement for the remaining distances.
 \end{enumerate}
 
-Below is an example of calculating heuristic cost in 3 dimensional space:
+Below is an example of calculating heuristic cost in 3-dimensional space:
 
 \noindent Go from $(0,0,0)$ to $(5,3,2)$. \\
 Initial differences: $dx=5, dy=3, dz=2$.
@@ -806,7 +818,7 @@ according to the following steps:
     obstacles.
     \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
-    \item If not, check the neighbouring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
+    \item If not, check the neighboring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
     \item If a node is already in the open set but a better path is found,
     update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
@@ -1090,7 +1102,7 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
 \end{figure}
 
 \subsection{Machine Learning}
-The projects aims to utilize machine learning algorithms for two purposes:
+The projects aim to utilize machine learning algorithms for two purposes:
 (1) to classify the received signals into three classes: reflected from ground,
 direct to down antenna and reflected from trees, and (2) to predict vegetation 
 properties based on the features extracted from GNSS measurements.
@@ -1127,7 +1139,7 @@ over trees and UAV hovering over bare ground. These features are outlined below:
     
     \item\textbf{Pseudorange}: Similar to $C/N_0$, the pseudorange values for signals
     reflected from trees display an increased pseudorange bias and variance, which produces a
-    ckear decision boundary for the classifier than that of bare ground signals.
+    clear decision boundary for the classifier than that of bare ground signals.
     Some of the pseudorange values for signals reflected from trees are extremely high, which 
     might be due to the multipath effect caused by dense vegetation. The figures below
     illustrate the distribution of pseudorange values for signals reflected from trees
@@ -1138,27 +1150,27 @@ over trees and UAV hovering over bare ground. These features are outlined below:
         \caption{Distribution of pseudorange for signals reflected from trees and bare ground.}
     \end{figure}
     
-    \item\textbf{Doppler measurement}: Dopple measurement refers to the instantaneous
+    \item\textbf{Doppler measurement}: Doppler measurement refers to the instantaneous
     shift in frequency of the received GNSS carrier signal due to the relative 
     velocity between the satellite and the receiver. As can be seen from the 
-    figures below, the doppler values for signal reflected from trees are clearly
+    figures below, the Doppler values for signal reflected from trees are clearly
     distinguishable from those reflected from bare ground. For the case of bare ground, 
-    the doppler values for up and down antenna are almost identical. However, for 
-    the case of UAV hovering over vegetation, the doppler distribution is more
+    the Doppler values for up and down antenna are almost identical. However, for 
+    the case of UAV hovering over vegetation, the Doppler distribution is more
     spread out, ranging from approximately -5000 dbHz to 4000 dbHz. This indicates
     that reflections caused by trees introduce additional frequency shifts in the received 
-    signals. The figure below illustrates the distribution of doppler values for signals
+    signals. The figure below illustrates the distribution of Doppler values for signals
     reflected from trees and bare ground.
     \begin{figure}[H]
         \centering
         \includegraphics[width= 1\textwidth]{Included_Images/doppler.png}
-        \caption{Distribution of doppler for signals reflected from trees and bare ground.}
+        \caption{Distribution of Doppler for signals reflected from trees and bare ground.}
     \end{figure}
     
     \item\textbf{Carrier Phase}: Carrier phase refers to the precise range observables that are derived 
      from the accumulated phase cycles of the GNSS carrier wave. From the figure below, 
      it can be observed that the carrier phase values for signals reflected from trees
-     exhibit 2.5 times broader carrier phase spread compared to thos reflected from bare 
+     exhibit 2.5 times broader carrier phase spread compared to those reflected from bare 
      ground, reflecting multipath induced phase delays versus the concentrated phase coherence of bare 
      ground reflections. This indicated that vegetation introduces additional phase 
      shifts in the received signals. The figure below illustrates the distribution of
@@ -1170,8 +1182,8 @@ over trees and UAV hovering over bare ground. These features are outlined below:
     \end{figure}
 \end{itemize}
 \subsubsection{Dataset Construction}
-Data was collected from muliple locations with different environmental settings, in order to have 
-a diverese dataset that captures the three classes of signals. The scenariors include:
+Data was collected from multiple locations with different environmental settings, in order to have 
+a diverse dataset that captures the three classes of signals. The scenarios include:
 (1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
 \begin{figure}[H]
     \centering
@@ -1196,19 +1208,21 @@ from open sky mostly contains direct signals, data collected from UAV hovering o
 mostly contains signals reflected from ground, and data collected from UAV hovering over trees
 mostly contains signals reflected from trees.
 \subsubsection{Model Selection}
-For the classification task, a LightGBM model was selected due to its advantages with native 
-support for NaN values. This feature of the model is particularly important for our case as 
-raw GNSS data often contains missing values due to signal blocckages or reveiver limitations. Cleaning the
-data by removing the NaN values would lead to sinificant loss of data, as cleaning process would have to be carried
-out either row wise of column wise. Replacing the NaN values with zeros or mean values would introduce bias to the dataset, 
-which would potentially affect the performance of the model. Therefore, using a model with native support for NaN 
-values was the most suitable approach for our case. Below is a brief introduction to LightGBM model.
-\paragraph{LightGBM Model} ~\\
+For the classification task, a LightGBM model was selected due to its advantages
+with native support for NaN values. This feature of the model is particularly
+important for our case as raw GNSS data often contains missing values due to
+signal blockages or receiver limitations. Cleaning the data by removing the NaN
+values would lead to significant loss of data, as cleaning process would have to
+be carried out either row wise of column wise. Replacing the NaN values with
+zeros or mean values would introduce bias to the dataset, which would
+potentially affect the performance of the model. Therefore, using a model with
+native support for NaN values was the most suitable approach for our case. Below
+is a brief introduction to LightGBM model. \paragraph{LightGBM Model} ~\\
 LightGBM (Light Gradient Boosting Machine) is a highly efficient framework 
 for gradient boosting decision trees (GBDT) which was developed by Microsoft
 \cite{ke2017lightgbm}. The model it similar to popular GBDT such as XGBoost, 
-however it addresses some of the limitations of these models in terms of effieciency 
-and scalability for large datasets with high dimensional feautures \cite{ke2017lightgbm}.
+however it addresses some of the limitations of these models in terms of efficiency 
+and scalability for large datasets with high dimensional features \cite{ke2017lightgbm}.
 
 Unlike level wise tree growth that can be seen in traditional GBDT models, 
 LightGBM uses a leaf wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
@@ -1222,7 +1236,7 @@ It expands the leaf with the maximum variance gain at each step, as shown in the
 V_{j|o}(d) = \frac{1}{n_o} \left( \frac{ \left( \sum_{ {x_i \in O: x_{ij} \leq d} } g_i \right)^2 }{ n_l^o(d) } + \frac{ \left( \sum_{ {x_i \in O: x_{ij} > d} } g_i \right)^2 }{ n_r^o(d) } \right),
 \end{equation}
 where $V_{j|o}(d)$ is the variance gain, $g_i$ are the gradients, $n_o$ is the number of samples in the parent node. This approach 
-optimizes boosting and leads to faster congergence when combined with gradient based sampling. 
+optimizes boosting and leads to faster convergence when combined with gradient based sampling. 
 
 LightGBM also provides native support for NaN values through optimal 
 directional assignment during splits. This helps to avoid manual imputation 
@@ -1230,7 +1244,7 @@ of data that could introduce bias.
 \subsubsection{Model Training}
 In order to train the LightGBM model, the dataset was first split into training
 testing and validation sets with a ration of 60:20:20 respectively. A total of 70,125 
-labeled samples were used for training the model. The training features included Pseudorange, 
+labeled samples were used for training the model. The training features included pseudorange, 
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
 hyperparameters are shown in the table below. 
@@ -1380,7 +1394,7 @@ predicted state.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/Kalman Filter.png}
-    \caption{The red distribution in the figure represents the predicted step $P(x_k|x_{k-1}, u_{k-1})$  which results in predictive distribution  $x^f_k$ .The blue distribution represents likelihood $P(z_k|x_k)$ derived from the noisy sensor measurement $z_k$. The green distribution illustrates the refined state estimate $x^a_k$, showing the reduction in the uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
+    \caption{The red distribution in the figure represents the predicted step $P(x_k|x_{k-1}, u_{k-1})$  which results in predictive distribution  $x^f_k$.The blue distribution represents likelihood $P(z_k|x_k)$ derived from the noisy sensor measurement $z_k$. The green distribution illustrates the refined state estimate $x^a_k$, showing the reduction in the uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
 \end{figure}
 
 \subsubsection{Graph-Based SLAM}
@@ -1441,7 +1455,7 @@ then uploaded incrementally:
 \end{equation}
 
 \hl{Where $\Delta \mathcal{X}$ is the optimal step calculated to move the current estimate toward the minimum of the "error
-valley".This optimization process relies on the Jacobian matrix $\mathbf{J}_R$,
+valley". This optimization process relies on the Jacobian matrix $\mathbf{J}_R$,
 which represents the first-order partial derivatives of the residuals with
 respect to the state variables. In the context of LiDAR-Inertial integration,
 the Jacobian is composed of two primary components: the partial derivatives of
@@ -1463,7 +1477,7 @@ noise does not lead to permanent global map distortion }
 In this project, a modular SLAM system is used with the front end having a
 Fast-LIO lidar odometry to carry out mapping in real time, while Pose Graph
 Optimization (PGO) coupled with GPS is used for the back end. During
-implementation, both Fast-Lio and PGO are initialized. The point cloud data will
+implementation, both Fast-LIO and PGO are initialized. The point cloud data will
 first be processed by Fast-LIO to create an odometry, and the odometry will then
 be passed to the PGO to further optimize the point clouds to increase accuracy.
 In the meantime, GPS data is passed into PGO to provide constraints to the SLAM
@@ -2049,7 +2063,7 @@ cloud alignment in PGO further increase the accuracy in SLAM.
     \caption{PGO SLAM after integration of GPS. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
     \label{fig:stg2_pgo}
 \end{figure}
-Once gps is being integrated to the PGO SLAM, we can see in \autoref{fig:stg2_pgo} that there
+Once GPS is being integrated to the PGO SLAM, we can see in \autoref{fig:stg2_pgo} that there
 are two different trajectories and the point clouds are very misaligned. First
 of all, both trajectories are not aligned as the position of the LiDAR and the
 GPS on the drone itself are different, hence having two different frames. Second of all, the point clouds are misaligned as GPS
