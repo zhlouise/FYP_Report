@@ -161,7 +161,7 @@ algorithms, dynamic obstacle avoidance, and environment mapping and
 localization. As a result, our research provides a unique solution by enhancing
 the UAV and GNSS-R combination with the integration of autonomous navigation. 
 
-\hl{May need some intro for path planning and lidar here. The above is from
+\hl{May need some intro for path planning and LiDAR here. The above is from
 Louise's project proposal, so need further editing. (Also need to mention 
 the full name of SLAM somewhere)}
 
@@ -463,6 +463,152 @@ repetitive tasks or take part in site surveys to ensure human safety or even
 reduce operational cost. To carry out remote sensing via UAV, mapping is
 essential to allow robots to create a spatial understanding of the site in order
 to create efficient flight paths as well as avoid obstacles. 
+
+The common way for remote sensing robots to carry out mapping is by using
+sensors such as camera or LiDAR to create an odometry. This allows the robots to
+estimate their position and movement over time by measuring the changes in each
+frame of the sensors. In practise, the common approaches to frame-to-frame odometry are visual
+odometry or LiDAR odometry. Visual odometry estimates motion by tracking
+distinct features in each image frame through gradients and textures while LiDAR
+odometry uses laser range measurements to scan the environment. Since our
+project focuses on investigating forests and dense vegetation, LiDAR odometry is
+preferred as it is not affected by visually repetitive scenes and varying
+lighting conditions that cause instability in camera-based methods. 
+
+\subsubsection{LiDAR Odometry} 
+The accuracy of LiDAR odometry largely depends on how well point clouds are
+aligned and it generally categorized into point-based and feature-based
+approaches. In terms of point-based point cloud registration, iterative closest
+point (ICP) is considered one of the most well-known pointwise LiDAR odometry
+methods. It is a simple, modular algorithm that aligns two consecutive point
+clouds by establishing point-to-point correspondences and estimating the
+transformation that minimizes their distance error \cite{besl1992method}.
+However, a key limitation of ICP is its high computational cost when registering
+dense point clouds. Its accuracy relies strongly on the quality of the initial
+alignment due to the nonconvex nature of the optimization, and the presence of
+outliers from moving objects can further complicate the process by adding extra
+nonconvexities \cite{maron2016point}. To counter the limitation of ICP, variants
+such as Generalized ICP (G-ICP), FASTG-ICP, Voxelized G-ICP (VGICP) have been
+developed to improve its computational efficiency \cite{segal2009generalized,
+huang2022point}. 
+
+On the other hand, feature-based LiDAR odometry methods utilize a set of
+representative features from the point clouds to estimate the transformation
+\cite{rusu2009fast, salti2014shot}. Fast Point Feature Histograms (FPFH) is a
+feature-based point cloud matching method that looks at the distinct shape in
+point clouds (surface normals) and uses multidimensional histogram to label the
+geometric properties of each point \cite{rusu2009fast}. As FPFH is able to
+remain consistent even if the sensor is rotated or moved, it creates a robust
+tool for finding matches between different scans and can be used as an initial
+alignment of point clouds before handling it to other types of processors
+\cite{wu2020iterative}. However, creating complex descriptors for every point is
+computationally demanding which is not favorable for real time requirements
+\cite{atik2021lokal}. 
+
+In the meantime, LOAM uses more efficient way to carry out feature-based LiDAR
+odometry. It is done by extracting features and edges within the point clouds
+based on the smoothness of a small region near a given feature point
+\cite{huang2022point}. Unlike conventional ICP methods that compare consecutive
+scans directly, LOAM matches these extracted features against a continuously
+updated map of dense edge features, creating a scan-to-map correspondence
+system. Since feature-based methods process only a small fraction of the
+original point cloud data rather than all raw points, they require substantially
+less computational power for matching compared to G-ICP and NDT optimization
+processes. Feature-based methods rely less on the accuracy of the
+initial pose estimate than point-wise methods, but this reduced dependence often
+results in noticeable drift along the altitude axis. \cite{koide2021voxelized,
+shan2018lego}. In this case, LOAM variants such as Lightweight and ground
+optimized (LeGO)-LOAM \cite{shan2018lego} are proposed to counter the drifting
+in altitude direction.
+
+\subsubsection{Simultaneous Localization and Mapping (SLAM)}
+While odometry provides the foundation for estimating local motion through
+consecutive point cloud alignment, it lacks mechanisms such as loop closure and
+mapping, making it prone to drift over time \cite{liu2019optimized,
+thrun2000probabilistic}. Simultaneous Localization and Mapping (SLAM) extends
+odometry by incorporating global optimization techniques, enabling both drift
+correction and the construction of consistent long-term maps. Moreover, SLAM
+frameworks naturally support sensor fusion, allowing data from multiple
+modalities such as GNSS and LiDAR to be combined, which further enhances
+localization robustness and mapping accuracy \cite{xu2022review, chang2019gnss}.
+
+In terms of optimization strategies, SLAM methods can generally be divided into
+two categories: filtering-based approaches and pose graph optimization
+approaches. Filtering methods, such as the Extended Kalman Filter (EKF) or
+particle filters, update the robot’s state incrementally as new sensor data
+arrives, making them suitable for real-time applications but often less accurate
+over long trajectories. In contrast, pose graph optimization such as GraphSLAM
+treats past poses and sensor measurements as nodes and constraints in a graph,
+allowing global corrections through nonlinear optimization. 
+
+EKF SLAM is one of the fundamental SLAM algorithms within the filtering-based
+approach. It estimates the system state through an iterative cycle of
+prediction, observation, and correction, effectively functioning as a
+specialized form of Bayesian filtering \cite{paz2007ekf}. Unlike pure
+odometry-based methods, EKF SLAM incorporates implicit loop closure, where it
+matches current observations to known landmarks. The filter then automatically
+updates the estimated position and all correlated landmarks in the state vector
+to reduce accumulated drift. While this mechanism improves consistency, it is
+less flexible than the explicit loop closure in graph-based SLAM, which performs
+global optimization \cite{khan2021comparative}. 
+
+Although EKF SLAM is known to be used in real-time SLAM applications due to its
+low-latency estimates, it faces quadratic complexity when updating the
+covariance matrix with new landmarks, making it less scalable for large
+environments but still efficient for small to medium-scale maps
+\cite{gil2015occupancy}. Additionally, EKF SLAM integrates data from multiple
+sensors by weighting each input according to its uncertainty, which helps manage
+cross-sensor correlations \cite{oh2010symmetrical}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/EKF SLAM.png}
+    \caption{The figure depicts a spring network analogy to visualize how EKF
+SLAM works. The landmarks are connected by springs describing correlations
+between landmarks. As the robot pass through the landmark more than once, this
+correlations increase which makes the red spring thicker
+\cite{stachniss2016simultaneous}.}
+\end{figure}
+
+GraphSLAM on the other hand is an algorithm designed for the offline SLAM
+problem, where pose graph optimization is employed to refine the robot’s
+trajectory by minimizing errors across a graph of poses and constraints. Similar
+to EKF SLAM, GraphSLAM uses Bayes’ rule for probabilistic inference and similar
+methods for building motion and measurement models [23]. The key difference
+between GraphSLAM and EKF SLAM is that GraphSLAM requires to accumulates all
+data first before process everything together. This makes it more
+computationally heavy as solving the resulting large optimization problem often
+involves costly operations such as matrix inversion. To address this, GraphSLAM
+applies iterative optimization methods like stochastic gradient descent [24],
+which adaptively solve the non-linear optimization problem more efficiently,
+while alternatives such as conjugate gradient methods can further improve
+scalability [25]. 
+
+Moreover, GraphSLAM explicitly incorporates loop closure.
+Which means that when the robot revisits a previously mapped location, it
+recognizes the place and adds new constraints linking the current pose to the
+past one. This additional relation corrects accumulated drift and improves
+global consistency [26]. Based on [25, 27], GraphSLAM can refer to more than 100
+million environments features, as each robot pose only connects to adjacent
+poses and each feature only connects to poses where it was observed without
+connecting to each other. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/pgo.png}
+    \caption{Visualization of  GraphSLAM with loop closure }
+\end{figure}
+
+Although GraphSLAM is more robust than EKF-SLAM and both approaches have
+demonstrated strong performance in urban and structured environments [4, 17],
+single-sensor SLAM systems (e.g. LiDAR-only) remain vulnerable to drift because
+their measurements are purely relative, allowing errors to accumulate over time.
+While recent work such as \cite{mailka2024efficient }has integrated additional
+sensors to improve SLAM accuracy, their applicability to UAV-based forest
+monitoring remains limited due to canopy interference, sparse LiDAR features,
+and computational trade-offs. This project investigates how such SLAM methods
+can be adapted and deployed for real-time forestry applications.
+
 
 
 
@@ -1250,7 +1396,7 @@ $K$ is added to repeat the measurement update at time step $k$ as shown:
 \end{equation}
 
 Where $x^a$ is the state estimate after corrected by sensor measurement and
-$x^f$ is the predictive distribution before looking at the lidar data. In this
+$x^f$ is the predictive distribution before looking at the LiDAR data. In this
 case, the iteration $K$ is repeated until the change in the state estimate
 $|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$. 
 
@@ -1305,7 +1451,7 @@ predicted state.
 As LiDAR odometry is used in the front end to provide high-rate local pose
 estimates without global constrains, iSAM2 pose graph optimization architecture
 is used for the back end to further optimize the point cloud map for higher
-accuracy. This technique is rooted from the factor graph optimization algorithm
+accuracy. This technique is rooted in factor graph optimization algorithm
 where Maximum A Posteriori (MAP) is also used to factorize the joint posterior
 probability of the robot trajectory X as shown  \cite{wen2021factor}:
 
@@ -1332,7 +1478,7 @@ prediction is expressed as:
     P(x_k|x_{k-1},u_{k-1}) = \exp(-||f_k(x_{k-1}, u_k)-x_k||^2_{\Sigma_{u,k}})
 \end{equation}
 
-Similarly, the Gaussian noise from lidar measurements is factorized into the following equation:
+Similarly, the Gaussian noise from LiDAR measurements is factorized into the following equation:
 \begin{equation}
     P(z_k | x_k) = \exp(-||h_k(x_k) - z_k||^2_{\Sigma_{z,k}})
 \end{equation}
@@ -1358,28 +1504,28 @@ then uploaded incrementally:
     \mathcal{X}^{(i+1)} = \mathcal{X}^{(i)} + \Delta \mathcal{X}
 \end{equation}
 
-\hl{Where $\Delta \mathcal{X}$ is the optimal step calculated to move the current estimate toward the minimum of the "error
-valley".This optimization process relies on the Jacobian matrix $\mathbf{J}_R$,
-which represents the first-order partial derivatives of the residuals with
-respect to the state variables. In the context of LiDAR-Inertial integration,
-the Jacobian is composed of two primary components: the partial derivatives of
-the LiDAR measurement residuals and the propagation model
-residuals: (EQUATIONS)
-
-By setting the gradient of the error function to zero, the system solves for
-$\Delta \mathcal{X}$ through the normal equations, typically using the
-Gauss-Newton method. Unlike the IEKF, which only iterates on the current state
-at time $k$, this graph-based optimization allows the system to re-linearize the
-entire trajectory history—or a sliding window of it—ensuring that local sensor
-noise does not lead to permanent global map distortion }
+Where $\Delta \mathcal{X}$ is the calculation for minimizing the error. This
+optimization process relies on the Jacobian matrix $\mathbf{J}_R$ to linearize
+the state variables as shown:
 
 \begin{equation}
     \mathbf{J}_R = \frac{\partial(\mathbf{H}(\mathcal{X}) - \mathbf{Z})}{\partial \mathcal{X}} + \frac{\partial(\mathbf{F}(\mathcal{X}, \mathbf{U}) - \mathcal{X})}{\partial \mathcal{X}}
 \end{equation}
 
+Where $\mathbf{H}(\mathcal{X}) - \mathbf{Z}$ is the measurement residuals and
+$\mathbf{F}(\mathcal{X}, \mathbf{U}) - \mathcal{X}$ is the predictive propagation
+model. By setting the gradient of the error function to zero, the system solves
+for $\Delta \mathcal{X}$ through the normal equations using the Gauss-Newton
+method. Unlike the IEKF, which only iterates on the current state at time $k$,
+this graph-based optimization allows the system to re-linearize the entire
+trajectory history to ensure local sensor noise does not lead to permanent
+global map distortion 
+
+
+
 \subsubsection{System Architecture}
 In this project, a modular SLAM system is used with the front end having a
-Fast-LIO lidar odometry to carry out mapping in real time, while Pose Graph
+Fast-LIO LiDAR odometry to carry out mapping in real time, while Pose Graph
 Optimization (PGO) coupled with GPS is used for the back end. During
 implementation, both Fast-Lio and PGO are initialized. The point cloud data will
 first be processed by Fast-LIO to create an odometry, and the odometry will then
@@ -1710,8 +1856,8 @@ system is used for the extrinsic calibration:
 
 Based on \autoref{fig:stg3_pgo}, despite both odometry and GPS trajectory and aligned, we can
 still observe that the point clouds in PGO are still misaligned. Aside from having high
-gain for GPS in the SLAM, the misalignment is due to the issues regarding the coordinate
-frame rotation between GPS and LiDAR Odometry, and GPS transformation logic which
+gain for GPS in the SLAM, the misalignment of point clouds is due to the issues regarding the coordinate
+frame rotation between GPS and LiDAR odometry, and GPS transformation logic which
 needs to be solved in later stage. 
 
 \begin{figure}[H]
@@ -1751,7 +1897,11 @@ Placeholder text
 Placeholder text
 
 \subsection{LiDAR SLAM}
-Placeholder text
+The next part of this project aims to solve the point cloud alignment issues
+caused by the incorrect coordinate frame rotation between GPS and LiDAR
+odometry, as well as from the GPS transformation logic. In addition to that, the
+modular SLAM framework will be fine-tuned to improve robustness in mitigating
+the effects of canopy interference and sparse LiDAR features.
 
 
 % --- Project Management ---
