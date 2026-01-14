@@ -1569,10 +1569,11 @@ Placeholder text
 
 \subsection{Experimental Setup}
 
+\subsubsection{Ground Control Setup}
 To set up the ground control station, we first paired the telemetry in the UAV
-and in the ground controller. For this experiment, we use QGround Control \cite{QGroundControl_PlanView} as the
-ground controlling software and use 433MHz Radio Telemetry for communication
-between Pixhawk and QGround Control. 
+and in the ground controller. For this experiment, we use QGround Control
+\cite{QGroundControl_PlanView} as the ground controlling software and use 433MHz
+Radio Telemetry for communication between Pixhawk and QGround Control. 
 
 QGround Control (QGC) is a full-featured flight control and mission planning
 software for MAVLink-enabled drones.  The experiments were conducted as
@@ -1580,9 +1581,9 @@ missions, which enables the user to select a set of waypoints in the QGC map and
 upload it to the UAV’s flight controller. 
 
 The plan view in QGC helps to assign particular waypoints, including takeoff and
-landing. Figure \ref{fig:qgc_plan_view} shows a screenshot of the QGC plan view, which specifies the
-different toolbars, including plan tools, the command editor, and the mission
-list.
+landing. Figure \ref{fig:qgc_plan_view} shows a screenshot of the QGC plan view,
+which specifies the different toolbars, including plan tools, the command
+editor, and the mission list.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/qgc_planview.jpg}
@@ -1592,14 +1593,25 @@ list.
 Additionally, users can specify the altitude and speed at each waypoint by
 editing the mission command list. For instance, if our experiment is hovering
 over a tree, we will assign a speed of 2 m/s, hold for 300 seconds, and the
-altitude will be roughly around 30m. Figure \ref{fig:qgc_mission_list} shows an example of a mission
-command list in QGC.
+altitude will be roughly around 30m. Figure \ref{fig:qgc_mission_list} shows an
+example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGround Control Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
+
+\subsubsection{Establishing Remote Connection with Onboard Computer}
+While the ground controller is being set up, the onboard Jetson Orin is being connected
+through both the SSH protocol and remote desktop on two separate computers. 
+
+Through Wi-Fi, both the SSH computer and the Jetson Orin is connected into a common internal
+network that was pre-established using ZeroTier. Then, the Terminal of the Jetson Orin could
+be easily accessed through Virtual Studio Code, where the command to log GNSS data from the
+two onboard receivers can be executed. 
+
+On the other hand, \hl{(ROS set up)}
 
 \subsection{Experiment Workflow}
 Placeholder text
@@ -1992,12 +2004,12 @@ LightGBM model is shown in the figure below.
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
 of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
 tree reflection. As can be observed from the confusion matrix, 1110 and 1008 samples of direct and ground reflected
-signals repectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
+signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
-This results are acceptable as the model will later be usef to identify vegetation reflected signals mostly.
+This results are acceptable as the model will later be used to identify vegetation reflected signals mostly.
 \subsubsection{Receiver Operating Characteristic (ROC) Curve}
 A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
-binary classification model at various threshold settings. It plots plots the True Positive Rate (TPR) against the False Positive
+binary classification model at various threshold settings. It plot the True Positive Rate (TPR) against the False Positive
 Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC values is 
 closer to 1, it basically indicates that the model has good ability to distinguish between classes. However, a value near
 0.5 indicates that the model has no discrimination ability. For the LightGBM model trained for classification of signals, 
