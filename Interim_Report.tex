@@ -2063,7 +2063,7 @@ signals. However, the model has performed well in classifying tree reflected sig
 This results are acceptable as the model will later be used to identify vegetation reflected signals mostly.
 \subsubsection{Receiver Operating Characteristic (ROC) Curve}
 A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
-binary classification model at various threshold settings. It plot the True Positive Rate (TPR) against the False Positive
+binary classification model at various threshold settings. It plots the True Positive Rate (TPR) against the False Positive
 Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC values is 
 closer to 1, it basically indicates that the model has good ability to distinguish between classes. However, a value near
 0.5 indicates that the model has no discrimination ability. For the LightGBM model trained for classification of signals, 
@@ -2308,7 +2308,14 @@ selected out for analysis individually, while the code for processing those data
 also be optimized with the help of GenAI tools.
 
 \subsubsection{Machine Learning}
-Placeholder text
+One of the main difficulties currently in this project is not being able to collect true 
+labelled data for training the classification model. Although the data collection was 
+performed in a controlled environment, there are still chances of having some direct signals
+being recorded by the nadir antenna and some reflected signals being recorded by the zenith antenna.
+This could be leading to some mislabelling of the training data and thus affecting the model performance 
+as observed in the confusion matrix section. To solve this issue, more controlled data collection will be 
+performed to ensure the quality of the training dataset. Advanced data cleaning techniques will also be explored to 
+improve the labelling accuracy of the dataset. 
 
 \subsubsection{LiDAR SLAM}
 Placeholder text
