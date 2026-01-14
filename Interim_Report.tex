@@ -1661,7 +1661,7 @@ find all the positive samples. The F1-score is calculated as follows from precis
 The F1-score for the LightGBM model on the test dataset is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/F1.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
 From the firgure above, it is observed that the LightGBM model achieves a F1 score of approximately 
@@ -1674,7 +1674,7 @@ while the off-diagonal values indicate misclassified ones. The confusion matrix 
 LightGBM model is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/Confusion-matrix.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/Confusion-matrix.png}
     \caption{Confusion matrix for LightGBM model on test dataset}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
@@ -1692,11 +1692,28 @@ closer to 1, it basically indicates that the model has good ability to distingui
 the ROC curve is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/ROC.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/ROC.png}
     \caption{ROC curve for LightGBM model on test dataset}
 \end{figure}
 The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning 
 that the model has high abiity to distinguish between signal classes.
+\subsubsection{Feature Importance}
+Feature importance is a techniques in Machine Learning to identify and rank the most relevant features 
+in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for 
+our signal classification task. The feature importance plot is shown in the figure below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Included_Images/feature_importance.png}
+    \caption{Feature importance plot for LightGBM model}
+\end{figure}
+The figure indicates that the top three most important features for the LightGBM model are:
+\begin{itemize}
+    \item Pseudorange 
+    \item Doppler measurement
+    \item Elevation Angle
+\end{itemize}
+These features have the highest importance scores, indicating that they contribute significantly to the model's ability to classify
+the signals accurately. This insight can be useful for future feature engineering and model improvement efforts.
 \subsection{LiDAR SLAM}
 \subsubsection{Stage 1: Modular SLAM Implementation without GPS}
 \begin{figure}[H]
