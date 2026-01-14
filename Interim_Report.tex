@@ -29,6 +29,16 @@
 \usepackage{subcaption}
 \usepackage{colortbl}
 \usepackage{xcolor}
+\usepackage{pgfgantt}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage[dvipsnames]{xcolor}
+
+\definecolor{overallcolor}{RGB}{114,158,206}
+\definecolor{pathcolor}{RGB}{230,145,56}
+\definecolor{gnsscolor}{RGB}{102,194,164}
+\definecolor{mlcolor}{RGB}{194,165,207}
+\definecolor{slamcolor}{RGB}{158,202,225}
 \usepackage{longtable}
 
 
@@ -530,7 +540,7 @@ Vegetation Water Content (VWC) \cite{small2010sensing}. A study by Chen et al.
 Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of
 approximately 0.94 with reference measurements \cite{chen2024new}. Other studies
 have trained deep learning models on GNSS-R features. One study trained a ANN on
-Delay Doppler Maps (DMMs), SNR, signal incidence angle and geographic data to
+Delay Doppler Maps (DDMs), SNR, signal incidence angle and geographic data to
 predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}. Prior GNSS-R
 vegetation retrieval efforts have focused on parameters like biomass, soil
 moisture, and VWC. For example. SNR that has been reflected from wheat was used
@@ -2278,7 +2288,82 @@ Placeholder text
 Placeholder text
 
 \subsection{Gantt Chart}
-Placeholder text
+\vspace*{\fill}
+\begin{center}
+\begin{sideways}
+\begin{ganttchart}[
+  vgrid=true,
+  hgrid=true,
+  title/.append style={fill=OliveGreen!70},
+  title label font=\small\color{white},
+  group/.append style={fill=none},
+  group label font=\bfseries\small,
+  bar label font=\scriptsize,
+  progress label text={},
+  x unit=1.5cm,
+  y unit title=0.7cm,
+  y unit chart=0.4cm,
+  time slot format=isodate,
+  time slot unit=month,
+  canvas/.append style={fill=none},
+  bar incomplete/.append style={fill=ForestGreen!30},
+  today=2026-01-01,
+  today label=Interim,
+  today offset=.5,
+  today rule/.style={draw=blue, ultra thick, dash pattern=on 2pt off 2pt},
+  bar height=0.7,
+  bar top shift=0.15,
+  group height=0.7,
+  group top shift=0.15,
+  group peaks tip position=0,
+  group left shift=0,
+  group right shift=0,
+]{2025-09-01}{2026-05-30}
+\gantttitle{2025}{4}
+\gantttitle{2026}{5} \\
+\gantttitlecalendar{month=shortname} \\
+% Overall
+\ganttgroup[group/.style={fill=overallcolor}]{Overall}{2025-09-01}{2026-05-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Planning \& Initialization}{2025-09-01}{2025-09-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Literature Review}{2025-09-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{System Design}{2025-10-01}{2025-11-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-10-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Phase 1 Experiments}{2025-11-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2026-02-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Phase 2 Experiments}{2026-03-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Final Report \& Presentation}{2026-05-01}{2026-05-30} \\
+% Path Planning
+\ganttgroup[group/.style={fill=pathcolor}]{Path Planning}{2025-10-01}{2026-05-30} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Waypoint Nav}{2025-10-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Coverage Planning}{2025-11-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Dynamic Sim (MATLAB/AirSim)}{2026-02-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Real-world Nav}{2026-03-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Simul Mapping \& Nav (w/ SLAM)}{2026-04-01}{2026-05-30} \\
+% GNSS-R
+\ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{GNSS Measurement Extraction}{2025-10-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Analysis}{2025-11-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{ML Integration}{2026-02-01}{2026-02-28} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Sensitivity}{2026-03-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Correlation Modeling}{2026-04-01}{2026-04-30} \\
+% ML
+\ganttgroup[group/.style={fill=mlcolor}]{Machine Learning}{2025-10-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Feature Analysis}{2025-10-01}{2025-11-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Dataset Construction}{2025-10-01}{2025-11-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Model Selection \& Training}{2025-11-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{NN Dev for Regression}{2026-01-01}{2026-03-01} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Dataset Expansion}{2026-01-01}{2026-04-01} \\
+% LiDAR SLAM
+\ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{LiDAR-Inertial Odom}{2025-11-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Graph-Based SLAM}{2025-12-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{System Architecture \& GPS Integration}{2026-01-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Improvements}{2026-02-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-04-01}{2026-04-30} \\
+\end{ganttchart}
+\end{sideways}
+\end{center}
+\vspace*{\fill}
 
 \subsection{Project Difficulties and Solutions}
 Placeholder text
