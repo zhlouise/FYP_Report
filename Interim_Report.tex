@@ -242,13 +242,13 @@ intelligence, and control systems. In robotics, path planning is a technique
 that is used in navigating a robot autonomously from an origin to a destination
 via a collision-free route. Therefore, path planning is primarily a geometric
 problem that generates a path according to a given sequence of waypoints,
-without accounting for variations over time. \hl{In contrast, trajectory planning
+without accounting for variations over time. In contrast, trajectory planning
 defines the path as a function of time, assigning specific timing to the
-geometric route} \cite{gasparetto2015path}. \hl{Currently, our research focuses on
+geometric route \cite{gasparetto2015path}. Currently, our research focuses on
 implementing path planning for the autonomous navigation of an Unmanned Aerial
 Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
 methodologies in this work, reserving trajectory planning and optimization for
-future investigation. (Really need to say trajectory planning?)}
+future investigation. 
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
 as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
@@ -270,7 +270,7 @@ areas for further GNSS-R surveying.
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
 accurate and precise navigation in fragmented urban forests. To develop path
-planning mechanisms, we conducted our literature review across three different
+planning mechanisms, we conducted our literature review across four different
 path planning approaches. 
 
 \begin{enumerate} 
@@ -734,13 +734,57 @@ can be adapted and deployed for real-time forestry applications.
 
 % --- Methodology ---
 \section{Methodology}
-Placeholder text
+In this section, a detailed analysis of the system architecture is presented,
+with a focus on the UAV platform for data collection. The system is divided into
+four key workflows: path planning, GNSS-R data processing, Machine Learning, and
+LiDAR SLAM. A detailed overview of the processes, mechanisms, and derivations of
+each workflow is presented in the methodology section. 
 
 \subsection{UAV Platform}
-Placeholder text
+In this project, one of the primary objectives is to utilize a UAV to collect
+GNSS-R data and conduct subsequent post-processing. This data collection system
+is built on a Holybro X650 drone frame, integrated with a Pixhawk 6C flight
+controller for navigation and a SiK telemetry radio for ground station
+communication. For GNSS-R measurements, the setup features a dual-antenna
+configuration consisting of zenith and nadir antennas. An onboard Jetson Orin
+Nano serves as the primary computer for processing data from the Livox LiDAR and
+GNSS receivers. The system is further supported by a GPS module and a
+receiver for the remote controller, enabling both manual and autonomous flight
+operations. The figure \ref{UAV Platform} demonstrates the onboard setup of the UAV and
+sensors. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Included_Images/UAV_Setup.png}
+    \caption{UAV Platform and Onboard Setup}
+    \label{UAV Platform}
+\end{figure}
 
 \subsection{System Architecture}
-The system architecture adapted in this project is as shown below.
+
+Our system architecture comprises four key components: path planning, GNSS-R,
+machine learning, and LiDAR SLAM. First, we will conduct path planning using
+waypoint-based navigation and coverage path planning to navigate the UAV in
+desired vegetation environments. Then, we will send the planned trajectory to
+the ground control station for execution of the mission. Finally, during mission
+execution, we will collect raw GNSS data and LiDAR data for SLAM. 
+
+In the GNSS pipeline, we will conduct GNSS measurement extraction and Fresnel
+Zone analysis to obtain the GNSS measurement level model. Simultaneously, we
+will send the raw data to the machine learning pipeline to perform data
+preprocessing and signal classification for open sky, UAV hovering over bare
+ground, and UAV hovering over trees. Once the classification is complete, we
+will proceed with vegetation feature regression. Ultimately, the system
+integrates the GNSS-R modeling with vegetation feature regression, enabling the
+precise retrieval of the desired vegetation parameters. 
+
+In the LIDAR SLAM pipeline, we will first synchronize the LiDAR data with the
+timestamps from the flight controller (Pixhawk). Once synchronized, we obtain
+the LiDAR data and corresponding GPS data. We then send these to our front-end
+LiDAR Odometry and subsequently to the back-end pose graph optimization. This
+data is used to cross-validate the vegetation parameters retrieved by the GNSS-R
+and Machine Learning pipelines. 
+A comprehensive flow of our system architecture
+is shown in Figure \ref{System Architecture}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
@@ -825,7 +869,7 @@ shortest path from a starting point to a goal. The algorithm first divides the
 map into nodes, where each node represents a possible position for the robot to
 move. These positions depend on the grid architecture, such as 4-way or 8-way
 connected grids. In addition to the conventional grid architecture, novel grid
-mapping approaches such as NavMeshes are widely used in 3D simulation software.
+mapping approaches such as NavMeshes \cite{putz20163d} are widely used in 3D simulation software.
 These mapping techniques connect the locations of the movable agent to the
 surface (mesh) and store the surfaces as convex polygons.  
 
@@ -1089,6 +1133,7 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
         \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
         \caption{Boustrophedon Cell Decomposition IN Event Example}
         \label{fig:in_event}
+          \cite{Choset-1997-16422}
     \end{figure}
 
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
@@ -1816,6 +1861,7 @@ A total of 10 successful flights were conducted during the reporting period. The
     \label{Experiment Environment}
 \end{figure}
 
+
 \begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.12\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
     \caption{Summary of Experiments Conducted}
     \label{Experiment Summary}\\
@@ -1849,7 +1895,8 @@ A total of 10 successful flights were conducted during the reporting period. The
     \hline
     (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via autonomous coverage path planning, but in the opposite direction compared to experiment (h) and (i) when scanning tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
-\end{longtable}
+\end{longtable} 
+
 
 
 
@@ -1924,7 +1971,7 @@ successful execution of a mission.
 \end{figure}
 
 \subsubsection{Coverage Path Planning Results}
-Similar to waypoint—based navigation, the coverage-based path planning results
+Similar to waypoint-based navigation, the coverage-based path planning results
 are divided into two segments: a locally implemented boustrophedon algorithm and
 coverage mission planning in QGroundControl. 
 \paragraph{Boustrophedon Implementation Results} ~\\
@@ -2365,7 +2412,10 @@ Placeholder text
 
 % --- Future Works ---
 \section{Future Works}
-Placeholder text
+In this section, we present the limitations of each component at its current
+stage, followed by proposed solutions. The frameworks discussed include path
+planning, GNSS-R, machine learning, and LiDAR SLAM. The discussed solutions will
+be operated in the next stage of our project. 
 
 \subsection{Path Planning}
 For the path planning framework, so far, most results have been conducted in a
@@ -2543,7 +2593,14 @@ Placeholder text
 Placeholder text
 
 \subsubsection{Path Planning}
-Placeholder text
+In terms of project management, the issues that arose during the path-planning
+process were mainly related to hardware and communication. During on-site
+experiments, the UAV's telemetry disconnected from the ground station, even
+though it was within the specified communication range. Since the mission
+planner in QGround Control does not rely on real-time communication, the
+experiments were not disrupted. However, to solve this problem, we have analyzed
+strong long-distance communication telemetry types and will be replacing the
+current hardware in the next stage. 
 
 \subsubsection{GNSS-R}
 Through processing the data collected during the first half of this project, one of the 
