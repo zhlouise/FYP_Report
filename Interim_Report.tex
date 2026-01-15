@@ -88,7 +88,26 @@
 
 % --- Abstract ---
 \section{Abstract}
-Placeholder text
+\begin{it}
+Vegetation monitoring is essential for environmental sustainability, yet
+conventional sensing methods are often limited by high costs, weather
+dependency, and low spatial resolution. This project explores an alternative
+solution through developing an intelligent Unmanned Aerial Vehicle (UAV) system
+that integrates Global Navigation Satellite System Reflectometry (GNSS-R) remote
+sensing, autonomous path planning algorithms, machine learning techniques, and
+Light Detection and Ranging (LiDAR) based mapping for robust vegetation
+monitoring. Currently, the system design implements A* and Boustrophedon
+algorithms for path planning, a dual antenna system with opposite polarization
+for GNSS signal reception, a LightGBM model for GNSS signal classification, and
+a modular LiDAR Simultaneous Localization and Mapping (SLAM) framework for
+generating canopy maps. In this interim report, preliminary experiments
+demonstrating successful data collection, GNSS signal feature extraction,
+analysis, and classification, as well as functional path planning and SLAM
+modules will be detailed. With the foundational platform developed, the ongoing
+works will focus on system integration, correlation modelling, and vegetation
+parameter prediction to establish a robust and intelligent vegetation monitoring
+technology.
+\end{it}
 
 
 % --- Introduction ---
@@ -123,19 +142,19 @@ categories based on the distance between the target object and the measurement
 sensor: 1) space-borne and 2) airborne remote sensing. Space-borne remote
 sensing involves the use of instruments onboard orbiting satellites, including
 spectral and hyperspectral cameras \cite{Qian2022}, synthetic aperture radar
-(SAR) \cite{Hu2025}, and space-borne Light Detection And Ranging (LiDAR) sensors
-\cite{Bergen2009}. Due to the wide coverage and availability of space-borne
-data, large-scale terrestrial changes over time could be captured, enabling the
-continuous monitoring of macro-scale ecosystems \cite{Khan2024}. Compared to
-space-borne systems, airborne remote sensing can provide significantly improved
-spatial resolution and assessment flexibility through the integration of sensors
-onboard manned aircraft or unmanned aerial vehicles (UAVs) \cite{Khan2024}.
-Although limited by coverage area, airborne remote sensing can provide timely
-information for addressing regional emergencies such as pest \cite{Wulder2006}
-or wildfire \cite{Arroyo2008} outspreads since the systems could be deployed
-on-demand. In UAV-based remote sensing particularly, this temporal flexibility
-is further complemented with the benefit of low operational cost, rendering it
-an ideal platform for monitoring regional and urban vegetation \cite{Tang2015}. 
+(SAR) \cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the
+wide coverage and availability of space-borne data, large-scale terrestrial
+changes over time could be captured, enabling the continuous monitoring of
+macro-scale ecosystems \cite{Khan2024}. Compared to space-borne systems,
+airborne remote sensing can provide significantly improved spatial resolution
+and assessment flexibility through the integration of sensors onboard manned
+aircraft or UAVs \cite{Khan2024}. Although limited by coverage area, airborne
+remote sensing can provide timely information for addressing regional
+emergencies such as pest \cite{Wulder2006} or wildfire \cite{Arroyo2008}
+outspreads since the systems could be deployed on-demand. In UAV-based remote
+sensing particularly, this temporal flexibility is further complemented with the
+benefit of low operational cost, rendering it an ideal platform for monitoring
+regional and urban vegetation \cite{Tang2015}. 
 
 Conventionally, UAV remote sensing platforms carry similar instruments to that
 of other remote sensing systems, including radar, LiDAR, and multi-spectral or
@@ -144,43 +163,42 @@ instruments are susceptible to the influence of lighting and weather
 \cite{Wu2024}, LiDAR devices tend to face difficulties penetrating through dense
 canopy \cite{Su2007}. Therefore, it is critical to explore a robust sensing
 technique that is suitable for UAVs in terms of payload and power consumption to
-complement the existing instruments. Recently, the technique of Global
-Navigation Satellite System Reflectometry (GNSS-R) is receiving increasing
-interest in the field of remote sensing. GNSS-R exploits the L-band signals
-transmitted from Global Navigation Satellite Systems (GNSS) that are then
-scattered on different terrain surfaces of the Earth \cite{Jin2024}. Then, the
-reception of reflected GNSS signals can provide information regarding the
-properties of the signal reflector on land \cite{Jin2024}. As signals of
-opportunity conventionally dedicated to Positioning, Navigation, and Timing
-(PNT) applications, GNSS is capable of providing real-time measurements
-regardless of time, location, and weather \cite{Jin2024}. Additionally, as a
-bi-static system where signal transmitters are separated from receivers, GNSS-R
-is exempt from the need of dedicated transmitter-receiver instruments that are
-crucial to mono-static radar systems \cite{Jin2010}. Instead, any consumer-grade
-receivers capable of receiving reflected GNSS signals could be used for GNSS-R
-remote sensing, further demonstrating GNSS-R's applicability onboard low-cost
-remote sensing systems such as an UAV. 
-%added by sashenka 
+complement the existing instruments. Recently, the technique of GNSS-R is
+receiving increasing interest in the field of remote sensing. GNSS-R exploits
+the L-band signals transmitted from Global Navigation Satellite Systems (GNSS)
+that are then scattered on different terrain surfaces of the Earth
+\cite{Jin2024}. Then, the reception of reflected GNSS signals can provide
+information regarding the properties of the signal reflector on land
+\cite{Jin2024}. As signals of opportunity conventionally dedicated to
+Positioning, Navigation, and Timing (PNT) applications, GNSS is capable of
+providing real-time measurements regardless of time, location, and weather
+\cite{Jin2024}. Additionally, as a bi-static system where signal transmitters
+are separated from receivers, GNSS-R is exempt from the need of dedicated
+transmitter-receiver instruments that are crucial to mono-static radar systems
+\cite{Jin2010}. Instead, any consumer-grade receivers capable of receiving
+reflected GNSS signals could be used for GNSS-R remote sensing, further
+demonstrating GNSS-R's applicability onboard low-cost remote sensing systems
+such as an UAV. 
 
-Recent research has demonstrated the potential of integrating GNSS-R with UAVs
-by developing a UAV-based GNSS-R system for water body detection and flood
-mapping \cite{UAV-water}. This showcases how low-altitude UAV platforms can give
-high-resolution and flexible measurements. Their work established UAV-mounted
-GNSS-R as a promising tool for monitoring dynamic environmental conditions.
-However, due to the challenges in optimal flight trajectories planning and
-coverage planning, this research does not provide an autonomous navigation
-application. Addressing the above challenges requires autonomous path planning
-algorithms, dynamic obstacle avoidance, and environment mapping and
-localization. As a result, our research provides a unique solution by enhancing
-the UAV and GNSS-R combination with the integration of autonomous navigation. 
+Recent research has demonstrated the potential of integrating GNSS-R techniques
+with UAVs through an UAV-based GNSS-R system for water body detection and flood
+mapping \cite{UAV-water}. Not only does this application demonstrate the
+capability of obtaining high resolution and flexibility measurements onboard
+low-altitude UAV platforms, but it also established UAV-mounted GNSS-R as a
+promising tool for monitoring dynamic environmental conditions. However, while
+existing systems are yet to be developed specifically for vegetation monitoring
+purposes, they also often lack fully autonomous navigation capabilities.
+Therefore, this project aims to address this gap through both the development of
+a robust GNSS-R framework for vegetation remote sensing and the integration of
+optimal trajectory planning, dynamic obstacle avoidance, and environment
+mapping. An additional LiDAR-based 3D canopy map will also provide the critical
+spatial reference to validate any vegetation parameters obtained through the
+GNSS-R framework.
 
-\hl{May need some intro for path planning and LiDAR here. The above is from
-Louise's project proposal, so need further editing. (Also need to mention 
-the full name of SLAM somewhere)}
-
-In this project, the technique of GNSS-R will be integrated onto an UAV platform
-to achieve an intelligent and structured remote sensing system for vegetation
-monitoring. The main objectives of this project are as follows:
+In summary, this project will integrate the technologies of autonomous
+navigation, GNSS-R, machine learning, and LiDAR SLAM to achieve an intelligent
+and structured remote sensing system for vegetation monitoring. The main
+objectives of this project are as follows:
 \begin{enumerate}
 \item To introduce an autonomous path planning framework onboard the UAV platform
 for optimized GNSS-R remote sensing.
@@ -197,57 +215,57 @@ UAV path planning, GNSS-R, machine learning, and LiDAR SLAM, while Section 4
 outlines the project's methodologies. The subsequent sections cover the
 experiments conducted (Section 5), a discussion of current results (Section 6),
 and the project conclusions (Section 7). Finally, Section 8 explores future
-work, and Section 9 summarizes project management details. 
+works, and Section 9 summarizes project management details. 
 
 
 % --- Literature Review ---
 \section{Literature Review}
 To achieve the project objectives, this literature review comprehensively examines
-the contemporary research in four domains, each associated with one project objective.
-\hl{First, existing path planning methodologies are reviewed to \dots}
-Subsequently, the existing techniques of GNSS-R are explored, with a focus on its
-prior applications in vegetation parameter retrieval. Then machine learning based 
-techniques are investigated for the purpose of classification of reflected and direct 
-signals. Further investigation is conducted on machine learning based approaches for predicting 
-vegetation parameters from raw GNSS data.
-\hl{Finally, LiDAR-based SLAM techniques \dots}
-Consequently, this review identifies the existing gaps in each domain for the 
-objective of vegetation monitoring, which will inform the integrated project 
-methodologies.
+the contemporary research in four domains, each associated with one project
+objective. First, existing path planning methodologies are reviewed to identify
+suitable algorithms for autonomous UAV navigation in vegetated environments.
+Subsequently, the existing techniques of GNSS-R are explored, with a focus on
+its prior applications in vegetation parameter retrieval. Then, machine learning
+based techniques are investigated for the purpose of classification of reflected
+and direct signals. Further investigation is conducted on machine learning based
+approaches for predicting vegetation parameters from raw GNSS data. Finally,
+LiDAR-based SLAM techniques are assessed to identify robust mapping and
+localization frameworks suitable for generating 3D canopy models to provide
+spatial references. Consequently, this review identifies the existing gaps in
+each domain for the objective of vegetation monitoring, which will inform the
+integrated project methodologies.
+
 
 \subsection{Path Planning}
-Path planning is a term affiliated with fields, such as robotics, artificial
-intelligence, and control systems. In robotics, path planning is a technique that
-is used in navigating a robot autonomously from an origin to a destination via a
-collision-free route. Path planning is primarily a geometric problem that
-generates a path according to a given sequence of waypoints, without accounting
-for variations over time. In contrast, trajectory planning defines the path as a
-function of time, assigning specific timing to the geometric route
-\cite{gasparetto2015path}. Currently, our research focuses on implementing path
-planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
-outdoor environments. Consequently, we prioritize path planning methodologies in
-this work, reserving trajectory planning and optimization for future
-investigation.
+Path planning is a term affiliated with fields such as robotics, artificial
+intelligence, and control systems. In robotics, path planning is a technique
+that is used in navigating a robot autonomously from an origin to a destination
+via a collision-free route. Therefore, path planning is primarily a geometric
+problem that generates a path according to a given sequence of waypoints,
+without accounting for variations over time. \hl{In contrast, trajectory planning
+defines the path as a function of time, assigning specific timing to the
+geometric route} \cite{gasparetto2015path}. \hl{Currently, our research focuses on
+implementing path planning for the autonomous navigation of an Unmanned Aerial
+Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
+methodologies in this work, reserving trajectory planning and optimization for
+future investigation. (Really need to say trajectory planning?)}
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
-as bug1 and bug2 algorithms \cite{choset2005principles}. These algorithms are
-designed to first navigate around an obstacle and then determine the
-shortest path around the obstacle to reach the goal (shown in Figure \ref{fig:bug_algorithms}).
+as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
+first navigate around an obstacle and then determine the shortest path around
+the obstacle to reach the goal (Figure \ref{fig:bug_algorithms}).
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
-    \caption{Bug1 and Bug2 Path Planning Algorithms}
-    \cite{choset2005principles}
+    \caption{Bug1 and Bug2 path planning algorithms \cite{choset2005principles}.}
     \label{fig:bug_algorithms}  
 \end{figure}
-However, both bug1 and bug2 algorithms are used in scenarios where the robot has
+However, both Bug1 and Bug2 algorithms are used in scenarios where the robot has
 no map (i.e., an unknown environment). Additionally, these algorithms do not
-guarantee the optimal path. With the rise of SLAM (Simultaneous Localization and
-Mapping) techniques, we are able to create maps of the navigation environment,
-which enabled the transition to use map-based path planning methods. Therefore,
-in our system, we are using commonly found grid-based path planning algorithms,
-which enables us to create an intelligent UAV system that can identify potential
-vegetation areas using GNSS-R. 
+guarantee the optimal path. With the rise of SLAM techniques, maps of the navigation
+environment can be generated, which enabled the transition to map-based path planning methods. Therefore, the conventional grid-based path planning algorithms will be 
+integrated in this project, which enables the identification of potential vegetated
+areas for further GNSS-R surveying.
 
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
@@ -992,7 +1010,7 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 To evaluate the algorithm's performance, we conducted a series of test runs
 using vegetation density maps in different categories. The maps were obtained
-using QGround Control software from satellite imagery and then imported into an
+using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
@@ -1113,7 +1131,7 @@ in each cell.
 
 The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
-algorithm are discussed in the discussion section.
+algorithm are discussed in the results and discussion section.
 
 
 \subsection{GNSS-R}
@@ -1767,7 +1785,13 @@ network that was pre-established using ZeroTier. Then, the Terminal of the Jetso
 be easily accessed through Virtual Studio Code, where the command to log GNSS data from the
 two onboard receivers can be executed. 
 
-On the other hand, \hl{(ROS set up)}
+On the other hand, SLAM data including LiDAR point clouds, IMU, GPS data are
+collected into a .bag file from Robot Operating System (ROS). To do so,
+Nomachine is used to create remote access from Jetson Orin with the
+pre-established ZeroTier connection. Such method enable access of multiple
+terminals from Jetson Orin so that all the required sensor drivers can be
+launched to carry out data collection.
+
 
 \subsection{Summary of Experiments Conducted}
 A total of 10 successful flights were conducted during the reporting period. They are conducted in the following three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
@@ -1805,27 +1829,28 @@ A total of 10 successful flights were conducted during the reporting period. The
     \endhead
     \hline
     \endfoot
-    (a) & 2025 Oct. 01 & Homantin Mountain & & \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
+    (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via manual flight control where it hovers above bare ground with grass for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
     \hline
-    (b) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
+    (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first successful implementation of path planning where the UAV hovers above bare ground with grass in two different points for 2 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
     \hline
-    (c) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
+    (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 2 minutes and above trees for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
     \hline
-    (d) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
+    (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via manual flight control. However, we face the problem of controlling the UAV mid-way due to large wind velocity. Hence resulting in irregular flight path. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
-    (e) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
+    (e) & 2025 Nov. 09 & Nam Sang Wai &  This experiment is carried out via path planning where the UAV is hovering over bare ground with grass in two different points for 3 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
-    (f) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
+    (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 3 minutes and above trees for 5 minutes. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
-    (g) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
+    (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually assigning multiple waypoints in QGroundControl to perform path planning. The UAV hovers above each waypoint for one minute, with a total of six waypoints assigned in the mission. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
     \hline
-    (h) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\ 
+    (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first implementation of using surveying function from QGroundControl to carry out coverage path planning. The UAV is going back and forth between bare ground with grass and tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
     \hline
-    (i) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
+    (i) & 2025 Nov. 09 & Nam Sang Wai & This experiment demonstrates wider-area coverage through autonomous path planning, similar to (h) where it allows the UAV to systematically fly over clusters of trees. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
     \hline
-    (j) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
+    (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via autonomous coverage path planning, but in the opposite direction compared to experiment (h) and (i) when scanning tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
 \end{longtable}
+
 
 
 \subsection{Key Experiment 1}
@@ -1904,7 +1929,7 @@ are divided into two segments: a locally implemented boustrophedon algorithm and
 coverage mission planning in QGroundControl. 
 \paragraph{Boustrophedon Implementation Results} ~\\
 The algorithm results were obtained by running the ROS (Robot Operating System) \cite{ROS_website}
-package developed by the Autonomous Systems Lab at ETH Zurich. The experiments
+package developed by the Autonomous Systems Lab at ETH Zurich \cite{B_hnemann_2021}. The experiments
 were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
 shows the graphical user interface of the coverage path planner. 
 \begin{figure}[H]
@@ -1917,7 +1942,7 @@ shows the graphical user interface of the coverage path planner.
 At first, we specified the map as a polygon in the GUI. Once we input the
 polygon, the algorithm will determine the coordinates of the polygon, the sweep
 distance, and the altitude.  An example of result interpretation for a polygon
-shown in Figure \ref{fig:cpp_gui} is as follows: 
+shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/cpp_result.png}
@@ -1949,9 +1974,9 @@ shown in Figure \ref{fig:cpp_gui} is as follows:
 [ INFO] [1762353101.770556488]: Sending visualization messages.
 \end{lstlisting}
 As shown in the command-line output, the polygon is considered to be 3 meters
-high in altitude. This simulates a camera/sensor flying at 3m height with a
+high in altitude. This simulates a camera or a sensor flying at 3m height with a
 field of view. The sweeps are spaced 1.07177m apart to ensure 60 percent overlap
-between consecutive passes. The Boustrophedon algorithm divides your polygon
+between consecutive passes. The Boustrophedon algorithm divides the polygon
 into one cell that can be swept in a back-and-forth pattern. The algorithm
 generated 24 possible sweep patterns across the cell. 
 
@@ -2552,7 +2577,23 @@ performed to ensure the quality of the training dataset. Advanced data cleaning 
 improve the labelling accuracy of the dataset. 
 
 \subsubsection{LiDAR SLAM}
-Placeholder text
+One of the problems faced during this project is the point clouds produced by
+Pose Graph Optimization (PGO) SLAM. Based on Figure \ref{debug_pc}, we can see that there are
+two types of point cloud clusters. One of which is the purple point cloud
+clusters and the other is the yellow point cloud clusters. To solve this issue,
+the source code was debugged and revealed that the yellow point cloud clusters
+are a loop-closure debug visualization in which the algorithm compares the
+current scan against local history to verify a loop closure. Because the point
+clouds are distorted due to GPS integration, these debug point clouds are
+temporarily commented out to allow focus on the overall alignment of point
+clouds in PGO SLAM.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/debug_pc.png}
+    \caption{PGO SLAM with two types of point clouds}
+    \label{debug_pc}
+\end{figure}
 
 
 % --- Appendix ---
