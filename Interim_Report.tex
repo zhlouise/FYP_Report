@@ -824,7 +824,7 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 To evaluate the algorithm's performance, we conducted a series of test runs
 using vegetation density maps in different categories. The maps were obtained
-using QGround Control software from satellite imagery and then imported into an
+using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
@@ -945,7 +945,7 @@ in each cell.
 
 The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
-algorithm are discussed in the discussion section.
+algorithm are discussed in the results and discussion section.
 
 
 \subsection{GNSS-R}
@@ -1669,7 +1669,7 @@ are divided into two segments: a locally implemented boustrophedon algorithm and
 coverage mission planning in QGroundControl. 
 \paragraph{Boustrophedon Implementation Results} ~\\
 The algorithm results were obtained by running the ROS (Robot Operating System) \cite{ROS_website}
-package developed by the Autonomous Systems Lab at ETH Zurich. The experiments
+package developed by the Autonomous Systems Lab at ETH Zurich \cite{B_hnemann_2021}. The experiments
 were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
 shows the graphical user interface of the coverage path planner. 
 \begin{figure}[H]
@@ -1682,7 +1682,7 @@ shows the graphical user interface of the coverage path planner.
 At first, we specified the map as a polygon in the GUI. Once we input the
 polygon, the algorithm will determine the coordinates of the polygon, the sweep
 distance, and the altitude.  An example of result interpretation for a polygon
-shown in Figure \ref{fig:cpp_gui} is as follows: 
+shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/cpp_result.png}
@@ -1714,9 +1714,9 @@ shown in Figure \ref{fig:cpp_gui} is as follows:
 [ INFO] [1762353101.770556488]: Sending visualization messages.
 \end{lstlisting}
 As shown in the command-line output, the polygon is considered to be 3 meters
-high in altitude. This simulates a camera/sensor flying at 3m height with a
+high in altitude. This simulates a camera or a sensor flying at 3m height with a
 field of view. The sweeps are spaced 1.07177m apart to ensure 60 percent overlap
-between consecutive passes. The Boustrophedon algorithm divides your polygon
+between consecutive passes. The Boustrophedon algorithm divides the polygon
 into one cell that can be swept in a back-and-forth pattern. The algorithm
 generated 24 possible sweep patterns across the cell. 
 
