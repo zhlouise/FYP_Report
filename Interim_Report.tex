@@ -485,6 +485,7 @@ patterns often provides a jagged path, whereas boustrophedon provides the
 kinematic feasibility. The detailed implementation of the boustrophedon
 algorithm is discussed in the methodology section.
 
+
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
 the correlation between direct and scattered GNSS signals were proven promising
@@ -508,27 +509,45 @@ simulations revealed that tree trunk scattering effects would dominate total
 scattering response, while satellite azimuth angles are significantly correlated
 to the signal polarization \cite{Wu2014}. 
 
-Aside from simulated approaches, empirical or semi-empirical studies regarding GNSS-R
-remote sensing of vegetation were also reviewed. In a study by Yueh et al.,
-GNSS-R data onboard the Cyclone GNSS (CYGNSS) satellite were analyzed against
-the vegetation water content estimated through the satellite-derived Normalized
-Difference Vegetation Index (NDVI) \cite{Yueh2022}. The results demonstrated
-near-linear relationship between vegetation water content and GNSS-R signal
-attenuation, while the CYGNSS data also suggested the existence of volume
-scattering within complex forest components \cite{Yueh2022}. Similarly, another
-study analyzing GNSS-R data from TechDemoSat-1 demonstrated reduced sensitivity
-to soil moisture retrieval due to vegetation attenuation, which could be
-effectively compensated using NDVI data, indicating a correlation between signal
-attenuation and vegetation water content \cite{Camps2016}. Additionally, the
-interference pattern between direct and reflected GNSS signals from the Earth's
-surface was used in estimating vegetation height and land topography
-\cite{RodriguezAlvarez2011}. Through using a Soil Moisture Interference-pattern
-GNSS Observations at L-band (SMIGOL) reflectometer, the instantaneous power of
-the direct and reflected signals were coherently added, in which the resulting
-power oscillations present notches that are correlated to vegetation layer
-thickness and the reflection geometry \cite{RodriguezAlvarez2011}. As a result,
-an RMSE of 3-5 cm in estimating the height of vegetation with simple geometrical
-structures (barley and wheat) could be achieved \cite{RodriguezAlvarez2011}.
+Aside from simulated approaches, empirical or semi-empirical studies regarding
+GNSS-R remote sensing of vegetation were also reviewed. In a study by Yueh et
+al., GNSS-R data onboard the Cyclone GNSS (CYGNSS) satellite were analyzed
+against the vegetation water content estimated through the satellite-derived
+Normalized Difference Vegetation Index (NDVI) \cite{Yueh2022}. The results
+demonstrated near-linear relationship between vegetation water content and
+GNSS-R signal attenuation, while the CYGNSS data also suggested the existence of
+volume scattering within complex forest components \cite{Yueh2022}. Similarly,
+another study analyzing GNSS-R data from TechDemoSat-1 demonstrated reduced
+sensitivity to soil moisture retrieval due to vegetation attenuation, which
+could be effectively compensated using NDVI data, indicating a correlation
+between signal attenuation and vegetation water content \cite{Camps2016}.
+Additionally, the interference pattern between direct and reflected GNSS signals
+from the Earth's surface was used in estimating vegetation height and land
+topography \cite{RodriguezAlvarez2011}. Through using a Soil Moisture
+Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
+instantaneous power of the direct and reflected signals were coherently added,
+in which the resulting power oscillations present notches that are correlated to
+vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
+\cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in estimating the
+height of vegetation with simple geometrical structures (barley and wheat) could
+be achieved \cite{RodriguezAlvarez2011}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SMIGOL_reflectometer.png}
+        \caption{SMIGOL Reflectometer Setup}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SMIGOL_interference.png}
+        \caption{Interference Notch}
+    \end{subfigure}
+    \caption{Setup and interference notch examples of the SMIGOL reflectometer
+    \cite{RodriguezAlvarez2011}.}
+    \label{SMIGOL}
+\end{figure}
+
 Yet, despite the effort in prior studies, the use of GNSS-R techniques in
 vegetation remote sensing and monitoring is far from developed. Most
 importantly, existing research relies heavily on space-borne or static
@@ -538,7 +557,8 @@ develop a systematic framework for an UAV-based GNSS-R system, in which
 correlations between GNSS-R signal features and vegetation condition parameters
 are comprehensively assessed and modeled. Additionally, with adequate dataset size,
 the GNSS-R framework could be complemented by machine learning-based modelling
-approaches, further enhancing the system robustness. \hl{Connection to ML part}
+approaches, further enhancing the system robustness.
+
 
 \subsection{Machine Learning}
 A part of this project will be to develop a deep learning based model that can
@@ -557,7 +577,7 @@ Vegetation Water Content (VWC) \cite{small2010sensing}. A study by Chen et al.
 (2024) recently derived a new GNSS-R vegetation index and used Artificial Neural
 Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of
 approximately 0.94 with reference measurements \cite{chen2024new}. Other studies
-have trained deep learning models on GNSS-R features. One study trained a ANN on
+have trained deep learning models on GNSS-R features. One study trained an ANN on
 Delay Doppler Maps (DDMs), SNR, signal incidence angle and geographic data to
 predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}. Prior GNSS-R
 vegetation retrieval efforts have focused on parameters like biomass, soil
@@ -589,13 +609,13 @@ to create efficient flight paths as well as avoid obstacles.
 The common way for remote sensing robots to carry out mapping is by using
 sensors such as camera or LiDAR to create an odometry. This allows the robots to
 estimate their position and movement over time by measuring the changes in each
-frame of the sensors. In practise, the common approaches to frame-to-frame odometry are visual
-odometry or LiDAR odometry. Visual odometry estimates motion by tracking
-distinct features in each image frame through gradients and textures while LiDAR
-odometry uses laser range measurements to scan the environment. Since our
-project focuses on investigating forests and dense vegetation, LiDAR odometry is
-preferred as it is not affected by visually repetitive scenes and varying
-lighting conditions that cause instability in camera-based methods. 
+frame of the sensors. In practise, the common approaches to frame-to-frame
+odometry are visual odometry or LiDAR odometry. Visual odometry estimates motion
+by tracking distinct features in each image frame through gradients and textures
+while LiDAR odometry uses laser range measurements to scan the environment.
+Since our project focuses on investigating forests and dense vegetation, LiDAR
+odometry is preferred as it is not affected by visually repetitive scenes and
+varying lighting conditions that cause instability in camera-based methods. 
 
 \subsubsection{LiDAR Odometry} 
 The accuracy of LiDAR odometry largely depends on how well point clouds are
@@ -718,14 +738,14 @@ connecting to each other.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/pgo.png}
-    \caption{Visualization of  GraphSLAM with loop closure }
+    \caption{Visualization of GraphSLAM with loop closure}
 \end{figure}
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
 demonstrated strong performance in urban and structured environments [4, 17],
 single-sensor SLAM systems (e.g. LiDAR-only) remain vulnerable to drift because
 their measurements are purely relative, allowing errors to accumulate over time.
-While recent work such as \cite{mailka2024efficient }has integrated additional
+While recent work such as \cite{mailka2024efficient}has integrated additional
 sensors to improve SLAM accuracy, their applicability to UAV-based forest
 monitoring remains limited due to canopy interference, sparse LiDAR features,
 and computational trade-offs. This project investigates how such SLAM methods
@@ -736,8 +756,10 @@ can be adapted and deployed for real-time forestry applications.
 \section{Methodology}
 Placeholder text
 
+
 \subsection{UAV Platform}
 Placeholder text
+
 
 \subsection{System Architecture}
 The system architecture adapted in this project is as shown below.
@@ -747,6 +769,7 @@ The system architecture adapted in this project is as shown below.
     \caption{System Architecture}
     \label{System Architecture}
 \end{figure}
+
 
 \subsection{Path Planning}
 As mentioned in the system architecture, path planning in our system focuses on
@@ -1735,13 +1758,21 @@ The pseudocode of the front-end and back-end of the modular SLAM can be shown be
 \end{figure}
 
 
-
-
 % --- Experiments ---
 \section{Experiments}
-Placeholder text
+To apply the methodologies outlined in the previous section, a series of field
+experiments were conducted, aiming to demonstrate the functionality of the UAV
+platform and collect data necessary for further analysis. Over ten unique
+flight missions were executed across three different locations in Hong Kong and
+diverse flight scenarios, including static hovering, dynamic surveying, and manual
+controlled flight. The following subsections present the experimental setups, 
+summarize experiments conducted, and detail one key experiment that highlight 
+the current system capabilities and challenges for further development.
+
 
 \subsection{Experimental Setup}
+Before the initiation of a flight mission, the ground control station must be
+configurated and remote connections with the onboard computer should be established.
 
 \subsubsection{Ground Control Setup}
 To set up the ground control station, we first paired the telemetry in the UAV
@@ -1852,13 +1883,84 @@ A total of 10 successful flights were conducted during the reporting period. The
 \end{longtable}
 
 
+\subsection{Key Experiment: Experiment (i)}
+In this subsection, the details of Experiment (i) in Table \ref{Experiment Summary}
+are discussed. Here, a survey flight mission was conducted to collect 
+feature-extensive LiDAR and GNSS-R datasets above a canopy area consisted of mixed
+dense vegetation. 
 
-\subsection{Key Experiment 1}
-Placeholder text
+\subsubsection{Setup and Procedure}
+The experiment was conducted in Nam Sang Wai on November 09, 2025, where the UAV
+followed a pre-planned path surveying an area consisting of dense, mixed-species 
+tree. First, the UAV sensors were calibrated before the experiment session. After
+the UAV is being connected to the battery, radio telemetry connection and remote 
+connections to the onboard computer were established. With the trajectory plan
+uploaded onto the onboard Pixhawk controller and the onboard computer configured to
+initialize data collection, the mission was executed. Lastly, the collected data could
+be downloaded and post-processed for further analysis.
 
-\subsection{Key Experiment 2}
-Placeholder text
+\subsubsection{Path Planning and Execution}
+In this experiment, the trajectory is planned to ascend and maintain at an altitude of
+35 meters during the survey mission. The paths in the survey area are spaced at 2 meter
+intervals, with the turnaround buffer distance set at 5 meter. The result of the flight
+plan is shown in the figure below. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_Pathplanninglist.png}
+        \caption{Mission Planning List in QGroundControl}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
+        \caption{Planned Path Result}
+    \end{subfigure}
+    \caption{Path planning and execution results.}
+\end{figure}
 
+\subsubsection{GNSS-R Analysis}
+After the successful collection of GNSS data during the flight mission, the raw data
+was post processed into measurement information. With the FFZs of the reflected GNSS 
+signals calculated, they were plotted onto the satellite image map. Here, color
+of the FFZs indicate the $C/N_0$ ratio between the bottom antenna and the top antenna,
+and strong reflections over water and bare ground could be observed compared to those
+reflected from vegetation.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
+    \caption{GNSS-R Fresnel zone analysis result.}
+\end{figure}
+
+\subsubsection{Machine Learning Signal Classification}
+For this dataset, a trained LGBM classification model was used to classify the
+GNSS signals into the categories of tree-reflected, ground-reflected, and direct
+signals, with the results shown in the figure below. Here, the majority of the
+signals are classified as tree-reflected since the survey was conducted over 
+vegetation. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_ML.png}
+    \caption{LGBM-based signal classification result.}
+\end{figure}
+
+\subsubsection{LiDAR SLAM}
+For this dataset, LiDAR data was processed using two back-end techniques: the
+standard Fast-LIO odometry and SCPGO with GPS fusion (SCPGO+GPS). As shown in
+the figures below, the SCPGO+GPS result demonstrates significant drift compared
+to the Fast-LIO output, which will be further discussed in the coming section.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=0.95\textwidth]{Included_Images/KeyExperiment_FAST-LIO.png}
+        \caption{Fast-LIO}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
+        \caption{SCPGO+GPS}
+    \end{subfigure}
+    \caption{LiDAR SLAM results using two different techniques.}
+\end{figure}
 
 % --- Results and Discussion ---
 \section{Results and Discussion}
