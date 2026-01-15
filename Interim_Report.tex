@@ -30,7 +30,6 @@
 \usepackage{colortbl}
 \usepackage{xcolor}
 \usepackage{pgfgantt}
-\usepackage{graphicx}
 \usepackage{rotating}
 \usepackage[dvipsnames]{xcolor}
 
@@ -88,7 +87,7 @@
 
 % --- Abstract ---
 \section{Abstract}
-\begin{it}
+\begin{itshape}
 Vegetation monitoring is essential for environmental sustainability, yet
 conventional sensing methods are often limited by high costs, weather
 dependency, and low spatial resolution. This project explores an alternative
@@ -107,7 +106,7 @@ modules will be detailed. With the foundational platform developed, the ongoing
 works will focus on system integration, correlation modelling, and vegetation
 parameter prediction to establish a robust and intelligent vegetation monitoring
 technology.
-\end{it}
+\end{itshape}
 
 
 % --- Introduction ---
@@ -771,13 +770,13 @@ configuration consisting of zenith and nadir antennas. An onboard Jetson Orin
 Nano serves as the primary computer for processing data from the Livox LiDAR and
 GNSS receivers. The system is further supported by a GPS module and a
 receiver for the remote controller, enabling both manual and autonomous flight
-operations. The figure \ref{UAV Platform} demonstrates the onboard setup of the UAV and
+operations. The figure \ref{UAV Platform Diagram} demonstrates the onboard setup of the UAV and
 sensors. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/UAV_Setup.png}
     \caption{UAV Platform and Onboard Setup}
-    \label{UAV Platform}
+    \label{UAV Platform Diagram}
 \end{figure}
 
 
@@ -1943,7 +1942,7 @@ A total of 10 successful flights were conducted during the reporting period. The
     \hline
     (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via manual flight control. However, we face the problem of controlling the UAV mid-way due to large wind velocity. Hence resulting in irregular flight path. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
-    (e) & 2025 Nov. 09 & Nam Sang Wai &  This experiment is carried out via path planning where the UAV is hovering over bare ground with grass in two different points for 3 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
+    (e) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass in two different points for 3 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
     (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 3 minutes and above trees for 5 minutes. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
@@ -2677,7 +2676,7 @@ on literature review, methodology development, finalizing connections between
 different parts of the project and conducting preliminary experiments for collecting data and testing 
 developed methodologies. The second semester will focus on integrating developed systems for
 each individual parts, developing final models, conducting final experiments to collect more data and 
-validate methodologies and writing final project report. the Gannt Chart below summarizes the project timeline 
+validate methodologies and writing final project report. The Gantt Chart below summarizes the project timeline 
 for each part of the project. 
 
 \subsection{Gantt Chart}
@@ -2842,7 +2841,7 @@ aligns with different frameworks of this project. Specifically:
     \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
     \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
     \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
-    \item LiDAR SLAM: \url{}
+    \item LiDAR SLAM: \url{https://github.com/A4paper2003/scpgo-workspace/tree/main}
 \end{itemize}
 
 
