@@ -242,13 +242,13 @@ intelligence, and control systems. In robotics, path planning is a technique
 that is used in navigating a robot autonomously from an origin to a destination
 via a collision-free route. Therefore, path planning is primarily a geometric
 problem that generates a path according to a given sequence of waypoints,
-without accounting for variations over time. \hl{In contrast, trajectory planning
+without accounting for variations over time. In contrast, trajectory planning
 defines the path as a function of time, assigning specific timing to the
-geometric route} \cite{gasparetto2015path}. \hl{Currently, our research focuses on
+geometric route \cite{gasparetto2015path}. Currently, our research focuses on
 implementing path planning for the autonomous navigation of an Unmanned Aerial
 Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
 methodologies in this work, reserving trajectory planning and optimization for
-future investigation. (Really need to say trajectory planning?)}
+future investigation. 
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
 as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
@@ -270,7 +270,7 @@ areas for further GNSS-R surveying.
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
 accurate and precise navigation in fragmented urban forests. To develop path
-planning mechanisms, we conducted our literature review across three different
+planning mechanisms, we conducted our literature review across four different
 path planning approaches. 
 
 \begin{enumerate} 
@@ -485,6 +485,7 @@ patterns often provides a jagged path, whereas boustrophedon provides the
 kinematic feasibility. The detailed implementation of the boustrophedon
 algorithm is discussed in the methodology section.
 
+
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
 the correlation between direct and scattered GNSS signals were proven promising
@@ -508,27 +509,45 @@ simulations revealed that tree trunk scattering effects would dominate total
 scattering response, while satellite azimuth angles are significantly correlated
 to the signal polarization \cite{Wu2014}. 
 
-Aside from simulated approaches, empirical or semi-empirical studies regarding GNSS-R
-remote sensing of vegetation were also reviewed. In a study by Yueh et al.,
-GNSS-R data onboard the Cyclone GNSS (CYGNSS) satellite were analyzed against
-the vegetation water content estimated through the satellite-derived Normalized
-Difference Vegetation Index (NDVI) \cite{Yueh2022}. The results demonstrated
-near-linear relationship between vegetation water content and GNSS-R signal
-attenuation, while the CYGNSS data also suggested the existence of volume
-scattering within complex forest components \cite{Yueh2022}. Similarly, another
-study analyzing GNSS-R data from TechDemoSat-1 demonstrated reduced sensitivity
-to soil moisture retrieval due to vegetation attenuation, which could be
-effectively compensated using NDVI data, indicating a correlation between signal
-attenuation and vegetation water content \cite{Camps2016}. Additionally, the
-interference pattern between direct and reflected GNSS signals from the Earth's
-surface was used in estimating vegetation height and land topography
-\cite{RodriguezAlvarez2011}. Through using a Soil Moisture Interference-pattern
-GNSS Observations at L-band (SMIGOL) reflectometer, the instantaneous power of
-the direct and reflected signals were coherently added, in which the resulting
-power oscillations present notches that are correlated to vegetation layer
-thickness and the reflection geometry \cite{RodriguezAlvarez2011}. As a result,
-an RMSE of 3-5 cm in estimating the height of vegetation with simple geometrical
-structures (barley and wheat) could be achieved \cite{RodriguezAlvarez2011}.
+Aside from simulated approaches, empirical or semi-empirical studies regarding
+GNSS-R remote sensing of vegetation were also reviewed. In a study by Yueh et
+al., GNSS-R data onboard the Cyclone GNSS (CYGNSS) satellite were analyzed
+against the vegetation water content estimated through the satellite-derived
+Normalized Difference Vegetation Index (NDVI) \cite{Yueh2022}. The results
+demonstrated near-linear relationship between vegetation water content and
+GNSS-R signal attenuation, while the CYGNSS data also suggested the existence of
+volume scattering within complex forest components \cite{Yueh2022}. Similarly,
+another study analyzing GNSS-R data from TechDemoSat-1 demonstrated reduced
+sensitivity to soil moisture retrieval due to vegetation attenuation, which
+could be effectively compensated using NDVI data, indicating a correlation
+between signal attenuation and vegetation water content \cite{Camps2016}.
+Additionally, the interference pattern between direct and reflected GNSS signals
+from the Earth's surface was used in estimating vegetation height and land
+topography \cite{RodriguezAlvarez2011}. Through using a Soil Moisture
+Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
+instantaneous power of the direct and reflected signals were coherently added,
+in which the resulting power oscillations present notches that are correlated to
+vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
+\cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in estimating the
+height of vegetation with simple geometrical structures (barley and wheat) could
+be achieved \cite{RodriguezAlvarez2011}.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SMIGOL_reflectometer.png}
+        \caption{SMIGOL Reflectometer Setup}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SMIGOL_interference.png}
+        \caption{Interference Notch}
+    \end{subfigure}
+    \caption{Setup and interference notch examples of the SMIGOL reflectometer
+    \cite{RodriguezAlvarez2011}.}
+    \label{SMIGOL}
+\end{figure}
+
 Yet, despite the effort in prior studies, the use of GNSS-R techniques in
 vegetation remote sensing and monitoring is far from developed. Most
 importantly, existing research relies heavily on space-borne or static
@@ -538,7 +557,8 @@ develop a systematic framework for an UAV-based GNSS-R system, in which
 correlations between GNSS-R signal features and vegetation condition parameters
 are comprehensively assessed and modeled. Additionally, with adequate dataset size,
 the GNSS-R framework could be complemented by machine learning-based modelling
-approaches, further enhancing the system robustness. \hl{Connection to ML part}
+approaches, further enhancing the system robustness.
+
 
 \subsection{Machine Learning}
 A part of this project will be to develop a deep learning based model that can
@@ -557,7 +577,7 @@ Vegetation Water Content (VWC) \cite{small2010sensing}. A study by Chen et al.
 (2024) recently derived a new GNSS-R vegetation index and used Artificial Neural
 Networks (ANN) to retrieve VWX from spaceborne data, achieve a correlation of
 approximately 0.94 with reference measurements \cite{chen2024new}. Other studies
-have trained deep learning models on GNSS-R features. One study trained a ANN on
+have trained deep learning models on GNSS-R features. One study trained an ANN on
 Delay Doppler Maps (DDMs), SNR, signal incidence angle and geographic data to
 predict the Above Ground Biomass (AGB) \cite{pilikos2024biomass}. Prior GNSS-R
 vegetation retrieval efforts have focused on parameters like biomass, soil
@@ -589,13 +609,13 @@ to create efficient flight paths as well as avoid obstacles.
 The common way for remote sensing robots to carry out mapping is by using
 sensors such as camera or LiDAR to create an odometry. This allows the robots to
 estimate their position and movement over time by measuring the changes in each
-frame of the sensors. In practise, the common approaches to frame-to-frame odometry are visual
-odometry or LiDAR odometry. Visual odometry estimates motion by tracking
-distinct features in each image frame through gradients and textures while LiDAR
-odometry uses laser range measurements to scan the environment. Since our
-project focuses on investigating forests and dense vegetation, LiDAR odometry is
-preferred as it is not affected by visually repetitive scenes and varying
-lighting conditions that cause instability in camera-based methods. 
+frame of the sensors. In practise, the common approaches to frame-to-frame
+odometry are visual odometry or LiDAR odometry. Visual odometry estimates motion
+by tracking distinct features in each image frame through gradients and textures
+while LiDAR odometry uses laser range measurements to scan the environment.
+Since our project focuses on investigating forests and dense vegetation, LiDAR
+odometry is preferred as it is not affected by visually repetitive scenes and
+varying lighting conditions that cause instability in camera-based methods. 
 
 \subsubsection{LiDAR Odometry} 
 The accuracy of LiDAR odometry largely depends on how well point clouds are
@@ -718,14 +738,14 @@ only connects to poses where it was observed without connecting to each other.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/pgo.png}
-    \caption{Visualization of  GraphSLAM with loop closure }
+    \caption{Visualization of GraphSLAM with loop closure}
 \end{figure}
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
 demonstrated strong performance in urban and structured environments [4, 17],
 single-sensor SLAM systems (e.g. LiDAR-only) remain vulnerable to drift because
 their measurements are purely relative, allowing errors to accumulate over time.
-While recent work such as \cite{mailka2024efficient }has integrated additional
+While recent work such as \cite{mailka2024efficient}has integrated additional
 sensors to improve SLAM accuracy, their applicability to UAV-based forest
 monitoring remains limited due to canopy interference, sparse LiDAR features,
 and computational trade-offs. This project investigates how such SLAM methods
@@ -734,13 +754,59 @@ can be adapted and deployed for real-time forestry applications.
 
 % --- Methodology ---
 \section{Methodology}
-Placeholder text
+In this section, a detailed analysis of the system architecture is presented,
+with a focus on the UAV platform for data collection. The system is divided into
+four key workflows: path planning, GNSS-R data processing, Machine Learning, and
+LiDAR SLAM. A detailed overview of the processes, mechanisms, and derivations of
+each workflow is presented in the methodology section. 
+
 
 \subsection{UAV Platform}
-Placeholder text
+In this project, one of the primary objectives is to utilize a UAV to collect
+GNSS-R data and conduct subsequent post-processing. This data collection system
+is built on a Holybro X650 drone frame, integrated with a Pixhawk 6C flight
+controller for navigation and a SiK telemetry radio for ground station
+communication. For GNSS-R measurements, the setup features a dual-antenna
+configuration consisting of zenith and nadir antennas. An onboard Jetson Orin
+Nano serves as the primary computer for processing data from the Livox LiDAR and
+GNSS receivers. The system is further supported by a GPS module and a
+receiver for the remote controller, enabling both manual and autonomous flight
+operations. The figure \ref{UAV Platform} demonstrates the onboard setup of the UAV and
+sensors. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Included_Images/UAV_Setup.png}
+    \caption{UAV Platform and Onboard Setup}
+    \label{UAV Platform}
+\end{figure}
+
 
 \subsection{System Architecture}
-The system architecture adapted in this project is as shown below.
+
+Our system architecture comprises four key components: path planning, GNSS-R,
+machine learning, and LiDAR SLAM. First, we will conduct path planning using
+waypoint-based navigation and coverage path planning to navigate the UAV in
+desired vegetation environments. Then, we will send the planned trajectory to
+the ground control station for execution of the mission. Finally, during mission
+execution, we will collect raw GNSS data and LiDAR data for SLAM. 
+
+In the GNSS pipeline, we will conduct GNSS measurement extraction and Fresnel
+Zone analysis to obtain the GNSS measurement level model. Simultaneously, we
+will send the raw data to the machine learning pipeline to perform data
+preprocessing and signal classification for open sky, UAV hovering over bare
+ground, and UAV hovering over trees. Once the classification is complete, we
+will proceed with vegetation feature regression. Ultimately, the system
+integrates the GNSS-R modeling with vegetation feature regression, enabling the
+precise retrieval of the desired vegetation parameters. 
+
+In the LIDAR SLAM pipeline, we will first synchronize the LiDAR data with the
+timestamps from the flight controller (Pixhawk). Once synchronized, we obtain
+the LiDAR data and corresponding GPS data. We then send these to our front-end
+LiDAR Odometry and subsequently to the back-end pose graph optimization. This
+data is used to cross-validate the vegetation parameters retrieved by the GNSS-R
+and Machine Learning pipelines. 
+A comprehensive flow of our system architecture
+is shown in Figure \ref{System Architecture}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
@@ -748,21 +814,23 @@ The system architecture adapted in this project is as shown below.
     \label{System Architecture}
 \end{figure}
 
+
 \subsection{Path Planning}
-As mentioned in the system architecture, path planning in our system focuses on
+As mentioned in the system architecture, path planning focuses on
 two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
 are crucial for observing dense forests, such as hovering over trees and
-surveying the dense canopy to obtain dynamic data for LiDAR SLAM.
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM. Below are the
+detailed methodologies for each path planning method.
 
 \subsubsection{Waypoint-based navigation}
 
 Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
-Intelligence-based algorithms. Since our system is designed to hover over dense
-vegetation environments and identify potential Fresnel Zones, we primarily need
-to fly in outdoor, high-altitude, open spaces. To determine the optimal
-algorithm for building an intelligent UAV system, we conducted a baseline
-comparison among the Dijkstra algorithm, the A* algorithm, and the RRT
+Intelligence-based algorithms. Since the UAV is designed to hover over dense
+vegetation environments and identify potential Fresnel Zones, it primarily needs
+to fly outdoors, at high-altitude and open spaces. To determine the optimal
+algorithm for building an intelligent UAV system, a baseline
+comparison was conducted among the Dijkstra algorithm, the A* algorithm, and the RRT
 algorithm.
 
 \begin{table}[ht]
@@ -814,7 +882,7 @@ algorithm.
 \end{table}
 
 As a result, for a given occupancy grid map, the comparison shows that the A*
-algorithm is suitable for offline path planning. Therefore, our system is
+algorithm is suitable for offline path planning. Therefore, the system is
 designed to perform offline path planning using the A* algorithm. On the other
 hand, RRT performs well in dynamic, unknown environments and is suitable for
 online path planning. 
@@ -825,11 +893,11 @@ shortest path from a starting point to a goal. The algorithm first divides the
 map into nodes, where each node represents a possible position for the robot to
 move. These positions depend on the grid architecture, such as 4-way or 8-way
 connected grids. In addition to the conventional grid architecture, novel grid
-mapping approaches such as NavMeshes are widely used in 3D simulation software.
+mapping approaches such as NavMeshes \cite{putz20163d} are widely used in 3D simulation software.
 These mapping techniques connect the locations of the movable agent to the
 surface (mesh) and store the surfaces as convex polygons.  
 
-In our research, we will focus on regular grids that connect nodes across 26
+In this project, the focus will be on regular grids that connect nodes across 26
 directions in 3-D space. Each node will be assigned a cost based on the starting
 and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
 shown in Figure \ref{fig:astar}.
@@ -844,10 +912,10 @@ shown in Figure \ref{fig:astar}.
 \paragraph{A* Algorithm Grid Definition} ~\\
 
 
-Our system utilizes a grid map defined in 3D space, featuring 26-connectivity,
+This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
 simplify the initial validation, the algorithm is currently evaluated using a 2D
-grid with 8-connectivity. We first convert the coordinates of the given map into
+grid with 8-connectivity. The coordinates of the given map were first converted into
 grid node indexes using the \texttt{coord\_to\_index} function. The coordinates
 can be defined as world coordinates or image coordinates for a given map image.
 An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
@@ -892,7 +960,7 @@ where:
     \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
     \item $f(n)$ is the total estimated cost of the shortest path node $n$.
 \end{itemize}
-In our implementation the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
+In this project, the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
 between the starting node and the current node $n$.
 The Euclidean distance can be calculated as follows:
 \begin{equation}
@@ -1008,13 +1076,13 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \end{figure}
 
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
-To evaluate the algorithm's performance, we conducted a series of test runs
+To evaluate the algorithm's performance, a series of test runs conducted
 using vegetation density maps in different categories. The maps were obtained
 using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
-    \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
+    \item Use HSV (Hue, Saturation, Value) color space conversion and RGB
     Conversion to identify greenery, and NDVI Index to measure vegetation
     health.
     \item The images are categorized into three vegetation types: Dense tree
@@ -1051,8 +1119,8 @@ the results and discussion section.
 
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
-areas and for obtaining dynamic data for LiDAR SLAM. In this research, we
-implemented Boustrophedon Cell Decomposition as the CPP algorithm. The
+areas and for obtaining dynamic data for LiDAR SLAM. In this research,
+Boustrophedon Cell Decomposition was implemented as the CPP algorithm. The
 decomposition algorithm works by dividing the map into cells based on the
 polygonal shape of the map and the obstacles present. After decomposing the map
 into cells, the algorithm generates a sweeping path in each cell based on the
@@ -1089,6 +1157,7 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
         \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
         \caption{Boustrophedon Cell Decomposition IN Event Example}
         \label{fig:in_event}
+          \cite{Choset-1997-16422}
     \end{figure}
 
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
@@ -1301,7 +1370,7 @@ over trees and UAV hovering over bare ground. These features are outlined below:
     \item\textbf{Carrier to Noise Ratio (C/N0)}: From the figures below, It can 
     be observed that the $C/N_0$ values for signals reflected from trees are
     generally lower than those for signals getting reflected from the bare ground. 
-    This indicated that vegetation attenuated the GNS signal quality. The figures also 
+    This indicated that vegetation attenuated the GNSS signal quality. The figures also 
     illustrate a wider spread of $C/N_0$ values for signals reflected from trees compared
     to those from bare ground, in which case the signal distribution is more 
     concentrated. 
@@ -1765,14 +1834,24 @@ Pixhawk are passed to the back end pose graph optimization SLAM under
 
 % --- Experiments ---
 \section{Experiments}
-Placeholder text
+To apply the methodologies outlined in the previous section, a series of field
+experiments were conducted, aiming to demonstrate the functionality of the UAV
+platform and collect data necessary for further analysis. Over ten unique
+flight missions were executed across three different locations in Hong Kong and
+diverse flight scenarios, including static hovering, dynamic surveying, and manual
+controlled flight. The following subsections present the experimental setups, 
+summarize experiments conducted, and detail one key experiment that highlight 
+the current system capabilities and challenges for further development.
+
 
 \subsection{Experimental Setup}
+Before the initiation of a flight mission, the ground control station must be
+configurated and remote connections with the onboard computer should be established.
 
 \subsubsection{Ground Control Setup}
 To set up the ground control station, we first paired the telemetry in the UAV
-and in the ground controller. For this experiment, we use QGround Control
-\cite{QGroundControl_PlanView} as the ground controlling software and use 433MHz
+and in the ground controller. For this experiment, QGround Control
+\cite{QGroundControl_PlanView} was used as the ground controlling software and use 433MHz
 Radio Telemetry for communication between Pixhawk and QGround Control. 
 
 QGround Control (QGC) is a full-featured flight control and mission planning
@@ -1791,8 +1870,8 @@ editor, and the mission list.
     \label{fig:qgc_plan_view}
 \end{figure}
 Additionally, users can specify the altitude and speed at each waypoint by
-editing the mission command list. For instance, if our experiment is hovering
-over a tree, we will assign a speed of 2 m/s, hold for 300 seconds, and the
+editing the mission command list. For instance, if the UAV is hovering
+over a tree, a speed of 2 m/s will be assigned, to hold for 300 seconds, and the
 altitude will be roughly around 30m. Figure \ref{fig:qgc_mission_list} shows an
 example of a mission command list in QGC.
 \begin{figure}[H]
@@ -1842,6 +1921,7 @@ A total of 10 successful flights were conducted during the reporting period. The
     \label{Experiment Environment}
 \end{figure}
 
+
 \begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.12\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
     \caption{Summary of Experiments Conducted}
     \label{Experiment Summary}\\
@@ -1875,16 +1955,88 @@ A total of 10 successful flights were conducted during the reporting period. The
     \hline
     (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via autonomous coverage path planning, but in the opposite direction compared to experiment (h) and (i) when scanning tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
-\end{longtable}
+\end{longtable} 
 
 
 
-\subsection{Key Experiment 1}
-Placeholder text
+\subsection{Key Experiment: Experiment (i)}
+In this subsection, the details of Experiment (i) in Table \ref{Experiment Summary}
+are discussed. Here, a survey flight mission was conducted to collect 
+feature-extensive LiDAR and GNSS-R datasets above a canopy area consisted of mixed
+dense vegetation. 
 
-\subsection{Key Experiment 2}
-Placeholder text
+\subsubsection{Setup and Procedure}
+The experiment was conducted in Nam Sang Wai on November 09, 2025, where the UAV
+followed a pre-planned path surveying an area consisting of dense, mixed-species 
+tree. First, the UAV sensors were calibrated before the experiment session. After
+the UAV is being connected to the battery, radio telemetry connection and remote 
+connections to the onboard computer were established. With the trajectory plan
+uploaded onto the onboard Pixhawk controller and the onboard computer configured to
+initialize data collection, the mission was executed. Lastly, the collected data could
+be downloaded and post-processed for further analysis.
 
+\subsubsection{Path Planning and Execution}
+In this experiment, the trajectory is planned to ascend and maintain at an altitude of
+35 meters during the survey mission. The paths in the survey area are spaced at 2 meter
+intervals, with the turnaround buffer distance set at 5 meter. The result of the flight
+plan is shown in the figure below. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_Pathplanninglist.png}
+        \caption{Mission Planning List in QGroundControl}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
+        \caption{Planned Path Result}
+    \end{subfigure}
+    \caption{Path planning and execution results.}
+\end{figure}
+
+\subsubsection{GNSS-R Analysis}
+After the successful collection of GNSS data during the flight mission, the raw data
+was post processed into measurement information. With the FFZs of the reflected GNSS 
+signals calculated, they were plotted onto the satellite image map. Here, color
+of the FFZs indicate the $C/N_0$ ratio between the bottom antenna and the top antenna,
+and strong reflections over water and bare ground could be observed compared to those
+reflected from vegetation.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
+    \caption{GNSS-R Fresnel zone analysis result.}
+\end{figure}
+
+\subsubsection{Machine Learning Signal Classification}
+For this dataset, a trained LGBM classification model was used to classify the
+GNSS signals into the categories of tree-reflected, ground-reflected, and direct
+signals, with the results shown in the figure below. Here, the majority of the
+signals are classified as tree-reflected since the survey was conducted over 
+vegetation. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_ML.png}
+    \caption{LGBM-based signal classification result.}
+\end{figure}
+
+\subsubsection{LiDAR SLAM}
+For this dataset, LiDAR data was processed using two back-end techniques: the
+standard Fast-LIO odometry and SCPGO with GPS fusion (SCPGO+GPS). As shown in
+the figures below, the SCPGO+GPS result demonstrates significant drift compared
+to the Fast-LIO output, which will be further discussed in the coming section.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=0.95\textwidth]{Included_Images/KeyExperiment_FAST-LIO.png}
+        \caption{Fast-LIO}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
+        \caption{SCPGO+GPS}
+    \end{subfigure}
+    \caption{LiDAR SLAM results using two different techniques.}
+\end{figure}
 
 % --- Results and Discussion ---
 \section{Results and Discussion}
@@ -1893,7 +2045,7 @@ Placeholder text
 \subsection{Path Planning}
 \subsubsection{Waypoint-based Navigation Results}
 The results of the waypoint-based navigation can be divided into two platforms,
-as we conducted test runs using both a locally developed A* algorithm and
+as test runs were conducted using both a locally developed A* algorithm and
 a waypoint navigation in QGroundControl. 
 
 \paragraph{Locally Developed A* Algorithm Results} ~\\
@@ -1939,7 +2091,7 @@ algorithm will avoid converging on paths that lead to dense vegetation.
 \paragraph{QGround Control Waypoint-based Navigation} ~\\
 In QGround Control, we defined the important parameters, such as flying
 waypoints, flying speed, and flying altitude, using the Graphical User Interface
-in QGround Control. Then, we upload the coordinates and the data to the Pixhawk
+in QGround Control. Then, the coordinates were uploaded and the data to the Pixhawk
 flight controller using telemetry. The figure shows the settings and the
 successful execution of a mission. 
 \begin{figure}[H]
@@ -1950,7 +2102,7 @@ successful execution of a mission.
 \end{figure}
 
 \subsubsection{Coverage Path Planning Results}
-Similar to waypoint—based navigation, the coverage-based path planning results
+Similar to waypoint-based navigation, the coverage-based path planning results
 are divided into two segments: a locally implemented boustrophedon algorithm and
 coverage mission planning in QGroundControl. 
 \paragraph{Boustrophedon Implementation Results} ~\\
@@ -1965,8 +2117,8 @@ shows the graphical user interface of the coverage path planner.
     \label{fig:cpp_gui}
 \end{figure}
 
-At first, we specified the map as a polygon in the GUI. Once we input the
-polygon, the algorithm will determine the coordinates of the polygon, the sweep
+At first, the map was specified as a polygon in the GUI. Once giving the input, 
+the algorithm will determine the coordinates of the polygon, the sweep
 distance, and the altitude.  An example of result interpretation for a polygon
 shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
@@ -2066,14 +2218,14 @@ successful execution of the mission.
     \label{fig:gqc_coverage}
 \end{figure}
 
-In summary, we conducted waypoint-based navigation experiments primarily to
+In summary, waypoint-based navigation experiments were conducted primarily to
 hover the UAV above a tree or vegetation and above bare ground without trees.
 This is mainly to assist in obtaining the differences  between the GNSS-R signals
 in two scenarios and conduct an analysis on the reflected signals from the
 trees. 
-Additionally, we implemented coverage path planning to obtain dynamic UAV
+Additionally, coverage path planning was implemented to obtain dynamic UAV
 movement data, which enables the development of LiDAR SLAM in our system. LiDAR
-SLAM is crucial in our system to cross-validate the data obtained through GNSS-R
+SLAM is crucial in the system to cross-validate the data obtained through GNSS-R
 analysis and the Machine Learning pipeline. 
 
 \subsection{GNSS-R}
@@ -2423,7 +2575,10 @@ robust modular LiDAR SLAM system.
 
 % --- Future Works ---
 \section{Future Works}
-Placeholder text
+In this section, we present the limitations of each component at its current
+stage, followed by proposed solutions. The frameworks discussed include path
+planning, GNSS-R, machine learning, and LiDAR SLAM. The discussed solutions will
+be operated in the next stage of our project. 
 
 \subsection{Path Planning}
 For the path planning framework, so far, most results have been conducted in a
@@ -2517,10 +2672,15 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-Placeholder text
+The Final Year Project spans two semesters, with first semester focusing mainly 
+on literature review, methodology development, finalizing connections between 
+different parts of the project and conducting preliminary experiments for collecting data and testing 
+developed methodologies. The second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to collect more data and 
+validate methodologies and writing final project report. the Gannt Chart below summarizes the project timeline 
+for each part of the project. 
 
 \subsection{Gantt Chart}
-\vspace*{\fill}
 \begin{center}
 \begin{sideways}
 \begin{ganttchart}[
@@ -2532,8 +2692,8 @@ Placeholder text
   group label font=\bfseries\small,
   bar label font=\scriptsize,
   progress label text={},
-  x unit=1.5cm,
-  y unit title=0.7cm,
+  x unit=1.8cm,
+  y unit title=0.6cm,
   y unit chart=0.4cm,
   time slot format=isodate,
   time slot unit=month,
@@ -2543,9 +2703,9 @@ Placeholder text
   today label=Interim,
   today offset=.5,
   today rule/.style={draw=blue, ultra thick, dash pattern=on 2pt off 2pt},
-  bar height=0.7,
+  bar height=0.6,
   bar top shift=0.15,
-  group height=0.7,
+  group height=0.6,
   group top shift=0.15,
   group peaks tip position=0,
   group left shift=0,
@@ -2558,11 +2718,15 @@ Placeholder text
 \ganttgroup[group/.style={fill=overallcolor}]{Overall}{2025-09-01}{2026-05-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Planning \& Initialization}{2025-09-01}{2025-09-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Literature Review}{2025-09-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-09-01}{2025-10-31} \\
 \ganttbar[bar/.style={fill=overallcolor}]{System Design}{2025-10-01}{2025-11-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-10-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Phase 1 Experiments}{2025-11-01}{2026-01-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Phase 2 Experiments}{2026-03-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 1}{2025-10-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 2}{2025-11-01}{2025-11-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 3}{2025-12-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2025-12-01}{2026-01-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 4}{2026-02-01}{2026-02-28} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 5}{2026-03-01}{2026-03-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Final Demonstration}{2026-04-01}{2026-04-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Final Report \& Presentation}{2026-05-01}{2026-05-30} \\
 % Path Planning
 \ganttgroup[group/.style={fill=pathcolor}]{Path Planning}{2025-10-01}{2026-05-30} \\
@@ -2606,7 +2770,14 @@ specific problems observed along with the strategies proposed or adopted to
 address them.
 
 \subsubsection{Path Planning}
-Placeholder text
+In terms of project management, the issues that arose during the path-planning
+process were mainly related to hardware and communication. During on-site
+experiments, the UAV's telemetry disconnected from the ground station, even
+though it was within the specified communication range. Since the mission
+planner in QGround Control does not rely on real-time communication, the
+experiments were not disrupted. However, to solve this problem, we have analyzed
+strong long-distance communication telemetry types and will be replacing the
+current hardware in the next stage. 
 
 \subsubsection{GNSS-R}
 Through processing the data collected during the first half of this project, one of the 
@@ -2669,6 +2840,9 @@ The code scripts of this project are organized in various GitHub repositories, w
 aligns with different frameworks of this project. Specifically: 
 \begin{itemize}
     \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
+    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
+    \item LiDAR SLAM: \url{}
 \end{itemize}
 
 
