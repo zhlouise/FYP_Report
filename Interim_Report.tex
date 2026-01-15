@@ -1010,7 +1010,7 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 To evaluate the algorithm's performance, we conducted a series of test runs
 using vegetation density maps in different categories. The maps were obtained
-using QGround Control software from satellite imagery and then imported into an
+using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
@@ -1131,7 +1131,7 @@ in each cell.
 
 The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
-algorithm are discussed in the discussion section.
+algorithm are discussed in the results and discussion section.
 
 
 \subsection{GNSS-R}
@@ -1785,7 +1785,13 @@ network that was pre-established using ZeroTier. Then, the Terminal of the Jetso
 be easily accessed through Virtual Studio Code, where the command to log GNSS data from the
 two onboard receivers can be executed. 
 
-On the other hand, \hl{(ROS set up)}
+On the other hand, SLAM data including LiDAR point clouds, IMU, GPS data are
+collected into a .bag file from Robot Operating System (ROS). To do so,
+Nomachine is used to create remote access from Jetson Orin with the
+pre-established ZeroTier connection. Such method enable access of multiple
+terminals from Jetson Orin so that all the required sensor drivers can be
+launched to carry out data collection.
+
 
 \subsection{Summary of Experiments Conducted}
 A total of 10 successful flights were conducted during the reporting period. They are conducted in the following three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
@@ -1823,27 +1829,28 @@ A total of 10 successful flights were conducted during the reporting period. The
     \endhead
     \hline
     \endfoot
-    (a) & 2025 Oct. 01 & Homantin Mountain & & \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
+    (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via manual flight control where it hovers above bare ground with grass for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
     \hline
-    (b) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
+    (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first successful implementation of path planning where the UAV hovers above bare ground with grass in two different points for 2 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
     \hline
-    (c) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
+    (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 2 minutes and above trees for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
     \hline
-    (d) & 2025 Oct. 12 & Tai Hang Tun & & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
+    (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via manual flight control. However, we face the problem of controlling the UAV mid-way due to large wind velocity. Hence resulting in irregular flight path. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
-    (e) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
+    (e) & 2025 Nov. 09 & Nam Sang Wai &  This experiment is carried out via path planning where the UAV is hovering over bare ground with grass in two different points for 3 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
-    (f) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
+    (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 3 minutes and above trees for 5 minutes. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
-    (g) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
+    (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually assigning multiple waypoints in QGroundControl to perform path planning. The UAV hovers above each waypoint for one minute, with a total of six waypoints assigned in the mission. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
     \hline
-    (h) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\ 
+    (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first implementation of using surveying function from QGroundControl to carry out coverage path planning. The UAV is going back and forth between bare ground with grass and tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
     \hline
-    (i) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
+    (i) & 2025 Nov. 09 & Nam Sang Wai & This experiment demonstrates wider-area coverage through autonomous path planning, similar to (h) where it allows the UAV to systematically fly over clusters of trees. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
     \hline
-    (j) & 2025 Nov. 09 & Nam Sang Wai & & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
+    (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via autonomous coverage path planning, but in the opposite direction compared to experiment (h) and (i) when scanning tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
 \end{longtable}
+
 
 
 \subsection{Key Experiment 1}
@@ -1922,7 +1929,7 @@ are divided into two segments: a locally implemented boustrophedon algorithm and
 coverage mission planning in QGroundControl. 
 \paragraph{Boustrophedon Implementation Results} ~\\
 The algorithm results were obtained by running the ROS (Robot Operating System) \cite{ROS_website}
-package developed by the Autonomous Systems Lab at ETH Zurich. The experiments
+package developed by the Autonomous Systems Lab at ETH Zurich \cite{B_hnemann_2021}. The experiments
 were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
 shows the graphical user interface of the coverage path planner. 
 \begin{figure}[H]
@@ -1935,7 +1942,7 @@ shows the graphical user interface of the coverage path planner.
 At first, we specified the map as a polygon in the GUI. Once we input the
 polygon, the algorithm will determine the coordinates of the polygon, the sweep
 distance, and the altitude.  An example of result interpretation for a polygon
-shown in Figure \ref{fig:cpp_gui} is as follows: 
+shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/cpp_result.png}
@@ -1967,9 +1974,9 @@ shown in Figure \ref{fig:cpp_gui} is as follows:
 [ INFO] [1762353101.770556488]: Sending visualization messages.
 \end{lstlisting}
 As shown in the command-line output, the polygon is considered to be 3 meters
-high in altitude. This simulates a camera/sensor flying at 3m height with a
+high in altitude. This simulates a camera or a sensor flying at 3m height with a
 field of view. The sweeps are spaced 1.07177m apart to ensure 60 percent overlap
-between consecutive passes. The Boustrophedon algorithm divides your polygon
+between consecutive passes. The Boustrophedon algorithm divides the polygon
 into one cell that can be swept in a back-and-forth pattern. The algorithm
 generated 24 possible sweep patterns across the cell. 
 
@@ -2570,7 +2577,23 @@ performed to ensure the quality of the training dataset. Advanced data cleaning 
 improve the labelling accuracy of the dataset. 
 
 \subsubsection{LiDAR SLAM}
-Placeholder text
+One of the problems faced during this project is the point clouds produced by
+Pose Graph Optimization (PGO) SLAM. Based on Figure \ref{debug_pc}, we can see that there are
+two types of point cloud clusters. One of which is the purple point cloud
+clusters and the other is the yellow point cloud clusters. To solve this issue,
+the source code was debugged and revealed that the yellow point cloud clusters
+are a loop-closure debug visualization in which the algorithm compares the
+current scan against local history to verify a loop closure. Because the point
+clouds are distorted due to GPS integration, these debug point clouds are
+temporarily commented out to allow focus on the overall alignment of point
+clouds in PGO SLAM.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/debug_pc.png}
+    \caption{PGO SLAM with two types of point clouds}
+    \label{debug_pc}
+\end{figure}
 
 
 % --- Appendix ---
