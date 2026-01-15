@@ -236,35 +236,24 @@ integrated project methodologies.
 
 
 \subsection{Path Planning}
-Path planning is a term affiliated with fields such as robotics, artificial
-intelligence, and control systems. In robotics, path planning is a technique
-that is used in navigating a robot autonomously from an origin to a destination
-via a collision-free route. Therefore, path planning is primarily a geometric
-problem that generates a path according to a given sequence of waypoints,
-without accounting for variations over time. In contrast, trajectory planning
-defines the path as a function of time, assigning specific timing to the
-geometric route \cite{gasparetto2015path}. Currently, our research focuses on
-implementing path planning for the autonomous navigation of an Unmanned Aerial
-Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
-methodologies in this work, reserving trajectory planning and optimization for
-future investigation. 
+Path planning is a technique that is used in navigating a robot autonomously
+from an origin to a destination via a collision-free route. It is primarily a
+geometric problem that generates a path according to a given sequence of
+waypoints, without accounting for variations over time
+\cite{gasparetto2015path}. Currently, our research focuses on implementing path
+planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
+outdoor environments.
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
 as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
 first navigate around an obstacle and then determine the shortest path around
-the obstacle to reach the goal (Figure \ref{fig:bug_algorithms}).
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
-    \caption{Bug1 and Bug2 path planning algorithms \cite{choset2005principles}.}
-    \label{fig:bug_algorithms}  
-\end{figure}
-However, both Bug1 and Bug2 algorithms are used in scenarios where the robot has
-no map (i.e., an unknown environment). Additionally, these algorithms do not
-guarantee the optimal path. With the rise of SLAM techniques, maps of the navigation
-environment can be generated, which enabled the transition to map-based path planning methods. Therefore, the conventional grid-based path planning algorithms will be 
-integrated in this project, which enables the identification of potential vegetated
-areas for further GNSS-R surveying.
+the obstacle to reach the goal. However, these algorithms are used
+in scenarios where the robot has no map (i.e., an unknown environment). With the
+rise of SLAM techniques, maps of the navigation environment can be generated,
+which enabled the transition to map-based path planning methods. Therefore, the
+conventional grid-based path planning algorithms will be integrated in this
+project, which enables the identification of potential vegetated areas for
+further GNSS-R surveying.
 
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
@@ -284,95 +273,70 @@ path planning approaches.
 Dijkstra's algorithm solves the problem of finding the shortest path from a
 given starting point to a given ending point. The algorithm explores this path
 by simultaneously finding the shortest path from a given starting node to all
-points in the graph \cite{javaid2013understanding}. As a result, the algorithm is known to perform the
-guaranteed shortest path across two points. However, finding the shortest path
-across all the points in the map consumes high computational cost, and
-therefore, it is impractical to use for real-time UAV path planning. The update rule \ref{alg:dijkstra} illustrates the
-pathfinding process of Dijkstra's algorithm.
-\begin{algorithm}[H]
-\caption{Dijkstra's Algorithm (Relaxation Step)}
-\label{alg:dijkstra}
+points in the graph \cite{javaid2013understanding}. However, finding the shortest
+path across all the points in the map incurs high computational cost.
+Therefore, it is impractical to use for real-time UAV path planning. 
 
-\begin{algorithmic}[1]
-  \State $d[u] \gets$ current known shortest distance from start to node $u$
-  \State $w(u,v) \gets$ weight (cost) of edge from $u$ to $v$
-  \State \textbf{The core update rule is:}
-  \State $d[v] \gets \min(d[v], d[u] + w(u,v))$
-\end{algorithmic}
-\end{algorithm}
 To address the limitations of Dijkstra’s algorithm, scientists developed another
-search-based algorithm called the A* (A-star) algorithm. A* algorithm is one of
+search-based algorithm called the A* (A-star) algorithm. The A* algorithm is one of
 the most common path planning algorithms, which can be applied to grid-based or
 topological configuration spaces \cite{Astar_simulation}. This algorithm
 combines the shortest path calculation in Dijkstra’s algorithm and heuristic
 searching. The heuristic cost is known as the estimated cost from the current
-node to the end node. A* algorithm is better in terms of reducing the search
+node to the end node. The A* algorithm is better in terms of reducing the search
 space compared to the Dijkstra algorithm. However, it requires accurate
 heuristics to determine the shortest path and has a large computation time
-depending on the number of cells in the map.   \cite{DUCHON201459}.  
+depending on the number of cells in the map \cite{DUCHON201459}.  
 
 \paragraph{Sampling-based algorithms} ~\\
-As previously discussed, search-based algorithms consume an excessive amount of
-computational power in high-dimensional spaces and with a large number of
-obstacles \cite{karaman2011samplingbasedalgorithmsoptimalmot}.  To avoid such burnout, sampling-based algorithms have been proposed
-and have performed effectively in high-dimensional spaces, attracting
-significant attention across several decades \cite{Kavraki},\cite{kavraki_etal}. One of the most common
-sampling-based algorithms is RRTs and PRMs, which sample points randomly from
-the given map. 
+Due to the excessive amount of computational power consumed by search-based
+algorithms \cite{karaman2011samplingbasedalgorithmsoptimalmotion}, sampling-based
+algorithms have been proposed and have performed effectively in high-dimensional
+spaces, attracting significant attention across several decades
+\cite{Kavraki},\cite{kavraki_etal}. The most common sampling-based algorithms are
+RRTs and PRM algorithms.
 
-The RRT algorithm works by selecting a random available cell and randomly
-checking its neighboring nodes. As a result, there is no need to assign nodes at
-every point in the path. The algorithm spreads like a tree from the random
-neighboring nodes and eventually will reach the endpoint. Additionally, RRT
-effectively handles systems with differential constraints \cite{anytimeRRT},
-making it a suitable algorithm for state-of-the-art robotics. Although RRT
-quickly computes the path between the starting and ending points, it does not
-guarantee the shortest path. This was also proven by Karaman and Frazzoli
-\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing that the
-probability of the RRT algorithm converging to an optimal solution is zero.
-Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
+The RRT algorithm operates by iteratively sampling random states within the
+configuration space and extending the nearest existing node in the tree toward
+these samples. This sampling-based approach allows the algorithm to spread like a
+tree and rapidly explore the state space and eventually connect to the goal. 
+
+Additionally, RRT effectively handles systems with differential constraints
+\cite{anytimeRRT}, making it a suitable algorithm for state-of-the-art robotics.
+Although RRT quickly computes the path between the starting and ending points,
+it does not guarantee the shortest path. This was proven by Karaman and
+Frazzoli \cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing
+that the probability of the RRT algorithm converging to an optimal solution is
+zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
+proposed. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{Included_Images/rrt_vs_rrtstar.png}
     \caption{RRT vs RRT* Path Planning Algorithms}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
-In RRT*, the algorithm considers neighboring nodes within a window of radius r
-and examines the shortest path by comparing nodes in the window, shown in Figure
-\ref{fig:rrt_vs_rrtstar}. RRT* has the same properties as RRT, but with
-near-neighbor search and tree rewriting operations
-\cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As the number of
-iterations increases, RRT* performance improves, while the path becomes more
-jagged with each iteration \cite{noreen2016comparison}. Moreover, PRM is another
-type of sampling-based algorithm that has a network of possible paths in the
-freely available space. By creating a network among the available spaces, the
-PRM increases the path-finding speed by converting the map into a graph.
-\cite{PRM}.
+As shown in Figure \ref{fig:rrt_vs_rrtstar}, RRT* incorporates a rewiring step
+within a neighbor radius $r$, ensuring that the path improves as the number of
+iterations increases \cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As
+the number of iterations increases, RRT* performance improves, while the path
+becomes more jagged with each iteration \cite{noreen2016comparison}. Moreover,
+PRM is another type of sampling-based algorithm that has a network of possible
+paths in the freely available space. By creating a network among the available
+spaces, the PRM increases the path-finding speed by converting the map into a
+graph \cite{PRM}.
 
 \paragraph{AI-based algorithms} ~\\
 In recent years, deep reinforcement learning methods have been employed to
 address task allocation and path planning problems in autonomous vehicles
 \cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
-multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent studies have merged the
-Soft-Actor-Critic (SAC) reinforcement learning algorithm with a sampling-based
-path planning algorithm to design adaptively informed trees (AIT*) \cite{ait}. The network
-structure of the hybrid path planner is shown in the Figure \ref{fig:sac_ait}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/sac_ait.png}
-    \caption{SAC Network Structure}
-    \cite{SAC-path-planning}
-    \label{fig:sac_ait}
-\end{figure}
-
-SAC learns a policy that specifies a given state and the corresponding action to
-be taken. In other words, “given my current state (position, velocity, sensor
-readings), what action (thrust, roll, yaw, pitch) should I take?” With the
-correct reward design (e.g., penalties for collisions, rewards for reaching the
-goal), SAC can learn to generate collision-free trajectories. The data needed
-for each state should be stored in a replay buffer, including the state at a
-given time, the action taken at that time, the reward received after taking that
-action, and the next state after the action.
+multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent
+studies have merged the Soft-Actor-Critic (SAC) reinforcement learning algorithm
+with a sampling-based path planning algorithm to design adaptively informed
+trees (AIT*) \cite{ait}. 
+SAC learns a policy that specifies a given state and
+the corresponding action to be taken. With the correct reward design (e.g.,
+penalties for collisions, rewards for reaching the goal), SAC can learn to
+generate collision-free trajectories.
 
 Table \ref{tab:algorithms_comparison} summarizes the advantages and disadvantages of the search-based,
 sampling-based, and AI-based path planning algorithms. 
@@ -399,7 +363,7 @@ sampling-based, and AI-based path planning algorithms.
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item High computational cost in large/continuous spaces.
         \item Needs accurate heuristics.
-        \item It may not be scalable for dynamic environments.
+        \item Poor performance in dynamic environments.
     \end{itemize} \\ 
     \addlinespace[4pt] % Adds a tiny gap between rows instead of a line
     
@@ -464,7 +428,7 @@ decomposition methods, the robot's free space is subdivided into several
 regions, called cells \cite{gasparetto2015path}. The decomposition process can
 be explained as follows: subdivision of space into numbered polygons, creation
 of a connectivity graph, identification of regions to be crossed, and generation
-of the path.  The figure \ref{fig:cell_decomposition} shows the detailed steps
+of the path.  Figure \ref{fig:cell_decomposition} shows the detailed steps
 of the exact cell decomposition process. In our system, we utilize exact cell
 decomposition, specifically boustrophedon decomposition, for coverage path
 planning. 
@@ -476,15 +440,13 @@ planning.
     \label{fig:cell_decomposition}
 \end{figure}
 The boustrophedon cellular decomposition is a common algorithm that breaks down
-the robot’s free space into cells and covers each cell with a motion of back and
-forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the UAV to constantly learn,
-resulting in an unstable antenna, using boustrophedon keeps the drone stable
-while covering the area. Similarly, in wavefront algorithms, having zigzag
-patterns often provides a jagged path, whereas boustrophedon provides the
-kinematic feasibility. The detailed implementation of the boustrophedon
-algorithm is discussed in the methodology section. The section below reviews
-existing GNSS-R techniques that can be used once the path planning methodologies have been
-established.
+the robot’s free space into cells and covers each cell with a motion of back-and-forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the
+UAV to constantly bank (roll), thereby destabilizing the antenna, using
+boustrophedon maintains a stable flight attitude suitable for consistent data
+collection. Furthermore, it offers better kinematic feasibility compared to the
+jagged paths often produced by standard wavefront algorithms. The section below
+reviews existing GNSS-R techniques that can be used once the path planning
+methodologies have been established.
 
 
 \subsection{GNSS-R}
@@ -821,14 +783,13 @@ is shown in Figure \ref{System Architecture}.
 
 
 \subsection{Path Planning}
-As mentioned in the system architecture, path planning focuses on
-two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
-are crucial for observing dense forests, such as hovering over trees and
-surveying the dense canopy to obtain dynamic data for LiDAR SLAM. Below are the
-detailed methodologies for each path planning method.
+As mentioned in the system architecture, path planning focuses on two methods:
+Waypoint-Based Navigation and Coverage Path Planning. These methods are crucial
+for observing dense forests, enabling maneuvers such as hovering over trees and
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM. The detailed
+methodologies for each method are presented below.
 
 \subsubsection{Waypoint-based navigation}
-
 Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
 Intelligence-based algorithms. Since the UAV is designed to hover over dense
@@ -897,15 +858,12 @@ The A* algorithm is a heuristic, search-based algorithm that calculates the
 shortest path from a starting point to a goal. The algorithm first divides the
 map into nodes, where each node represents a possible position for the robot to
 move. These positions depend on the grid architecture, such as 4-way or 8-way
-connected grids. In addition to the conventional grid architecture, novel grid
-mapping approaches such as NavMeshes \cite{putz20163d} are widely used in 3D simulation software.
-These mapping techniques connect the locations of the movable agent to the
-surface (mesh) and store the surfaces as convex polygons.  
+connected grids.  
 
-In this project, the focus will be on regular grids that connect nodes across 26
-directions in 3-D space. Each node will be assigned a cost based on the starting
-and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
-shown in Figure \ref{fig:astar}.
+In this project, the focus will be on regular 8-way grids that connect nodes
+across 26 directions in 3-D space. Each node will be assigned a cost based on
+the starting and ending nodes of a given path. A 2-D path illustration of an A*
+algorithm is shown in Figure \ref{fig:astar}.
 
 \begin{figure}[ht]
     \centering
@@ -915,7 +873,6 @@ shown in Figure \ref{fig:astar}.
 \end{figure}
 
 \paragraph{A* Algorithm Grid Definition} ~\\
-
 
 This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
