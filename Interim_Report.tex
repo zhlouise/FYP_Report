@@ -482,7 +482,9 @@ resulting in an unstable antenna, using boustrophedon keeps the drone stable
 while covering the area. Similarly, in wavefront algorithms, having zigzag
 patterns often provides a jagged path, whereas boustrophedon provides the
 kinematic feasibility. The detailed implementation of the boustrophedon
-algorithm is discussed in the methodology section.
+algorithm is discussed in the methodology section. The section below reviews
+existing GNSS-R techniques that can be used once the path planning methodologies have been
+established.
 
 
 \subsection{GNSS-R}
@@ -556,8 +558,8 @@ develop a systematic framework for an UAV-based GNSS-R system, in which
 correlations between GNSS-R signal features and vegetation condition parameters
 are comprehensively assessed and modeled. Additionally, with adequate dataset size,
 the GNSS-R framework could be complemented by machine learning-based modelling
-approaches, further enhancing the system robustness.
-
+approaches, further enhancing the system robustness. The section below reviews
+existing machine learning-based techniques that are relevant to this project.
 
 \subsection{Machine Learning}
 A part of this project will be to develop a deep learning based model that can
@@ -597,6 +599,10 @@ is clear: GNSS-R with UAVs for vegetation mapping and signal classification has
 not been demonstrated. This project will bridge the gap by developing ML models
 tailored for UAV scale GNSS-R data and the specific tasks of vegetation
 detection and parameters estimation. 
+
+Apart from GNSS-R and ML, the project will also integrate LiDAR SLAM to provide
+spatial reference for the GNSS-R derived vegetation parameters. The section
+below reviews existing LiDAR SLAM techniques relevant to this project.
 
 \subsection{LiDAR SLAM}
 In recent years, autonomous robots have been widely implemented to carry out
@@ -1199,8 +1205,9 @@ in each cell.
 
 The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
-algorithm are discussed in the results and discussion section.
-
+algorithm are discussed in the results and discussion section. The section below 
+provides a detailed overview of the GNSS-R framework used for data processing once 
+the path planning is completed and the UAV is in operation.
 
 \subsection{GNSS-R}
 The GNSS-R framework takes in raw GNSS data collected from the onboard
@@ -1342,6 +1349,11 @@ $\pm$ 5 meters \cite{dataDigitalTerrain}.
     \includegraphics[width=0.75\textwidth]{Included_Images/FFZ_Flow.png}
     \caption{Flowchart of calculating FFZ shape and location from collected data.}
 \end{figure}
+
+One key issue for the GNSS-R is not being able to classify the received signals
+into direct signals and reflected signals. Therefore, in this project, machine
+learning techniques are employed to classify the received signals based on the
+extracted GNSS measurements, as outlined in the section below.
 
 \subsection{Machine Learning}
 The projects aim to utilize machine learning algorithms for two purposes:
@@ -1534,7 +1546,9 @@ The model converged well and the loss curves for training and validation sets ar
 \end{figure}
 From the figure above, it is clear that the model did not overfit as the training and validation 
 loss curves are close to each other and decreases steadily. Further performance assessment results 
-of the model are presented in the results and discussion section. 
+of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
+mapping and localization.
+
 \subsection{LiDAR SLAM}
 \subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
@@ -2225,7 +2239,9 @@ trees.
 Additionally, coverage path planning was implemented to obtain dynamic UAV
 movement data, which enables the development of LiDAR SLAM in our system. LiDAR
 SLAM is crucial in the system to cross-validate the data obtained through GNSS-R
-analysis and the Machine Learning pipeline. 
+analysis and the Machine Learning pipeline. The section below discusses the
+GNSS-R results obtained from the experiments conducted using the path planning
+methods above.
 
 \subsection{GNSS-R}
 After successful execution of the path planning algorithms onboard the UAV, GNSS
@@ -2449,6 +2465,7 @@ The figure indicates that the top three most important features for the LightGBM
 \end{itemize}
 These features have the highest importance scores, indicating that they contribute significantly to the model's ability to classify
 the signals accurately. This insight can be useful for future feature engineering and model improvement efforts.
+
 \subsection{LiDAR SLAM}
 \subsubsection{Stage 1: Modular SLAM Implementation without GPS}
 \begin{figure}[H]
