@@ -2019,10 +2019,11 @@ vegetation.
 \end{figure}
 
 \subsubsection{LiDAR SLAM}
-For this dataset, LiDAR data was processed using two back-end techniques: the
-standard Fast-LIO odometry and SCPGO with GPS fusion (SCPGO+GPS). As shown in
-the figures below, the SCPGO+GPS result demonstrates significant drift compared
-to the Fast-LIO output, which will be further discussed in the coming section.
+For this dataset, LiDAR point clouds were processed using two techniques: the
+standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
+figures below, PGO+GPS have misaligned point clouds due to the GPS coordinate
+frame and transformation logic issues. In PGO+GPS, the green trajectory
+indicates the LiDAR odometry, and 3 axis trajectory indicates GPS trajectory. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
@@ -2032,7 +2033,7 @@ to the Fast-LIO output, which will be further discussed in the coming section.
     \hfill
     \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
-        \caption{SCPGO+GPS}
+        \caption{PGO+GPS}
     \end{subfigure}
     \caption{LiDAR SLAM results using two different techniques.}
 \end{figure}
