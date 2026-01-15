@@ -716,24 +716,24 @@ GraphSLAM on the other hand is an algorithm designed for the offline SLAM
 problem, where pose graph optimization is employed to refine the robot’s
 trajectory by minimizing errors across a graph of poses and constraints. Similar
 to EKF SLAM, GraphSLAM uses Bayes’ rule for probabilistic inference and similar
-methods for building motion and measurement models [23]. The key difference
+methods for building motion and measurement models \cite{thrun2006graph}. The key difference
 between GraphSLAM and EKF SLAM is that GraphSLAM requires to accumulates all
 data first before process everything together. This makes it more
 computationally heavy as solving the resulting large optimization problem often
 involves costly operations such as matrix inversion. To address this, GraphSLAM
-applies iterative optimization methods like stochastic gradient descent [24],
+applies iterative optimization methods like stochastic gradient descent \cite{bosse2004simultaneous},
 which adaptively solve the non-linear optimization problem more efficiently,
 while alternatives such as conjugate gradient methods can further improve
-scalability [25]. 
+scalability . \cite{konolige2004large}
 
-Moreover, GraphSLAM explicitly incorporates loop closure.
-Which means that when the robot revisits a previously mapped location, it
-recognizes the place and adds new constraints linking the current pose to the
-past one. This additional relation corrects accumulated drift and improves
-global consistency [26]. Based on [25, 27], GraphSLAM can refer to more than 100
-million environments features, as each robot pose only connects to adjacent
-poses and each feature only connects to poses where it was observed without
-connecting to each other. 
+Moreover, GraphSLAM explicitly incorporates loop closure. Which means that when
+the robot revisits a previously mapped location, it recognizes the place and
+adds new constraints linking the current pose to the past one. This additional
+relation corrects accumulated drift and improves global consistency
+\cite{grisetti2011tutorial}. Based on \cite{konolige2004large,
+montemerlo2006large}, GraphSLAM can refer to more than 100 million environments
+features, as each robot pose only connects to adjacent poses and each feature
+only connects to poses where it was observed without connecting to each other. 
 
 \begin{figure}[H]
     \centering
@@ -1801,8 +1801,36 @@ The pseudocode of the front-end and back-end of the modular SLAM can be shown be
     \centering
     \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
     \caption{Interactions of different ROS topics in the SLAM system}
+    \label{fig:rqt}
 \end{figure}
 
+Based on Figure \ref{fig:rqt}, the system can be divided into sensor drivers, the front-end
+LiDAR odometry, and back-end pose graph optimization (PGO) component. At the
+sensor level, two main drivers are used. The Livox driver publishes raw LiDAR
+and IMU data under the /livox namespace. In addition, the MAVROS driver
+interfaces with the Pixhawk flight controller and publishes Pixhawk and GPS data
+under the /mavros namespace.
+
+The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
+/laserMapping node. It produces several outputs including: 
+\begin{itemize}
+    \item \texttt{/Odometry}: Real-time LiDAR odometry.
+    \item \texttt{/path}: The estimated trajectory.
+    \item \texttt{/cloud\_registered}: Point clouds aligned in the global frame.
+    \item \texttt{/cloud\_registered\_body}: Point clouds in the body frame.
+\end{itemize}
+
+Afterwards, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
+/cloud\_registered\_body from /laserMapping, and GPS and IMU information from
+Pixhawk are passed to the back end pose graph optimization SLAM under
+/laserPGO\_gps namespace. The optimized results are published as:
+\begin{itemize}
+    \item \texttt{/aft\_pgo\_odom}: Optimized odometry.
+    \item \texttt{/GpsOdom}: GPS-constrained odometry.
+    \item \texttt{/aft\_pgo\_path}: Globally optimized trajectory.
+    \item \texttt{/aft\_pgo\_map}: Optimized global map.
+    \item \texttt{/loop\_scan\_local} and \texttt{/loop\_submap\_local}: Data used for loop closure and local map refinement.
+\end{itemize}
 
 % --- Experiments ---
 \section{Experiments}
@@ -2026,7 +2054,7 @@ vegetation environments, including dense forests, crop fields, and grasslands.
 The images are obtained from the QGround Control satellite imagery and sent to
 our image processing pipeline to identify the potential flying areas. 
 
-The figure \ref{fig:forest_path} shows two different start and end points, and how the A* algorithm
+Figure \ref{fig:forest_path} shows two different start and end points, and how the A* algorithm
 finds the shortest path between them in a dense forest canopy. The image
 processing filter is designed to identify darker shades of green in this image.
 Therefore, the algorithm fits precisely to predict the paths in the dense area. 
@@ -2510,7 +2538,39 @@ distortion.
 
 % --- Conclusion ---
 \section{Conclusion}
-Placeholder text
+In conclusion, our preliminary results show the successful establishment of a
+comprehensive UAV-based framework that integrates autonomous path planning,
+GNSS-Reflectometry (GNSS-R), machine learning, and LiDAR SLAM for vegetation
+analysis. 
+
+The path planning results confirm that both A* and boustrophedon algorithms can
+generate efficient trajectories for the UAV to fly over vegetated and mixed
+environments. Besides that, QGroundControl is successfully implemented to
+conduct high-level mission planning for the UAV to carry out vegetation data
+collection. 
+
+On the other hand, GNSS-R analysis discovered distinct signal behaviors when the
+UAV is hovering above bare ground, water, and vegetation. However, it is found
+that the assumption of the zenith antenna receiving only direct signals and the
+nadir antenna only reflected signals is shown to be invalid, as the antenna
+orientation alone only attenuates satellite signals of non-matching
+polarization. To solve this problem, robust signal classification is required to
+distinguish between direct, ground-reflected, and vegetation-reflected signals. 
+
+To do this, a LightGBM-based machine learning model is used to classify signal
+types. The implementation of this machine learning model shows strong
+performance, where the model can effectively distinguish between direct,
+ground-reflected, and tree-reflected signals. This in turns provides a critical
+component for a reliable GNSS-R pipeline. 
+
+In parallel, a modular LiDAR SLAM framework was developed to cross-check the
+vegetation data from GNSS-R. It is found that the pose graph optimization (PGO)
+SLAM demonstrates better point cloud alignment compared to Fast-LIO LiDAR
+odometry before the fusion of GPS data. However, it is found to have large point
+cloud misalignments after GPS is integrated into the PGO SLAM. Thus, this
+finding provides a clear direction for subsequent system refinement to create a
+robust modular LiDAR SLAM system.
+
 
 
 % --- Future Works ---
@@ -2702,7 +2762,12 @@ for each part of the project.
 \vspace*{\fill}
 
 \subsection{Project Difficulties and Solutions}
-Placeholder text
+Even though this project established a robust UAV framework and produced
+meaningful results, several challenges were encountered during the
+implementation of UAV path planning, GNSS-R data interpretation, machine
+learning model development, and LiDAR-based SLAM. Each subsection details the
+specific problems observed along with the strategies proposed or adopted to
+address them.
 
 \subsubsection{Path Planning}
 In terms of project management, the issues that arose during the path-planning
