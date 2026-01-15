@@ -793,20 +793,21 @@ is shown in Figure \ref{System Architecture}.
 \end{figure}
 
 \subsection{Path Planning}
-As mentioned in the system architecture, path planning in our system focuses on
+As mentioned in the system architecture, path planning focuses on
 two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
 are crucial for observing dense forests, such as hovering over trees and
-surveying the dense canopy to obtain dynamic data for LiDAR SLAM.
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM. Below are the
+detailed methodologies for each path planning method.
 
 \subsubsection{Waypoint-based navigation}
 
 Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
-Intelligence-based algorithms. Since our system is designed to hover over dense
-vegetation environments and identify potential Fresnel Zones, we primarily need
-to fly in outdoor, high-altitude, open spaces. To determine the optimal
-algorithm for building an intelligent UAV system, we conducted a baseline
-comparison among the Dijkstra algorithm, the A* algorithm, and the RRT
+Intelligence-based algorithms. Since the UAV is designed to hover over dense
+vegetation environments and identify potential Fresnel Zones, it primarily needs
+to fly outdoors, at high-altitude and open spaces. To determine the optimal
+algorithm for building an intelligent UAV system, a baseline
+comparison was conducted among the Dijkstra algorithm, the A* algorithm, and the RRT
 algorithm.
 
 \begin{table}[ht]
@@ -858,7 +859,7 @@ algorithm.
 \end{table}
 
 As a result, for a given occupancy grid map, the comparison shows that the A*
-algorithm is suitable for offline path planning. Therefore, our system is
+algorithm is suitable for offline path planning. Therefore, the system is
 designed to perform offline path planning using the A* algorithm. On the other
 hand, RRT performs well in dynamic, unknown environments and is suitable for
 online path planning. 
@@ -873,7 +874,7 @@ mapping approaches such as NavMeshes \cite{putz20163d} are widely used in 3D sim
 These mapping techniques connect the locations of the movable agent to the
 surface (mesh) and store the surfaces as convex polygons.  
 
-In our research, we will focus on regular grids that connect nodes across 26
+In this project, the focus will be on regular grids that connect nodes across 26
 directions in 3-D space. Each node will be assigned a cost based on the starting
 and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
 shown in Figure \ref{fig:astar}.
@@ -888,10 +889,10 @@ shown in Figure \ref{fig:astar}.
 \paragraph{A* Algorithm Grid Definition} ~\\
 
 
-Our system utilizes a grid map defined in 3D space, featuring 26-connectivity,
+This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
 simplify the initial validation, the algorithm is currently evaluated using a 2D
-grid with 8-connectivity. We first convert the coordinates of the given map into
+grid with 8-connectivity. The coordinates of the given map were first converted into
 grid node indexes using the \texttt{coord\_to\_index} function. The coordinates
 can be defined as world coordinates or image coordinates for a given map image.
 An illustration of image coordinates is shown in Figure \ref{fig:image_coordinates}.
@@ -936,7 +937,7 @@ where:
     \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
     \item $f(n)$ is the total estimated cost of the shortest path node $n$.
 \end{itemize}
-In our implementation the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
+In this project, the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
 between the starting node and the current node $n$.
 The Euclidean distance can be calculated as follows:
 \begin{equation}
@@ -1052,13 +1053,13 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \end{figure}
 
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
-To evaluate the algorithm's performance, we conducted a series of test runs
+To evaluate the algorithm's performance, a series of test runs conducted
 using vegetation density maps in different categories. The maps were obtained
 using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
-    \item Use HSV (Hue, Saturation, Value) color space conversion and RBG
+    \item Use HSV (Hue, Saturation, Value) color space conversion and RGB
     Conversion to identify greenery, and NDVI Index to measure vegetation
     health.
     \item The images are categorized into three vegetation types: Dense tree
@@ -1095,8 +1096,8 @@ the results and discussion section.
 
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
-areas and for obtaining dynamic data for LiDAR SLAM. In this research, we
-implemented Boustrophedon Cell Decomposition as the CPP algorithm. The
+areas and for obtaining dynamic data for LiDAR SLAM. In this research,
+Boustrophedon Cell Decomposition was implemented as the CPP algorithm. The
 decomposition algorithm works by dividing the map into cells based on the
 polygonal shape of the map and the obstacles present. After decomposing the map
 into cells, the algorithm generates a sweeping path in each cell based on the
@@ -1346,7 +1347,7 @@ over trees and UAV hovering over bare ground. These features are outlined below:
     \item\textbf{Carrier to Noise Ratio (C/N0)}: From the figures below, It can 
     be observed that the $C/N_0$ values for signals reflected from trees are
     generally lower than those for signals getting reflected from the bare ground. 
-    This indicated that vegetation attenuated the GNS signal quality. The figures also 
+    This indicated that vegetation attenuated the GNSS signal quality. The figures also 
     illustrate a wider spread of $C/N_0$ values for signals reflected from trees compared
     to those from bare ground, in which case the signal distribution is more 
     concentrated. 
@@ -1790,8 +1791,8 @@ Placeholder text
 
 \subsubsection{Ground Control Setup}
 To set up the ground control station, we first paired the telemetry in the UAV
-and in the ground controller. For this experiment, we use QGround Control
-\cite{QGroundControl_PlanView} as the ground controlling software and use 433MHz
+and in the ground controller. For this experiment, QGround Control
+\cite{QGroundControl_PlanView} was used as the ground controlling software and use 433MHz
 Radio Telemetry for communication between Pixhawk and QGround Control. 
 
 QGround Control (QGC) is a full-featured flight control and mission planning
@@ -1810,8 +1811,8 @@ editor, and the mission list.
     \label{fig:qgc_plan_view}
 \end{figure}
 Additionally, users can specify the altitude and speed at each waypoint by
-editing the mission command list. For instance, if our experiment is hovering
-over a tree, we will assign a speed of 2 m/s, hold for 300 seconds, and the
+editing the mission command list. For instance, if the UAV is hovering
+over a tree, a speed of 2 m/s will be assigned, to hold for 300 seconds, and the
 altitude will be roughly around 30m. Figure \ref{fig:qgc_mission_list} shows an
 example of a mission command list in QGC.
 \begin{figure}[H]
@@ -1914,7 +1915,7 @@ Placeholder text
 \subsection{Path Planning}
 \subsubsection{Waypoint-based Navigation Results}
 The results of the waypoint-based navigation can be divided into two platforms,
-as we conducted test runs using both a locally developed A* algorithm and
+as test runs were conducted using both a locally developed A* algorithm and
 a waypoint navigation in QGroundControl. 
 
 \paragraph{Locally Developed A* Algorithm Results} ~\\
@@ -1960,7 +1961,7 @@ algorithm will avoid converging on paths that lead to dense vegetation.
 \paragraph{QGround Control Waypoint-based Navigation} ~\\
 In QGround Control, we defined the important parameters, such as flying
 waypoints, flying speed, and flying altitude, using the Graphical User Interface
-in QGround Control. Then, we upload the coordinates and the data to the Pixhawk
+in QGround Control. Then, the coordinates were uploaded and the data to the Pixhawk
 flight controller using telemetry. The figure shows the settings and the
 successful execution of a mission. 
 \begin{figure}[H]
@@ -1986,8 +1987,8 @@ shows the graphical user interface of the coverage path planner.
     \label{fig:cpp_gui}
 \end{figure}
 
-At first, we specified the map as a polygon in the GUI. Once we input the
-polygon, the algorithm will determine the coordinates of the polygon, the sweep
+At first, the map was specified as a polygon in the GUI. Once giving the input, 
+the algorithm will determine the coordinates of the polygon, the sweep
 distance, and the altitude.  An example of result interpretation for a polygon
 shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
@@ -2087,14 +2088,14 @@ successful execution of the mission.
     \label{fig:gqc_coverage}
 \end{figure}
 
-In summary, we conducted waypoint-based navigation experiments primarily to
+In summary, waypoint-based navigation experiments were conducted primarily to
 hover the UAV above a tree or vegetation and above bare ground without trees.
 This is mainly to assist in obtaining the differences  between the GNSS-R signals
 in two scenarios and conduct an analysis on the reflected signals from the
 trees. 
-Additionally, we implemented coverage path planning to obtain dynamic UAV
+Additionally, coverage path planning was implemented to obtain dynamic UAV
 movement data, which enables the development of LiDAR SLAM in our system. LiDAR
-SLAM is crucial in our system to cross-validate the data obtained through GNSS-R
+SLAM is crucial in the system to cross-validate the data obtained through GNSS-R
 analysis and the Machine Learning pipeline. 
 
 \subsection{GNSS-R}
@@ -2509,10 +2510,15 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-Placeholder text
+The Final Year Project spans two semesters, with first semester focusing mainly 
+on literature review, methodology development, finalizing connections between 
+different parts of the project and conducting preliminary experiments for collecting data and testing 
+developed methodologies. The second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to collect more data and 
+validate methodologies and writing final project report. the Gannt Chart below summarizes the project timeline 
+for each part of the project. 
 
 \subsection{Gantt Chart}
-\vspace*{\fill}
 \begin{center}
 \begin{sideways}
 \begin{ganttchart}[
@@ -2524,8 +2530,8 @@ Placeholder text
   group label font=\bfseries\small,
   bar label font=\scriptsize,
   progress label text={},
-  x unit=1.5cm,
-  y unit title=0.7cm,
+  x unit=1.8cm,
+  y unit title=0.6cm,
   y unit chart=0.4cm,
   time slot format=isodate,
   time slot unit=month,
@@ -2535,9 +2541,9 @@ Placeholder text
   today label=Interim,
   today offset=.5,
   today rule/.style={draw=blue, ultra thick, dash pattern=on 2pt off 2pt},
-  bar height=0.7,
+  bar height=0.6,
   bar top shift=0.15,
-  group height=0.7,
+  group height=0.6,
   group top shift=0.15,
   group peaks tip position=0,
   group left shift=0,
@@ -2550,11 +2556,15 @@ Placeholder text
 \ganttgroup[group/.style={fill=overallcolor}]{Overall}{2025-09-01}{2026-05-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Planning \& Initialization}{2025-09-01}{2025-09-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Literature Review}{2025-09-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-09-01}{2025-10-31} \\
 \ganttbar[bar/.style={fill=overallcolor}]{System Design}{2025-10-01}{2025-11-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-10-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Phase 1 Experiments}{2025-11-01}{2026-01-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Phase 2 Experiments}{2026-03-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 1}{2025-10-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 2}{2025-11-01}{2025-11-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 3}{2025-12-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2025-12-01}{2026-01-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 4}{2026-02-01}{2026-02-28} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 5}{2026-03-01}{2026-03-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Final Demonstration}{2026-04-01}{2026-04-30} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Final Report \& Presentation}{2026-05-01}{2026-05-30} \\
 % Path Planning
 \ganttgroup[group/.style={fill=pathcolor}]{Path Planning}{2025-10-01}{2026-05-30} \\
@@ -2664,6 +2674,8 @@ aligns with different frameworks of this project. Specifically:
 \begin{itemize}
     \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
     \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
+    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
+    \item LiDAR SLAM: \url{}
 \end{itemize}
 
 
