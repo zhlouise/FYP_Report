@@ -1495,6 +1495,47 @@ random\_state & 42 \\
 \caption{Hyperparameters for LGBMClassifier}
 \end{table}
 
+As can be seen from the table above, a multiclass objective function was used
+to classify the signals into three classes. This is because the dataset contains
+three classes of signals: direct signals, signals reflected from ground and
+signals reflected from trees. The training objective here is the multinomial 
+cross entropy loss function. Let $K$ be the number of classes and $N$ be the number of samples.
+For each of the samples $i$,  the model output of raw scores $\mathbf{f}_i =
+\{f_{i,1}, \dots, f_{i,K}\}$, which are converted into probabilities using the softmax function:
+\begin{equation}
+    p_{i,k} = \frac{e^{f_{i,k}}}{\sum_{j=1}^{K} e^{f_{i,j}}}
+\end{equation}
+
+where $p_{i,k}$ is the predicted probability of sample $i$ belonging to class $k$. 
+The overall loss function minimized during training is given by:
+\begin{equation}
+    \mathcal{L}=
+-\frac{1}{N}
+\sum_{i=1}^{N}
+\sum_{k=1}^{K}
+y_{i,k} \log(p_{i,k}),
+\end{equation}
+where $y_{i,k}$ is a binary indicator that equals 1 if the true class of
+sample $i$ is $k$, and 0 if not. LightGBM optimizes this loss using
+gradient boosting with second order Taylor approximation, which leverages both
+the first (gradient) and second order derivatives (hessian) of the loss with respect to the
+model outputs \cite{ke2017lightgbm}. The corresponding gradients and hessians are computed as follows:
+\begin{equation}
+g_{i,k}
+=
+\frac{\partial \mathcal{L}}{\partial f_{i,k}}
+=
+p_{i,k} - y_{i,k},
+\end{equation}
+\begin{equation}
+h_{i,k}
+=
+\frac{\partial^2 \mathcal{L}}{\partial f_{i,k}^2}
+=
+p_{i,k}(1 - p_{i,k}).
+\end{equation}
+These are used to fit decision trees in a leaf wise manner, where at each iteration,
+the model adds a new tree that predicts the negative gradients of the loss function \cite{ke2017lightgbm}.
 The model converged well and the loss curves for training and validation sets are shown in the figure below.
 \begin{figure}[H]
     \centering
@@ -2657,8 +2698,31 @@ on literature review, methodology development, finalizing connections between
 different parts of the project and conducting preliminary experiments for collecting data and testing 
 developed methodologies. The second semester will focus on integrating developed systems for
 each individual parts, developing final models, conducting final experiments to collect more data and 
-validate methodologies and writing final project report. The Gantt Chart below summarizes the project timeline 
-for each part of the project. 
+validate methodologies and writing final project report. 
+
+The path planning part of the project is lead by GAMAGE Sashenka, who has been focusing 
+on developing and testing the path planning algorithms in local mapping environment and
+QGround Control. So far, the path planning part has been progressing as per the timeline in the Gantt chart and 
+future works mainly focus on conducting simulations in dynamic UAV environment and real world UAV testing. 
+
+The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on conducting GNSS-R experiments
+and analyzing the collected data. So far, the GNSS-R part has been progressing as per the timeline in the Gantt chart and
+future works mainly focus on integrating machine learning classification results into the GNSS-R pipeline
+to classify between reflected and direct signals and exploring the sensitivity of GNSS carrier phase measurements
+for FFZs covering the trees.
+
+The ML part of the project is lead by MAHMUD Md Sahat, who has been working on developing a 
+classification model using LightGBM to identify true tree reflected signals from the collected GNSS-R data.
+So far, the ML part has been progressing as per the timeline in the Gantt chart and
+future works will be focusing on developing neural netwok based model to perform regression tasks to predic 
+vegetation parameters. Sahat has also been responsible for piloting the drone during the experiments.
+
+The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been developing a modular LiDAR SLAM 
+framework which she has tested in both with and without GPS integration. So farm the LiDAR SLAM part has been
+progressing as per the timeline in the Gantt chart and future works mainly focus on solving the point cloud
+alignment issues after GPS integration and fine-tuning the modular SLAM framework to improve robustness.
+
+The Gantt chart below summarizes the project timeline for each individual parts of the project.
 
 \subsection{Gantt Chart}
 \begin{center}
@@ -2672,7 +2736,7 @@ for each part of the project.
   group label font=\bfseries\small,
   bar label font=\scriptsize,
   progress label text={},
-  x unit=1.8cm,
+  x unit=1.6cm,
   y unit title=0.6cm,
   y unit chart=0.4cm,
   time slot format=isodate,
