@@ -338,8 +338,9 @@ the corresponding action to be taken. With the correct reward design (e.g.,
 penalties for collisions, rewards for reaching the goal), SAC can learn to
 generate collision-free trajectories.
 
-Table \ref{tab:algorithms_comparison} summarizes the advantages and disadvantages of the search-based,
-sampling-based, and AI-based path planning algorithms. 
+Table \ref{tab:algorithms_comparison} summarizes the advantages and
+disadvantages of the search-based, sampling-based, and AI-based path planning
+algorithms. 
 
 \begin{table}[ht]
     \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
@@ -353,7 +354,6 @@ sampling-based, and AI-based path planning algorithms.
     \midrule
 
     % --- SEARCH BASED ---
- 
     \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
     % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
@@ -749,7 +749,6 @@ sensors.
 
 
 \subsection{System Architecture}
-
 Our system architecture comprises four key components: path planning, GNSS-R,
 machine learning, and LiDAR SLAM. First, we will conduct path planning using
 waypoint-based navigation and coverage path planning to navigate the UAV in
@@ -873,7 +872,6 @@ algorithm is shown in Figure \ref{fig:astar}.
 \end{figure}
 
 \paragraph{A* Algorithm Grid Definition} ~\\
-
 This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
 simplify the initial validation, the algorithm is currently evaluated using a 2D
@@ -938,32 +936,14 @@ node) is implemented using the diagonal heuristic function. The function has fiv
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
     \item Determines the direction with the minimum change in distance.
     \item The heuristic cost starts at zero and will increment by $\sqrt{3} \cdot \min(dx, dy, dz)$ to account for diagonal movement in 3D space.
-    \item The function checks which dimensions still have remaining distance to cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$ equals zero), it calculates the remaining cost using 2D diagonal movement and straight-line movement.
-    \item If the three dimensions still have remaining distance, it calculates the cost using a combination of 2D diagonal movement and straight-line movement for the remaining distances.
+    \item The function checks which dimensions still have remaining distance to
+    cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$
+    equals zero), it calculates the remaining cost using 2D diagonal movement
+    and straight-line movement.
+    \item If the three dimensions still have remaining distance, it calculates
+    the cost using a combination of 2D diagonal movement and straight-line
+    movement for the remaining distances.
 \end{enumerate}
-
-Below is an example of calculating heuristic cost in 3-dimensional space:
-
-\noindent Go from $(0,0,0)$ to $(5,3,2)$. \\
-Initial differences: $dx=5, dy=3, dz=2$.
-
-\begin{itemize}
-    \item \textbf{Step 1: 3D diagonal movement} \\
-    Calculate the shared 3D distance:
-    \[ diag_{3d} = \min(5, 3, 2) = 2 \]
-    Cost for 2 steps diagonally in 3D:
-    \[ \text{Cost} = \sqrt{3} \times 2 \approx 3.464 \]
-    \textit{Remaining:} $dx=3, dy=1, dz=0$.
-
-    \item \textbf{Step 2: Handle remaining} (since $dz=0$) \\
-    Calculate 2D diagonal in X-Y ($\min(3,1) = 1$ step):
-    \[ \text{Cost} = \sqrt{2} \times 1 \approx 1.414 \]
-    Calculate Straight line ($|3-1| = 2$ steps):
-    \[ \text{Cost} = 2.0 \]
-\end{itemize}
-
-\noindent \textbf{Total estimated cost:}
-\[ 3.464 + 1.414 + 2.0 = 6.878 \]
 
 Below is the pseudocode for the diagonal heuristic function:
 \begin{singlespace}
@@ -1023,7 +1003,7 @@ according to the following steps:
     \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighboring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
-    \item If a node is already in the open set but a better path is found,
+    \item If a node is already in the open set, but a better path is found,
     update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
     \item Repeat steps 2-5 until the goal node is reached or no path is found.
@@ -2067,7 +2047,7 @@ as test runs were conducted using both a locally developed A* algorithm and
 a waypoint navigation in QGroundControl. 
 
 \paragraph{Locally Developed A* Algorithm Results} ~\\
-A* algorithm results evaluation The results are obtained in various types of
+The A* algorithm evaluation results are obtained in various types of
 vegetation environments, including dense forests, crop fields, and grasslands.
 The images are obtained from the QGround Control satellite imagery and sent to
 our image processing pipeline to identify the potential flying areas. 
@@ -2798,7 +2778,7 @@ address them.
 
 \subsubsection{Path Planning}
 In terms of project management, the issues that arose during the path-planning
-process were mainly related to hardware and communication. During on-site
+process were mainly related to hardware communication. During on-site
 experiments, the UAV's telemetry disconnected from the ground station, even
 though it was within the specified communication range. Since the mission
 planner in QGround Control does not rely on real-time communication, the
