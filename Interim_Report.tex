@@ -2605,27 +2605,17 @@ be operated in the next stage of our project.
 For the path planning framework, so far, most results have been conducted in a
 local mapping environment without involving a UAV. Although the deployed
 algorithms have demonstrated accurate results, it is crucial to obtain dynamic
-results in UAV simulation and the real world. Therefore, the following
-limitations arise in the path planning workflow:
-\begin{itemize}
-    \item Simulation in dynamic UAV path planning.
-    \item Autonomous Navigation in the real-world UAV.
-    \item Simultaneous mapping and autonomous navigation
-\end{itemize}
-\paragraph{1. Simulation in dynamic UAV path planning} ~\\
-Simulating the flight trajectories of UAVs is crucial for understanding and
-evaluating the dynamics and kinematics of the UAV during autonomous navigation.
-With these simulations, we can verify our locally developed algorithms
-and incorporate different frameworks (i.e., ROS) to implement software that is
-compatible with hardware. 
+results in UAV simulation and the real world. By simulating flight trajectories,
+we can verify our locally developed algorithms prior to real-world application. 
 
-To address this limitation, we will use uavpackage \cite{MathWorks_UAV_Delivery}, developed by MATLAB, for
-small quadrotors, and Microsoft AirSim \cite{shah2017airsimhighfidelityvisualphysical} to conduct advanced simulations. These
-simulation software packages are built specifically for unmanned aerial
-vehicles; therefore, they provide the necessary aerodynamics and real-world
-physics packages to minimize the gap between real-world and simulation
-environments. 
-\paragraph{2. Autonomous Navigation in the real-world UAV} ~\\
+To address this limitation, we will use uavpackage
+\cite{MathWorks_UAV_Delivery}, developed by MATLAB, for small quadrotors, and
+Microsoft AirSim \cite{shah2017airsimhighfidelityvisualphysical} to conduct
+advanced simulations. These simulation software packages are built specifically
+for unmanned aerial vehicles; therefore, they provide the necessary aerodynamics
+and real-world physics packages to minimize the gap between real-world and
+simulation environments. 
+
 Currently, we do not deploy our algorithms in the real-world UAV; instead, we
 use the control and path planning system in QGround Control to communicate with
 the UAV. As a result, it is necessary to conduct real-world testing after we
@@ -2643,7 +2633,7 @@ issues. Figure \ref{fig:indoor_experiment} shows an example of a designed indoor
     \caption{Indoor autonomous navigation experiment design}
     \label{fig:indoor_experiment}
 \end{figure}
-\paragraph{3. Simultaneous mapping and autonomous navigation} ~\\
+
 Simultaneous mapping and navigation enable the drone to construct its own map
 for unknown environments while in the air. This is crucial for navigating
 unknown environments and flying at different altitudes. Moreover, it provides a
@@ -2656,13 +2646,6 @@ support the mapping and localization of the UAV. Currently, the ROS2 Nav2
 package incorporates LiDAR odometry data into autonomous navigation. Although
 most of the results from this system are reported for ground robots, we plan to
 adapt a similar approach in our system in the future. 
-
-In summary, we have identified three key limitations in the path planning
-framework and have analyzed potential solutions for each limitation. The current
-limitations, such as verifying simulation results and conducting real-world UAV
-testing, are crucial and will be addressed during the next stage of the project.
-Combining LiDAR SLAM data for the mapping system can be achieved later,
-depending on the given time limitation, by collaborating with the SLAM pipeline. 
 
 
 \subsection{GNSS-R}
