@@ -177,12 +177,12 @@ transmitter-receiver instruments that are crucial to mono-static radar systems
 \cite{Jin2010}. Instead, any consumer-grade receivers capable of receiving
 reflected GNSS signals could be used for GNSS-R remote sensing, further
 demonstrating GNSS-R's applicability onboard low-cost remote sensing systems
-such as an UAV. 
+such as a UAV. 
 
 Recent research has demonstrated the potential of integrating GNSS-R techniques
-with UAVs through an UAV-based GNSS-R system for water body detection and flood
+with UAVs through a UAV-based GNSS-R system for water body detection and flood
 mapping \cite{UAV-water}. Not only does this application demonstrate the
-capability of obtaining high resolution and flexibility measurements onboard
+capability of obtaining high-resolution, flexible measurements onboard
 low-altitude UAV platforms, but it also established UAV-mounted GNSS-R as a
 promising tool for monitoring dynamic environmental conditions. However, while
 existing systems are yet to be developed specifically for vegetation monitoring
@@ -204,7 +204,7 @@ for optimized GNSS-R remote sensing.
 \item To analyze and model the correlations between signal propagation parameters
 retrieved through GNSS-R and ground vegetation conditions.
 \item To classify signals reflected by vegetation and predict vegetation parameters
-based on raw GNSS data using machine learning-based approach.
+based on raw GNSS data using a machine-learning-based approach.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
 \end{enumerate}
@@ -236,35 +236,24 @@ integrated project methodologies.
 
 
 \subsection{Path Planning}
-Path planning is a term affiliated with fields such as robotics, artificial
-intelligence, and control systems. In robotics, path planning is a technique
-that is used in navigating a robot autonomously from an origin to a destination
-via a collision-free route. Therefore, path planning is primarily a geometric
-problem that generates a path according to a given sequence of waypoints,
-without accounting for variations over time. In contrast, trajectory planning
-defines the path as a function of time, assigning specific timing to the
-geometric route \cite{gasparetto2015path}. Currently, our research focuses on
-implementing path planning for the autonomous navigation of an Unmanned Aerial
-Vehicle (UAV) in outdoor environments. Consequently, we prioritize path planning
-methodologies in this work, reserving trajectory planning and optimization for
-future investigation. 
+Path planning is a technique that is used in navigating a robot autonomously
+from an origin to a destination via a collision-free route. It is primarily a
+geometric problem that generates a path according to a given sequence of
+waypoints, without accounting for variations over time
+\cite{gasparetto2015path}. Currently, our research focuses on implementing path
+planning for the autonomous navigation of an Unmanned Aerial Vehicle (UAV) in
+outdoor environments.
 
 The earliest sensor-based, obstacle-avoiding path planning algorithms are known
 as Bug1 and Bug2 algorithms \cite{choset2005principles}, which are designed to
 first navigate around an obstacle and then determine the shortest path around
-the obstacle to reach the goal (Figure \ref{fig:bug_algorithms}).
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Included_Images/bug_algorithms.png}
-    \caption{Bug1 and Bug2 path planning algorithms \cite{choset2005principles}.}
-    \label{fig:bug_algorithms}  
-\end{figure}
-However, both Bug1 and Bug2 algorithms are used in scenarios where the robot has
-no map (i.e., an unknown environment). Additionally, these algorithms do not
-guarantee the optimal path. With the rise of SLAM techniques, maps of the navigation
-environment can be generated, which enabled the transition to map-based path planning methods. Therefore, the conventional grid-based path planning algorithms will be 
-integrated in this project, which enables the identification of potential vegetated
-areas for further GNSS-R surveying.
+the obstacle to reach the goal. However, these algorithms are used
+in scenarios where the robot has no map (i.e., an unknown environment). With the
+rise of SLAM techniques, maps of the navigation environment can be generated,
+which enabled the transition to map-based path planning methods. Therefore, the
+conventional grid-based path planning algorithms will be integrated in this
+project, which enables the identification of potential vegetated areas for
+further GNSS-R surveying.
 
 One of the primary reasons for utilizing autonomous navigation and path planning
 in our UAV system is that it is scalable across vegetation monitoring, providing
@@ -284,95 +273,70 @@ path planning approaches.
 Dijkstra's algorithm solves the problem of finding the shortest path from a
 given starting point to a given ending point. The algorithm explores this path
 by simultaneously finding the shortest path from a given starting node to all
-points in the graph \cite{javaid2013understanding}. As a result, the algorithm is known to perform the
-guaranteed shortest path across two points. However, finding the shortest path
-across all the points in the map consumes high computational cost, and
-therefore, it is impractical to use for real-time UAV path planning. The update rule \ref{alg:dijkstra} illustrates the
-pathfinding process of Dijkstra's algorithm.
-\begin{algorithm}[H]
-\caption{Dijkstra's Algorithm (Relaxation Step)}
-\label{alg:dijkstra}
+points in the graph \cite{javaid2013understanding}. However, finding the shortest
+path across all the points in the map incurs high computational cost.
+Therefore, it is impractical to use for real-time UAV path planning. 
 
-\begin{algorithmic}[1]
-  \State $d[u] \gets$ current known shortest distance from start to node $u$
-  \State $w(u,v) \gets$ weight (cost) of edge from $u$ to $v$
-  \State \textbf{The core update rule is:}
-  \State $d[v] \gets \min(d[v], d[u] + w(u,v))$
-\end{algorithmic}
-\end{algorithm}
 To address the limitations of Dijkstra’s algorithm, scientists developed another
-search-based algorithm called the A* (A-star) algorithm. A* algorithm is one of
+search-based algorithm called the A* (A-star) algorithm. The A* algorithm is one of
 the most common path planning algorithms, which can be applied to grid-based or
 topological configuration spaces \cite{Astar_simulation}. This algorithm
 combines the shortest path calculation in Dijkstra’s algorithm and heuristic
 searching. The heuristic cost is known as the estimated cost from the current
-node to the end node. A* algorithm is better in terms of reducing the search
+node to the end node. The A* algorithm is better in terms of reducing the search
 space compared to the Dijkstra algorithm. However, it requires accurate
 heuristics to determine the shortest path and has a large computation time
-depending on the number of cells in the map.   \cite{DUCHON201459}.  
+depending on the number of cells in the map \cite{DUCHON201459}.  
 
 \paragraph{Sampling-based algorithms} ~\\
-As previously discussed, search-based algorithms consume an excessive amount of
-computational power in high-dimensional spaces and with a large number of
-obstacles \cite{karaman2011samplingbasedalgorithmsoptimalmot}.  To avoid such burnout, sampling-based algorithms have been proposed
-and have performed effectively in high-dimensional spaces, attracting
-significant attention across several decades \cite{Kavraki},\cite{kavraki_etal}. One of the most common
-sampling-based algorithms is RRTs and PRMs, which sample points randomly from
-the given map. 
+Due to the excessive amount of computational power consumed by search-based
+algorithms \cite{karaman2011samplingbasedalgorithmsoptimalmotion}, sampling-based
+algorithms have been proposed and have performed effectively in high-dimensional
+spaces, attracting significant attention across several decades
+\cite{Kavraki},\cite{kavraki_etal}. The most common sampling-based algorithms are
+RRTs and PRM algorithms.
 
-The RRT algorithm works by selecting a random available cell and randomly
-checking its neighboring nodes. As a result, there is no need to assign nodes at
-every point in the path. The algorithm spreads like a tree from the random
-neighboring nodes and eventually will reach the endpoint. Additionally, RRT
-effectively handles systems with differential constraints \cite{anytimeRRT},
-making it a suitable algorithm for state-of-the-art robotics. Although RRT
-quickly computes the path between the starting and ending points, it does not
-guarantee the shortest path. This was also proven by Karaman and Frazzoli
-\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing that the
-probability of the RRT algorithm converging to an optimal solution is zero.
-Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
+The RRT algorithm operates by iteratively sampling random states within the
+configuration space and extending the nearest existing node in the tree toward
+these samples. This sampling-based approach allows the algorithm to spread like a
+tree and rapidly explore the state space and eventually connect to the goal. 
+
+Additionally, RRT effectively handles systems with differential constraints
+\cite{anytimeRRT}, making it a suitable algorithm for state-of-the-art robotics.
+Although RRT quickly computes the path between the starting and ending points,
+it does not guarantee the shortest path. This was proven by Karaman and
+Frazzoli \cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing
+that the probability of the RRT algorithm converging to an optimal solution is
+zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
+proposed. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\linewidth]{Included_Images/rrt_vs_rrtstar.png}
     \caption{RRT vs RRT* Path Planning Algorithms}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
-In RRT*, the algorithm considers neighboring nodes within a window of radius r
-and examines the shortest path by comparing nodes in the window, shown in Figure
-\ref{fig:rrt_vs_rrtstar}. RRT* has the same properties as RRT, but with
-near-neighbor search and tree rewriting operations
-\cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As the number of
-iterations increases, RRT* performance improves, while the path becomes more
-jagged with each iteration \cite{noreen2016comparison}. Moreover, PRM is another
-type of sampling-based algorithm that has a network of possible paths in the
-freely available space. By creating a network among the available spaces, the
-PRM increases the path-finding speed by converting the map into a graph.
-\cite{PRM}.
+As shown in Figure \ref{fig:rrt_vs_rrtstar}, RRT* incorporates a rewiring step
+within a neighbor radius $r$, ensuring that the path improves as the number of
+iterations increases \cite{karaman2011samplingbasedalgorithmsoptimalmotion}. As
+the number of iterations increases, RRT* performance improves, while the path
+becomes more jagged with each iteration \cite{noreen2016comparison}. Moreover,
+PRM is another type of sampling-based algorithm that has a network of possible
+paths in the freely available space. By creating a network among the available
+spaces, the PRM increases the path-finding speed by converting the map into a
+graph \cite{PRM}.
 
 \paragraph{AI-based algorithms} ~\\
 In recent years, deep reinforcement learning methods have been employed to
 address task allocation and path planning problems in autonomous vehicles
 \cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
-multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent studies have merged the
-Soft-Actor-Critic (SAC) reinforcement learning algorithm with a sampling-based
-path planning algorithm to design adaptively informed trees (AIT*) \cite{ait}. The network
-structure of the hybrid path planner is shown in the Figure \ref{fig:sac_ait}.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/sac_ait.png}
-    \caption{SAC Network Structure}
-    \cite{SAC-path-planning}
-    \label{fig:sac_ait}
-\end{figure}
-
-SAC learns a policy that specifies a given state and the corresponding action to
-be taken. In other words, “given my current state (position, velocity, sensor
-readings), what action (thrust, roll, yaw, pitch) should I take?” With the
-correct reward design (e.g., penalties for collisions, rewards for reaching the
-goal), SAC can learn to generate collision-free trajectories. The data needed
-for each state should be stored in a replay buffer, including the state at a
-given time, the action taken at that time, the reward received after taking that
-action, and the next state after the action.
+multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent
+studies have merged the Soft-Actor-Critic (SAC) reinforcement learning algorithm
+with a sampling-based path planning algorithm to design adaptively informed
+trees (AIT*) \cite{ait}. 
+SAC learns a policy that specifies a given state and
+the corresponding action to be taken. With the correct reward design (e.g.,
+penalties for collisions, rewards for reaching the goal), SAC can learn to
+generate collision-free trajectories.
 
 Table \ref{tab:algorithms_comparison} summarizes the advantages and disadvantages of the search-based,
 sampling-based, and AI-based path planning algorithms. 
@@ -399,7 +363,7 @@ sampling-based, and AI-based path planning algorithms.
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item High computational cost in large/continuous spaces.
         \item Needs accurate heuristics.
-        \item It may not be scalable for dynamic environments.
+        \item Poor performance in dynamic environments.
     \end{itemize} \\ 
     \addlinespace[4pt] % Adds a tiny gap between rows instead of a line
     
@@ -464,7 +428,7 @@ decomposition methods, the robot's free space is subdivided into several
 regions, called cells \cite{gasparetto2015path}. The decomposition process can
 be explained as follows: subdivision of space into numbered polygons, creation
 of a connectivity graph, identification of regions to be crossed, and generation
-of the path.  The figure \ref{fig:cell_decomposition} shows the detailed steps
+of the path.  Figure \ref{fig:cell_decomposition} shows the detailed steps
 of the exact cell decomposition process. In our system, we utilize exact cell
 decomposition, specifically boustrophedon decomposition, for coverage path
 planning. 
@@ -476,22 +440,20 @@ planning.
     \label{fig:cell_decomposition}
 \end{figure}
 The boustrophedon cellular decomposition is a common algorithm that breaks down
-the robot’s free space into cells and covers each cell with a motion of back and
-forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the UAV to constantly learn,
-resulting in an unstable antenna, using boustrophedon keeps the drone stable
-while covering the area. Similarly, in wavefront algorithms, having zigzag
-patterns often provides a jagged path, whereas boustrophedon provides the
-kinematic feasibility. The detailed implementation of the boustrophedon
-algorithm is discussed in the methodology section. The section below reviews
-existing GNSS-R techniques that can be used once the path planning methodologies have been
-established.
+the robot’s free space into cells and covers each cell with a motion of back-and-forth \cite{choset2000coverage}. Compared to spiral patterns, which cause the
+UAV to constantly bank (roll), thereby destabilizing the antenna, using
+boustrophedon maintains a stable flight attitude suitable for consistent data
+collection. Furthermore, it offers better kinematic feasibility compared to the
+jagged paths often produced by standard wavefront algorithms. The section below
+reviews existing GNSS-R techniques that can be used once the path planning
+methodologies have been established.
 
 
 \subsection{GNSS-R}
 The concept of using GNSS-R for remote sensing was first proposed in 1993, where
-the correlation between direct and scattered GNSS signals were proven promising
+the correlation between direct and scattered GNSS signals was proven promising
 for the application of ocean altimetry \cite{MartnNeira1993APR}. Today, apart
-from the originally proposed application, GNSS-R techniques has been extensively
+from the originally proposed application, GNSS-R techniques have been extensively
 used for Earth observations and land information retrieval, including ocean
 salinity, soil moisture, and ice thickness \cite{RodriguezAlvarez2011}. However,
 research on vegetation parameter retrieval remains limited to preliminary
@@ -524,9 +486,9 @@ could be effectively compensated using NDVI data, indicating a correlation
 between signal attenuation and vegetation water content \cite{Camps2016}.
 Additionally, the interference pattern between direct and reflected GNSS signals
 from the Earth's surface was used in estimating vegetation height and land
-topography \cite{RodriguezAlvarez2011}. Through using a Soil Moisture
+topography \cite{RodriguezAlvarez2011}. Using a Soil Moisture
 Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
-instantaneous power of the direct and reflected signals were coherently added,
+instantaneous power of the direct and reflected signals was coherently added,
 in which the resulting power oscillations present notches that are correlated to
 vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
 \cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in estimating the
@@ -553,8 +515,8 @@ Yet, despite the effort in prior studies, the use of GNSS-R techniques in
 vegetation remote sensing and monitoring is far from developed. Most
 importantly, existing research relies heavily on space-borne or static
 ground-based platforms, while the use of high spatial resolution and flexibility
-platforms - such as an UAV - remains underexplored. Therefore, it is critical to
-develop a systematic framework for an UAV-based GNSS-R system, in which
+platforms - such as a UAV - remains underexplored. Therefore, it is critical to
+develop a systematic framework for a UAV-based GNSS-R system, in which
 correlations between GNSS-R signal features and vegetation condition parameters
 are comprehensively assessed and modeled. Additionally, with adequate dataset size,
 the GNSS-R framework could be complemented by machine learning-based modelling
@@ -712,8 +674,8 @@ cross-sensor correlations \cite{oh2010symmetrical}.
     \includegraphics[width=\textwidth]{Included_Images/EKF SLAM.png}
     \caption{The figure depicts a spring network analogy to visualize how EKF
 SLAM works. The landmarks are connected by springs describing correlations
-between landmarks. As the robot pass through the landmark more than once, this
-correlations increase which makes the red spring thicker
+between landmarks. As the robot passes a landmark more than once, these
+correlations increase, which makes the red spring thicker
 \cite{stachniss2016simultaneous}.}
 \end{figure}
 
@@ -821,21 +783,20 @@ is shown in Figure \ref{System Architecture}.
 
 
 \subsection{Path Planning}
-As mentioned in the system architecture, path planning focuses on
-two methods: Waypoint-Based Navigation and Coverage Path Planning. These methods
-are crucial for observing dense forests, such as hovering over trees and
-surveying the dense canopy to obtain dynamic data for LiDAR SLAM. Below are the
-detailed methodologies for each path planning method.
+As mentioned in the system architecture, path planning focuses on two methods:
+Waypoint-Based Navigation and Coverage Path Planning. These methods are crucial
+for observing dense forests, enabling maneuvers such as hovering over trees and
+surveying the dense canopy to obtain dynamic data for LiDAR SLAM. The detailed
+methodologies for each method are presented below.
 
 \subsubsection{Waypoint-based navigation}
-
 Waypoint-based navigation can be achieved through various approaches, such as
 search-based algorithms, graph-based algorithms, and Artificial
 Intelligence-based algorithms. Since the UAV is designed to hover over dense
 vegetation environments and identify potential Fresnel Zones, it primarily needs
-to fly outdoors, at high-altitude and open spaces. To determine the optimal
-algorithm for building an intelligent UAV system, a baseline
-comparison was conducted among the Dijkstra algorithm, the A* algorithm, and the RRT
+to fly outdoors at high altitudes in open spaces. To determine the optimal
+algorithm for building an intelligent UAV system, a baseline comparison was
+conducted among the Dijkstra algorithm, the A* algorithm, and the RRT
 algorithm.
 
 \begin{table}[ht]
@@ -897,15 +858,12 @@ The A* algorithm is a heuristic, search-based algorithm that calculates the
 shortest path from a starting point to a goal. The algorithm first divides the
 map into nodes, where each node represents a possible position for the robot to
 move. These positions depend on the grid architecture, such as 4-way or 8-way
-connected grids. In addition to the conventional grid architecture, novel grid
-mapping approaches such as NavMeshes \cite{putz20163d} are widely used in 3D simulation software.
-These mapping techniques connect the locations of the movable agent to the
-surface (mesh) and store the surfaces as convex polygons.  
+connected grids.  
 
-In this project, the focus will be on regular grids that connect nodes across 26
-directions in 3-D space. Each node will be assigned a cost based on the starting
-and ending nodes of a given path. A 2-D path illustration of an A* algorithm is
-shown in Figure \ref{fig:astar}.
+In this project, the focus will be on regular 8-way grids that connect nodes
+across 26 directions in 3-D space. Each node will be assigned a cost based on
+the starting and ending nodes of a given path. A 2-D path illustration of an A*
+algorithm is shown in Figure \ref{fig:astar}.
 
 \begin{figure}[ht]
     \centering
@@ -915,7 +873,6 @@ shown in Figure \ref{fig:astar}.
 \end{figure}
 
 \paragraph{A* Algorithm Grid Definition} ~\\
-
 
 This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
@@ -930,7 +887,7 @@ An illustration of image coordinates is shown in Figure \ref{fig:image_coordinat
     \caption{Image Coordinates System}
     \label{fig:image_coordinates}
 \end{figure}
-Below is the psuedocode for the \texttt{coord\_to\_index} function:
+Below is the pseudocode for the \texttt{coord\_to\_index} function:
 \begin{singlespace}
 \begin{algorithm}[H]
 \caption{Coordinate to Grid Index Conversion}
@@ -1008,7 +965,7 @@ Initial differences: $dx=5, dy=3, dz=2$.
 \noindent \textbf{Total estimated cost:}
 \[ 3.464 + 1.414 + 2.0 = 6.878 \]
 
-Below is the psuedocode for the diagonal heuristic function:
+Below is the pseudocode for the diagonal heuristic function:
 \begin{singlespace}
 \begin{algorithm}[H]
 \caption{Diagonal Heuristic (3D)}
@@ -1144,7 +1101,7 @@ using the framework developed by the Autonomous Systems Lab at ETH Zurich
 \end{figure}
 
 \paragraph{Boustrophedon Cell Decomposition Implementation} ~\\
-The algorithm decomposite the map (polygonal area) into cells based on three key events:
+The algorithm decomposes the map (polygonal area) into cells based on three key events:
 \begin{itemize} 
     \item \textbf{In Event}: When the sweep line encounters the start of an
     obstacle, the current cell is divided into two new cells. The algorithm is
@@ -1166,7 +1123,7 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     \end{figure}
 
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
-    and updates it cell status.
+    and updates its cell status.
     \item \textbf{Out Event}: The sweep line encounters the end of an obstacle,
     and two cells merge into one cell. The algorithm is defined by an if-else
     loop that compares the points of the obstacle's vertices and the
@@ -1365,8 +1322,8 @@ properties based on the features extracted from GNSS measurements.
     \includegraphics[width=1\textwidth]{Included_Images/Classes.png}
     \caption{Classes of signals to be classified.}
 \end{figure}
-So far, only the first part has been attempted. A supervised learning approach was takes, where a dataset was 
-constructed from collected GNSS data with labels assigned based on the collection scenarios. 
+So far, only the first part has been attempted. A supervised learning approach was taken, where a dataset was
+constructed from collected GNSS data with labels assigned based on the collection scenarios.
 The collected data was analyzed and features were then selected to train a classification model. 
 The details of the feature analysis, dataset construction, feature selection and model training 
 are outlined in the following sections.
@@ -1467,37 +1424,37 @@ with native support for NaN values. This feature of the model is particularly
 important for our case as raw GNSS data often contains missing values due to
 signal blockages or receiver limitations. Cleaning the data by removing the NaN
 values would lead to significant loss of data, as cleaning process would have to
-be carried out either row wise of column wise. Replacing the NaN values with
+be carried out either row-wise or column-wise. Replacing the NaN values with
 zeros or mean values would introduce bias to the dataset, which would
 potentially affect the performance of the model. Therefore, using a model with
 native support for NaN values was the most suitable approach for our case. Below
 is a brief introduction to LightGBM model. \paragraph{LightGBM Model} ~\\
 LightGBM (Light Gradient Boosting Machine) is a highly efficient framework 
-for gradient boosting decision trees (GBDT) which was developed by Microsoft
-\cite{ke2017lightgbm}. The model it similar to popular GBDT such as XGBoost, 
-however it addresses some of the limitations of these models in terms of efficiency 
-and scalability for large datasets with high dimensional features \cite{ke2017lightgbm}.
+for gradient boosting decision trees (GBDT) that was developed by Microsoft
+\cite{ke2017lightgbm}. The model is similar to popular GBDTs such as XGBoost;
+however, it addresses some of the limitations of these models in terms of efficiency 
+and scalability for large datasets with high-dimensional features \cite{ke2017lightgbm}.
 
 Unlike level wise tree growth that can be seen in traditional GBDT models, 
-LightGBM uses a leaf wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
+LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
-    \caption{Leaf wise tree growth strategy.}
+    \caption{Leaf-wise tree growth strategy.}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
 \begin{equation}
 V_{j|o}(d) = \frac{1}{n_o} \left( \frac{ \left( \sum_{ {x_i \in O: x_{ij} \leq d} } g_i \right)^2 }{ n_l^o(d) } + \frac{ \left( \sum_{ {x_i \in O: x_{ij} > d} } g_i \right)^2 }{ n_r^o(d) } \right),
 \end{equation}
 where $V_{j|o}(d)$ is the variance gain, $g_i$ are the gradients, $n_o$ is the number of samples in the parent node. This approach 
-optimizes boosting and leads to faster convergence when combined with gradient based sampling. 
+optimizes boosting and leads to faster convergence when combined with gradient-based sampling. 
 
 LightGBM also provides native support for NaN values through optimal 
 directional assignment during splits. This helps to avoid manual imputation 
 of data that could introduce bias. 
 \subsubsection{Model Training}
-In order to train the LightGBM model, the dataset was first split into training
-testing and validation sets with a ration of 60:20:20 respectively. A total of 70,125 
+In order to train the LightGBM model, the dataset was first split into training,
+testing, and validation sets with a ratio of 60:20:20 respectively. A total of 70,125 
 labeled samples were used for training the model. The training features included pseudorange, 
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
@@ -1586,7 +1543,7 @@ The model converged well and the loss curves for training and validation sets ar
     \caption{Loss curves for training and validation sets.}
 \end{figure}
 From the figure above, it is clear that the model did not overfit as the training and validation 
-loss curves are close to each other and decreases steadily. Further performance assessment results 
+loss curves are close to each other and decrease steadily. Further performance assessment results 
 of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
 mapping and localization.
 
@@ -1892,21 +1849,21 @@ To apply the methodologies outlined in the previous section, a series of field
 experiments were conducted, aiming to demonstrate the functionality of the UAV
 platform and collect data necessary for further analysis. Over ten unique
 flight missions were executed across three different locations in Hong Kong and
-diverse flight scenarios, including static hovering, dynamic surveying, and manual
-controlled flight. The following subsections present the experimental setups, 
-summarize experiments conducted, and detail one key experiment that highlight 
+diverse flight scenarios, including static hovering, dynamic surveying, and manually
+controlled flight. The following subsections present the experimental setups,
+summarize experiments conducted, and detail one key experiment that highlights
 the current system capabilities and challenges for further development.
 
 
 \subsection{Experimental Setup}
 Before the initiation of a flight mission, the ground control station must be
-configurated and remote connections with the onboard computer should be established.
+configured and remote connections with the onboard computer should be established.
 
 \subsubsection{Ground Control Setup}
 To set up the ground control station, we first paired the telemetry in the UAV
 and in the ground controller. For this experiment, QGround Control
-\cite{QGroundControl_PlanView} was used as the ground controlling software and use 433MHz
-Radio Telemetry for communication between Pixhawk and QGround Control. 
+\cite{QGroundControl_PlanView} was used as the ground controlling software and used 433 MHz
+radio telemetry for communication between Pixhawk and QGround Control.
 
 QGround Control (QGC) is a full-featured flight control and mission planning
 software for MAVLink-enabled drones.  The experiments were conducted as
@@ -1926,7 +1883,7 @@ editor, and the mission list.
 Additionally, users can specify the altitude and speed at each waypoint by
 editing the mission command list. For instance, if the UAV is hovering
 over a tree, a speed of 2 m/s will be assigned, to hold for 300 seconds, and the
-altitude will be roughly around 30m. Figure \ref{fig:qgc_mission_list} shows an
+altitude will be roughly around 30 m. Figure \ref{fig:qgc_mission_list} shows an
 example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
@@ -1936,24 +1893,24 @@ example of a mission command list in QGC.
 \end{figure}
 
 \subsubsection{Establishing Remote Connection with Onboard Computer}
-While the ground controller is being set up, the onboard Jetson Orin is being connected
+While the ground controller is being set up, the onboard Jetson Orin is connected
 through both the SSH protocol and remote desktop on two separate computers. 
 
-Through Wi-Fi, both the SSH computer and the Jetson Orin is connected into a common internal
-network that was pre-established using ZeroTier. Then, the Terminal of the Jetson Orin could
-be easily accessed through Virtual Studio Code, where the command to log GNSS data from the
+Through Wi-Fi, both the SSH computer and the Jetson Orin are connected to a common internal
+network that was pre-established using ZeroTier. The terminal of the Jetson Orin can
+be accessed through Visual Studio Code, where the command to log GNSS data from the
 two onboard receivers can be executed. 
 
-On the other hand, SLAM data including LiDAR point clouds, IMU, GPS data are
+On the other hand, SLAM data including LiDAR point clouds, IMU, and GPS data are
 collected into a .bag file from Robot Operating System (ROS). To do so,
 Nomachine is used to create remote access from Jetson Orin with the
-pre-established ZeroTier connection. Such method enable access of multiple
+pre-established ZeroTier connection. This method enables access to multiple
 terminals from Jetson Orin so that all the required sensor drivers can be
 launched to carry out data collection.
 
 
 \subsection{Summary of Experiments Conducted}
-A total of 10 successful flights were conducted during the reporting period. They are conducted in the following three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
+A total of 10 successful flights were conducted during the reporting period. They were carried out in three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
 
 \begin{figure}[H]
     \centering
@@ -2050,9 +2007,9 @@ plan is shown in the figure below.
 
 \subsubsection{GNSS-R Analysis}
 After the successful collection of GNSS data during the flight mission, the raw data
-was post processed into measurement information. With the FFZs of the reflected GNSS 
-signals calculated, they were plotted onto the satellite image map. Here, color
-of the FFZs indicate the $C/N_0$ ratio between the bottom antenna and the top antenna,
+was post-processed into measurement information. With the FFZs of the reflected GNSS 
+signals calculated, they were plotted onto the satellite image map. Here, the color
+of the FFZs indicates the $C/N_0$ ratio between the bottom and top antennas,
 and strong reflections over water and bare ground could be observed compared to those
 reflected from vegetation.
 \begin{figure}[H]
@@ -2076,9 +2033,9 @@ vegetation.
 \subsubsection{LiDAR SLAM}
 For this dataset, LiDAR point clouds were processed using two techniques: the
 standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
-figures below, PGO+GPS have misaligned point clouds due to the GPS coordinate
+figures below, PGO+GPS has misaligned point clouds due to the GPS coordinate
 frame and transformation logic issues. In PGO+GPS, the green trajectory
-indicates the LiDAR odometry, and 3 axis trajectory indicates GPS trajectory. 
+indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
@@ -2337,7 +2294,7 @@ vegetation.
         \includegraphics[width=\textwidth]{Included_Images/Tree_Pr_Error.png}
         \caption{UAV hovering over trees.}
     \end{subfigure}
-    \caption{Normalized distributions of psuedorange errors for both antennas in 
+    \caption{Normalized distributions of pseudorange errors for both antennas in 
     two different flight scenarios.}
     \label{Pr_Error Distribution}
 \end{figure}
@@ -2445,10 +2402,10 @@ in the following section.
 
 \subsection{Machine Learning}
 As classification of the reflected and direct signals is required for robust GNSS-R
-implementation, the LightGBM model is trained to classify the signals based on  
-the features extracted from both antennas. The data collection, dataset preparation and model
-selection has been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including accuracy, precision, recall and F1-score. The subsections 
+implementation, the LightGBM model is trained to classify the signals based on
+the features extracted from both antennas. The data collection, dataset preparation, and model
+selection have been explained in the methodology section. The performance of the model is
+evaluated based on various metrics including accuracy, precision, recall, and F1-score. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
 The F1-score is a mean of precision and recall of a classification model. Precision of a model indicates
@@ -2463,12 +2420,12 @@ The F1-score for the LightGBM model on the test dataset is shown in the figure b
     \includegraphics[width=0.9\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
-From the firgure above, it is observed that the LightGBM model achieves a F1 score of approximately 
+From the figure above, it is observed that the LightGBM model achieves an F1 score of approximately
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-Confusion matrix is a table that is used to describe the performance of a classification model on a set of test data
-for which the true values are known. The diagonal elements of a confusion matrix the correctly classified samples 
+A confusion matrix is used to describe the performance of a classification model on a set of test data
+for which the true values are known. The diagonal elements of a confusion matrix represent correctly classified samples,
 while the off-diagonal values indicate misclassified ones. The confusion matrix for our signal classification 
 LightGBM model is shown in the figure below.
 \begin{figure}[H]
@@ -2481,24 +2438,24 @@ of the samples in the test dataset. Primary confusion for the model occurs for d
 tree reflection. As can be observed from the confusion matrix, 1110 and 1008 samples of direct and ground reflected
 signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
-This results are acceptable as the model will later be used to identify vegetation reflected signals mostly.
+These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
 \subsubsection{Receiver Operating Characteristic (ROC) Curve}
 A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
 binary classification model at various threshold settings. It plots the True Positive Rate (TPR) against the False Positive
-Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC values is 
-closer to 1, it basically indicates that the model has good ability to distinguish between classes. However, a value near
-0.5 indicates that the model has no discrimination ability. For the LightGBM model trained for classification of signals, 
+Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
+closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
+0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
 the ROC curve is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/ROC.png}
     \caption{ROC curve for LightGBM model on test dataset}
 \end{figure}
-The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning 
-that the model has high abiity to distinguish between signal classes.
+The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning
+that the model has high ability to distinguish between signal classes.
 \subsubsection{Feature Importance}
-Feature importance is a techniques in Machine Learning to identify and rank the most relevant features 
-in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for 
+Feature importance is a technique in machine learning used to identify and rank the most relevant features
+in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for
 our signal classification task. The feature importance plot is shown in the figure below.
 \begin{figure}[H]
     \centering
@@ -2712,19 +2669,19 @@ depending on the given time limitation, by collaborating with the SLAM pipeline.
 In the next half of the project, the GNSS-R framework will integrate with the 
 machine learning classification results to effectively distinguish between reflected 
 and directly propagated signals. Then, the sensitivity of GNSS carrier phase measurements
-for FFZs covering the trees would be explored. Lastly, a model of identified correlations
-between GNSS measurements and ground features would be summarized to achieve the
+for FFZs covering the trees will be explored. Lastly, a model of identified correlations
+between GNSS measurements and ground features will be summarized to achieve the
 ultimate objective of this project.
 
 
 \subsection{Machine Learning}
-The next part of this project will focus on the developing a neural network based model 
-to perform regression based task to predict vegetation parameters such as biomass, VWC, 
-thee height etc. Literature shows that neural networks have been effective in performing
-such regression tasks using features such as: Delay Doppler Maps (DDMs), signal power,
-polarization parameters etc. \cite{hu2019detecting,pilikos2024biomass}. Simultaneously,
-the dataset for LightGBM model will be further expansed by collecting more GNSS-R data in controlled 
-environment to improve the classification performance.
+The next part of this project will focus on developing a neural-network-based model
+to perform regression tasks to predict vegetation parameters such as biomass, VWC,
+tree height, etc. Literature shows that neural networks have been effective in performing
+such regression tasks using features such as Delay Doppler Maps (DDMs), signal power,
+and polarization parameters, etc. \cite{hu2019detecting,pilikos2024biomass}. Simultaneously,
+the dataset for the LightGBM model will be further expanded by collecting more GNSS-R data in controlled
+environments to improve classification performance.
 
 \subsection{LiDAR SLAM}
 The next part of this project aims to solve the point cloud alignment issues
