@@ -250,7 +250,8 @@
   publisher = {Springer Science and Business Media LLC},
   author = {Jin,  Shuanggen and Camps,  Adriano and Jia,  Yan and Wang,  Feng and Martin-Neira,  Manuel and Huang,  Feixiong and Yan,  Qingyun and Zhang,  Shuangcheng and Li,  Zhongyu and Edokossi,  Komi and Yang,  Dongkai and Xiao,  Zhiyu and Ma,  Zhongmin and Bai,  Weihua},
   year = {2024},
-  month = may 
+  month = may,
+  pages = {19}
 }
 
 @article{Jin2010,
@@ -479,31 +480,40 @@
   pages = {216 - 222},
 }
 
-@article{gasparetto2015path,
-  title = {{Path planning and trajectory planning algorithms: A general overview}},
-  author={Gasparetto, Alessandro and Boscariol, Paolo and Lanzutti, Albano and Vidoni, Renato},
-  journal={Motion and operation planning of robotic systems: Background and practical approaches},
-  pages={3--27},
-  year={2015},
-  publisher={Springer}
+@Article{Gasparetto2015,
+  AUTHOR = {Gasparetto, Alessandro and Boscariol, Paolo and Lanzutti, Albano and Vidoni, Renato},
+  TITLE = {{Path Planning and Trajectory Planning Algorithms: A General Overview}},
+  JOURNAL = {Motion and Operation Planning of Robotic Systems: Background and Practical Approaches},
+  YEAR = {2015},
+  VOLUME = {Cham},
+  NUMBER = {Springer International Publishing},
+  PAGES = {3--27},
+  URL = {https://doi.org/10.1007/978-3-319-14705-5_1},
+  ISSN = {978-3-319-14705-5},
+  ABSTRACT = {Path planning and trajectory planning are crucial issues in the field of Robotics and, more generally, in the field of Automation. Indeed, the trend for robots and automatic machines is to operate at increasingly high speed, in order to achieve shorter production times. The high operating speed may hinder the accuracy and repeatability of the robot motion, since extreme performances are required from the actuators and the control system. Therefore, particular care should be put in generating a trajectory that could be executed at high speed, but at the same time harmless for the robot, in terms of avoiding excessive accelerations of the actuators and vibrations of the mechanical structure. Such a trajectory is defined as smooth. For such reasons, path planning and trajectory planning algorithms assume an increasing significance in robotics. Path planning algorithms generate a geometric path, from an initial to a final point, passing through pre-defined via-points, either in the joint space or in the operating space of the robot, while trajectory planning algorithms take a given geometric path and endow it with the time information. Trajectory planning algorithms are crucial in Robotics, because defining the times of passage at the via-points influences not only the kinematic properties of the motion, but also the dynamic ones. Namely, the inertial forces (and torques), to which the robot is subjected, depend on the accelerations along the trajectory, while the vibrations of its mechanical structure are basically determined by the values of the jerk (i.e. the derivative of the acceleration). Path planning algorithms are usually divided according to the methodologies used to generate the geometric path, namely: roadmap techniques cell decomposition algorithms artificial potential methods.},
+  DOI = {10.1007/978-3-319-14705-5_1}
 }
 
 @book{choset2005principles,
-  title = {{Principles of robot motion: theory, algorithms, and implementations}},
-  author={Choset, Howie and Lynch, Kevin M and Hutchinson, Seth and Kantor, George A and Burgard, Wolfram},
-  year={2005},
-  publisher={MIT press}
+  author    = {Choset, Howie and Lynch, Kevin M. and Hutchinson, Seth and Kantor, George and Burgard, Wolfram and Kavraki, Lydia E. and Thrun, Sebastian},
+  title     = {{Principles of Robot Motion: Theory, Algorithms, and Implementations}},
+  publisher = {MIT Press},
+  year      = {2005},
+  series    = {Intelligent Robotics and Autonomous Agents series}
 }
 
-@article{UAV-water,
-  author = {Imam, Rayan and Pini, Marco and Marucco, Gianluca and Dominici, Fabrizio and Dovis, Fabio},
-  year = {2019},
-  month = {12},
-  pages = {210},
-  title = {{UAV-Based GNSS-R for Water Detection as a Support to Flood Monitoring Operations: A Feasibility Study}},
-  volume = {10},
-  journal = {Applied Sciences},
-  doi = {10.3390/app10010210}
+@Article{app10010210,
+AUTHOR = {Imam, Rayan and Pini, Marco and Marucco, Gianluca and Dominici, Fabrizio and Dovis, Fabio},
+TITLE = {{UAV-Based GNSS-R for Water Detection as a Support to Flood Monitoring Operations: A Feasibility Study}},
+JOURNAL = {Applied Sciences},
+VOLUME = {10},
+YEAR = {2020},
+NUMBER = {1},
+ARTICLE-NUMBER = {210},
+URL = {https://www.mdpi.com/2076-3417/10/1/210},
+ISSN = {2076-3417},
+ABSTRACT = {Signals from global navigation satellite systems (GNSS) can be utilized as signals of opportunity in remote sensing applications. Geophysical properties of the earth surface can be detected and monitored by processing the back-scattered GNSS signals from the ground. In the literature, several airborne GNSS-based passive radar experiments have been successfully demonstrated. With the advancements in small unmanned aerial vehicles (UAVs) and their applications for environmental monitoring, we want to investigate whether GNSS-based passive radar can provide valuable geospatial information from such platforms. Low-cost GNSS reflectometry sensors, developed using commercial of the shelf components, can be mounted onboard UAVs and flown to sense environmental parameters. This paper presents the results of a preliminary study to investigate the feasibility of utilizing data collected by UAV-based GNSS-R sensors to detect surface water for a potential application in supporting flood monitoring operations. The study was conducted in the area surrounding the Avigliana lakes in Northern Italy. The results show the possibility of detecting small water surfaces with few tens of meters resolution, and estimating the area of the lake surface with 92% accuracy. Furthermore, it is proved through simulations that the use of multi-GNSS increases this accuracy to about 99%.},
+DOI = {10.3390/app10010210}
 }
 
 @inproceedings{takasu2009rtklib,
@@ -589,7 +599,8 @@
   title={{Introduction to algorithms}},
   author={Cormen, Thomas H and Leiserson, Charles E and Rivest, Ronald L and Stein, Clifford},
   year={2022},
-  publisher={MIT press}
+  publisher={MIT press},
+  series    = {Intelligent Robotics and Autonomous Agents series}
 }
 
 @article{DUCHON201459,
@@ -613,18 +624,13 @@
   year={2012}
 }
 
-
-
-@INPROCEEDINGS{Kavraki,
-  author={Kavraki, L. and Latombe, J.-C.},
-  booktitle={Proceedings of the 1994 IEEE International Conference on Robotics and Automation}, 
-  title = {{Randomized preprocessing of configuration for fast path planning}}, 
+@article{Kavraki,
+  title={{Randomized preprocessing of configuration for fast path planning}},
+  author={Lydia E. Kavraki and Jean-Claude Latombe},
+  journal={Proceedings of the 1994 IEEE International Conference on Robotics and Automation},
   year={1994},
-  volume={},
-  number={},
   pages={2138-2145 vol.3},
-  keywords={Path planning;Orbital robotics;Robot programming;Computer science;Computer networks;Costs;Motion planning;Workstations;Joining processes;Smoothing methods},
-  doi={10.1109/ROBOT.1994.350966}
+  url={https://api.semanticscholar.org/CorpusID:31703567}
 }
 
 @ARTICLE{kavraki_etal,
@@ -654,32 +660,28 @@
 @article{karaman2010incrementalsamplingbasedalgorithmsoptimal,
   title={{Incremental Sampling-based Algorithms for Optimal Motion Planning}},
   author={Sertac Karaman and Emilio Frazzoli},
-  journal={Robotics: Science and Systems},
+  journal={ArXiv},
   year={2010},
   volume={abs/1005.0416},
   url={https://api.semanticscholar.org/CorpusID:9208217}
 }
 
-@article{karaman2011samplingbasedalgorithmsoptimalmotion,
- title = {{Sampling-based algorithms for optimal motion planning}},
-  author={Karaman, Sertac and Frazzoli, Emilio},
-  journal={The International Journal of Robotics Research},
-  volume={30},
-  number={7},
-  pages={846--894},
-  year={2011},
-  publisher={SAGE Publications}
+@misc{karaman2011samplingbasedalgorithmsoptimalmotion,
+      title = {{Sampling-based Algorithms for Optimal Motion Planning}}, 
+      author={Sertac Karaman and Emilio Frazzoli},
+      year={2011},
+      eprint={1105.1186},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/1105.1186}, 
 }
 
-@article{noreen2016comparison,
-  title = {{A comparison of RRT, RRT* and RRT*-smart path planning algorithms}},
-  author={Noreen, Iram and Khan, Amna and Habib, Zulfiqar},
+@inproceedings{noreen2016comparison,
+  title={{A Comparison of RRT, RRT* and RRT*-Smart Path Planning Algorithms}},
+  author={Iram Noreen and Amna Khan and Zulfiqar Habib},
   journal={International Journal of Computer Science and Network Security (IJCSNS)},
-  volume={16},
-  number={10},
-  pages={20},
   year={2016},
-  publisher={International Journal of Computer Science and Network Security}
+  url={https://api.semanticscholar.org/CorpusID:212564389}
 }
 
 @Article{PRM,
@@ -698,9 +700,10 @@
 @article{RL-path-planning,
   author = {Dinneweth, Joris and Boubezoul, Abderrahmane and Mandiau, René and Espié, Stéphane},
   year = {2022},
-  month = {11},
-  pages = {},
+  month = nov,
+  pages = {27},
   title = {{Multi-agent reinforcement learning for autonomous vehicles: a survey}},
+  number = {1},
   volume = {2},
   journal = {Autonomous Intelligent Systems},
   doi = {10.1007/s43684-022-00045-z}
@@ -720,7 +723,7 @@
 @article{SAC-path-planning,
   author = {Zhao, Xiaoru and Yang, Rennong and Zhong, Liangsheng and Zhiwei, Hou},
   year = {2024},
-  month = {01},
+  month = jan,
   pages = {18},
   title = {{Multi-UAV Path Planning and Following Based on Multi-Agent Reinforcement Learning}},
   volume = {8},
