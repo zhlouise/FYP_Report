@@ -214,7 +214,11 @@ signal. Ultimately, such correlations would be modelled both quantitatively and
 qualitatively such that the ground vegetation conditions could be effectively predicted
 from the GNSS signal properties received onboard the UAV.
 \item To classify signals reflected by vegetation and predict vegetation parameters
-based on raw GNSS data using a machine-learning-based approach.
+based on raw GNSS data using a machine-learning-based approach. The classification 
+task will help to identify tree reflected signals which will be sent to GNSS-R framework, 
+while the regression task will help to predict vegetation parameters and assess 
+the performance of the GNSS-R framework. Ultimately, this will enhance the
+robustness and accuracy of the GNSS-R vegetation monitoring system.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
 This involves creating a modular SLAM system, with the front-end being LiDAR
