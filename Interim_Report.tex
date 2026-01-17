@@ -226,7 +226,7 @@ network architectures. Ultimately, the machine learning part will complement the
 framework to enhance the robustness of vegetation parameter prediction.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
-This involves creating a modular SLAM system, incorporating LiDAR Odometry as the 
+This involves creating a modular SLAM system, incorporating LiDAR odometry as the 
 front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a result, 
 an accurate vegetation map could be generated to complement the GNSS-R vegetation 
 monitoring system.
@@ -636,7 +636,7 @@ to create efficient flight paths as well as avoid obstacles.
 The common way for remote sensing robots to carry out mapping is by using
 sensors such as camera or LiDAR to create an odometry. This allows the robots to
 estimate their position and movement over time by measuring the changes in each
-frame of the sensors. In practise, the common approaches to frame-to-frame
+frame of the sensors. In practice, the common approaches to frame-to-frame
 odometry are visual odometry or LiDAR odometry. Visual odometry estimates motion
 by tracking distinct features in each image frame through gradients and textures
 while LiDAR odometry uses laser range measurements to scan the environment.
@@ -646,7 +646,7 @@ varying lighting conditions that cause instability in camera-based methods.
 
 \subsubsection{LiDAR Odometry} 
 The accuracy of LiDAR odometry largely depends on how well point clouds are
-aligned and it generally categorized into point-based and feature-based
+aligned, and it generally categorized into point-based and feature-based
 approaches. In terms of point-based point cloud registration, iterative closest
 point (ICP) is considered one of the most well-known pointwise LiDAR odometry
 methods. It is a simple, modular algorithm that aligns two consecutive point
@@ -654,9 +654,9 @@ clouds by establishing point-to-point correspondences and estimating the
 transformation that minimizes their distance error \cite{besl1992method}.
 However, a key limitation of ICP is its high computational cost when registering
 dense point clouds. Its accuracy relies strongly on the quality of the initial
-alignment due to the nonconvex nature of the optimization, and the presence of
+alignment due to the non-convex nature of the optimization, and the presence of
 outliers from moving objects can further complicate the process by adding extra
-nonconvexities \cite{maron2016point}. To counter the limitation of ICP, variants
+non-convexities \cite{maron2016point}. To counter the limitation of ICP, variants
 such as Generalized ICP (G-ICP), FASTG-ICP, Voxelized G-ICP (VGICP) have been
 developed to improve its computational efficiency \cite{segal2009generalized,
 huang2022point}. 
@@ -744,14 +744,14 @@ problem, where pose graph optimization is employed to refine the robot’s
 trajectory by minimizing errors across a graph of poses and constraints. Similar
 to EKF SLAM, GraphSLAM uses Bayes’ rule for probabilistic inference and similar
 methods for building motion and measurement models \cite{thrun2006graph}. The key difference
-between GraphSLAM and EKF SLAM is that GraphSLAM requires to accumulates all
+between GraphSLAM and EKF SLAM is that GraphSLAM requires to accumulate all
 data first before process everything together. This makes it more
 computationally heavy as solving the resulting large optimization problem often
 involves costly operations such as matrix inversion. To address this, GraphSLAM
 applies iterative optimization methods like stochastic gradient descent \cite{bosse2004simultaneous},
 which adaptively solve the non-linear optimization problem more efficiently,
 while alternatives such as conjugate gradient methods can further improve
-scalability . \cite{konolige2004large}
+scalability. \cite{konolige2004large}
 
 Moreover, GraphSLAM explicitly incorporates loop closure. Which means that when
 the robot revisits a previously mapped location, it recognizes the place and
@@ -966,7 +966,7 @@ Below is the pseudocode for the \texttt{coord\_to\_index} function:
         \State \Comment{Calculate position relative to the map center}
         \State $pos_{relative} \gets pos - pos_{center}$
         
-        \State \Comment{Scale by resolution and round to nearest integer}
+        \State \Comment{Scale by resolution and round to the nearest integer}
         \State $index \gets \text{round}(pos_{relative} \cdot step_{inv})$
         
         \State \Comment{Apply the center index offset}
@@ -1538,7 +1538,7 @@ class\_weight & balanced \\
 random\_state & 42 \\
 \bottomrule
 \end{tabular}
-\caption{Hyperparameters for LGBMClassifier}
+\caption{Hyperparameters for LGBM Classifier}
 \end{table}
 
 As can be seen from the table above, a multi-class objective function was used
@@ -1630,7 +1630,7 @@ uncertainty of the physical model.
 Even so, the predicted state alone is prone to errors due to various
 factors such as inaccurate prediction function and further source of noise. This
 issue can be solved by taking sensor measurements to improve the predicted state
-accuracy. Hence the observation model is defined as shown:
+accuracy. Hence, the observation model is defined as shown:
 \begin{equation}
     z_k = h(x_k) + v_k
 \end{equation} 
@@ -1694,7 +1694,13 @@ predicted state.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/Kalman Filter.png}
-    \caption{The red distribution in the figure represents the predicted step $P(x_k|x_{k-1}, u_{k-1})$  which results in predictive distribution  $x^f_k$.The blue distribution represents likelihood $P(z_k|x_k)$ derived from the noisy sensor measurement $z_k$. The green distribution illustrates the refined state estimate $x^a_k$, showing the reduction in the uncertainty covariance $P_k$ after fusing both data sources \cite{faragher2012understanding}.}
+    \caption{The red distribution in the figure represents the predicted step
+    $P(x_k|x_{k-1}, u_{k-1})$ which results in predictive distribution $x^f_k$.
+    The blue distribution represents likelihood $P(z_k|x_k)$ derived from the
+    noisy sensor measurement $z_k$. The green distribution illustrates the
+    refined state estimate $x^a_k$, showing the reduction in the uncertainty
+    covariance $P_k$ after fusing both data sources
+    \cite{faragher2012understanding}.}
 \end{figure}
 
 \subsubsection{Graph-Based SLAM}
@@ -1872,7 +1878,7 @@ The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
     \item \texttt{/cloud\_registered\_body}: Point clouds in the body frame.
 \end{itemize}
 
-Afterwards, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
+Afterward, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
 /cloud\_registered\_body from /laserMapping, and GPS and IMU information from
 Pixhawk are passed to the back end pose graph optimization SLAM under
 /laserPGO\_gps namespace. The optimized results are published as:
@@ -2509,12 +2515,13 @@ cloud alignment in PGO further increase the accuracy in SLAM.
     \caption{PGO SLAM after integration of GPS. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
     \label{fig:stg2_pgo}
 \end{figure}
-Once GPS is being integrated to the PGO SLAM, we can see in \autoref{fig:stg2_pgo} that there
-are two different trajectories and the point clouds are very misaligned. First
-of all, both trajectories are not aligned as the position of the LiDAR and the
-GPS on the drone itself are different, hence having two different frames. Second of all, the point clouds are misaligned as GPS
-has a high gain in the SLAM and some issues related to the transformation of the
-GPS to LiDAR odometry. 
+Once GPS is being integrated to the PGO SLAM, we can see in
+\autoref{fig:stg2_pgo} that there are two different trajectories and the point
+clouds are very misaligned. Firstly, both trajectories are not aligned as the
+position of the LiDAR and the GPS on the drone itself are different, hence
+having two different frames. Second of all, the point clouds are misaligned as
+GPS has a high gain in the SLAM and some issues related to the transformation of
+the GPS to LiDAR odometry. 
 
 To solve the misalignments of both trajectories, extrinsic calibration is
 carried out between IMU from Pixhawk that is connected to the GPS and the LiDAR
@@ -2771,7 +2778,7 @@ The ML part of the project is lead by MAHMUD Md Sahat, who has been working on
 developing a classification model using LightGBM to identify true tree reflected
 signals from the collected GNSS-R data. So far, the ML part has been progressing
 as per the timeline in the Gantt chart and future works will be focusing on
-developing neural netwok based model to perform regression tasks to predic
+developing neural network based model to perform regression tasks to predict
 vegetation parameters. Sahat has also been responsible for piloting the drone
 during the experiments.
 
@@ -2806,7 +2813,7 @@ The Gantt chart below summarizes the project timeline for each individual parts 
   group label font=\bfseries\small,
   bar label font=\scriptsize,
   progress label text={},
-  x unit=1.6cm,
+  x unit=2cm,
   y unit title=0.6cm,
   y unit chart=0.4cm,
   time slot format=isodate,
@@ -2824,52 +2831,50 @@ The Gantt chart below summarizes the project timeline for each individual parts 
   group peaks tip position=0,
   group left shift=0,
   group right shift=0,
-]{2025-09-01}{2026-05-30}
+]{2025-09-01}{2026-05-03}
 \gantttitle{2025}{4}
 \gantttitle{2026}{5} \\
 \gantttitlecalendar{month=shortname} \\
 % Overall
-\ganttgroup[group/.style={fill=overallcolor}]{Overall}{2025-09-01}{2026-05-30} \\
+\ganttgroup[group/.style={fill=overallcolor}]{Overall}{2025-09-01}{2026-05-03} \\
 \ganttbar[bar/.style={fill=overallcolor}]{Planning \& Initialization}{2025-09-01}{2025-09-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Literature Review}{2025-09-01}{2025-10-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{UAV Setup}{2025-09-01}{2025-10-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{System Design}{2025-10-01}{2025-11-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Experiment 1}{2025-10-01}{2025-10-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Experiment 2}{2025-11-01}{2025-11-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Experiment 3}{2025-12-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation}{2025-12-01}{2026-01-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Experiment 4}{2026-02-01}{2026-02-28} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Experiment 5}{2026-03-01}{2026-03-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Final Demonstration}{2026-04-01}{2026-04-30} \\
-\ganttbar[bar/.style={fill=overallcolor}]{Final Report \& Presentation}{2026-05-01}{2026-05-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Initial UAV Build \& Testing}{2025-09-01}{2025-09-30} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 1}{2025-10-01}{2025-10-02} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 2}{2025-10-12}{2025-10-13} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 3}{2025-11-09}{2025-11-10} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Interim Report \& Presentation Preparation}{2025-11-15}{2026-01-18} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 4}{2026-01-31}{2026-02-01} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Experiment 5}{2026-02-28}{2026-03-01} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Final Demonstration Experiment}{2026-03-31}{2026-04-01} \\
+\ganttbar[bar/.style={fill=overallcolor}]{Final Report \& Presentation Preparation}{2026-04-10}{2026-05-03} \\
 % Path Planning
-\ganttgroup[group/.style={fill=pathcolor}]{Path Planning}{2025-10-01}{2026-05-30} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Waypoint Nav}{2025-10-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Coverage Planning}{2025-11-01}{2026-01-31} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Dynamic Sim (MATLAB/AirSim)}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Real-world Nav}{2026-03-01}{2026-04-30} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Simul Mapping \& Nav (w/ SLAM)}{2026-04-01}{2026-05-30} \\
+\ganttgroup[group/.style={fill=pathcolor}]{Path Planning}{2025-10-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Waypoint \& Coverage Planning}{2025-10-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Image Processing}{2025-10-15}{2025-12-15} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Integrate with Image Processing}{2026-01-31}{2026-02-15} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Dynamic Simulation (MATLAB/AirSim)}{2026-02-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Real-World Navigation Application}{2026-03-01}{2026-04-30} \\
 % GNSS-R
-\ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-30} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{GNSS Measurement Extraction}{2025-10-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Analysis}{2025-11-01}{2026-01-31} \\
+\ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Data Post-Processing Code Development}{2025-10-01}{2025-10-30} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Antenna Testing}{2025-10-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Sensitivity Analysis}{2025-10-31}{2026-03-01} \\
 \ganttbar[bar/.style={fill=gnsscolor}]{ML Integration}{2026-02-01}{2026-02-28} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Sensitivity}{2026-03-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{Correlation Modeling}{2026-04-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Correlation Modelling}{2026-03-01}{2026-04-10} \\
 % ML
-\ganttgroup[group/.style={fill=mlcolor}]{Machine Learning}{2025-10-01}{2026-04-30} \\
+\ganttgroup[group/.style={fill=mlcolor}]{Machine Learning}{2025-10-01}{2026-04-10} \\
 \ganttbar[bar/.style={fill=mlcolor}]{Feature Analysis}{2025-10-01}{2025-11-31} \\
 \ganttbar[bar/.style={fill=mlcolor}]{Dataset Construction}{2025-10-01}{2025-11-31} \\
 \ganttbar[bar/.style={fill=mlcolor}]{Model Selection \& Training}{2025-11-01}{2025-12-31} \\
 \ganttbar[bar/.style={fill=mlcolor}]{NN Dev for Regression}{2026-01-01}{2026-03-01} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Dataset Expansion}{2026-01-01}{2026-04-01} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Dataset Expansion}{2026-01-01}{2026-04-10} \\
 % LiDAR SLAM
-\ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-30} \\
+\ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-10} \\
 \ganttbar[bar/.style={fill=slamcolor}]{LiDAR-Inertial Odom}{2025-11-01}{2025-12-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{Graph-Based SLAM}{2025-12-01}{2026-01-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{System Architecture \& GPS Integration}{2026-01-01}{2026-01-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{Improvements}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-04-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-04-01}{2026-04-10} \\
 \end{ganttchart}
 \end{sideways}
 \end{center}
