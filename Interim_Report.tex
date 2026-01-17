@@ -696,7 +696,7 @@ odometry by incorporating global optimization techniques, enabling both drift
 correction and the construction of consistent long-term maps. Moreover, SLAM
 frameworks naturally support sensor fusion, allowing data from multiple
 modalities such as GNSS and LiDAR to be combined, which further enhances
-localization robustness and mapping accuracy \cite{xu2022review, chang2019gnss}.
+localization robustness and mapping accuracy \cite{xu2022review, rs11091009}.
 
 In terms of optimization strategies, SLAM methods can generally be divided into
 two categories: filtering-based approaches and pose graph optimization
@@ -767,7 +767,7 @@ only connects to poses where it was observed without connecting to each other.
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
 demonstrated strong performance in urban and structured environments
-\cite{mailka2024efficient, chang2019gnss} single-sensor SLAM systems (e.g.
+\cite{mailka2024efficient, rs11091009} single-sensor SLAM systems (e.g.
 LiDAR-only) remain vulnerable to drift because their measurements are purely
 relative, allowing errors to accumulate over time. While recent work such as
 \cite{mailka2024efficient}has integrated additional sensors to improve SLAM
@@ -2700,13 +2700,14 @@ ultimate objective of this project.
 
 
 \subsection{Machine Learning}
-The next part of this project will focus on developing a neural-network-based model
-to perform regression tasks to predict vegetation parameters such as biomass, VWC,
-tree height, etc. Literature shows that neural networks have been effective in performing
-such regression tasks using features such as Delay Doppler Maps (DDMs), signal power,
-and polarization parameters, etc. \cite{hu2019detecting,pilikos2024biomass}. Simultaneously,
-the dataset for the LightGBM model will be further expanded by collecting more GNSS-R data in controlled
-environments to improve classification performance.
+The next part of this project will focus on developing a neural-network-based
+model to perform regression tasks to predict vegetation parameters such as
+biomass, VWC, tree height, etc. Literature shows that neural networks have been
+effective in performing such regression tasks using features such as Delay
+Doppler Maps (DDMs), signal power, and polarization parameters, etc.
+\cite{hu2019detecting,pilikos2024biomass}. Simultaneously, the dataset for the
+LightGBM model will be further expanded by collecting more GNSS-R data in
+controlled environments to improve classification performance.
 
 \subsection{LiDAR SLAM}
 The next part of this project aims to solve the point cloud alignment issues
@@ -2718,34 +2719,52 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-The Final Year Project spans two semesters, with first semester focusing mainly 
-on literature review, methodology development, finalizing connections between 
-different parts of the project and conducting preliminary experiments for collecting data and testing 
-developed methodologies. The second semester will focus on integrating developed systems for
-each individual parts, developing final models, conducting final experiments to collect more data and 
-validate methodologies and writing final project report. 
+The Final Year Project spans two semesters, with first semester focusing mainly
+on literature review, methodology development, finalizing connections between
+different parts of the project and conducting preliminary experiments for
+collecting data and testing developed methodologies. The second semester will
+focus on integrating developed systems for each individual parts, developing
+final models, conducting final experiments to collect more data and validate
+methodologies and writing final project report. 
 
-The path planning part of the project is lead by GAMAGE Sashenka, who has been focusing 
-on developing and testing the path planning algorithms in local mapping environment and
-QGround Control. So far, the path planning part has been progressing as per the timeline in the Gantt chart and 
-future works mainly focus on conducting simulations in dynamic UAV environment and real world UAV testing. 
+The path planning part of the project is lead by GAMAGE Sashenka, who has been
+focusing on developing and testing the path planning algorithms in local mapping
+environment and QGround Control. So far, the path planning part has been
+progressing as per the timeline in the Gantt chart and future works mainly focus
+on conducting simulations in dynamic UAV environment and real world UAV testing. 
 
-The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on conducting GNSS-R experiments
-and analyzing the collected data. So far, the GNSS-R part has been progressing as per the timeline in the Gantt chart and
-future works mainly focus on integrating machine learning classification results into the GNSS-R pipeline
-to classify between reflected and direct signals and exploring the sensitivity of GNSS carrier phase measurements
-for FFZs covering the trees.
+The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on
+conducting GNSS-R experiments and analyzing the collected data. So far, the
+GNSS-R part has been progressing as per the timeline in the Gantt chart and
+future works mainly focus on integrating machine learning classification results
+into the GNSS-R pipeline to classify between reflected and direct signals and
+exploring the sensitivity of GNSS carrier phase measurements for FFZs covering
+the trees.
 
-The ML part of the project is lead by MAHMUD Md Sahat, who has been working on developing a 
-classification model using LightGBM to identify true tree reflected signals from the collected GNSS-R data.
-So far, the ML part has been progressing as per the timeline in the Gantt chart and
-future works will be focusing on developing neural netwok based model to perform regression tasks to predic 
-vegetation parameters. Sahat has also been responsible for piloting the drone during the experiments.
+The ML part of the project is lead by MAHMUD Md Sahat, who has been working on
+developing a classification model using LightGBM to identify true tree reflected
+signals from the collected GNSS-R data. So far, the ML part has been progressing
+as per the timeline in the Gantt chart and future works will be focusing on
+developing neural netwok based model to perform regression tasks to predic
+vegetation parameters. Sahat has also been responsible for piloting the drone
+during the experiments.
 
-The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been developing a modular LiDAR SLAM 
-framework which she has tested in both with and without GPS integration. So farm the LiDAR SLAM part has been
-progressing as per the timeline in the Gantt chart and future works mainly focus on solving the point cloud
-alignment issues after GPS integration and fine-tuning the modular SLAM framework to improve robustness.
+The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been
+developing a modular LiDAR SLAM framework which she has tested in both with and
+without GPS integration. So farm the LiDAR SLAM part has been progressing as per
+the timeline in the Gantt chart and future works mainly focus on solving the
+point cloud alignment issues after GPS integration and fine-tuning the modular
+SLAM framework to improve robustness.
+
+Furthermore, the second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to
+collect more data and validate methodologies and writing final project report.
+While much of the work will remain divided among team members, increased
+collaboration is expected in some key areas. For instance, ZHOU Jiayi and MAHMUD
+Md Sahat will work more closely on GNSS data classification, while GAMAGE
+Sashenka and TAN Qing Lin will collaborate on integrating the SLAM system into
+the path planning framework.
+
 
 The Gantt chart below summarizes the project timeline for each individual parts of the project.
 
