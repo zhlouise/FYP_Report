@@ -204,8 +204,11 @@ navigation, GNSS-R, machine learning, and LiDAR SLAM to achieve an intelligent
 and structured remote sensing system for vegetation monitoring. The main
 objectives of this project are as follows:
 \begin{enumerate}
-\item To introduce an autonomous path planning framework onboard the UAV platform
-for optimized GNSS-R remote sensing.
+\item To introduce an autonomous path planning framework onboard the UAV
+platform for optimized GNSS-R remote sensing. The framework aims to identify
+potential vegetation areas and generate accurate trajectories for navigation
+during data collection. Consequently, the proposed system enables the UAV to
+autonomously acquire high-quality GNSS raw data for environmental monitoring.
 \item To analyze and model the correlations between signal propagation parameters
 retrieved through GNSS-R and ground vegetation conditions. This involves the collection
 and post-processing of raw GNSS data, extraction of GNSS signal measurements, and the
@@ -364,7 +367,7 @@ algorithms.
 
 \begin{table}[ht]
     \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
-    \caption{Comparison of Path Planning Algorithms} 
+    \caption{Comparison of Waypoint-based Path Planning Algorithms} 
     \label{tab:algorithms_comparison}
     \centering
     \footnotesize
@@ -381,7 +384,7 @@ algorithms.
         \item Reduces the search space compared to Dijkstra.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item High computational cost in large/continuous spaces.
+        \item High computational cost in large spaces.
         \item Needs accurate heuristics.
         \item Poor performance in dynamic environments.
     \end{itemize} \\ 
@@ -794,7 +797,7 @@ with one upward-facing RHCP antenna (zenith) located at the top and one
 downward-facing RHCP antenna (nadir) located at the bottom. As a result, both
 the direct RHCP signal and the ground-reflected LHCP signal could be received
 simultaneously for further analysis. Additionally, an onboard Nvidia Jetson Orin
-Nano serves as The primary computer responsible for the control and logging of
+Nano serves as the primary computer responsible for the control and logging of
 LiDAR and GNSS receiver data. The system is further supported by an additional
 GPS module directly connected to the flight controller, enabling both manual and
 autonomous flight operations.
@@ -902,7 +905,7 @@ algorithm.
         \item Perform well in unknown or partially known maps.
     \end{itemize} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
-        \item Does not guarantee the shortest/optimal path.
+        \item Does not guarantee the optimal path.
         \item Paths are often jagged and require smoothing.
     \end{itemize} \\ 
     \bottomrule
@@ -1154,7 +1157,7 @@ The algorithm decomposes the map (polygonal area) into cells based on three key 
     the sweep line intersection. In the IN event, the intersecting vertices move
     in the same direction as the sweep line.
 
-    The if else logic in an IN event can be interpreted as follows:
+    The conditional logic in an IN event can be interpreted as follows:
 \[
     \text{If } \texttt{target\_upper} > \texttt{source\_upper} \text{ and } \texttt{target\_lower} < \texttt{source\_lower}
 \]
@@ -1173,7 +1176,7 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     and two cells merge into one cell. The algorithm is defined by an if-else
     loop that compares the points of the obstacle's vertices and the
     intersection of the sweep line. In the OUT event, intersecting vertices move
-    in the opposite direction of the sweep direction. The if else logic in an
+    in the opposite direction of the sweep direction. The conditional logic in an
     OUT event can be interpreted as follows:
 \[
     \text{If } \texttt{target\_upper} < \texttt{source\_upper} \text{ and } \texttt{target\_lower} > \texttt{source\_lower}
@@ -1186,17 +1189,15 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
-
-After decomposing the map into cells, the algorithm will visit each cell using a
-depth-first search (DFS). It will choose a random cell to visit first and then
-visit the neighboring cells of that cell. It will also backpropagate through the
-visited cells to ensure all cells are visited. When visiting each cell, the
-algorithm generates a sweeping path based on the given parameters, such as the
-sweeping direction and sweep distance. The sweeping path can be performed
-horizontally or vertically. The angle of the sweep line can also be adjusted to
-fit the edges of the obstacles. The sweep distance is defined as the distance
-between each sweep line. Figure \ref{fig:sweep_parameters} illustrates sweeping
-in each cell. 
+Following the decomposition phase, the algorithm visits the resulting adjacent
+cells, typically employing a Depth-First Search (DFS) strategy. To guarantee
+complete coverage, a backtracking mechanism is utilized to ensure all connected
+cells are visited. When visiting each cell, the algorithm generates a sweeping
+path based on the given parameters, such as the sweeping direction and sweep
+distance. The sweeping direction can be performed horizontally or vertically,
+while the sweep angle can be aligned with the polygon's edges. The sweep
+distance defines the separation between parallel tracks. Figure
+\ref{fig:sweep_parameters} illustrates boustrophedon path in each cell. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
