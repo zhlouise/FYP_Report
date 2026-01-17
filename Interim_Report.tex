@@ -1541,7 +1541,7 @@ random\_state & 42 \\
 \caption{Hyperparameters for LGBMClassifier}
 \end{table}
 
-As can be seen from the table above, a multiclass objective function was used
+As can be seen from the table above, a multi-class objective function was used
 to classify the signals into three classes. This is because the dataset contains
 three classes of signals: direct signals, signals reflected from ground and
 signals reflected from trees. The training objective here is the multinomial 
@@ -1979,7 +1979,7 @@ summarized in Table \ref{Experiment-Summary}.
     \label{Experiment Environment}
 \end{figure}
 
-\begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.11\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
+\begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.1\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
     \caption{Summary of Experiments Conducted}
     \label{Experiment-Summary}\\
     \hline
@@ -1995,44 +1995,44 @@ summarized in Table \ref{Experiment-Summary}.
     \hline
     \endfoot
     (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via
-    manual flight control where it hovers above bare ground with grass for 3
+    manual flight control where it flies above bare ground with grass for 1.5
     minutes. &
     \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
     \hline
     (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first
-    successful implementation of path planning where the UAV hovers above bare
-    ground with grass in two different points for 2 minutes respectively. &
+    successful implementation of path planning where the UAV takes off, then
+    hovers over a specified waypoint above bare ground with grass for 8 minutes. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
     \hline
     (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path
-    planning where the UAV is hovering over bare ground with grass for 2 minutes
-    and above trees for 3 minutes &
+    planning where the UAV takes off, then hovers over a specified waypoint
+    above trees for 7 minutes. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
     \hline
     (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via
-    manual flight control. However, we face the problem of controlling the UAV
-    mid-way due to large wind velocity. Hence resulting in irregular flight
-    path. &
+    manual flight control. However, due to large wind velocity, the UAV drifts
+    significantly and manual control became difficult, hence resulting in
+    irregular flight path. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
     (e) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
-    planning where the UAV is hovering over bare ground with grass in two
-    different points for 3 minutes respectively. &
+    planning, where the UAV takes off and hovers over bare ground with grass for
+    a total of 11 minutes. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
     (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
-    planning where the UAV is hovering over bare ground with grass for 3 minutes
-    and above trees for 5 minutes. &
+    planning, where the UAV takes off and hovers over trees for a total of 11
+    minutes. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
     (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually
     assigning multiple waypoints in QGroundControl to perform path planning. The
-    UAV hovers above each waypoint for one minute, with a total of six waypoints
+    UAV hovers above each waypoint for half a minute, with a total of 12 waypoints
     assigned in the mission. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
     \hline
     (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first
-    implementation of using surveying function from QGroundControl to carry out
+    implementation of using the surveying function from QGroundControl to carry out
     coverage path planning. The UAV is going back and forth between bare ground
     with grass and tree clusters. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
