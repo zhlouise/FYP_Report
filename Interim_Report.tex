@@ -2805,9 +2805,11 @@ Sashenka and TAN Qing Lin will collaborate on integrating the SLAM system into
 the path planning framework.
 
 
-\subsection{Gantt Chart}
-The Gantt chart below summarizes the project timeline for each individual part of the project.
+The Gantt chart below summarizes the project timeline for each individual parts of the project.
 
+\clearpage % Start a fresh page to ensure there is enough room
+\begin{minipage}{\textwidth}
+\subsection{Gantt Chart}
 \begin{center}
 \begin{sideways}
 \begin{ganttchart}[
@@ -2885,6 +2887,7 @@ The Gantt chart below summarizes the project timeline for each individual part o
 \end{sideways}
 \end{center}
 \vspace*{\fill}
+\end{minipage}
 
 \subsection{Project Difficulties and Solutions}
 Even though this project established a robust UAV framework and produced
@@ -2916,7 +2919,7 @@ this issue, machine learning approaches will be employed to extract only the ref
 signals from the nadir antenna observations.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/GNSS_R_FFZ_Confusing_Result.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/GNSS_R_FFZ_Confusing_Result.png}
     \caption{Example of inconclusive results.}
     \label{GNSS-R Confusing Result}
 \end{figure}
