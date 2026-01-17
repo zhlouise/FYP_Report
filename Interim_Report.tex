@@ -33,11 +33,11 @@
 \usepackage{rotating}
 \usepackage[dvipsnames]{xcolor}
 
-\definecolor{overallcolor}{RGB}{114,158,206}
-\definecolor{pathcolor}{RGB}{230,145,56}
-\definecolor{gnsscolor}{RGB}{102,194,164}
-\definecolor{mlcolor}{RGB}{194,165,207}
-\definecolor{slamcolor}{RGB}{158,202,225}
+\definecolor{overallcolor}{RGB}{210, 180, 222}
+\definecolor{pathcolor}{RGB}{102,194,164}
+\definecolor{gnsscolor}{RGB}{114,158,206}
+\definecolor{mlcolor}{RGB}{241, 196, 15}
+\definecolor{slamcolor}{RGB}{230,145,56}
 \usepackage{longtable}
 
 
@@ -2872,9 +2872,9 @@ The Gantt chart below summarizes the project timeline for each individual parts 
 \ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-10} \\
 \ganttbar[bar/.style={fill=slamcolor}]{LiDAR-Inertial Odom}{2025-11-01}{2025-12-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{Graph-Based SLAM}{2025-12-01}{2026-01-31} \\
-\ganttbar[bar/.style={fill=slamcolor}]{System Architecture \& GPS Integration}{2026-01-01}{2026-01-31} \\
-\ganttbar[bar/.style={fill=slamcolor}]{Improvements}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-04-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=slamcolor}]{GPS Integration to Graph-Based SLAM}{2026-01-01}{2026-03-15} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Improvements}{2026-03-15}{2026-03-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-03-30}{2026-04-30} \\
 \end{ganttchart}
 \end{sideways}
 \end{center}
