@@ -204,8 +204,11 @@ navigation, GNSS-R, machine learning, and LiDAR SLAM to achieve an intelligent
 and structured remote sensing system for vegetation monitoring. The main
 objectives of this project are as follows:
 \begin{enumerate}
-\item To introduce an autonomous path planning framework onboard the UAV platform
-for optimized GNSS-R remote sensing.
+\item To introduce an autonomous path planning framework onboard the UAV
+platform for optimized GNSS-R remote sensing. The framework aims to identify
+potential vegetation areas and generate accurate trajectories for navigation
+during data collection. Consequently, the proposed system enables the UAV to
+autonomously acquire high-quality GNSS raw data for environmental monitoring.
 \item To analyze and model the correlations between signal propagation parameters
 retrieved through GNSS-R and ground vegetation conditions. This involves the collection
 and post-processing of raw GNSS data, extraction of GNSS signal measurements, and the
@@ -364,7 +367,7 @@ algorithms.
 
 \begin{table}[ht]
     \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
-    \caption{Comparison of Path Planning Algorithms} 
+    \caption{Comparison of Waypoint-based Path Planning Algorithms} 
     \label{tab:algorithms_comparison}
     \centering
     \footnotesize
@@ -381,7 +384,7 @@ algorithms.
         \item Reduces the search space compared to Dijkstra.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item High computational cost in large/continuous spaces.
+        \item High computational cost in large spaces.
         \item Needs accurate heuristics.
         \item Poor performance in dynamic environments.
     \end{itemize} \\ 
@@ -696,7 +699,7 @@ odometry by incorporating global optimization techniques, enabling both drift
 correction and the construction of consistent long-term maps. Moreover, SLAM
 frameworks naturally support sensor fusion, allowing data from multiple
 modalities such as GNSS and LiDAR to be combined, which further enhances
-localization robustness and mapping accuracy \cite{xu2022review, chang2019gnss}.
+localization robustness and mapping accuracy \cite{xu2022review, rs11091009}.
 
 In terms of optimization strategies, SLAM methods can generally be divided into
 two categories: filtering-based approaches and pose graph optimization
@@ -767,7 +770,7 @@ only connects to poses where it was observed without connecting to each other.
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
 demonstrated strong performance in urban and structured environments
-\cite{mailka2024efficient, chang2019gnss} single-sensor SLAM systems (e.g.
+\cite{mailka2024efficient, rs11091009} single-sensor SLAM systems (e.g.
 LiDAR-only) remain vulnerable to drift because their measurements are purely
 relative, allowing errors to accumulate over time. While recent work such as
 \cite{mailka2024efficient}has integrated additional sensors to improve SLAM
@@ -794,7 +797,7 @@ with one upward-facing RHCP antenna (zenith) located at the top and one
 downward-facing RHCP antenna (nadir) located at the bottom. As a result, both
 the direct RHCP signal and the ground-reflected LHCP signal could be received
 simultaneously for further analysis. Additionally, an onboard Nvidia Jetson Orin
-Nano serves as The primary computer responsible for the control and logging of
+Nano serves as the primary computer responsible for the control and logging of
 LiDAR and GNSS receiver data. The system is further supported by an additional
 GPS module directly connected to the flight controller, enabling both manual and
 autonomous flight operations.
@@ -902,7 +905,7 @@ algorithm.
         \item Perform well in unknown or partially known maps.
     \end{itemize} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
-        \item Does not guarantee the shortest/optimal path.
+        \item Does not guarantee the optimal path.
         \item Paths are often jagged and require smoothing.
     \end{itemize} \\ 
     \bottomrule
@@ -1154,7 +1157,7 @@ The algorithm decomposes the map (polygonal area) into cells based on three key 
     the sweep line intersection. In the IN event, the intersecting vertices move
     in the same direction as the sweep line.
 
-    The if else logic in an IN event can be interpreted as follows:
+    The conditional logic in an IN event can be interpreted as follows:
 \[
     \text{If } \texttt{target\_upper} > \texttt{source\_upper} \text{ and } \texttt{target\_lower} < \texttt{source\_lower}
 \]
@@ -1173,7 +1176,7 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     and two cells merge into one cell. The algorithm is defined by an if-else
     loop that compares the points of the obstacle's vertices and the
     intersection of the sweep line. In the OUT event, intersecting vertices move
-    in the opposite direction of the sweep direction. The if else logic in an
+    in the opposite direction of the sweep direction. The conditional logic in an
     OUT event can be interpreted as follows:
 \[
     \text{If } \texttt{target\_upper} < \texttt{source\_upper} \text{ and } \texttt{target\_lower} > \texttt{source\_lower}
@@ -1186,17 +1189,15 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
-
-After decomposing the map into cells, the algorithm will visit each cell using a
-depth-first search (DFS). It will choose a random cell to visit first and then
-visit the neighboring cells of that cell. It will also backpropagate through the
-visited cells to ensure all cells are visited. When visiting each cell, the
-algorithm generates a sweeping path based on the given parameters, such as the
-sweeping direction and sweep distance. The sweeping path can be performed
-horizontally or vertically. The angle of the sweep line can also be adjusted to
-fit the edges of the obstacles. The sweep distance is defined as the distance
-between each sweep line. Figure \ref{fig:sweep_parameters} illustrates sweeping
-in each cell. 
+Following the decomposition phase, the algorithm visits the resulting adjacent
+cells, typically employing a Depth-First Search (DFS) strategy. To guarantee
+complete coverage, a backtracking mechanism is utilized to ensure all connected
+cells are visited. When visiting each cell, the algorithm generates a sweeping
+path based on the given parameters, such as the sweeping direction and sweep
+distance. The sweeping direction can be performed horizontally or vertically,
+while the sweep angle can be aligned with the polygon's edges. The sweep
+distance defines the separation between parallel tracks. Figure
+\ref{fig:sweep_parameters} illustrates boustrophedon path in each cell. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
@@ -2734,13 +2735,14 @@ ultimate objective of this project.
 
 
 \subsection{Machine Learning}
-The next part of this project will focus on developing a neural-network-based model
-to perform regression tasks to predict vegetation parameters such as biomass, VWC,
-tree height, etc. Literature shows that neural networks have been effective in performing
-such regression tasks using features such as Delay Doppler Maps (DDMs), signal power,
-and polarization parameters, etc. \cite{hu2019detecting,pilikos2024biomass}. Simultaneously,
-the dataset for the LightGBM model will be further expanded by collecting more GNSS-R data in controlled
-environments to improve classification performance.
+The next part of this project will focus on developing a neural-network-based
+model to perform regression tasks to predict vegetation parameters such as
+biomass, VWC, tree height, etc. Literature shows that neural networks have been
+effective in performing such regression tasks using features such as Delay
+Doppler Maps (DDMs), signal power, and polarization parameters, etc.
+\cite{hu2019detecting,pilikos2024biomass}. Simultaneously, the dataset for the
+LightGBM model will be further expanded by collecting more GNSS-R data in
+controlled environments to improve classification performance.
 
 \subsection{LiDAR SLAM}
 The next part of this project aims to solve the point cloud alignment issues
@@ -2752,34 +2754,52 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-The Final Year Project spans two semesters, with first semester focusing mainly 
-on literature review, methodology development, finalizing connections between 
-different parts of the project and conducting preliminary experiments for collecting data and testing 
-developed methodologies. The second semester will focus on integrating developed systems for
-each individual parts, developing final models, conducting final experiments to collect more data and 
-validate methodologies and writing final project report. 
+The Final Year Project spans two semesters, with first semester focusing mainly
+on literature review, methodology development, finalizing connections between
+different parts of the project and conducting preliminary experiments for
+collecting data and testing developed methodologies. The second semester will
+focus on integrating developed systems for each individual parts, developing
+final models, conducting final experiments to collect more data and validate
+methodologies and writing final project report. 
 
-The path planning part of the project is lead by GAMAGE Sashenka, who has been focusing 
-on developing and testing the path planning algorithms in local mapping environment and
-QGroundControl. So far, the path planning part has been progressing as per the timeline in the Gantt chart and 
-future works mainly focus on conducting simulations in dynamic UAV environment and real world UAV testing. 
+The path planning part of the project is lead by GAMAGE Sashenka, who has been
+focusing on developing and testing the path planning algorithms in local mapping
+environment and QGround Control. So far, the path planning part has been
+progressing as per the timeline in the Gantt chart and future works mainly focus
+on conducting simulations in dynamic UAV environment and real world UAV testing. 
 
-The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on conducting GNSS-R experiments
-and analyzing the collected data. So far, the GNSS-R part has been progressing as per the timeline in the Gantt chart and
-future works mainly focus on integrating machine learning classification results into the GNSS-R pipeline
-to classify between reflected and direct signals and exploring the sensitivity of GNSS carrier phase measurements
-for FFZs covering the trees.
+The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on
+conducting GNSS-R experiments and analyzing the collected data. So far, the
+GNSS-R part has been progressing as per the timeline in the Gantt chart and
+future works mainly focus on integrating machine learning classification results
+into the GNSS-R pipeline to classify between reflected and direct signals and
+exploring the sensitivity of GNSS carrier phase measurements for FFZs covering
+the trees.
 
-The ML part of the project is lead by MAHMUD Md Sahat, who has been working on developing a 
-classification model using LightGBM to identify true tree reflected signals from the collected GNSS-R data.
-So far, the ML part has been progressing as per the timeline in the Gantt chart and
-future works will be focusing on developing neural netwok based model to perform regression tasks to predic 
-vegetation parameters. Sahat has also been responsible for piloting the drone during the experiments.
+The ML part of the project is lead by MAHMUD Md Sahat, who has been working on
+developing a classification model using LightGBM to identify true tree reflected
+signals from the collected GNSS-R data. So far, the ML part has been progressing
+as per the timeline in the Gantt chart and future works will be focusing on
+developing neural netwok based model to perform regression tasks to predic
+vegetation parameters. Sahat has also been responsible for piloting the drone
+during the experiments.
 
-The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been developing a modular LiDAR SLAM 
-framework which she has tested in both with and without GPS integration. So farm the LiDAR SLAM part has been
-progressing as per the timeline in the Gantt chart and future works mainly focus on solving the point cloud
-alignment issues after GPS integration and fine-tuning the modular SLAM framework to improve robustness.
+The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been
+developing a modular LiDAR SLAM framework which she has tested in both with and
+without GPS integration. So far, the LiDAR SLAM part has been progressing as per
+the timeline in the Gantt chart. The future works will mainly focus on solving the
+point cloud alignment issues after GPS integration and fine-tuning the modular
+SLAM framework to improve robustness.
+
+Furthermore, the second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to
+collect more data and validate methodologies and writing final project report.
+While much of the work will remain divided among team members, increased
+collaboration is expected in some key areas. For instance, ZHOU Jiayi and MAHMUD
+Md Sahat will work more closely on GNSS data classification, while GAMAGE
+Sashenka and TAN Qing Lin will collaborate on integrating the SLAM system into
+the path planning framework.
+
 
 The Gantt chart below summarizes the project timeline for each individual parts of the project.
 
