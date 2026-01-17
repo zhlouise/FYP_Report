@@ -808,30 +808,36 @@ autonomous flight operations.
 
 
 \subsection{System Architecture}
-Our system architecture comprises four key components: path planning, GNSS-R,
-machine learning, and LiDAR SLAM. First, we will conduct path planning using
-waypoint-based navigation and coverage path planning to navigate the UAV in
-desired vegetation environments. Then, we will send the planned trajectory to
-the ground control station for execution of the mission. Finally, during mission
-execution, we will collect raw GNSS data and LiDAR data for SLAM. 
+With regard to the project objectives, four key components comprise the system
+architecture: path planning, GNSS-R, machine learning, and LiDAR SLAM, as illustrated
+in Figure \ref{System Architecture}. Here, the path planning processes are indicated
+in green, GNSS-R processes in blue, machine learning processes in yellow, and
+LiDAR SLAM processes in orange.
 
-In the GNSS pipeline, we will conduct GNSS measurement extraction and Fresnel
-Zone analysis to obtain the GNSS measurement level model. Simultaneously, we
-will send the raw data to the machine learning pipeline to perform data
-preprocessing and signal classification for open sky, UAV hovering over bare
-ground, and UAV hovering over trees. Once the classification is complete, we
-will proceed with vegetation feature regression. Ultimately, the system
-integrates the GNSS-R modeling with vegetation feature regression, enabling the
-precise retrieval of the desired vegetation parameters. 
-
-In the LIDAR SLAM pipeline, we will first synchronize the LiDAR data with the
-timestamps from the flight controller (Pixhawk). Once synchronized, we obtain
-the LiDAR data and corresponding GPS data. We then send these to our front-end
-LiDAR Odometry and subsequently to the back-end pose graph optimization. This
-data is used to cross-validate the vegetation parameters retrieved by the GNSS-R
-and Machine Learning pipelines. 
-A comprehensive flow of our system architecture
-is shown in Figure \ref{System Architecture}.
+First, both waypoint-based and coverage-based path planning algorithms will be
+adopted to navigate the UAV platform for specific monitoring missions, while
+satellite imagery will be used to identify vegetated areas to achieve autonomous
+mission designs. With the planned trajectory designed, the ground control
+station will facilitate the mission execution to enable the collection of both
+GNSS raw data and LiDAR point cloud data. Then, both the zenith and nadir GNSS
+receiver's data will be post-processed into GNSS measurements, where they will
+be analyzed with respect to the Fresnel zones of ground reflections, while any
+correlations between the GNSS measurements and ground vegetation parameters will
+be systematically modelled. On the other hand, machine learning methods will
+also be adopted to process the collected GNSS data. A trained LightGBM model
+will be used to classify the GNSS signals according to the signal reception
+scenarios: direct open sky reception, signals reflected from vegetation, and
+signals reflected from bare ground. The classification results will then be
+integrated with the GNSS-R framework for more accurate signal analysis, while
+regression models will also be trained for vegetation parameter prediction.
+Meanwhile, the LiDAR data will be synchronized with the timestamps obtained from
+the flight controller's GPS module. Then, both LiDAR and GPS data will be
+collected and used for the generation of a 3D vegetation map. This will be
+achieved through a modular LiDAR framework, utilizing LiDAR odometry as the
+front-end and pose graph optimization as the back-end. Together, the 3D
+vegetation map will be used to cross-validate any vegetation parameters
+retrieved by GNSS-R models and regression results, enabling a robust system for
+vegetation parameter retrieval.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
