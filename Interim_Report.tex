@@ -114,10 +114,15 @@ technology.
 Vegetation is a critical asset to the environment and the human civilization.
 Not only does vegetation produce essential societal resources, but its
 distribution and productivity also greatly impacts the terrestrial ecosystems
-and the global climate \cite{Richardson2013}. Therefore, the continuous and
-accurate monitoring of vegetation is essential for sustainable resource
-management \cite{Wallace2006}, ecosystem preservation \cite{Zeng2022}, and
-climate change modeling \cite{Richardson2013}. 
+and the global climate \cite{Richardson2013}. On the global scale, vegetation
+acts as major carbon sinks for mitigating the effect of global warming while
+also playing critical roles in regional water fluxes, ecosystem biodiversity,
+and carbon cycles \cite{Richardson2013}. To the human society, vegetation is not
+only a consumable resource but also a key regulator of urban temperature and air
+quality \cite{OBrien2022}. Therefore, the continuous and accurate monitoring of
+vegetation is essential for sustainable resource management \cite{Wallace2006},
+ecosystem preservation \cite{Zeng2022}, and climate change modeling
+\cite{Richardson2013}. 
 
 Traditionally, methods of vegetation monitoring involved manual field
 assessments of site characteristics, extracting vegetation condition indicators
@@ -338,8 +343,9 @@ the corresponding action to be taken. With the correct reward design (e.g.,
 penalties for collisions, rewards for reaching the goal), SAC can learn to
 generate collision-free trajectories.
 
-Table \ref{tab:algorithms_comparison} summarizes the advantages and disadvantages of the search-based,
-sampling-based, and AI-based path planning algorithms. 
+Table \ref{tab:algorithms_comparison} summarizes the advantages and
+disadvantages of the search-based, sampling-based, and AI-based path planning
+algorithms. 
 
 \begin{table}[ht]
     \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
@@ -353,7 +359,6 @@ sampling-based, and AI-based path planning algorithms.
     \midrule
 
     % --- SEARCH BASED ---
- 
     \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
     % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
@@ -750,7 +755,6 @@ sensors.
 
 
 \subsection{System Architecture}
-
 Our system architecture comprises four key components: path planning, GNSS-R,
 machine learning, and LiDAR SLAM. First, we will conduct path planning using
 waypoint-based navigation and coverage path planning to navigate the UAV in
@@ -874,7 +878,6 @@ algorithm is shown in Figure \ref{fig:astar}.
 \end{figure}
 
 \paragraph{A* Algorithm Grid Definition} ~\\
-
 This system utilizes a grid map defined in 3D space, featuring 26-connectivity,
 which allows for movement in all straight and diagonal directions. However, to
 simplify the initial validation, the algorithm is currently evaluated using a 2D
@@ -939,32 +942,14 @@ node) is implemented using the diagonal heuristic function. The function has fiv
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
     \item Determines the direction with the minimum change in distance.
     \item The heuristic cost starts at zero and will increment by $\sqrt{3} \cdot \min(dx, dy, dz)$ to account for diagonal movement in 3D space.
-    \item The function checks which dimensions still have remaining distance to cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$ equals zero), it calculates the remaining cost using 2D diagonal movement and straight-line movement.
-    \item If the three dimensions still have remaining distance, it calculates the cost using a combination of 2D diagonal movement and straight-line movement for the remaining distances.
+    \item The function checks which dimensions still have remaining distance to
+    cover. If one dimension has been fully covered (i.e., $dx$, $dy$, or $dz$
+    equals zero), it calculates the remaining cost using 2D diagonal movement
+    and straight-line movement.
+    \item If the three dimensions still have remaining distance, it calculates
+    the cost using a combination of 2D diagonal movement and straight-line
+    movement for the remaining distances.
 \end{enumerate}
-
-Below is an example of calculating heuristic cost in 3-dimensional space:
-
-\noindent Go from $(0,0,0)$ to $(5,3,2)$. \\
-Initial differences: $dx=5, dy=3, dz=2$.
-
-\begin{itemize}
-    \item \textbf{Step 1: 3D diagonal movement} \\
-    Calculate the shared 3D distance:
-    \[ diag_{3d} = \min(5, 3, 2) = 2 \]
-    Cost for 2 steps diagonally in 3D:
-    \[ \text{Cost} = \sqrt{3} \times 2 \approx 3.464 \]
-    \textit{Remaining:} $dx=3, dy=1, dz=0$.
-
-    \item \textbf{Step 2: Handle remaining} (since $dz=0$) \\
-    Calculate 2D diagonal in X-Y ($\min(3,1) = 1$ step):
-    \[ \text{Cost} = \sqrt{2} \times 1 \approx 1.414 \]
-    Calculate Straight line ($|3-1| = 2$ steps):
-    \[ \text{Cost} = 2.0 \]
-\end{itemize}
-
-\noindent \textbf{Total estimated cost:}
-\[ 3.464 + 1.414 + 2.0 = 6.878 \]
 
 Below is the pseudocode for the diagonal heuristic function:
 \begin{singlespace}
@@ -1024,7 +1009,7 @@ according to the following steps:
     \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighboring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
-    \item If a node is already in the open set but a better path is found,
+    \item If a node is already in the open set, but a better path is found,
     update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
     \item Repeat steps 2-5 until the goal node is reached or no path is found.
@@ -1496,6 +1481,47 @@ random\_state & 42 \\
 \caption{Hyperparameters for LGBMClassifier}
 \end{table}
 
+As can be seen from the table above, a multiclass objective function was used
+to classify the signals into three classes. This is because the dataset contains
+three classes of signals: direct signals, signals reflected from ground and
+signals reflected from trees. The training objective here is the multinomial 
+cross entropy loss function. Let $K$ be the number of classes and $N$ be the number of samples.
+For each of the samples $i$,  the model output of raw scores $\mathbf{f}_i =
+\{f_{i,1}, \dots, f_{i,K}\}$, which are converted into probabilities using the softmax function:
+\begin{equation}
+    p_{i,k} = \frac{e^{f_{i,k}}}{\sum_{j=1}^{K} e^{f_{i,j}}}
+\end{equation}
+
+where $p_{i,k}$ is the predicted probability of sample $i$ belonging to class $k$. 
+The overall loss function minimized during training is given by:
+\begin{equation}
+    \mathcal{L}=
+-\frac{1}{N}
+\sum_{i=1}^{N}
+\sum_{k=1}^{K}
+y_{i,k} \log(p_{i,k}),
+\end{equation}
+where $y_{i,k}$ is a binary indicator that equals 1 if the true class of
+sample $i$ is $k$, and 0 if not. LightGBM optimizes this loss using
+gradient boosting with second order Taylor approximation, which leverages both
+the first (gradient) and second order derivatives (hessian) of the loss with respect to the
+model outputs \cite{ke2017lightgbm}. The corresponding gradients and hessians are computed as follows:
+\begin{equation}
+g_{i,k}
+=
+\frac{\partial \mathcal{L}}{\partial f_{i,k}}
+=
+p_{i,k} - y_{i,k},
+\end{equation}
+\begin{equation}
+h_{i,k}
+=
+\frac{\partial^2 \mathcal{L}}{\partial f_{i,k}^2}
+=
+p_{i,k}(1 - p_{i,k}).
+\end{equation}
+These are used to fit decision trees in a leaf wise manner, where at each iteration,
+the model adds a new tree that predicts the negative gradients of the loss function \cite{ke2017lightgbm}.
 The model converged well and the loss curves for training and validation sets are shown in the figure below.
 \begin{figure}[H]
     \centering
@@ -2027,7 +2053,7 @@ as test runs were conducted using both a locally developed A* algorithm and
 a waypoint navigation in QGroundControl. 
 
 \paragraph{Locally Developed A* Algorithm Results} ~\\
-A* algorithm results evaluation The results are obtained in various types of
+The A* algorithm evaluation results were obtained in various types of
 vegetation environments, including dense forests, crop fields, and grasslands.
 The images are obtained from the QGround Control satellite imagery and sent to
 our image processing pipeline to identify the potential flying areas. 
@@ -2565,27 +2591,17 @@ be operated in the next stage of our project.
 For the path planning framework, so far, most results have been conducted in a
 local mapping environment without involving a UAV. Although the deployed
 algorithms have demonstrated accurate results, it is crucial to obtain dynamic
-results in UAV simulation and the real world. Therefore, the following
-limitations arise in the path planning workflow:
-\begin{itemize}
-    \item Simulation in dynamic UAV path planning.
-    \item Autonomous Navigation in the real-world UAV.
-    \item Simultaneous mapping and autonomous navigation
-\end{itemize}
-\paragraph{1. Simulation in dynamic UAV path planning} ~\\
-Simulating the flight trajectories of UAVs is crucial for understanding and
-evaluating the dynamics and kinematics of the UAV during autonomous navigation.
-With these simulations, we can verify our locally developed algorithms
-and incorporate different frameworks (i.e., ROS) to implement software that is
-compatible with hardware. 
+results in UAV simulation and the real world. By simulating flight trajectories,
+we can verify our locally developed algorithms prior to real-world application. 
 
-To address this limitation, we will use uavpackage \cite{MathWorks_UAV_Delivery}, developed by MATLAB, for
-small quadrotors, and Microsoft AirSim \cite{shah2017airsimhighfidelityvisualphysical} to conduct advanced simulations. These
-simulation software packages are built specifically for unmanned aerial
-vehicles; therefore, they provide the necessary aerodynamics and real-world
-physics packages to minimize the gap between real-world and simulation
-environments. 
-\paragraph{2. Autonomous Navigation in the real-world UAV} ~\\
+To address this limitation, we will use uavpackage
+\cite{MathWorks_UAV_Delivery}, developed by MATLAB, for small quadrotors, and
+Microsoft AirSim \cite{shah2017airsimhighfidelityvisualphysical} to conduct
+advanced simulations. These simulation software packages are built specifically
+for unmanned aerial vehicles; therefore, they provide the necessary aerodynamics
+and real-world physics packages to minimize the gap between real-world and
+simulation environments. 
+
 Currently, we do not deploy our algorithms in the real-world UAV; instead, we
 use the control and path planning system in QGround Control to communicate with
 the UAV. As a result, it is necessary to conduct real-world testing after we
@@ -2603,7 +2619,7 @@ issues. Figure \ref{fig:indoor_experiment} shows an example of a designed indoor
     \caption{Indoor autonomous navigation experiment design}
     \label{fig:indoor_experiment}
 \end{figure}
-\paragraph{3. Simultaneous mapping and autonomous navigation} ~\\
+
 Simultaneous mapping and navigation enable the drone to construct its own map
 for unknown environments while in the air. This is crucial for navigating
 unknown environments and flying at different altitudes. Moreover, it provides a
@@ -2616,13 +2632,6 @@ support the mapping and localization of the UAV. Currently, the ROS2 Nav2
 package incorporates LiDAR odometry data into autonomous navigation. Although
 most of the results from this system are reported for ground robots, we plan to
 adapt a similar approach in our system in the future. 
-
-In summary, we have identified three key limitations in the path planning
-framework and have analyzed potential solutions for each limitation. The current
-limitations, such as verifying simulation results and conducting real-world UAV
-testing, are crucial and will be addressed during the next stage of the project.
-Combining LiDAR SLAM data for the mapping system can be achieved later,
-depending on the given time limitation, by collaborating with the SLAM pipeline. 
 
 
 \subsection{GNSS-R}
@@ -2653,39 +2662,36 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-The Final Year Project spans two semesters, with first semester focusing mainly
-on literature review, methodology development, finalizing connections between
-different parts of the project and conducting preliminary experiments for
-collecting data and testing developed methodologies. To achieve the tasks, each
-members are mostly working individually with the task allocation shown below: 
-\begin{itemize}
-    \item Path planning: GAMAGE Sashenka (Sashenka)
-    \item GNSS-R Analysis : ZHOU Jiayi (Louise)
-    \item Machiene Learning: MAHMUD Md Sahat (Sahat)
-    \item LiDAR SLAM: Tan Qing Lin (Giselle)
-\end{itemize}
+The Final Year Project spans two semesters, with first semester focusing mainly 
+on literature review, methodology development, finalizing connections between 
+different parts of the project and conducting preliminary experiments for collecting data and testing 
+developed methodologies. The second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to collect more data and 
+validate methodologies and writing final project report. 
 
-Although each member focuses mainly on their individual area, some
-responsibilities are allocated to ensure efficient progress across all aspects
-of the project. With that, Sashenka handles hardware integration for flight
-control and executes autonomous flight missions using QGroundControl. Louise is
-responsible for leading the project, coordinating data collection experiments,
-and managing task distribution. Sahat undertakes the licensing process required
-to operate the UAV and conducts manual flight experiments. Giselle is
-responsible for purchasing logistics and the design and manufacture of
-3D-printed components for the UAV.
+The path planning part of the project is lead by GAMAGE Sashenka, who has been focusing 
+on developing and testing the path planning algorithms in local mapping environment and
+QGround Control. So far, the path planning part has been progressing as per the timeline in the Gantt chart and 
+future works mainly focus on conducting simulations in dynamic UAV environment and real world UAV testing. 
 
-Furthermore, the second semester will focus on integrating developed systems for
-each individual parts, developing final models, conducting final experiments to
-collect more data and validate methodologies and writing final project report.
-While much of the work will remain divided among team members, increased
-collaboration is expected in some key areas. For instance, Louise and Sahat will
-work more closely on GNSS data classification, while Sashenka and Giselle will
-collaborate on integrating the SLAM system into the path planning framework.
+The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on conducting GNSS-R experiments
+and analyzing the collected data. So far, the GNSS-R part has been progressing as per the timeline in the Gantt chart and
+future works mainly focus on integrating machine learning classification results into the GNSS-R pipeline
+to classify between reflected and direct signals and exploring the sensitivity of GNSS carrier phase measurements
+for FFZs covering the trees.
 
+The ML part of the project is lead by MAHMUD Md Sahat, who has been working on developing a 
+classification model using LightGBM to identify true tree reflected signals from the collected GNSS-R data.
+So far, the ML part has been progressing as per the timeline in the Gantt chart and
+future works will be focusing on developing neural netwok based model to perform regression tasks to predic 
+vegetation parameters. Sahat has also been responsible for piloting the drone during the experiments.
 
+The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been developing a modular LiDAR SLAM 
+framework which she has tested in both with and without GPS integration. So farm the LiDAR SLAM part has been
+progressing as per the timeline in the Gantt chart and future works mainly focus on solving the point cloud
+alignment issues after GPS integration and fine-tuning the modular SLAM framework to improve robustness.
 
-
+The Gantt chart below summarizes the project timeline for each individual parts of the project.
 
 \subsection{Gantt Chart}
 \begin{center}
@@ -2699,7 +2705,7 @@ collaborate on integrating the SLAM system into the path planning framework.
   group label font=\bfseries\small,
   bar label font=\scriptsize,
   progress label text={},
-  x unit=1.8cm,
+  x unit=1.6cm,
   y unit title=0.6cm,
   y unit chart=0.4cm,
   time slot format=isodate,
@@ -2778,7 +2784,7 @@ address them.
 
 \subsubsection{Path Planning}
 In terms of project management, the issues that arose during the path-planning
-process were mainly related to hardware and communication. During on-site
+process were mainly related to hardware communication. During on-site
 experiments, the UAV's telemetry disconnected from the ground station, even
 though it was within the specified communication range. Since the mission
 planner in QGround Control does not rely on real-time communication, the
