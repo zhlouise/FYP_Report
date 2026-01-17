@@ -334,7 +334,7 @@ zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
 proposed. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\linewidth]{Included_Images/rrt_vs_rrtstar.png}
+    \includegraphics[width=0.38\linewidth]{Included_Images/rrt_vs_rrtstar.png}
     \caption{RRT vs RRT* Path Planning Algorithms}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
@@ -458,8 +458,7 @@ planning.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/cell_decomposition.png}
-    \caption{Exact Cell Decomposition Process}
-    \cite{choset2005principles}
+    \caption{Exact Cell Decomposition Process \cite{choset2005principles}}
     \label{fig:cell_decomposition}
 \end{figure}
 The boustrophedon cellular decomposition is a common algorithm that breaks down
@@ -731,7 +730,7 @@ cross-sensor correlations \cite{oh2010symmetrical}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/EKF SLAM.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/EKF SLAM.png}
     \caption{The figure depicts a spring network analogy to visualize how EKF
 SLAM works. The landmarks are connected by springs describing correlations
 between landmarks. As the robot passes a landmark more than once, these
@@ -764,7 +763,7 @@ only connects to poses where it was observed without connecting to each other.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/pgo.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/pgo.png}
     \caption{Visualization of GraphSLAM with loop closure}
 \end{figure}
 
@@ -804,7 +803,7 @@ autonomous flight operations.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/UAV_Setup.png}
+    \includegraphics[width=\textwidth]{Included_Images/UAV_Setup.png}
     \caption{UAV Platform and Onboard Setup}
     \label{UAV Platform Diagram}
 \end{figure}
@@ -934,7 +933,7 @@ algorithm is shown in Figure \ref{fig:astar}.
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/A-starmap.jpg}
+    \includegraphics[width=0.7\linewidth]{Included_Images/A-starmap.jpg}
     \caption{Map Highlighting Shortest Path from Node A to Node K}
     \label{fig:astar}
 \end{figure}
@@ -1080,7 +1079,7 @@ according to the following steps:
 Below is the flow chart illustrating the core logic of A* algorithm:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{Included_Images/Astar_flowchart.png}
+    \includegraphics[width=0.45\linewidth]{Included_Images/Astar_flowchart.png}
     \caption{A* Algorithm Core Logic Flowchart}
     \label{fig:astar_flowchart}
 \end{figure}
@@ -1104,7 +1103,7 @@ image processing pipeline. The pipeline can be described in the following steps:
 Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/densecanopy_map.png}
+    \includegraphics[width=\linewidth]{Included_Images/densecanopy_map.png}
     \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
     \label{fig:dense_canopy_map}
 \end{figure}
@@ -1142,9 +1141,9 @@ using the framework developed by the Autonomous Systems Lab at ETH Zurich
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{Included_Images/boustrophedon_path.png}
-    \caption{Boustrophedon Cell Decomposition Path Planning Example}
-    \cite{Choset-1997-16422}
+    \includegraphics[width=0.4\linewidth]{Included_Images/boustrophedon_path.png}
+    \caption{Boustrophedon Cell Decomposition Path Planning Example
+    \cite{Choset-1997-16422}}
     \label{fig:boustrophedon}
 \end{figure}
 
@@ -1165,9 +1164,8 @@ Figure \ref{fig:in_event} illustrates an example of an IN event:
     \begin{figure}[H]
         \centering
         \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
-        \caption{Boustrophedon Cell Decomposition IN Event Example}
+        \caption{Boustrophedon Cell Decomposition IN Event Example \cite{Choset-1997-16422}}
         \label{fig:in_event}
-          \cite{Choset-1997-16422}
     \end{figure}
 
     \item \textbf{Middle Event}: When the sweep line passes through the obstacle
@@ -1185,7 +1183,7 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
     \begin{figure}[H]   
         \centering
         \includegraphics[width=0.6\linewidth]{Included_Images/out_event.png}
-        \caption{Boustrophedon Cell Decomposition OUT Event Example}    \cite{Choset-1997-16422}
+        \caption{Boustrophedon Cell Decomposition OUT Event Example \cite{Choset-1997-16422}}
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
@@ -1200,9 +1198,8 @@ distance defines the separation between parallel tracks. Figure
 \ref{fig:sweep_parameters} illustrates boustrophedon path in each cell. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{Included_Images/sweep_parameters.png}
-    \caption{Boustrophedon Cell Decomposition Sweeping}
-     \cite{Choset-1997-16422}
+    \includegraphics[width=0.5\linewidth]{Included_Images/sweep_parameters.png}
+    \caption{Boustrophedon Cell Decomposition Sweeping \cite{Choset-1997-16422}}
     \label{fig:sweep_parameters}
 \end{figure}
 
@@ -1380,81 +1377,86 @@ measurements were analyzed to identify potential features that could help
 distinguish between reflected and direct signals. Four major features were
 found to have different distributions between the two scenarios, which are UAV hovering 
 over trees and UAV hovering over bare ground. These features are outlined below:
-\begin{itemize}
-    \item\textbf{Carrier to Noise Ratio (C/N0)}: From the figures below, It can 
-    be observed that the $C/N_0$ values for signals reflected from trees are
-    generally lower than those for signals getting reflected from the bare ground. 
-    This indicated that vegetation attenuated the GNSS signal quality. The figures also 
-    illustrate a wider spread of $C/N_0$ values for signals reflected from trees compared
-    to those from bare ground, in which case the signal distribution is more 
-    concentrated. 
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width= 1\textwidth]{Included_Images/CNR.png}
-        \caption{Distribution of $C/N_0$ for signals reflected from trees and bare ground.}
-    \end{figure}
+
+\paragraph{Carrier to Noise Ratio (C/N0)} ~\\
+From the figures below, It can be observed that the $C/N_0$ values for signals
+reflected from trees are generally lower than those for signals getting
+reflected from the bare ground. This indicated that vegetation attenuated the
+GNSS signal quality. The figures also illustrate a wider spread of $C/N_0$
+values for signals reflected from trees compared to those from bare ground, in
+which case the signal distribution is more concentrated. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 1\textwidth]{Included_Images/CNR.png}
+    \caption{Distribution of $C/N_0$ for signals reflected from trees and bare ground.}
+\end{figure}
     
-    \item\textbf{Pseudorange}: Similar to $C/N_0$, the pseudorange values for signals
-    reflected from trees display an increased pseudorange bias and variance, which produces a
-    clear decision boundary for the classifier than that of bare ground signals.
-    Some of the pseudorange values for signals reflected from trees are extremely high, which 
-    might be due to the multipath effect caused by dense vegetation. The figures below
-    illustrate the distribution of pseudorange values for signals reflected from trees
-    and bare ground.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width= 1\textwidth]{Included_Images/Pseudorange.png}
-        \caption{Distribution of pseudorange for signals reflected from trees and bare ground.}
-    \end{figure}
+\paragraph{Pseudorange} ~\\
+Similar to $C/N_0$, the pseudorange values for signals
+reflected from trees display an increased pseudorange bias and variance, which produces a
+clear decision boundary for the classifier than that of bare ground signals.
+Some of the pseudorange values for signals reflected from trees are extremely high, which 
+might be due to the multipath effect caused by dense vegetation. The figures below
+illustrate the distribution of pseudorange values for signals reflected from trees
+and bare ground.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 1\textwidth]{Included_Images/Pseudorange.png}
+    \caption{Distribution of pseudorange for signals reflected from trees and bare ground.}
+\end{figure}
     
-    \item\textbf{Doppler measurement}: Doppler measurement refers to the instantaneous
-    shift in frequency of the received GNSS carrier signal due to the relative 
-    velocity between the satellite and the receiver. As can be seen from the 
-    figures below, the Doppler values for signal reflected from trees are clearly
-    distinguishable from those reflected from bare ground. For the case of bare ground, 
-    the Doppler values for up and down antenna are almost identical. However, for 
-    the case of UAV hovering over vegetation, the Doppler distribution is more
-    spread out, ranging from approximately -5000 dbHz to 4000 dbHz. This indicates
-    that reflections caused by trees introduce additional frequency shifts in the received 
-    signals. The figure below illustrates the distribution of Doppler values for signals
-    reflected from trees and bare ground.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width= 1\textwidth]{Included_Images/doppler.png}
-        \caption{Distribution of Doppler for signals reflected from trees and bare ground.}
-    \end{figure}
+\paragraph{Doppler measurement} ~\\
+Doppler measurement refers to the instantaneous shift in frequency of the
+received GNSS carrier signal due to the relative velocity between the satellite
+and the receiver. As can be seen from the figures below, the Doppler values for
+signal reflected from trees are clearly distinguishable from those reflected
+from bare ground. For the case of bare ground, the Doppler values for up and
+down antenna are almost identical. However, for the case of UAV hovering over
+vegetation, the Doppler distribution is more spread out, ranging from
+approximately -5000 dbHz to 4000 dbHz. This indicates that reflections caused by
+trees introduce additional frequency shifts in the received signals. The figure
+below illustrates the distribution of Doppler values for signals reflected from
+trees and bare ground.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 1\textwidth]{Included_Images/doppler.png}
+    \caption{Distribution of Doppler for signals reflected from trees and bare ground.}
+\end{figure}
     
-    \item\textbf{Carrier Phase}: Carrier phase refers to the precise range observables that are derived 
-     from the accumulated phase cycles of the GNSS carrier wave. From the figure below, 
-     it can be observed that the carrier phase values for signals reflected from trees
-     exhibit 2.5 times broader carrier phase spread compared to those reflected from bare 
-     ground, reflecting multipath induced phase delays versus the concentrated phase coherence of bare 
-     ground reflections. This indicated that vegetation introduces additional phase 
-     shifts in the received signals. The figure below illustrates the distribution of
-     carrier phase values for signals reflected from trees and bare ground.
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width= 1\textwidth]{Included_Images/Carrier Phase.png}
-        \caption{Distribution of carrier phase for signals reflected from trees and bare ground.}
-    \end{figure}
-\end{itemize}
+\paragraph{Carrier Phase} ~\\
+Carrier phase refers to the precise range observables that are derived from the
+accumulated phase cycles of the GNSS carrier wave. From the figure below, it can
+be observed that the carrier phase values for signals reflected from trees
+exhibit 2.5 times broader carrier phase spread compared to those reflected from
+bare ground, reflecting multipath induced phase delays versus the concentrated
+phase coherence of bare ground reflections. This indicated that vegetation
+introduces additional phase shifts in the received signals. The figure below
+illustrates the distribution of carrier phase values for signals reflected from
+trees and bare ground.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width= 1\textwidth]{Included_Images/Carrier Phase.png}
+    \caption{Distribution of carrier phase for signals reflected from trees and bare ground.}
+\end{figure}
+
+
 \subsubsection{Dataset Construction}
 Data was collected from multiple locations with different environmental settings, in order to have 
 a diverse dataset that captures the three classes of signals. The scenarios include:
 (1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.3\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/opensky.png}
         \caption{Open Sky}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.43\textwidth}
+    \begin{subfigure}{0.3\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/bareground.png}
-        \caption{UAV hovering over bare ground}
+        \caption{UAV hovering over ground}
     \end{subfigure}
-    \vfill
-    \begin{subfigure}{0.49\textwidth}
+    \hfill
+    \begin{subfigure}{0.3\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/overtrees.png}
         \caption{UAV hovering over trees}
     \end{subfigure}
@@ -1464,6 +1466,8 @@ The data was then labeled based on the collection scenarios, where data collecte
 from open sky mostly contains direct signals, data collected from UAV hovering over bare ground 
 mostly contains signals reflected from ground, and data collected from UAV hovering over trees
 mostly contains signals reflected from trees.
+
+
 \subsubsection{Model Selection}
 For the classification task, a LightGBM model was selected due to its advantages
 with native support for NaN values. This feature of the model is particularly
@@ -1498,6 +1502,8 @@ optimizes boosting and leads to faster convergence when combined with gradient-b
 LightGBM also provides native support for NaN values through optimal 
 directional assignment during splits. This helps to avoid manual imputation 
 of data that could introduce bias. 
+
+
 \subsubsection{Model Training}
 In order to train the LightGBM model, the dataset was first split into training,
 testing, and validation sets with a ratio of 60:20:20 respectively. A total of 70,125 
@@ -1585,7 +1591,7 @@ the model adds a new tree that predicts the negative gradients of the loss funct
 The model converged well and the loss curves for training and validation sets are shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{Included_Images/LossCurve.png}
+    \includegraphics[width=0.6\linewidth]{Included_Images/LossCurve.png}
     \caption{Loss curves for training and validation sets.}
 \end{figure}
 From the figure above, it is clear that the model did not overfit as the training and validation 
@@ -1927,7 +1933,7 @@ waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
 an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{Included_Images/qgc_mission_list.jpg}
+    \includegraphics[width=0.3\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
@@ -1963,17 +1969,17 @@ summarized in Table \ref{Experiment-Summary}.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.25\textwidth}
         \includegraphics[width=\linewidth]{Included_Images/HomantinMountain.jpg}
         \subcaption{Homantin Mountain}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.25\textwidth}
         \includegraphics[width=\linewidth]{Included_Images/TaiHangTun.jpg}
         \subcaption{Tai Hang Tun}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.25\textwidth}
         \includegraphics[width=\linewidth]{Included_Images/NamSangWai.jpg}
         \subcaption{Nam Sang Wai}
     \end{subfigure}
@@ -2073,14 +2079,14 @@ a waypoint navigation in QGroundControl.
 The A* algorithm evaluation results were obtained in various types of
 vegetation environments, including dense forests, crop fields, and grasslands.
 The images are obtained from the QGroundControl satellite imagery and sent to
-our image processing pipeline to identify the potential flying areas. 
+the image processing pipeline to identify the potential flying areas. 
 
-Figure \ref{fig:forest_path} shows two different start and end points, and how the A* algorithm
-finds the shortest path between them in a dense forest canopy. The image
-processing filter is designed to identify darker shades of green in this image.
-Therefore, the algorithm fits precisely to predict the paths in the dense area. 
-
-The output of the figure \ref{fig:forest_path} waypoints is shown in the below output:
+Figure \ref{fig:forest_path} shows two different start and end points, and how
+the A* algorithm finds the shortest path between them in a dense forest canopy.
+Here, the image processing filter is designed to identify darker shades of
+green. Therefore, the algorithm fits precisely to predict the paths in the dense
+area. The output of the figure \ref{fig:forest_path} waypoints is shown in the
+below output:
 \begin{lstlisting}[frame=single, basicstyle=\ttfamily\small, breaklines=true, caption={Path Planning Execution Output}, label={lst:path_output}]
 Planning UAV path...
 Search stats: {'iterations': 156, 'nodes_explored': 146, 'path_length': 57, 'time': 0.05894970893859863}
@@ -2088,7 +2094,7 @@ Path found! Length: 57 waypoints
 \end{lstlisting}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/forest_path.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/forest_path.png}
     \caption{A* path planning in dense forest canopy}
     \label{fig:forest_path}
 \end{figure}
@@ -2099,13 +2105,13 @@ green color, the dense vegetation is considered occupied. Therefore, the
 algorithm will avoid converging on paths that lead to dense vegetation. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/grassland_path.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/grassland_path.png}
     \caption{A* path planning in grassland area}
     \label{fig:grassland_path}
 \end{figure}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/mixed_path.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/mixed_path.png}
     \caption{A* path planning in mixed land and dense canopy area}
     \label{fig:mixed_path}
 \end{figure}
@@ -2118,7 +2124,7 @@ flight controller using telemetry. The figure shows the settings and the
 successful execution of a mission. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/gqc_mission.png}
+    \includegraphics[width=\textwidth]{Included_Images/gqc_mission.png}
     \caption{Waypoint-based navigation mission planning in QGroundControl}
     \label{fig:qgc_mission}
 \end{figure}
@@ -2134,18 +2140,18 @@ were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
 shows the graphical user interface of the coverage path planner. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/cpp_gui.png}
+    \includegraphics[width=\textwidth]{Included_Images/cpp_gui.png}
     \caption{Coverage path planning GUI}
     \label{fig:cpp_gui}
 \end{figure}
 
 At first, the map was specified as a polygon in the GUI. Once giving the input, 
 the algorithm will determine the coordinates of the polygon, the sweep
-distance, and the altitude.  An example of result interpretation for a polygon
+distance, and the altitude. An example of result interpretation for a polygon
 shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/cpp_result.png}
+    \includegraphics[width=\textwidth]{Included_Images/cpp_result.png}
     \caption{Coverage path planning result interpretation}
     \label{fig:cpp_result}  
 \end{figure}
@@ -2186,7 +2192,7 @@ environment is illustrated in Figure \ref{fig:env_obstacles}, while the
 corresponding execution log is presented in Listing \ref{lst:output_log}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{Included_Images/env_obstacles.png}
+    \includegraphics[width=0.3\textwidth]{Included_Images/env_obstacles.png}
     \caption{Coverage path planning environment with obstacles}
     \label{fig:env_obstacles}   
 
@@ -2423,7 +2429,7 @@ find all the positive samples. The F1-score is calculated as follows from precis
 The F1-score for the LightGBM model on the test dataset is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/F1.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
 From the figure above, it is observed that the LightGBM model achieves an F1 score of approximately
@@ -2436,7 +2442,7 @@ while the off-diagonal values indicate misclassified ones. The confusion matrix 
 LightGBM model is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/Confusion-matrix.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
     \caption{Confusion matrix for LightGBM model on test dataset}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
@@ -2454,7 +2460,7 @@ closer to 1, it indicates that the model can effectively distinguish between cla
 the ROC curve is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/ROC.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/ROC.png}
     \caption{ROC curve for LightGBM model on test dataset}
 \end{figure}
 The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning
@@ -2601,7 +2607,7 @@ and strong reflections over water and bare ground could be observed compared to 
 reflected from vegetation.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
     \caption{GNSS-R Fresnel zone analysis result.}
 \end{figure}
 
@@ -2613,7 +2619,7 @@ signals are classified as tree-reflected since the survey was conducted over
 vegetation. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_ML.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/KeyExperiment_ML.png}
     \caption{LGBM-based signal classification result.}
 \end{figure}
 
@@ -2710,7 +2716,7 @@ of the real-world drone and to address any potential hardware and software
 issues. Figure \ref{fig:indoor_experiment} shows an example of a designed indoor autonomous experiment. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/indoor_experiment.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/indoor_experiment.png}
     \caption{Indoor autonomous navigation experiment design}
     \label{fig:indoor_experiment}
 \end{figure}
