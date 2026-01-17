@@ -709,14 +709,15 @@ only connects to poses where it was observed without connecting to each other.
 \end{figure}
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
-demonstrated strong performance in urban and structured environments [4, 17],
-single-sensor SLAM systems (e.g. LiDAR-only) remain vulnerable to drift because
-their measurements are purely relative, allowing errors to accumulate over time.
-While recent work such as \cite{mailka2024efficient}has integrated additional
-sensors to improve SLAM accuracy, their applicability to UAV-based forest
-monitoring remains limited due to canopy interference, sparse LiDAR features,
-and computational trade-offs. This project investigates how such SLAM methods
-can be adapted and deployed for real-time forestry applications.
+demonstrated strong performance in urban and structured environments
+\cite{mailka2024efficient, chang2019gnss} single-sensor SLAM systems (e.g.
+LiDAR-only) remain vulnerable to drift because their measurements are purely
+relative, allowing errors to accumulate over time. While recent work such as
+\cite{mailka2024efficient}has integrated additional sensors to improve SLAM
+accuracy, their applicability to UAV-based forest monitoring remains limited due
+to canopy interference, sparse LiDAR features, and computational trade-offs.
+This project investigates how such SLAM methods can be adapted and deployed for
+real-time forestry applications.
 
 
 % --- Methodology ---
@@ -2652,13 +2653,39 @@ the effects of canopy interference and sparse LiDAR features.
 
 % --- Project Management ---
 \section{Project Management}
-The Final Year Project spans two semesters, with first semester focusing mainly 
-on literature review, methodology development, finalizing connections between 
-different parts of the project and conducting preliminary experiments for collecting data and testing 
-developed methodologies. The second semester will focus on integrating developed systems for
-each individual parts, developing final models, conducting final experiments to collect more data and 
-validate methodologies and writing final project report. The Gantt Chart below summarizes the project timeline 
-for each part of the project. 
+The Final Year Project spans two semesters, with first semester focusing mainly
+on literature review, methodology development, finalizing connections between
+different parts of the project and conducting preliminary experiments for
+collecting data and testing developed methodologies. To achieve the tasks, each
+members are mostly working individually with the task allocation shown below: 
+\begin{itemize}
+    \item Path planning: GAMAGE Sashenka (Sashenka)
+    \item GNSS-R Analysis : ZHOU Jiayi (Louise)
+    \item Machiene Learning: MAHMUD Md Sahat (Sahat)
+    \item LiDAR SLAM: Tan Qing Lin (Giselle)
+\end{itemize}
+
+Although each member focuses mainly on their individual area, some
+responsibilities are allocated to ensure efficient progress across all aspects
+of the project. With that, Sashenka handles hardware integration for flight
+control and executes autonomous flight missions using QGroundControl. Louise is
+responsible for leading the project, coordinating data collection experiments,
+and managing task distribution. Sahat undertakes the licensing process required
+to operate the UAV and conducts manual flight experiments. Giselle is
+responsible for purchasing logistics and the design and manufacture of
+3D-printed components for the UAV.
+
+Furthermore, the second semester will focus on integrating developed systems for
+each individual parts, developing final models, conducting final experiments to
+collect more data and validate methodologies and writing final project report.
+While much of the work will remain divided among team members, increased
+collaboration is expected in some key areas. For instance, Louise and Sahat will
+work more closely on GNSS data classification, while Sashenka and Giselle will
+collaborate on integrating the SLAM system into the path planning framework.
+
+
+
+
 
 \subsection{Gantt Chart}
 \begin{center}
