@@ -334,7 +334,7 @@ zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
 proposed. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{Included_Images/rrt_vs_rrtstar.png}
+    \includegraphics[width=0.4\linewidth]{Included_Images/rrt_vs_rrtstar.png}
     \caption{RRT vs RRT* Path Planning Algorithms}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
@@ -1788,13 +1788,9 @@ if large drifts occur.
     \includegraphics[width=0.7\textwidth]{Included_Images/SLAM flowchart.png}
     \caption{Flowchart of the modular SLAM system}
 \end{figure}
-
 This project builds upon an open-source implementation
 that integrates Fast-LIO with PGO for GPS-aided SLAM:
-\url{https://github.com/yxw027/FAST_LIO_GPS} 
-
-The pseudocode of the front-end and back-end of the modular SLAM can be shown below:
-
+\url{https://github.com/yxw027/FAST_LIO_GPS}. The pseudocode of the front-end and back-end of the modular SLAM can be shown below:
 {
     \singlespacing
     \begin{algorithm}[H]
@@ -1822,7 +1818,6 @@ The pseudocode of the front-end and back-end of the modular SLAM can be shown be
     \end{algorithmic}
     \end{algorithm}
 }
-
 {
     \singlespacing
     \begin{algorithm}[H]
@@ -1946,6 +1941,7 @@ Nomachine is used to create remote access from Jetson Orin with the
 pre-established ZeroTier connection. This method enables access to multiple
 terminals from Jetson Orin so that all the required sensor drivers can be
 launched to carry out data collection.
+
 
 With the trajectory plan uploaded onto the onboard Pixhawk controller and the
 onboard computer configured to initialize data collection, the mission could be
@@ -2077,18 +2073,19 @@ Figure \ref{fig:forest_path} shows two different start and end points, and how t
 finds the shortest path between them in a dense forest canopy. The image
 processing filter is designed to identify darker shades of green in this image.
 Therefore, the algorithm fits precisely to predict the paths in the dense area. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/forest_path.png}
-    \caption{A* path planning in dense forest canopy}
-    \label{fig:forest_path}
-\end{figure}
+
 The output of the figure \ref{fig:forest_path} waypoints is shown in the below output:
 \begin{lstlisting}[frame=single, basicstyle=\ttfamily\small, breaklines=true, caption={Path Planning Execution Output}, label={lst:path_output}]
 Planning UAV path...
 Search stats: {'iterations': 156, 'nodes_explored': 146, 'path_length': 57, 'time': 0.05894970893859863}
 Path found! Length: 57 waypoints
 \end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Included_Images/forest_path.png}
+    \caption{A* path planning in dense forest canopy}
+    \label{fig:forest_path}
+\end{figure}
 Similarly, figures \ref{fig:grassland_path} and \ref{fig:mixed_path} show how
 the A* algorithm determines the path to a grassland and to a combination of land
 and dense canopy. Since the filter is designed to filter out light shades of
@@ -2131,7 +2128,7 @@ were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
 shows the graphical user interface of the coverage path planner. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/cpp_gui.png}
+    \includegraphics[width=0.5\textwidth]{Included_Images/cpp_gui.png}
     \caption{Coverage path planning GUI}
     \label{fig:cpp_gui}
 \end{figure}
@@ -2183,7 +2180,7 @@ environment is illustrated in Figure \ref{fig:env_obstacles}, while the
 corresponding execution log is presented in Listing \ref{lst:output_log}.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/env_obstacles.png}
+    \includegraphics[width=0.4\textwidth]{Included_Images/env_obstacles.png}
     \caption{Coverage path planning environment with obstacles}
     \label{fig:env_obstacles}   
 
