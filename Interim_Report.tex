@@ -1088,7 +1088,7 @@ Below is the flow chart illustrating the core logic of A* algorithm:
 \paragraph{Evaluating the A* Algorithm Performance} ~\\
 To evaluate the algorithm's performance, a series of test runs conducted
 using vegetation density maps in different categories. The maps were obtained
-using QGround Control \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
+using QGroundControl \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
 image processing pipeline. The pipeline can be described in the following steps:
 \begin{enumerate}
     \item Convert the satellite imagery to grayscale images.
@@ -1904,35 +1904,30 @@ Before the initiation of a flight mission, the ground control station must be
 configured and remote connections with the onboard computer should be established.
 
 \subsubsection{Ground Control Setup}
-To set up the ground control station, we first paired the telemetry in the UAV
-and in the ground controller. For this experiment, QGround Control
-\cite{QGroundControl_PlanView} was used as the ground controlling software and used 433 MHz
-radio telemetry for communication between Pixhawk and QGround Control.
-
-QGround Control (QGC) is a full-featured flight control and mission planning
-software for MAVLink-enabled drones. The experiments were conducted as
-missions, which enables the user to select a set of waypoints in the QGC map and
-upload it to the UAV’s flight controller. 
-
-The plan view in QGC helps to assign particular waypoints, including takeoff and
-landing. Figure \ref{fig:qgc_plan_view} shows a screenshot of the QGC plan view,
-which specifies the different toolbars, including plan tools, the command
-editor, and the mission list.
+To set up the ground control station, the 433 MHz radio telemetries are first
+paired up to establish the connection between the onboard controller and the
+ground control computer. This is facilitated through the QGroundControl (QGC)
+software, which is a full-featured flight control and mission planning platform
+for MAVLink-enabled drones \cite{QGroundControl_PlanView}. For all the
+non-manual flights conducted, QGC is used to set up and execute flight missions,
+where a set of waypoints could be selected in the plan view, including takeoff
+and landing positions (Figure \ref{fig:qgc_plan_view}).
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/qgc_planview.jpg}
-    \caption{QGround Control Plan View}
+    \caption{QGroundControl Plan View}
     \label{fig:qgc_plan_view}
 \end{figure}
-Additionally, users can specify the altitude and speed at each waypoint by
-editing the mission command list. For instance, if the UAV is hovering
-over a tree, a speed of 2 m/s will be assigned, to hold for 300 seconds, and the
-altitude will be roughly around 30 m. Figure \ref{fig:qgc_mission_list} shows an
-example of a mission command list in QGC.
+In addition to the waypoint locations, the altitude and speed at each waypoint
+will be specified through the mission command list to meet the mission
+requirements. For instance, for hovering missions, a speed of 2 m/s will be
+assigned, where the UAV will be instructed to hold its position at the specific
+waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
+an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{Included_Images/qgc_mission_list.jpg}
-    \caption{QGround Control Mission Command List}
+    \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
 
@@ -1954,11 +1949,15 @@ launched to carry out data collection.
 
 With the trajectory plan uploaded onto the onboard Pixhawk controller and the
 onboard computer configured to initialize data collection, the mission could be
-executed. Lastly, the collected data could be downloaded and post-processed for
+executed. Ultimately, the collected data could be downloaded and post-processed for
 further analysis.
 
 \subsection{Summary of Experiments Conducted}
-A total of 10 successful flights were conducted during the reporting period. They were carried out in three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
+A total of 10 successful flights were conducted during the reporting period.
+They were carried out in three locations: Homantin Mountain, Tai Hang Tun Kite
+Flying Area, and Nam Sang Wai. Photos showing the experiment locations are
+arranged in Figure \ref{Experiment Environment} and the experiments are
+summarized in Table \ref{Experiment-Summary}.
 
 \begin{figure}[H]
     \centering
@@ -1980,39 +1979,73 @@ A total of 10 successful flights were conducted during the reporting period. The
     \label{Experiment Environment}
 \end{figure}
 
-
-\begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.12\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
+\begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.11\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
     \caption{Summary of Experiments Conducted}
-    \label{Experiment Summary}\\
+    \label{Experiment-Summary}\\
     \hline
-    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight Trajectory}\\ 
+    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight
+    Trajectory}\\ 
     \hline
     \endfirsthead
     \hline
-    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight Trajectory}\\ 
+    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight
+    Trajectory}\\ 
     \hline
     \endhead
     \hline
     \endfoot
-    (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via manual flight control where it hovers above bare ground with grass for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
+    (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via
+    manual flight control where it hovers above bare ground with grass for 3
+    minutes. &
+    \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
     \hline
-    (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first successful implementation of path planning where the UAV hovers above bare ground with grass in two different points for 2 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
+    (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first
+    successful implementation of path planning where the UAV hovers above bare
+    ground with grass in two different points for 2 minutes respectively. &
+    \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
     \hline
-    (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 2 minutes and above trees for 3 minutes & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
+    (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path
+    planning where the UAV is hovering over bare ground with grass for 2 minutes
+    and above trees for 3 minutes &
+    \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
     \hline
-    (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via manual flight control. However, we face the problem of controlling the UAV mid-way due to large wind velocity. Hence resulting in irregular flight path. & \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
+    (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via
+    manual flight control. However, we face the problem of controlling the UAV
+    mid-way due to large wind velocity. Hence resulting in irregular flight
+    path. &
+    \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
-    (e) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass in two different points for 3 minutes respectively. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
+    (e) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
+    planning where the UAV is hovering over bare ground with grass in two
+    different points for 3 minutes respectively. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
-    (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path planning where the UAV is hovering over bare ground with grass for 3 minutes and above trees for 5 minutes. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
+    (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
+    planning where the UAV is hovering over bare ground with grass for 3 minutes
+    and above trees for 5 minutes. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
-    (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually assigning multiple waypoints in QGroundControl to perform path planning. The UAV hovers above each waypoint for one minute, with a total of six waypoints assigned in the mission. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
+    (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually
+    assigning multiple waypoints in QGroundControl to perform path planning. The
+    UAV hovers above each waypoint for one minute, with a total of six waypoints
+    assigned in the mission. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
     \hline
-    (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first implementation of using surveying function from QGroundControl to carry out coverage path planning. The UAV is going back and forth between bare ground with grass and tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
+    (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first
+    implementation of using surveying function from QGroundControl to carry out
+    coverage path planning. The UAV is going back and forth between bare ground
+    with grass and tree clusters. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
     \hline
-    (i) & 2025 Nov. 09 & Nam Sang Wai & This experiment demonstrates wider-area coverage through autonomous path planning, similar to (h) where it allows the UAV to systematically fly over clusters of trees. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
+    (i) & 2025 Nov. 09 & Nam Sang Wai & This experiment demonstrates wider-area
+    coverage through autonomous path planning, similar to (h) where it allows
+    the UAV to systematically fly over clusters of trees. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
     \hline
-    (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via autonomous coverage path planning, but in the opposite direction compared to experiment (h) and (i) when scanning tree clusters. & \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
+    (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via
+    autonomous coverage path planning, but in the opposite direction compared to
+    experiment (h) and (i) when scanning tree clusters. &
+    \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
 \end{longtable} 
 
@@ -2022,7 +2055,7 @@ A total of 10 successful flights were conducted during the reporting period. The
 This section presents the results obtained from the four different
 implementations of this project. It includes path planning, GNSS-R signal
 analysis, machine learning classification, and LiDAR SLAM. The results are
-analysed to evaluate the effectiveness of each subsystem, and discuss how
+analyzed to evaluate the effectiveness of each subsystem, and discuss how
 autonomous navigation enables reliable data collection, how GNSS-R measurements
 vary across different surfaces, and how machine learning and SLAM enhance signal
 interpretation and spatial consistency.
@@ -2037,7 +2070,7 @@ a waypoint navigation in QGroundControl.
 \paragraph{Locally Developed A* Algorithm Results} ~\\
 The A* algorithm evaluation results were obtained in various types of
 vegetation environments, including dense forests, crop fields, and grasslands.
-The images are obtained from the QGround Control satellite imagery and sent to
+The images are obtained from the QGroundControl satellite imagery and sent to
 our image processing pipeline to identify the potential flying areas. 
 
 Figure \ref{fig:forest_path} shows two different start and end points, and how the A* algorithm
@@ -2074,16 +2107,16 @@ algorithm will avoid converging on paths that lead to dense vegetation.
     \label{fig:mixed_path}
 \end{figure}
 
-\paragraph{QGround Control Waypoint-based Navigation} ~\\
-In QGround Control, we defined the important parameters, such as flying
+\paragraph{QGroundControl Waypoint-based Navigation} ~\\
+In QGroundControl, we defined the important parameters, such as flying
 waypoints, flying speed, and flying altitude, using the Graphical User Interface
-in QGround Control. Then, the coordinates were uploaded and the data to the Pixhawk
+in QGroundControl. Then, the coordinates were uploaded and the data to the Pixhawk
 flight controller using telemetry. The figure shows the settings and the
 successful execution of a mission. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/gqc_mission.png}
-    \caption{Waypoint-based navigation mission planning in QGround Control}
+    \caption{Waypoint-based navigation mission planning in QGroundControl}
     \label{fig:qgc_mission}
 \end{figure}
 
@@ -2188,9 +2221,9 @@ The algorithm then pruned the number of nodes to 42. In summary, the
 boustrophedon decomposition was tested locally on polygonal maps with and
 without obstacles. 
 
-\paragraph{Coverage Path Planning in QGround Control} ~\\
+\paragraph{Coverage Path Planning in QGroundControl} ~\\
 First we defined the important parameters, such as waypoints, speed, trigger
-distance and altitude, using the Graphical User Interface in QGround Control.
+distance and altitude, using the Graphical User Interface in QGroundControl.
 The trigger distance is a parameter that specifies the space between each sweep
 line. For coverage path planning, we also defined the geo-fence and the rally
 point (an alternative landing point). We then uploaded the mission to the
@@ -2200,7 +2233,7 @@ successful execution of the mission.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/gqc_coverage.png}
-    \caption{Coverage path planning mission in QGround Control}
+    \caption{Coverage path planning mission in QGroundControl}
     \label{fig:gqc_coverage}
 \end{figure}
 
@@ -2222,7 +2255,7 @@ After successful execution of the path planning algorithms onboard the UAV, GNSS
 measurements from both the zenith and nadir antenna are recorded and
 post-processed. Specifically, the ratio of the nadir $C/N_0$ and the zenith
 $C/N_0$ is analyzed with respect to the FFZ locations. In the figure below, the
-FFZs from experiment (j) and (i) from Table \ref{Experiment Summary} are plotted
+FFZs from experiment (j) and (i) from Table \ref{Experiment-Summary} are plotted
 onto a satellite image map, with colors representing the ratio of $\frac{C/N_{0,
 reflected signal}}{C/N_{0,direct signal}}$.
 \begin{figure}[H]
@@ -2530,10 +2563,11 @@ distortion.
 
 
 \subsection{Case Study: Experiment (i)}
-In this subsection, the details of Experiment (i) in Table \ref{Experiment Summary}
-are discussed. Here, a survey flight mission was conducted to collect 
-feature-extensive LiDAR and GNSS-R datasets above a canopy area consisted of mixed
-dense vegetation. 
+In this case study, the results of Experiment (i) in Table
+\ref{Experiment-Summary} are discussed to demonstrate the current integrated
+system. Here, a survey flight mission was conducted to collect feature-extensive
+LiDAR and GNSS-R datasets above a canopy area consisted of mixed dense
+vegetation. 
 
 \subsubsection{Path Planning and Execution}
 In this experiment, the trajectory is planned to ascend and maintain at an altitude of
@@ -2651,7 +2685,7 @@ algorithms have demonstrated accurate results, it is crucial to obtain dynamic
 results in UAV simulation and the real world. By simulating flight trajectories,
 we can verify our locally developed algorithms prior to real-world application. 
 
-To address this limitation, we will use uavpackage
+To address this limitation, we will use UAV Package Delivery
 \cite{MathWorks_UAV_Delivery}, developed by MATLAB, for small quadrotors, and
 Microsoft AirSim \cite{shah2017airsimhighfidelityvisualphysical} to conduct
 advanced simulations. These simulation software packages are built specifically
@@ -2660,7 +2694,7 @@ and real-world physics packages to minimize the gap between real-world and
 simulation environments. 
 
 Currently, we do not deploy our algorithms in the real-world UAV; instead, we
-use the control and path planning system in QGround Control to communicate with
+use the control and path planning system in QGroundControl to communicate with
 the UAV. As a result, it is necessary to conduct real-world testing after we
 obtain validated simulation results. Conducting real-world autonomous navigation
 is necessary to automate the Fresnel Zone detection and to collect GNSS-R data. 
@@ -2863,7 +2897,7 @@ In terms of project management, the issues that arose during the path-planning
 process were mainly related to hardware communication. During on-site
 experiments, the UAV's telemetry disconnected from the ground station, even
 though it was within the specified communication range. Since the mission
-planner in QGround Control does not rely on real-time communication, the
+planner in QGroundControl does not rely on real-time communication, the
 experiments were not disrupted. However, to solve this problem, we have analyzed
 strong long-distance communication telemetry types and will be replacing the
 current hardware in the next stage. 
