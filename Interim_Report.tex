@@ -808,30 +808,36 @@ autonomous flight operations.
 
 
 \subsection{System Architecture}
-Our system architecture comprises four key components: path planning, GNSS-R,
-machine learning, and LiDAR SLAM. First, we will conduct path planning using
-waypoint-based navigation and coverage path planning to navigate the UAV in
-desired vegetation environments. Then, we will send the planned trajectory to
-the ground control station for execution of the mission. Finally, during mission
-execution, we will collect raw GNSS data and LiDAR data for SLAM. 
+With regard to the project objectives, four key components comprise the system
+architecture: path planning, GNSS-R, machine learning, and LiDAR SLAM, as illustrated
+in Figure \ref{System Architecture}. Here, the path planning processes are indicated
+in green, GNSS-R processes in blue, machine learning processes in yellow, and
+LiDAR SLAM processes in orange.
 
-In the GNSS pipeline, we will conduct GNSS measurement extraction and Fresnel
-Zone analysis to obtain the GNSS measurement level model. Simultaneously, we
-will send the raw data to the machine learning pipeline to perform data
-preprocessing and signal classification for open sky, UAV hovering over bare
-ground, and UAV hovering over trees. Once the classification is complete, we
-will proceed with vegetation feature regression. Ultimately, the system
-integrates the GNSS-R modeling with vegetation feature regression, enabling the
-precise retrieval of the desired vegetation parameters. 
-
-In the LIDAR SLAM pipeline, we will first synchronize the LiDAR data with the
-timestamps from the flight controller (Pixhawk). Once synchronized, we obtain
-the LiDAR data and corresponding GPS data. We then send these to our front-end
-LiDAR Odometry and subsequently to the back-end pose graph optimization. This
-data is used to cross-validate the vegetation parameters retrieved by the GNSS-R
-and Machine Learning pipelines. 
-A comprehensive flow of our system architecture
-is shown in Figure \ref{System Architecture}.
+First, both waypoint-based and coverage-based path planning algorithms will be
+adopted to navigate the UAV platform for specific monitoring missions, while
+satellite imagery will be used to identify vegetated areas to achieve autonomous
+mission designs. With the planned trajectory designed, the ground control
+station will facilitate the mission execution to enable the collection of both
+GNSS raw data and LiDAR point cloud data. Then, both the zenith and nadir GNSS
+receiver's data will be post-processed into GNSS measurements, where they will
+be analyzed with respect to the Fresnel zones of ground reflections, while any
+correlations between the GNSS measurements and ground vegetation parameters will
+be systematically modelled. On the other hand, machine learning methods will
+also be adopted to process the collected GNSS data. A trained LightGBM model
+will be used to classify the GNSS signals according to the signal reception
+scenarios: direct open sky reception, signals reflected from vegetation, and
+signals reflected from bare ground. The classification results will then be
+integrated with the GNSS-R framework for more accurate signal analysis, while
+regression models will also be trained for vegetation parameter prediction.
+Meanwhile, the LiDAR data will be synchronized with the timestamps obtained from
+the flight controller's GPS module. Then, both LiDAR and GPS data will be
+collected and used for the generation of a 3D vegetation map. This will be
+achieved through a modular LiDAR framework, utilizing LiDAR odometry as the
+front-end and pose graph optimization as the back-end. Together, the 3D
+vegetation map will be used to cross-validate any vegetation parameters
+retrieved by GNSS-R models and regression results, enabling a robust system for
+vegetation parameter retrieval.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
@@ -1886,13 +1892,11 @@ Pixhawk are passed to the back end pose graph optimization SLAM under
 \section{Experiments}
 To apply the methodologies outlined in the previous section, a series of field
 experiments were conducted, aiming to demonstrate the functionality of the UAV
-platform and collect data necessary for further analysis. Over ten unique
-flight missions were executed across three different locations in Hong Kong and
-diverse flight scenarios, including static hovering, dynamic surveying, and manually
-controlled flight. The following subsections present the experimental setups,
-summarize experiments conducted, and detail one key experiment that highlights
-the current system capabilities and challenges for further development.
-
+platform and collect data necessary for further analysis. Over ten unique flight
+missions were executed across three different locations in Hong Kong and diverse
+flight scenarios, including static hovering, dynamic surveying, and manually
+controlled flight. The following subsections present the experimental setups and
+summarize the experiments conducted.
 
 \subsection{Experimental Setup}
 Before the initiation of a flight mission, the ground control station must be
@@ -1905,7 +1909,7 @@ and in the ground controller. For this experiment, QGround Control
 radio telemetry for communication between Pixhawk and QGround Control.
 
 QGround Control (QGC) is a full-featured flight control and mission planning
-software for MAVLink-enabled drones.  The experiments were conducted as
+software for MAVLink-enabled drones. The experiments were conducted as
 missions, which enables the user to select a set of waypoints in the QGC map and
 upload it to the UAV’s flight controller. 
 
@@ -1947,6 +1951,10 @@ pre-established ZeroTier connection. This method enables access to multiple
 terminals from Jetson Orin so that all the required sensor drivers can be
 launched to carry out data collection.
 
+With the trajectory plan uploaded onto the onboard Pixhawk controller and the
+onboard computer configured to initialize data collection, the mission could be
+executed. Lastly, the collected data could be downloaded and post-processed for
+further analysis.
 
 \subsection{Summary of Experiments Conducted}
 A total of 10 successful flights were conducted during the reporting period. They were carried out in three locations: Homantin Mountain, Tai Hang Tun Kite Flying Area, and Nam Sang Wai. Photos showing the experiment locations are arranged in Figure \ref{Experiment Environment} and the experiments are summarized in Table \ref{Experiment Summary}.
@@ -2008,87 +2016,6 @@ A total of 10 successful flights were conducted during the reporting period. The
 \end{longtable} 
 
 
-
-\subsection{Key Experiment: Experiment (i)}
-In this subsection, the details of Experiment (i) in Table \ref{Experiment Summary}
-are discussed. Here, a survey flight mission was conducted to collect 
-feature-extensive LiDAR and GNSS-R datasets above a canopy area consisted of mixed
-dense vegetation. 
-
-\subsubsection{Setup and Procedure}
-The experiment was conducted in Nam Sang Wai on November 09, 2025, where the UAV
-followed a pre-planned path surveying an area consisting of dense, mixed-species 
-tree. First, the UAV sensors were calibrated before the experiment session. After
-the UAV is being connected to the battery, radio telemetry connection and remote 
-connections to the onboard computer were established. With the trajectory plan
-uploaded onto the onboard Pixhawk controller and the onboard computer configured to
-initialize data collection, the mission was executed. Lastly, the collected data could
-be downloaded and post-processed for further analysis.
-
-\subsubsection{Path Planning and Execution}
-In this experiment, the trajectory is planned to ascend and maintain at an altitude of
-35 meters during the survey mission. The paths in the survey area are spaced at 2 meter
-intervals, with the turnaround buffer distance set at 5 meter. The result of the flight
-plan is shown in the figure below. 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.3\textwidth}
-        \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_Pathplanninglist.png}
-        \caption{Mission Planning List in QGroundControl}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.65\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
-        \caption{Planned Path Result}
-    \end{subfigure}
-    \caption{Path planning and execution results.}
-\end{figure}
-
-\subsubsection{GNSS-R Analysis}
-After the successful collection of GNSS data during the flight mission, the raw data
-was post-processed into measurement information. With the FFZs of the reflected GNSS 
-signals calculated, they were plotted onto the satellite image map. Here, the color
-of the FFZs indicates the $C/N_0$ ratio between the bottom and top antennas,
-and strong reflections over water and bare ground could be observed compared to those
-reflected from vegetation.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
-    \caption{GNSS-R Fresnel zone analysis result.}
-\end{figure}
-
-\subsubsection{Machine Learning Signal Classification}
-For this dataset, a trained LGBM classification model was used to classify the
-GNSS signals into the categories of tree-reflected, ground-reflected, and direct
-signals, with the results shown in the figure below. Here, the majority of the
-signals are classified as tree-reflected since the survey was conducted over 
-vegetation. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_ML.png}
-    \caption{LGBM-based signal classification result.}
-\end{figure}
-
-\subsubsection{LiDAR SLAM}
-For this dataset, LiDAR point clouds were processed using two techniques: the
-standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
-figures below, PGO+GPS has misaligned point clouds due to the GPS coordinate
-frame and transformation logic issues. In PGO+GPS, the green trajectory
-indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=0.95\textwidth]{Included_Images/KeyExperiment_FAST-LIO.png}
-        \caption{Fast-LIO}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
-        \caption{PGO+GPS}
-    \end{subfigure}
-    \caption{LiDAR SLAM results using two different techniques.}
-\end{figure}
-
 % --- Results and Discussion ---
 \section{Results and Discussion}
 This section presents the results obtained from the four different
@@ -2098,6 +2025,7 @@ analysed to evaluate the effectiveness of each subsystem, and discuss how
 autonomous navigation enables reliable data collection, how GNSS-R measurements
 vary across different surfaces, and how machine learning and SLAM enhance signal
 interpretation and spatial consistency.
+
 
 \subsection{Path Planning}
 \subsubsection{Waypoint-based Navigation Results}
@@ -2287,6 +2215,7 @@ analysis and the Machine Learning pipeline. The section below discusses the
 GNSS-R results obtained from the experiments conducted using the path planning
 methods above.
 
+
 \subsection{GNSS-R}
 After successful execution of the path planning algorithms onboard the UAV, GNSS
 measurements from both the zenith and nadir antenna are recorded and
@@ -2439,6 +2368,7 @@ distinguishing reflected signals from direct signals in a robust GNSS-R system.
 Machine learning approaches offer an effective solution, which will be detailed
 in the following section. 
 
+
 \subsection{Machine Learning}
 As classification of the reflected and direct signals is required for robust GNSS-R
 implementation, the LightGBM model is trained to classify the signals based on
@@ -2509,6 +2439,7 @@ The figure indicates that the top three most important features for the LightGBM
 \end{itemize}
 These features have the highest importance scores, indicating that they contribute significantly to the model's ability to classify
 the signals accurately. This insight can be useful for future feature engineering and model improvement efforts.
+
 
 \subsection{LiDAR SLAM}
 \subsubsection{Stage 1: Modular SLAM Implementation without GPS}
@@ -2595,6 +2526,78 @@ needs to be solved in later stage.
 the PGO SLAM with and without GPS integration when using the same architecture. In
 this case we can confirm that GPS is the main issue that causes the point cloud
 distortion.
+
+
+\subsection{Case Study: Experiment (i)}
+In this subsection, the details of Experiment (i) in Table \ref{Experiment Summary}
+are discussed. Here, a survey flight mission was conducted to collect 
+feature-extensive LiDAR and GNSS-R datasets above a canopy area consisted of mixed
+dense vegetation. 
+
+\subsubsection{Path Planning and Execution}
+In this experiment, the trajectory is planned to ascend and maintain at an altitude of
+35 meters during the survey mission. The paths in the survey area are spaced at 2 meter
+intervals, with the turnaround buffer distance set at 5 meter. The result of the flight
+plan is shown in the figure below. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.3\textwidth}
+        \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_Pathplanninglist.png}
+        \caption{Mission Planning List in QGroundControl}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
+        \caption{Planned Path Result}
+    \end{subfigure}
+    \caption{Path planning and execution results.}
+\end{figure}
+
+\subsubsection{GNSS-R Analysis}
+After the successful collection of GNSS data during the flight mission, the raw data
+was post-processed into measurement information. With the FFZs of the reflected GNSS 
+signals calculated, they were plotted onto the satellite image map. Here, the color
+of the FFZs indicates the $C/N_0$ ratio between the bottom and top antennas,
+and strong reflections over water and bare ground could be observed compared to those
+reflected from vegetation.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
+    \caption{GNSS-R Fresnel zone analysis result.}
+\end{figure}
+
+\subsubsection{Machine Learning Signal Classification}
+For this dataset, a trained LGBM classification model was used to classify the
+GNSS signals into the categories of tree-reflected, ground-reflected, and direct
+signals, with the results shown in the figure below. Here, the majority of the
+signals are classified as tree-reflected since the survey was conducted over 
+vegetation. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_ML.png}
+    \caption{LGBM-based signal classification result.}
+\end{figure}
+
+\subsubsection{LiDAR SLAM}
+For this dataset, LiDAR point clouds were processed using two techniques: the
+standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
+figures below, PGO+GPS has misaligned point clouds due to the GPS coordinate
+frame and transformation logic issues. In PGO+GPS, the green trajectory
+indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=0.95\textwidth]{Included_Images/KeyExperiment_FAST-LIO.png}
+        \caption{Fast-LIO}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
+        \caption{PGO+GPS}
+    \end{subfigure}
+    \caption{LiDAR SLAM results using two different techniques.}
+\end{figure}
+
 
 % --- Conclusion ---
 \section{Conclusion}
