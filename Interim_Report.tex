@@ -223,9 +223,10 @@ network architectures. Ultimately, the machine learning part will complement the
 framework to enhance the robustness of vegetation parameter prediction.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
-This involves creating a modular SLAM system, with the front-end being LiDAR
-Odometry and the back-end being GPS-coupled pose graph optimization SLAM to
-create an accurate map of the vegetation. 
+This involves creating a modular SLAM system, incorporating LiDAR Odometry as the 
+front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a result, 
+an accurate vegetation map could be generated to complement the GNSS-R vegetation 
+monitoring system.
 \end{enumerate}
 
 This report is structured as follows: Section 3 reviews contemporary research in
@@ -485,11 +486,15 @@ sensitivity of GNSS-R signals can be influenced by incidence angle, soil
 parameters, and tree size, while signals with lower elevation angles and RL
 polarization (transmission of right-hand circular polarization (RHCP) signal,
 reception of left-hand circular polarization (LHCP) signal) appeared to be ideal
-for forest monitoring \cite{Ferrazzoli2011}. In another study, the polarization
-scattering properties of GNSS-R signals in forest canopies were modeled, where
-simulations revealed that tree trunk scattering effects would dominate total
-scattering response, while satellite azimuth angles are significantly correlated
-to the signal polarization \cite{Wu2014}. 
+for forest monitoring \cite{Ferrazzoli2011}. As GNSS signals are natively
+transmitted in RHCP, no modification on the transmitter is necessary for
+practical forest monitoring applications. However, since GNSS signals flip to
+LHCP upon reflection, a receiver capable of receiving LHCP signals is necessary
+to complete the RL polarization configuration \cite{Jia2018}. In another study,
+the polarization scattering properties of GNSS-R signals in forest canopies were
+modeled, where simulations revealed that tree trunk scattering effects would
+dominate total scattering response, while satellite azimuth angles are
+significantly correlated to the signal polarization \cite{Wu2014}. 
 
 Aside from simulated approaches, empirical or semi-empirical studies regarding
 GNSS-R remote sensing of vegetation were also reviewed. In a study by Yueh et
@@ -529,6 +534,39 @@ be achieved \cite{RodriguezAlvarez2011}.
     \cite{RodriguezAlvarez2011}.}
     \label{SMIGOL}
 \end{figure}
+
+The following table summarizes the contemporary research and analysis of GNSS-R 
+in vegetation monitoring applications:
+
+\begin{table}[H]
+    \centering
+    \caption{Contemporary GNSS-R Research in Vegetation Monitoring}
+    \begin{tabularx}{\linewidth}{@{} l X @{}}
+    \toprule
+    \textbf{Study} & \textbf{Key Findings} \\
+    \midrule
+    Ferrazzoli et al. (2011) & GNSS-R signals are sensitive to incidence angle,
+    soil parameters, and tree size, with RL polarization being ideal for forest
+    monitoring. \\
+    \midrule
+    Rodríguez-Álvarez et al. (2011) & A SMIGOL reflectometer, which leverages GNSS signal
+    interference patterns to measure soil and vegetation conditions, is used to achieve
+    3-5 cm RMSE in estimating simple vegetation height. \\
+    \midrule
+    Wu et al. (2014) & Tree trunk scattering dominates the total GNSS-R
+    response, while satellite azimuth angles are significantly correlated to
+    signal polarization. \\
+    \midrule
+    Camps et al. (2016) & Vegetation attenuation of GNSS-R signals reduces soil
+    moisture retrieval sensitivity, but this effect can be effectively
+    compensated using NDVI data, indicating a correlation. \\
+    \midrule
+    Yueh et al. (2022) & CYGNSS satellite data demonstrates a near-linear
+    relationship between vegetation water content and GNSS-R signal attenuation.
+    \\
+    \bottomrule
+    \end{tabularx}
+\end{table}
 
 Yet, despite the effort in prior studies, the use of GNSS-R techniques in
 vegetation remote sensing and monitoring is far from developed. Most
@@ -741,25 +779,26 @@ real-time forestry applications.
 
 % --- Methodology ---
 \section{Methodology}
-In this section, a detailed analysis of the system architecture is presented,
-with a focus on the UAV platform for data collection. The system is divided into
-four key workflows: path planning, GNSS-R data processing, Machine Learning, and
-LiDAR SLAM. A detailed overview of the processes, mechanisms, and derivations of
-each workflow is presented in the methodology section. 
-
+In this section, the UAV platform used for this project and the system architecture
+design is presented. With the system dividing into four key workflows of path planning,
+GNSS-R processing, machine learning, and LiDAR SLAM, a detailed overview of the processes
+and mechanism adopted for each workflow will also be discussed.
 
 \subsection{UAV Platform}
-In this project, one of the primary objectives is to utilize a UAV to collect
-GNSS-R data and conduct subsequent post-processing. This data collection system
+An integrated UAV platform is built and utilized for achieving each of the four
+project objectives. As shown in Figure \ref{UAV Platform Diagram}, the platform
 is built on a Holybro X650 drone frame, integrated with a Pixhawk 6C flight
-controller for navigation and a SiK telemetry radio for ground station
-communication. For GNSS-R measurements, the setup features a dual-antenna
-configuration consisting of zenith and nadir antennas. An onboard Jetson Orin
-Nano serves as the primary computer for processing data from the Livox LiDAR and
-GNSS receivers. The system is further supported by a GPS module and a
-receiver for the remote controller, enabling both manual and autonomous flight
-operations. The figure \ref{UAV Platform Diagram} demonstrates the onboard setup of the UAV and
-sensors. 
+controller and a pair of SiK telemetry radio for ground control communication. A
+pair of Ublox F9P GNSS receivers with L1/L2 band antenna are installed onboard,
+with one upward-facing RHCP antenna (zenith) located at the top and one
+downward-facing RHCP antenna (nadir) located at the bottom. As a result, both
+the direct RHCP signal and the ground-reflected LHCP signal could be received
+simultaneously for further analysis. Additionally, an onboard Nvidia Jetson Orin
+Nano serves as The primary computer responsible for the control and logging of
+LiDAR and GNSS receiver data. The system is further supported by an additional
+GPS module directly connected to the flight controller, enabling both manual and
+autonomous flight operations.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/UAV_Setup.png}
