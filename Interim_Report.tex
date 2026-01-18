@@ -994,8 +994,7 @@ The Euclidean distance can be calculated as follows:
 where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
 
-The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
-node) is implemented using the diagonal heuristic function. The function has five key steps as follows:
+The heuristic cost $h(n)$ is implemented using the diagonal heuristic function. The function has five key steps as follows:
 
 \begin{enumerate}
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
@@ -1108,8 +1107,8 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 
 \paragraph{Normalized Difference Vegetation Index} ~\\
 The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
-measures the difference between red light, which is absorbed by trees, and
-near-infrared light, which is strongly reflected by vegetation
+measures the difference between near-infrared light, which is strongly reflected
+by vegetation, and red light, which is absorbed by vegetation
 \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
