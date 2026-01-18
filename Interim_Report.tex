@@ -514,12 +514,12 @@ Additionally, the interference pattern between direct and reflected GNSS signals
 from the Earth's surface was used in estimating vegetation height and land
 topography \cite{RodriguezAlvarez2011}. Using a Soil Moisture
 Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
-instantaneous power of the direct and reflected signals was coherently added,
-in which the resulting power oscillations present notches that are correlated to
-vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
-\cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in estimating the
-height of vegetation with simple geometrical structures (barley and wheat) could
-be achieved \cite{RodriguezAlvarez2011}.
+power of the direct and reflected signals was coherently added, in which the
+resulting power oscillations due to interference present notches that are
+correlated to vegetation layer thickness and the reflection geometry (Figure
+\ref{SMIGOL}) \cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in
+estimating the height of vegetation with simple geometrical structures (barley
+and wheat) could be achieved \cite{RodriguezAlvarez2011}.
 
 \begin{figure}[H]
     \centering
@@ -1240,14 +1240,14 @@ pseudorange error.
 
 \paragraph{Carrier to Noise Ratio} ~\\
 Carrier to noise ratio refers to the power of received carrier signal relative
-to the noise power per unit bandwidth, usually expressed in decibel-Hertz (dB-Hz)
+to the noise power per unit bandwidth, usually with a unit of decibel-Hertz (dB-Hz)
 \cite{joseph2010gnss}. $C/N_0$ can be readily obtained from the receiver, and it 
-is calculated using the following equation:
+is calculated as the following:
 \begin{equation}
     C/N_0 = C - (N - BW)
 \end{equation}
 where $C$ refers to the carrier power in dBm or dBW; $N$ refers to the noise power
-in dBm or dBW; and $BW$ refers to the bandwidth of the observation in Hz.
+in dBm or dBW; and $BW$ refers to the bandwidth of the signal in Hz.
 
 \paragraph{Pseudorange Error} ~\\
 In GNSS, pseudorange refers to the "apparent" distance between a satellite and a
@@ -1257,13 +1257,13 @@ For the $i$th satellite, its pseudorange $\rho^i$ could be expressed as the foll
 \begin{equation}
     \rho^i = R^i + \Delta t_r + \Delta t_s^i + I^i + T^i + \epsilon^i
 \end{equation}
-where $R^i$ refers to the true geometric distance between the satellite and the receiver;
+where $R^i$ refers to the true distance between the satellite and the receiver;
 $\Delta t_r$ refers to the receiver clock bias; $\Delta t_s^i$ refers to the satellite
 clock bias; $I^i$ refers to the ionospheric delay; $T^i$ refers to the tropospheric 
 delay; and $\epsilon^i$ refers to the pseudorange error, which is mainly
 introduced through signal reflections. Among all the signals received at a given
-instant, a satellite $m$ with the highest elevation angle is selected as the
-master satellite, where the assumption that the master satellite is free of reflections
+instant, a satellite $m$ with the highest elevation angle is regarded as the
+'master satellite', where the assumption that the master satellite is free of reflections
 is applied \cite{hsu2018analysis}:
 \begin{equation}
     \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
@@ -1319,7 +1319,7 @@ To calculate the location of the FFZ center, a local coordinate system is
 defined. The origin is the receiver's ground projection, while the y-axis aligns
 with the ground projection of the receiver-to-satellite vector. The z-axis
 follows the local East-North-Up (ENU) "up" direction, and the x-axis completes
-the right-handed system by remaining orthogonal to both x and y axes. 
+the coordinate system by remaining orthogonal to both x and y axes. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
