@@ -644,13 +644,13 @@ varying lighting conditions that cause instability in camera-based methods.
 
 \subsubsection{LiDAR Odometry} 
 The accuracy of LiDAR odometry largely depends on how well point clouds are
-aligned, and it generally categorized into point-based and feature-based
+aligned, and it generally classified into point-based and feature-based
 approaches. In terms of point-based point cloud registration, iterative closest
 point (ICP) is considered one of the most well-known pointwise LiDAR odometry
 methods. It is a simple, modular algorithm that aligns two consecutive point
 clouds by establishing point-to-point correspondences and estimating the
 transformation that minimizes their distance error \cite{besl1992method}.
-However, a key limitation of ICP is its high computational cost when registering
+However, a key limitation of ICP is its high cost for computation when registering
 dense point clouds. Its accuracy relies strongly on the quality of the initial
 alignment due to the non-convex nature of the optimization, and the presence of
 outliers from moving objects can further complicate the process by adding extra
@@ -660,33 +660,32 @@ developed to improve its computational efficiency \cite{segal2009generalized,
 huang2022point}. 
 
 On the other hand, feature-based LiDAR odometry methods utilize a set of
-representative features from the point clouds to estimate the transformation
-\cite{rusu2009fast, salti2014shot}. Fast Point Feature Histograms (FPFH) is a
-feature-based point cloud matching method that looks at the distinct shape in
-point clouds (surface normals) and uses multidimensional histogram to label the
-geometric properties of each point \cite{rusu2009fast}. As FPFH is able to
-remain consistent even if the sensor is rotated or moved, it creates a robust
-tool for finding matches between different scans and can be used as an initial
-alignment of point clouds before handling it to other types of processors
-\cite{wu2020iterative}. However, creating complex descriptors for every point is
-computationally demanding which is not favorable for real time requirements
-\cite{doi:10.3233/AIC-230217}. 
+representative features of the point clouds to calculate the required
+transformation \cite{rusu2009fast, salti2014shot}. Fast Point Feature Histograms
+(FPFH) is a feature-based point cloud matching method that looks at the distinct
+shape in point clouds (surface normals) and uses multidimensional histogram to
+label the geometric properties of each point \cite{rusu2009fast}. As FPFH is
+able to remain consistent even if the sensor is rotated or moved, it creates a
+robust tool for finding matches between different scans and can be used as an
+initial alignment of point clouds before handling it to other types of
+processors \cite{wu2020iterative}. However, creating complex descriptors for
+every point is computationally expensive which is not favorable for real time
+requirements \cite{doi:10.3233/AIC-230217}. 
 
 In the meantime, LOAM uses more efficient way to carry out feature-based LiDAR
 odometry. It is done by extracting features and edges within the point clouds
-based on the smoothness of a small region near a given feature point
-\cite{huang2022point}. Unlike conventional ICP methods that compare consecutive
-scans directly, LOAM matches these extracted features against a continuously
-updated map of dense edge features, creating a scan-to-map correspondence
-system. Since feature-based methods process only a small fraction of the
-original point cloud data rather than all raw points, they require substantially
-less computational power for matching compared to G-ICP and NDT optimization
-processes. Feature-based methods rely less on the accuracy of the
-initial pose estimate than point-wise methods, but this reduced dependence often
-results in noticeable drift along the altitude axis. \cite{koide2021voxelized,
-shan2018lego}. In this case, LOAM variants such as Lightweight and ground
-optimized (LeGO)-LOAM \cite{shan2018lego} are proposed to counter the drifting
-in altitude direction.
+based on the smoothness of the point cloud clusters \cite{huang2022point}.
+Unlike conventional ICP methods that compare consecutive scans directly, LOAM
+matches these extracted features against a continuously updated map of dense
+edge features, creating a scan-to-map correspondence system. Since feature-based
+methods process only a small fraction of the original point cloud data rather
+than all raw points, they require substantially less computational power for
+matching compared to G-ICP and NDT optimization processes. Feature-based methods
+rely less on the accuracy of the initial pose estimate than point-wise methods,
+but this reduced dependence often results in noticeable drift along the altitude
+axis. \cite{koide2021voxelized, shan2018lego}. In this case, LOAM variants such
+as Lightweight and ground optimized (LeGO)-LOAM \cite{shan2018lego} are proposed
+to counter the drifting in altitude direction.
 
 \subsubsection{Simultaneous Localization and Mapping (SLAM)}
 While odometry provides the foundation for estimating local motion through
@@ -731,9 +730,9 @@ cross-sensor correlations \cite{oh2010symmetrical}.
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/EKF SLAM.png}
     \caption{The figure depicts a spring network analogy to visualize how EKF
-SLAM works. The landmarks are connected by springs describing correlations
-between landmarks. As the robot passes a landmark more than once, these
-correlations increase, which makes the red spring thicker
+SLAM works. The landmarks are connected by red lines to describe the
+correlations between landmarks. As the robot passes a landmark more than once,
+these correlations increase, which makes the red spring thicker
 \cite{stachniss2016simultaneous}.}
 \end{figure}
 
@@ -1609,16 +1608,16 @@ point clouds to create an odometry of the environment.
 Iterative Extended Kalman Filter (IEKF) follows the core of Bayesian Recursion
 to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
-$k$ evolved from the prior state at time $k-1$ is shown as follows:
+$k$ evolved from the prior state at time $k-1$, and it is shown as follows:
 \begin{equation}
     x_k = f(x_{k-1},u_k) + w_{k} 
 \end{equation}
 
-Where $x_k$ is the state vector containing the terms of interest for the system
-at time $k$. The $f(.)$ represents a non-linear state function that is used to
-forecast current state data from prior state data $x_{k-1}$ and $u_k$ is a control vector. We can approximate $w_{k-1}$ as
-$N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
-$Q_k$.
+Where $x_k$ is the state vector of the system's terms of interest at time $k$.
+The $f(.)$ represents a non-linear state function that is used to forecast
+current state data from prior state data $x_{k-1}$ and $u_k$ is a control
+vector. We can approximate $w_{k-1}$ as $N(0,Q_k)$ where it has a zero-mean
+Gaussian distribution with covariance matrix $Q_k$.
 
 To know the uncertainty of the prediction model, error covariance matrix $P^f_k$
 is defined as shown:
@@ -1630,7 +1629,7 @@ is defined as shown:
 
 Where $e$ is the prediction error, $F$ is the Jacobian matrix of the linearized
 state transition function $f(.)$ evaluated at the previous estimate
-$x_{k-1}$, and $Q$ is the process noise covariance matrix representing the
+$x_{k-1}$, and $Q$ is the noise covariance matrix that describes the
 uncertainty of the physical model.
 
 Even so, the predicted state alone is prone to errors due to various
@@ -1659,7 +1658,7 @@ $|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$.
 As actual measurements from sensors will typically differ from this prediction
 due to sensor noise and model inaccuracies, it is incorporated into the state
 estimate by computing the difference between the actual measurements and the
-predicted measurement based on the current iterative estimate $K$:
+predicted measurement at the current iterative estimate $K$:
 \begin{equation}
     z_{k, K} = z_k - h(x^a_{k, K})
 \end{equation}
@@ -1713,9 +1712,10 @@ predicted state.
 As LiDAR odometry is used in the front end to provide high-rate local pose
 estimates without global constrains, iSAM2 pose graph optimization architecture
 is used for the back end to further optimize the point cloud map for higher
-accuracy. This technique is rooted in factor graph optimization algorithm
-where Maximum A Posteriori (MAP) is also used to factorize the joint posterior
-probability of the robot trajectory X as shown  \cite{wen2021factor}:
+accuracy. This technique is rooted in factor graph optimization algorithm where
+Maximum A Posteriori (MAP) is also used to factorize the the collective
+posterior distribution of the trajectory state X as shown
+\cite{wen2021factor}:
 
 \begin{equation} 
     P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1}) 
@@ -1760,7 +1760,7 @@ $e(\mathcal{X})$ as shown:
 To solve the non-linear least squares problem defined by $e(\mathcal{X})$, the
 system iteratively refines the trajectory estimate to find the optimal solution
 $\hat{\mathcal{X}}$. The error function is linearized using a first-order Taylor
-expansion around the current estimate $\mathcal{X}^{(i)}$ where the state is
+expansion at the current estimate $\mathcal{X}^{(i)}$ where the state is
 then uploaded incrementally:
 \begin{equation}
     \mathcal{X}^{(i+1)} = \mathcal{X}^{(i)} + \Delta \mathcal{X}
