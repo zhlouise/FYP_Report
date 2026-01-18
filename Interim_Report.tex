@@ -89,7 +89,7 @@
 \section{Abstract}
 \begin{itshape}
 Vegetation monitoring is essential for environmental sustainability, yet
-conventional sensing methods are often limited by high costs, weather
+conventional sensing methods often face the limitations of high costs, weather
 dependency, and low spatial resolution. This project explores an alternative
 solution through developing an intelligent Unmanned Aerial Vehicle (UAV) system
 that integrates Global Navigation Satellite System Reflectometry (GNSS-R) remote
@@ -132,33 +132,33 @@ methods are highly dependent on the available expertise and resources, as the
 site assessments often required the assessor to possess reasonable levels of
 field knowledge prior to surveying \cite{Parkes2003}. To address the limitations
 of manual assessments and to accommodate for the increasing large-scale
-monitoring demands, remote sensing systems emerged as an essential tool for
-ecological monitoring \cite{Li2023}. 
+monitoring demands, remote sensing systems emerged as essential tools for
+ecological surveying \cite{Li2023}. 
 
-Remote sensing refers to the acquisition of an object's information through
-measurements obtained without coming into direct contact with said object,
-effectively minimizing the need for manual involvement on-site
-\cite{campbell2011introduction}. Specifically, remote sensing relies on
-information derived from different measurements of energy reflected from the
-object of interest \cite{campbell2011introduction}. In the context of surveying
-terrestrial vegetation, the remote sensing methods could be classified into two
-categories based on the distance between the target object and the measurement
-sensor: 1) space-borne and 2) airborne remote sensing. Space-borne remote
-sensing involves the use of instruments onboard orbiting satellites, including
-spectral and hyperspectral cameras \cite{Qian2022}, synthetic aperture radar
-(SAR) \cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the
-wide coverage and availability of space-borne data, large-scale terrestrial
-changes over time could be captured, enabling the continuous monitoring of
-macro-scale ecosystems \cite{Khan2024}. Compared to space-borne systems,
-airborne remote sensing can provide significantly improved spatial resolution
-and assessment flexibility through the integration of sensors onboard manned
-aircraft or UAVs \cite{Khan2024}. Although limited by coverage area, airborne
-remote sensing can provide timely information for addressing regional
-emergencies such as pest \cite{Wulder2006} or wildfire \cite{Arroyo2008}
-outspreads since the systems could be deployed on-demand. In UAV-based remote
-sensing particularly, this temporal flexibility is further complemented with the
-benefit of low operational cost, rendering it an ideal platform for monitoring
-regional and urban vegetation \cite{Tang2015}. 
+Remote sensing can be defined as the acquisition of an object's measurements
+without coming into direct contact with said object, effectively minimizing the
+need for manual involvement on-site \cite{campbell2011introduction}.
+Specifically, remote sensing relies on information derived from different
+measurements of energy reflected from the object of interest
+\cite{campbell2011introduction}. In the context of surveying terrestrial
+vegetation, the remote sensing methods could be classified into two categories
+based on the distance between the target object and the measurement sensor: 1)
+space-borne and 2) airborne remote sensing. Space-borne remote sensing involves
+the use of instruments onboard orbiting satellites, including spectral and
+hyperspectral cameras \cite{Qian2022}, synthetic aperture radar (SAR)
+\cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the wide
+coverage and availability of space-borne data, large-scale terrestrial changes
+over time could be captured, enabling the continuous monitoring of macro-scale
+ecosystems \cite{Khan2024}. Compared to space-borne systems, airborne remote
+sensing can provide significantly improved spatial resolution and assessment
+flexibility through the integration of sensors onboard manned aircraft or UAVs
+\cite{Khan2024}. Although limited by coverage area, airborne remote sensing can
+provide timely information for addressing regional emergencies such as pest
+\cite{Wulder2006} or wildfire \cite{Arroyo2008} outspreads since the systems
+could be deployed on-demand. In UAV-based remote sensing particularly, this
+temporal flexibility is further complemented with the benefit of low operational
+cost, rendering it an ideal platform for monitoring regional and urban
+vegetation \cite{Tang2015}. 
 
 Conventionally, UAV remote sensing platforms carry similar instruments to that
 of other remote sensing systems, including radar, LiDAR, and multi-spectral or
@@ -245,7 +245,7 @@ works, and Section 9 summarizes project management details.
 To achieve the project objectives, this literature review comprehensively examines
 the contemporary research in four domains, each associated with one project
 objective. First, existing path planning methodologies are reviewed to identify
-suitable algorithms for autonomous UAV navigation in vegetated environments.
+suitable algorithms for autonomously navigating an UAV in vegetated environments.
 Subsequently, the existing techniques of GNSS-R are explored, with a focus on
 its prior applications in vegetation parameter retrieval. Then, machine learning
 based techniques are investigated for the purpose of classification of reflected
@@ -293,17 +293,18 @@ path planning approaches.
 \end{enumerate}
 
 \paragraph{Search-based algorithms} ~\\
-Dijkstra's algorithm solves the problem of finding the shortest path from a
-given starting point to a given ending point. The algorithm explores this path
-by simultaneously finding the shortest path from a given starting node to all
-points in the graph \cite{javaid2013understanding}. However, finding the shortest
-path across all the points in the map incurs high computational cost.
-Therefore, it is impractical to use for real-time UAV path planning. 
+Dijkstra's algorithm is one of the major search-based algorithms, that finds the
+shortest path from a given starting point to a given ending point. The algorithm
+explores this path by simultaneously finding the shortest path from a given
+starting node to all points in the graph \cite{javaid2013understanding}.
+However, finding the optimal path across all the points in the map incurs high
+computational cost. Therefore, it is impractical to use for real-time UAV path
+planning. 
 
 To address the limitations of Dijkstra’s algorithm, scientists developed another
 search-based algorithm called the A* (A-star) algorithm. The A* algorithm is one of
 the most common path planning algorithms, which can be applied to grid-based or
-topological configuration spaces \cite{Astar_simulation}. This algorithm
+geometrical configuration spaces \cite{Astar_simulation}. This algorithm
 combines the shortest path calculation in Dijkstra’s algorithm and heuristic
 searching. The heuristic cost is known as the estimated cost from the current
 node to the end node. The A* algorithm is better in terms of reducing the search
@@ -327,15 +328,14 @@ tree and rapidly explore the state space and eventually connect to the goal.
 Additionally, RRT effectively handles systems with differential constraints
 \cite{anytimeRRT}, making it a suitable algorithm for state-of-the-art robotics.
 Although RRT quickly computes the path between the starting and ending points,
-it does not guarantee the shortest path. This was proven by Karaman and
-Frazzoli \cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing
-that the probability of the RRT algorithm converging to an optimal solution is
-zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
-proposed. 
+it does not guarantee the shortest path. This was proven by Karaman and Frazzoli
+\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, stating that there
+is a zero probability of the RRT algorithm converging to an optimal solution.
+Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.38\linewidth]{Included_Images/rrt_vs_rrtstar.png}
-    \caption{RRT vs RRT* Path Planning Algorithms}
+    \caption{RRT vs RRT*}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
 As shown in Figure \ref{fig:rrt_vs_rrtstar}, RRT* incorporates a rewiring step
@@ -351,7 +351,7 @@ graph \cite{PRM}.
 \paragraph{AI-based algorithms} ~\\
 In recent years, deep reinforcement learning methods have been employed to
 address task allocation and path planning problems in autonomous vehicles
-\cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
+\cite{RL-path-planning}. Multi-UAV path planning systems have been deployed as
 multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent
 studies have merged the Soft-Actor-Critic (SAC) reinforcement learning algorithm
 with a sampling-based path planning algorithm to design adaptively informed
@@ -380,7 +380,7 @@ algorithms.
     \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
     % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
-        \item Guarantees shortest path if heuristic is admissible.
+        \item Guarantees shortest path if heuristic is accurate.
         \item Reduces the search space compared to Dijkstra.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -393,7 +393,6 @@ algorithms.
     & \textbf{Dijkstra} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item Finds optimal path.
-        \item Works with any weighted graph.
         \item Simple to implement.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -447,9 +446,9 @@ algorithms.
 \paragraph{Decomposition-based algorithms} ~\\
 One of the primary reasons for using cell decomposition methods in our project
 is to cover fragmented areas in the vegetation environment. In cell
-decomposition methods, the robot's free space is subdivided into several
+decomposition methods, the robot's navigation space is divided into several
 regions, called cells \cite{Gasparetto2015}. The decomposition process can
-be explained as follows: subdivision of space into numbered polygons, creation
+be explained as follows: dividing the free space into several polygons, creation
 of a connectivity graph, identification of regions to be crossed, and generation
 of the path.  Figure \ref{fig:cell_decomposition} shows the detailed steps
 of the exact cell decomposition process. In our system, we utilize exact cell
@@ -513,11 +512,12 @@ between signal attenuation and vegetation water content \cite{Camps2016}.
 Additionally, the interference pattern between direct and reflected GNSS signals
 from the Earth's surface was used in estimating vegetation height and land
 topography \cite{RodriguezAlvarez2011}. Using a Soil Moisture
-Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
-instantaneous power of the direct and reflected signals was coherently added,
-in which the resulting power oscillations present notches that are correlated to
+Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, which
+receives both the direct and reflected signals simultaneously, the power of the
+received signals was coherently added. As a result, the recorded power
+oscillations due to interference present notches that are correlated to
 vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
-\cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in estimating the
+\cite{RodriguezAlvarez2011}. Ultimately, an RMSE of 3-5 cm in estimating the
 height of vegetation with simple geometrical structures (barley and wheat) could
 be achieved \cite{RodriguezAlvarez2011}.
 
@@ -900,7 +900,7 @@ algorithm.
     \textbf{Sampling-based} & \textbf{RRT} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Fast exploration of high-dimensional spaces.
-        \item Perform well in unknown or partially known maps.
+        \item Perform well in unknown maps.
     \end{itemize} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Does not guarantee the optimal path.
@@ -983,7 +983,7 @@ The cost function $f(n)$ for each node $n$ is calculated as follows:
 where:
 \begin{itemize}
     \item $g(n)$ is the cost from the starting node to the current node $n$.
-    \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
+    \item $h(n)$ is the estimated cost from node $n$ to the goal node.
     \item $f(n)$ is the total estimated cost of the shortest path node $n$.
 \end{itemize}
 In this project, the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
@@ -995,8 +995,7 @@ The Euclidean distance can be calculated as follows:
 where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
 
-The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
-node) is implemented using the diagonal heuristic function. The function has five key steps as follows:
+The heuristic cost $h(n)$ is implemented using the diagonal heuristic function. The function has five key steps as follows:
 
 \begin{enumerate}
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
@@ -1066,13 +1065,13 @@ according to the following steps:
     \item Initialize the grid, convert the start and end coordinates to grid
     indices, and adjust the indices if the start and end nodes are inside
     obstacles.
-    \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
+    \item Initialize the array to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighboring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
     \item If a node is already in the open set, but a better path is found,
     update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
-    \item Repeat steps 2-5 until the goal node is reached or no path is found.
+    \item Repeat steps 2-5 till reach the goal, or no path is found.
 \end{enumerate}
 
 Below is the flow chart illustrating the core logic of A* algorithm:
@@ -1108,9 +1107,11 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 \end{figure}
 
 \paragraph{Normalized Difference Vegetation Index} ~\\
-Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
-the difference between near-infrared (which vegetation strongly reflects) and
-red light (which vegetation absorbs) \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
+The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
+measures the difference between near-infrared light and red light. This provides
+the difference between strongly reflected by vegetation signals and signals
+absorbed by vegetation \cite{GISGeography_NDVI}. Below is the equation to
+calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
     \label{eq:ndvi}
@@ -1186,8 +1187,8 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
-Following the decomposition phase, the algorithm visits the resulting adjacent
-cells, typically employing a Depth-First Search (DFS) strategy. To guarantee
+After the decomposition phase, the algorithm visits the resulting adjacent
+cells, typically using a Depth-First Search (DFS) strategy. To guarantee
 complete coverage, a backtracking mechanism is utilized to ensure all connected
 cells are visited. When visiting each cell, the algorithm generates a sweeping
 path based on the given parameters, such as the sweeping direction and sweep
@@ -1239,14 +1240,14 @@ pseudorange error.
 
 \paragraph{Carrier to Noise Ratio} ~\\
 Carrier to noise ratio refers to the power of received carrier signal relative
-to the noise power per unit bandwidth, usually expressed in decibel-Hertz (dB-Hz)
+to the noise power per unit bandwidth, usually with a unit of decibel-Hertz (dB-Hz)
 \cite{joseph2010gnss}. $C/N_0$ can be readily obtained from the receiver, and it 
-is calculated using the following equation:
+is calculated as the following:
 \begin{equation}
     C/N_0 = C - (N - BW)
 \end{equation}
 where $C$ refers to the carrier power in dBm or dBW; $N$ refers to the noise power
-in dBm or dBW; and $BW$ refers to the bandwidth of the observation in Hz.
+in dBm or dBW; and $BW$ refers to the bandwidth of the signal in Hz.
 
 \paragraph{Pseudorange Error} ~\\
 In GNSS, pseudorange refers to the "apparent" distance between a satellite and a
@@ -1256,13 +1257,13 @@ For the $i$th satellite, its pseudorange $\rho^i$ could be expressed as the foll
 \begin{equation}
     \rho^i = R^i + \Delta t_r + \Delta t_s^i + I^i + T^i + \epsilon^i
 \end{equation}
-where $R^i$ refers to the true geometric distance between the satellite and the receiver;
+where $R^i$ refers to the true distance between the satellite and the receiver;
 $\Delta t_r$ refers to the receiver clock bias; $\Delta t_s^i$ refers to the satellite
 clock bias; $I^i$ refers to the ionospheric delay; $T^i$ refers to the tropospheric 
 delay; and $\epsilon^i$ refers to the pseudorange error, which is mainly
 introduced through signal reflections. Among all the signals received at a given
-instant, a satellite $m$ with the highest elevation angle is selected as the
-master satellite, where the assumption that the master satellite is free of reflections
+instant, a satellite $m$ with the highest elevation angle is regarded as the
+'master satellite', where the assumption that the master satellite is free of reflections
 is applied \cite{hsu2018analysis}:
 \begin{equation}
     \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
@@ -1316,13 +1317,14 @@ be calculated as the following \cite{yu2021theory}:
 \end{equation}
 To calculate the location of the FFZ center, a local coordinate system is
 defined. The origin is the receiver's ground projection, while the y-axis aligns
-with the ground projection of the receiver-to-satellite vector. The z-axis
-follows the local East-North-Up (ENU) "up" direction, and the x-axis completes
-the right-handed system by remaining orthogonal to both x and y axes. 
+with the ground projection of the vector from the receiver to the satellite. The
+z-axis follows the up direction of the local East-North-Up (ENU) coordinates,
+and the x-axis completes the coordinate system by remaining orthogonal to both x
+and y axes. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
-    \caption{Schematic diagram of the local coordinate system defined.}
+    \caption{Schematic diagram of the local coordinate axes defined.}
 \end{figure}
 In this coordinate system, the location of the FFZ center could be expressed as
 $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
@@ -1445,7 +1447,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
 (1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.33\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/opensky.png}
         \caption{Open Sky}
     \end{subfigure}
@@ -1455,7 +1457,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
         \caption{UAV hovering over ground}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.29\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/overtrees.png}
         \caption{UAV hovering over trees}
     \end{subfigure}
@@ -1488,8 +1490,8 @@ Unlike level wise tree growth that can be seen in traditional GBDT models,
 LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
-    \caption{Leaf-wise tree growth strategy.}
+    \includegraphics[width=0.9\linewidth]{Included_Images/LightGBM.png}
+    \caption{Leaf-wise strategy for tree growth}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
 \begin{equation}
@@ -1505,12 +1507,12 @@ of data that could introduce bias.
 
 \subsubsection{Model Training}
 In order to train the LightGBM model, the dataset was first split into training,
-testing, and validation sets with a ratio of 60:20:20 respectively. A total of 70,125 
+testing, and validation sets. The ratio for dataset division was 60:20:20 respectively. A total of 70,125 
 labeled samples were used for training the model. The training features included pseudorange, 
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
 hyperparameters are shown in the table below. 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \label{tab:lgbm-hyperparams}
 \renewcommand{\arraystretch}{1.2} % Increase row height for better readability
@@ -1545,7 +1547,6 @@ random\_state & 42 \\
 \end{tabular}
 \caption{Hyperparameters for LGBM Classifier}
 \end{table}
-
 As can be seen from the table above, a multi-class objective function was used
 to classify the signals into three classes. This is because the dataset contains
 three classes of signals: direct signals, signals reflected from ground and
@@ -1591,10 +1592,10 @@ The model converged well and the loss curves for training and validation sets ar
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/LossCurve.png}
-    \caption{Loss curves for training and validation sets.}
+    \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
-From the figure above, it is clear that the model did not overfit as the training and validation 
-loss curves are close to each other and decrease steadily. Further performance assessment results 
+From the figure above, it is clear that the model did not overfit as the loss curves for 
+training and validation are close to each other and decrease steadily. Further performance assessment results 
 of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
 mapping and localization.
 
@@ -1863,7 +1864,7 @@ that integrates Fast-LIO with PGO for GPS-aided SLAM:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rqt_graph.png}
     \caption{Interactions of different ROS topics in the SLAM system}
     \label{fig:rqt}
 \end{figure}
@@ -1885,7 +1886,7 @@ The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
 \end{itemize}
 
 Afterward, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
-/cloud\_registered\_body from /laserMapping, and GPS and IMU information from
+/cloud\_ registered\_body from /laserMapping, and GPS and IMU information from
 Pixhawk are passed to the back end pose graph optimization SLAM under
 /laserPGO\_gps namespace. The optimized results are published as:
 \begin{itemize}
@@ -1921,7 +1922,7 @@ where a set of waypoints could be selected in the plan view, including takeoff
 and landing positions (Figure \ref{fig:qgc_plan_view}).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/qgc_planview.jpg}
+    \includegraphics[width=0.8\textwidth]{Included_Images/qgc_planview.jpg}
     \caption{QGroundControl Plan View}
     \label{fig:qgc_plan_view}
 \end{figure}
@@ -1933,7 +1934,7 @@ waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
 an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{Included_Images/qgc_mission_list.jpg}
+    \includegraphics[width=0.25\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
@@ -2060,8 +2061,8 @@ summarized in Table \ref{Experiment-Summary}.
 
 % --- Results and Discussion ---
 \section{Results and Discussion}
-This section presents the results obtained from the four different
-implementations of this project. It includes path planning, GNSS-R signal
+In this section, the results obtained from the four different implementations of
+this project will be presented, which includes path planning, GNSS-R signal
 analysis, machine learning classification, and LiDAR SLAM. The results are
 analyzed to evaluate the effectiveness of each subsystem, and discuss how
 autonomous navigation enables reliable data collection, how GNSS-R measurements
@@ -2315,10 +2316,9 @@ potentially distinguish tree-reflected signals for identifying vegetated areas,
 it also highlights a critical assumption that must be validated. Up to this
 point, it was assumed that the zenith antenna receives only direct signals while
 the nadir antenna receives only reflected signals. However, Figure \ref{Pr_Error
-Distribution} has already demonstrated that this assumption is invalid. To
-investigate further, the distribution of the difference between the absolute
-pseudorange errors of the nadir and zenith antennas is plotted in Figure
-\ref{Pr_Error Difference}.
+Distribution} has already challenged this assumption. To investigate further,
+the distribution of the difference between the absolute pseudorange errors of
+the nadir and zenith antennas is plotted in Figure \ref{Pr_Error Difference}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
@@ -2341,7 +2341,7 @@ with similar pseudorange errors. Two possible scenarios explain this phenomenon:
 \end{enumerate}
 Furthermore, Figure \ref{Pr_Error Difference} shows observations where the
 zenith pseudorange error significantly exceeds the nadir pseudorange error,
-indicating that the zenith antenna receives reflected signals. Since the zenith
+indicating that the zenith antenna can receive reflected signals. Since the zenith
 antenna is RHCP and the nadir antenna is LHCP, this also indicates that a GNSS
 RHCP antenna is able to receive LHCP signals and vice versa. To further
 investigate this observation, both antenna are tested in an open sky environment
@@ -2370,7 +2370,7 @@ Testing Open Sky}.
 Assuming all signals received in the open sky environment are non-reflected and
 thus RHCP, the LHCP antenna (shown in orange) can indeed receive RHCP signals,
 just at lower $C/N_0$ values compared to the RHCP antenna due to lower antenna
-gains. This phenomenon is more pronounced in a subsequent experiment, where both
+gains. This phenomenon is further demonstrated in a subsequent experiment, where both
 antennas were elevated midair. During the first five minutes, both antennas
 faced upward; during the final five minutes, both antennas faced downward. The
 corresponding $C/N_0$ values received are plotted against observation time in
@@ -2416,34 +2416,34 @@ in the following section.
 As classification of the reflected and direct signals is required for robust GNSS-R
 implementation, the LightGBM model is trained to classify the signals based on
 the features extracted from both antennas. The data collection, dataset preparation, and model
-selection have been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including accuracy, precision, recall, and F1-score. The subsections
+selection have been explained in the methodology section. The performance evaluation of the model is done
+based on various metrics including F1 score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
-The F1-score is a mean of precision and recall of a classification model. Precision of a model indicates
-the ability of a model to not label a negative sample as positive and recall indicates the ability of a model to 
-find all the positive samples. The F1-score is calculated as follows from precision and recall:
+The F1 score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
+the ability of a model to not label a negative sample as positive. On the other hand, recall indicates the ability of a model to 
+find all the positive samples. The F1-score is calculated using the following equation:
 \begin{equation}
     F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
 \end{equation}
 The F1-score for the LightGBM model on the test dataset is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/F1.png}
+    \includegraphics[width=0.65\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
 From the figure above, it is observed that the LightGBM model achieves an F1 score of approximately
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-A confusion matrix is used to describe the performance of a classification model on a set of test data
-for which the true values are known. The diagonal elements of a confusion matrix represent correctly classified samples,
-while the off-diagonal values indicate misclassified ones. The confusion matrix for our signal classification 
-LightGBM model is shown in the figure below.
+Confusion matrix can help to visualize the performance of a classification model on a set of test data for which
+the true values are already known. The elements which are present diagonally in the matrix 
+represent correctly classified samples and the rest of the elements indicate the number of incorrect classified samples. 
+The confusion matrix for the LightGBM model is shown below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
-    \caption{Confusion matrix for LightGBM model on test dataset}
+    \caption{Confusion matrix for LightGBM model}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
 of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
@@ -2451,10 +2451,10 @@ tree reflection. As can be observed from the confusion matrix, 1110 and 1008 sam
 signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
-\subsubsection{Receiver Operating Characteristic (ROC) Curve}
-A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
-binary classification model at various threshold settings. It plots the True Positive Rate (TPR) against the False Positive
-Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
+\subsubsection{ROC Curve}
+A ROC curve is a way to graphically represent how well a binary classifier is performing at different threshold settings. 
+It generally plots the True Positive Rate (TPR) against the False Positive
+Rate (FPR). This technique helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
 closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
 0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
 the ROC curve is shown in the figure below.
@@ -2467,14 +2467,14 @@ The figure indicates that the LightGBM model has a ROC value of over 0.95 for al
 that the model has high ability to distinguish between signal classes.
 \subsubsection{Feature Importance}
 Feature importance is a technique in machine learning used to identify and rank the most relevant features
-in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for
-our signal classification task. The feature importance plot is shown in the figure below.
+in a model. A feature importance analysis was performed on the LightGBM model to identify the most crucial features for
+ signal classification task. The feature importance plot is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/feature_importance.png}
     \caption{Feature importance plot for LightGBM model}
 \end{figure}
-The figure indicates that the top three most important features for the LightGBM model are:
+The figure indicates that the top three features for the LightGBM model are:
 \begin{itemize}
     \item Pseudorange 
     \item Doppler measurement
@@ -2683,10 +2683,10 @@ robust modular LiDAR SLAM system.
 
 % --- Future Works ---
 \section{Future Works}
-In this section, we present the limitations of each component at its current
-stage, followed by proposed solutions. The frameworks discussed include path
+In this section, the proposed solutions to the limitations of each component at
+its current stage will be presented. The frameworks discussed include path
 planning, GNSS-R, machine learning, and LiDAR SLAM. The discussed solutions will
-be operated in the next stage of our project. 
+be executed in the next stage of our project. 
 
 \subsection{Path Planning}
 For the path planning framework, so far, most results have been conducted in a
@@ -2908,14 +2908,15 @@ strong long-distance communication telemetry types and will be replacing the
 current hardware in the next stage. 
 
 \subsubsection{GNSS-R}
-Through processing the data collected during the first half of this project, one of the 
-most important issue that arose was the fact that some results did not indicate obvious
-conclusions. For example, as demonstrated in Figure \ref{GNSS-R Confusing Result}, the
-FFZs of $C/N_0$ ratios do not display clear and conclusive results, as opposed to the
-observations shown in the Results and Discussion section of the report. This is partially
-caused by the fact that not all the FFZs shown here actually exist due to non-reflected
-signals received by the bottom antenna assumed to be reflected from the ground. To solve 
-this issue, machine learning approaches will be employed to extract only the reflected
+Through processing the data collected during the first half of this project, one
+of the most important issue that arose was the fact that some results did not
+indicate obvious conclusions. For example, as demonstrated in Figure \ref{GNSS-R
+Confusing Result}, the FFZs of $C/N_0$ ratios do not display clear and
+conclusive results, as opposed to the observations shown in the Results and
+Discussion section of the report. Particularly, this is due to the fact that not
+all the FFZs shown here actually exist due to non-reflected signals received by
+the bottom antenna assumed to be reflected from the ground. To solve this issue,
+machine learning approaches will be employed to extract only the reflected
 signals from the nadir antenna observations.
 \begin{figure}[H]
     \centering
