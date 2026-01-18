@@ -1604,13 +1604,14 @@ mapping and localization.
 \subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
 is used to build a map effectively within a short amount of time. To do this,
-Iterative Extended Kalman Filter (IEKF) is used to fuse the data between IMU and LiDAR
+Iterative Extended Kalman Filter (IEKF) is used to combine the data between IMU and LiDAR
 point clouds to create an odometry of the environment. 
 
 Iterative Extended Kalman Filter (IEKF) follows the core of Bayesian Recursion
 to estimate the state of the robot through the prediction and measurement update
-step. In the prediction step, IEKF assumes that the state of the system at time
-$k$ evolved from the prior state at time $k-1$, and it is shown as follows:
+step. In the prediction step, IEKF presumes that the state of the system at time
+$k$ is evolved from the previous system state at time $k-1$, and it is shown as
+follows:
 \begin{equation}
     x_k = f(x_{k-1},u_k) + w_{k} 
 \end{equation}
@@ -1618,8 +1619,9 @@ $k$ evolved from the prior state at time $k-1$, and it is shown as follows:
 Where $x_k$ is the state vector of the system's terms of interest at time $k$.
 The $f(.)$ represents a non-linear state function that is used to forecast
 current state data from prior state data $x_{k-1}$ and $u_k$ is a control
-vector. We can approximate $w_{k-1}$ as $N(0,Q_k)$ where it has a zero-mean
-Gaussian distribution with covariance matrix $Q_k$.
+vector. We can approximate $w_{k-1}$ as $N(0,Q_k)$ where it is distributed
+according to a multivariate normal distribution with zero mean and covariance
+matrix $Q_k$.
 
 To know the uncertainty of the prediction model, error covariance matrix $P^f_k$
 is defined as shown:
@@ -1630,8 +1632,8 @@ is defined as shown:
 \end{align}
 
 Where $e$ is the prediction error, $F$ is the Jacobian matrix of the linearized
-state transition function $f(.)$ evaluated at the previous estimate
-$x_{k-1}$, and $Q$ is the noise covariance matrix that describes the
+state transition function $f(.)$ evaluated at the previous estimate $x_{k-1}$,
+and $Q$ is characterized as the noise covariance matrix associated with the
 uncertainty of the physical model.
 
 Even so, the predicted state alone is prone to errors due to various
@@ -1660,7 +1662,7 @@ $|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$.
 As actual measurements from sensors will typically differ from this prediction
 due to sensor noise and model inaccuracies, it is incorporated into the state
 estimate by computing the difference between the actual measurements and the
-predicted measurement at the current iterative estimate $K$:
+predicted measurement at the present iterative estimate $K$:
 \begin{equation}
     z_{k, K} = z_k - h(x^a_{k, K})
 \end{equation}
@@ -1673,7 +1675,7 @@ dimension formula \cite{xu2021fast}.
 \end{equation}
 
 Where $H_{k, K}$ is the Jacobian of the observation function re-evaluated
-at the current iterative estimate $x^a_{k, K}$. This gain is then used
+at the present iterative estimate $x^a_{k, K}$. This gain is then used
 to compute the next refined state estimate:
 \begin{equation}
     x^a_{k,K+1} = x^a_{k, K} + K_{k, K} (z_{k, K}) - (I - K_{k, K} H_{k, K})(x^a_{k, K} - x_k^f)
@@ -1949,7 +1951,7 @@ network that was pre-established using ZeroTier. The terminal of the Jetson Orin
 be accessed through Visual Studio Code, where the command to log GNSS data from the
 two onboard receivers can be executed. 
 
-On the other hand, SLAM data including LiDAR, IMU, and GPS data are
+On the other hand, SLAM data including LiDAR point clouds, IMU, and GPS data are
 collected into a .bag file from Robot Operating System (ROS). To do so,
 Nomachine is used to create remote access from Jetson Orin with the
 pre-established ZeroTier connection. This method enables access to multiple
