@@ -1446,7 +1446,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
 (1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.33\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/opensky.png}
         \caption{Open Sky}
     \end{subfigure}
@@ -1456,7 +1456,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
         \caption{UAV hovering over ground}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.29\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/overtrees.png}
         \caption{UAV hovering over trees}
     \end{subfigure}
@@ -1489,7 +1489,7 @@ Unlike level wise tree growth that can be seen in traditional GBDT models,
 LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
+    \includegraphics[width=0.9\linewidth]{Included_Images/LightGBM.png}
     \caption{Leaf-wise strategy for tree growth}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
@@ -1863,7 +1863,7 @@ that integrates Fast-LIO with PGO for GPS-aided SLAM:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rqt_graph.png}
     \caption{Interactions of different ROS topics in the SLAM system}
     \label{fig:rqt}
 \end{figure}
@@ -1885,7 +1885,7 @@ The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
 \end{itemize}
 
 Afterward, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
-/cloud\_registered\_body from /laserMapping, and GPS and IMU information from
+/cloud\_ registered\_body from /laserMapping, and GPS and IMU information from
 Pixhawk are passed to the back end pose graph optimization SLAM under
 /laserPGO\_gps namespace. The optimized results are published as:
 \begin{itemize}
@@ -1921,7 +1921,7 @@ where a set of waypoints could be selected in the plan view, including takeoff
 and landing positions (Figure \ref{fig:qgc_plan_view}).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/qgc_planview.jpg}
+    \includegraphics[width=0.8\textwidth]{Included_Images/qgc_planview.jpg}
     \caption{QGroundControl Plan View}
     \label{fig:qgc_plan_view}
 \end{figure}
@@ -1933,7 +1933,7 @@ waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
 an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{Included_Images/qgc_mission_list.jpg}
+    \includegraphics[width=0.25\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
