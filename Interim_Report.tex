@@ -335,7 +335,7 @@ Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.38\linewidth]{Included_Images/rrt_vs_rrtstar.png}
-    \caption{RRT vs RRT* Path Planning Algorithms}
+    \caption{RRT vs RRT*}
     \label{fig:rrt_vs_rrtstar}
 \end{figure}
 As shown in Figure \ref{fig:rrt_vs_rrtstar}, RRT* incorporates a rewiring step
@@ -995,8 +995,7 @@ The Euclidean distance can be calculated as follows:
 where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
 
-The heuristic cost $h(n)$ (the estimated cost from current node $n$ to goal
-node) is implemented using the diagonal heuristic function. The function has five key steps as follows:
+The heuristic cost $h(n)$ is implemented using the diagonal heuristic function. The function has five key steps as follows:
 
 \begin{enumerate}
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
@@ -1109,9 +1108,10 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 
 \paragraph{Normalized Difference Vegetation Index} ~\\
 The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
-measures the difference between red light, which is absorbed by trees, and
-near-infrared light, which is strongly reflected by vegetation
-\cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
+measures the difference between near-infrared light and red light. This provides
+the difference between strongly reflected by vegetation signals and signals
+absorbed by vegetation \cite{GISGeography_NDVI}. Below is the equation to
+calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
     \label{eq:ndvi}
@@ -1447,7 +1447,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
 (1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.33\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/opensky.png}
         \caption{Open Sky}
     \end{subfigure}
@@ -1457,7 +1457,7 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
         \caption{UAV hovering over ground}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.3\textwidth}
+    \begin{subfigure}{0.29\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/overtrees.png}
         \caption{UAV hovering over trees}
     \end{subfigure}
@@ -1490,7 +1490,7 @@ Unlike level wise tree growth that can be seen in traditional GBDT models,
 LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \cite{ke2017lightgbm}. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
+    \includegraphics[width=0.9\linewidth]{Included_Images/LightGBM.png}
     \caption{Leaf-wise strategy for tree growth}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
@@ -1512,7 +1512,7 @@ labeled samples were used for training the model. The training features included
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
 hyperparameters are shown in the table below. 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \label{tab:lgbm-hyperparams}
 \renewcommand{\arraystretch}{1.2} % Increase row height for better readability
@@ -1864,7 +1864,7 @@ that integrates Fast-LIO with PGO for GPS-aided SLAM:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/rqt_graph.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rqt_graph.png}
     \caption{Interactions of different ROS topics in the SLAM system}
     \label{fig:rqt}
 \end{figure}
@@ -1886,7 +1886,7 @@ The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
 \end{itemize}
 
 Afterward, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
-/cloud\_registered\_body from /laserMapping, and GPS and IMU information from
+/cloud\_ registered\_body from /laserMapping, and GPS and IMU information from
 Pixhawk are passed to the back end pose graph optimization SLAM under
 /laserPGO\_gps namespace. The optimized results are published as:
 \begin{itemize}
@@ -1922,7 +1922,7 @@ where a set of waypoints could be selected in the plan view, including takeoff
 and landing positions (Figure \ref{fig:qgc_plan_view}).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/qgc_planview.jpg}
+    \includegraphics[width=0.8\textwidth]{Included_Images/qgc_planview.jpg}
     \caption{QGroundControl Plan View}
     \label{fig:qgc_plan_view}
 \end{figure}
@@ -1934,7 +1934,7 @@ waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
 an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{Included_Images/qgc_mission_list.jpg}
+    \includegraphics[width=0.25\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
@@ -2416,11 +2416,11 @@ in the following section.
 As classification of the reflected and direct signals is required for robust GNSS-R
 implementation, the LightGBM model is trained to classify the signals based on
 the features extracted from both antennas. The data collection, dataset preparation, and model
-selection have been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including F1-score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
+selection have been explained in the methodology section. The performance evaluation of the model is done
+based on various metrics including F1 score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
-The F1-score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
+The F1 score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
 the ability of a model to not label a negative sample as positive. On the other hand, recall indicates the ability of a model to 
 find all the positive samples. The F1-score is calculated using the following equation:
 \begin{equation}
@@ -2436,10 +2436,10 @@ From the figure above, it is observed that the LightGBM model achieves an F1 sco
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-A confusion matrix is a technique to visualize the performance of a classification model on a set of test data. 
-The diagonal elements of the matrix represent correctly classified samples,
-while the off-diagonal values indicate misclassified ones. The confusion matrix for the LightGBM signal classification 
-model is shown in the figure below.
+Confusion matrix can help to visualize the performance of a classification model on a set of test data for which
+the true values are already known. The elements which are present diagonally in the matrix 
+represent correctly classified samples and the rest of the elements indicate the number of incorrect classified samples. 
+The confusion matrix for the LightGBM model is shown below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
@@ -2452,8 +2452,8 @@ signals respectively are misclassified as tree reflected signals. This could be 
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
 \subsubsection{ROC Curve}
-A ROC curve is a technique to graphically represent the performance of a 
-binary classification model at various threshold settings. It generally plots the True Positive Rate (TPR) against the False Positive
+A ROC curve is a way to graphically represent how well a binary classifier is performing at different threshold settings. 
+It generally plots the True Positive Rate (TPR) against the False Positive
 Rate (FPR). This technique helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
 closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
 0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
