@@ -1490,7 +1490,7 @@ LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \ci
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
-    \caption{Leaf-wise tree growth strategy.}
+    \caption{Leaf-wise strategy for tree growth}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
 \begin{equation}
@@ -1506,7 +1506,7 @@ of data that could introduce bias.
 
 \subsubsection{Model Training}
 In order to train the LightGBM model, the dataset was first split into training,
-testing, and validation sets with a ratio of 60:20:20 respectively. A total of 70,125 
+testing, and validation sets. The ratio for dataset division was 60:20:20 respectively. A total of 70,125 
 labeled samples were used for training the model. The training features included pseudorange, 
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
@@ -1546,7 +1546,6 @@ random\_state & 42 \\
 \end{tabular}
 \caption{Hyperparameters for LGBM Classifier}
 \end{table}
-
 As can be seen from the table above, a multi-class objective function was used
 to classify the signals into three classes. This is because the dataset contains
 three classes of signals: direct signals, signals reflected from ground and
@@ -1592,10 +1591,10 @@ The model converged well and the loss curves for training and validation sets ar
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/LossCurve.png}
-    \caption{Loss curves for training and validation sets.}
+    \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
-From the figure above, it is clear that the model did not overfit as the training and validation 
-loss curves are close to each other and decrease steadily. Further performance assessment results 
+From the figure above, it is clear that the model did not overfit as the loss curves for 
+training and validation are close to each other and decrease steadily. Further performance assessment results 
 of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
 mapping and localization.
 
@@ -2417,12 +2416,12 @@ As classification of the reflected and direct signals is required for robust GNS
 implementation, the LightGBM model is trained to classify the signals based on
 the features extracted from both antennas. The data collection, dataset preparation, and model
 selection have been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including accuracy, precision, recall, and F1-score. The subsections
+evaluated based on various metrics including F1-score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
-The F1-score is a mean of precision and recall of a classification model. Precision of a model indicates
-the ability of a model to not label a negative sample as positive and recall indicates the ability of a model to 
-find all the positive samples. The F1-score is calculated as follows from precision and recall:
+The F1-score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
+the ability of a model to not label a negative sample as positive. On the other hand, recall indicates the ability of a model to 
+find all the positive samples. The F1-score is calculated using the following equation:
 \begin{equation}
     F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
 \end{equation}
@@ -2436,14 +2435,14 @@ From the figure above, it is observed that the LightGBM model achieves an F1 sco
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-A confusion matrix is used to describe the performance of a classification model on a set of test data
-for which the true values are known. The diagonal elements of a confusion matrix represent correctly classified samples,
-while the off-diagonal values indicate misclassified ones. The confusion matrix for our signal classification 
-LightGBM model is shown in the figure below.
+A confusion matrix is a technique to visualize the performance of a classification model on a set of test data. 
+The diagonal elements of the matrix represent correctly classified samples,
+while the off-diagonal values indicate misclassified ones. The confusion matrix for the LightGBM signal classification 
+model is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
-    \caption{Confusion matrix for LightGBM model on test dataset}
+    \caption{Confusion matrix for LightGBM model}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
 of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
@@ -2451,10 +2450,10 @@ tree reflection. As can be observed from the confusion matrix, 1110 and 1008 sam
 signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
-\subsubsection{Receiver Operating Characteristic (ROC) Curve}
-A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
-binary classification model at various threshold settings. It plots the True Positive Rate (TPR) against the False Positive
-Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
+\subsubsection{ROC Curve}
+A ROC curve is a technique to graphically represent the performance of a 
+binary classification model at various threshold settings. It generally plots the True Positive Rate (TPR) against the False Positive
+Rate (FPR). This technique helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
 closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
 0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
 the ROC curve is shown in the figure below.
@@ -2467,14 +2466,14 @@ The figure indicates that the LightGBM model has a ROC value of over 0.95 for al
 that the model has high ability to distinguish between signal classes.
 \subsubsection{Feature Importance}
 Feature importance is a technique in machine learning used to identify and rank the most relevant features
-in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for
-our signal classification task. The feature importance plot is shown in the figure below.
+in a model. A feature importance analysis was performed on the LightGBM model to identify the most crucial features for
+ signal classification task. The feature importance plot is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/feature_importance.png}
     \caption{Feature importance plot for LightGBM model}
 \end{figure}
-The figure indicates that the top three most important features for the LightGBM model are:
+The figure indicates that the top three features for the LightGBM model are:
 \begin{itemize}
     \item Pseudorange 
     \item Doppler measurement
