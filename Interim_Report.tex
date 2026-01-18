@@ -380,7 +380,7 @@ algorithms.
     \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
     % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
-        \item Guarantees shortest path if heuristic is admissible.
+        \item Guarantees shortest path if heuristic is accurate.
         \item Reduces the search space compared to Dijkstra.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -393,7 +393,6 @@ algorithms.
     & \textbf{Dijkstra} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item Finds optimal path.
-        \item Works with any weighted graph.
         \item Simple to implement.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -901,7 +900,7 @@ algorithm.
     \textbf{Sampling-based} & \textbf{RRT} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Fast exploration of high-dimensional spaces.
-        \item Perform well in unknown or partially known maps.
+        \item Perform well in unknown maps.
     \end{itemize} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Does not guarantee the optimal path.
@@ -1188,8 +1187,8 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
-Following the decomposition phase, the algorithm visits the resulting adjacent
-cells, typically employing a Depth-First Search (DFS) strategy. To guarantee
+After the decomposition phase, the algorithm visits the resulting adjacent
+cells, typically using a Depth-First Search (DFS) strategy. To guarantee
 complete coverage, a backtracking mechanism is utilized to ensure all connected
 cells are visited. When visiting each cell, the algorithm generates a sweeping
 path based on the given parameters, such as the sweeping direction and sweep
