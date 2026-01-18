@@ -293,17 +293,18 @@ path planning approaches.
 \end{enumerate}
 
 \paragraph{Search-based algorithms} ~\\
-Dijkstra's algorithm solves the problem of finding the shortest path from a
-given starting point to a given ending point. The algorithm explores this path
-by simultaneously finding the shortest path from a given starting node to all
-points in the graph \cite{javaid2013understanding}. However, finding the shortest
-path across all the points in the map incurs high computational cost.
-Therefore, it is impractical to use for real-time UAV path planning. 
+Dijkstra's algorithm is one of the major search-based algorithms, that finds the
+shortest path from a given starting point to a given ending point. The algorithm
+explores this path by simultaneously finding the shortest path from a given
+starting node to all points in the graph \cite{javaid2013understanding}.
+However, finding the optimal path across all the points in the map incurs high
+computational cost. Therefore, it is impractical to use for real-time UAV path
+planning. 
 
 To address the limitations of Dijkstra’s algorithm, scientists developed another
 search-based algorithm called the A* (A-star) algorithm. The A* algorithm is one of
 the most common path planning algorithms, which can be applied to grid-based or
-topological configuration spaces \cite{Astar_simulation}. This algorithm
+geometrical configuration spaces \cite{Astar_simulation}. This algorithm
 combines the shortest path calculation in Dijkstra’s algorithm and heuristic
 searching. The heuristic cost is known as the estimated cost from the current
 node to the end node. The A* algorithm is better in terms of reducing the search
@@ -327,11 +328,10 @@ tree and rapidly explore the state space and eventually connect to the goal.
 Additionally, RRT effectively handles systems with differential constraints
 \cite{anytimeRRT}, making it a suitable algorithm for state-of-the-art robotics.
 Although RRT quickly computes the path between the starting and ending points,
-it does not guarantee the shortest path. This was proven by Karaman and
-Frazzoli \cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, showing
-that the probability of the RRT algorithm converging to an optimal solution is
-zero. Therefore, the RRT*, an optimal version of the RRT algorithm, was
-proposed. 
+it does not guarantee the shortest path. This was proven by Karaman and Frazzoli
+\cite{karaman2010incrementalsamplingbasedalgorithmsoptimal}, stating that there
+is a zero probability of the RRT algorithm converging to an optimal solution.
+Therefore, the RRT*, an optimal version of the RRT algorithm, was proposed. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.38\linewidth]{Included_Images/rrt_vs_rrtstar.png}
@@ -351,7 +351,7 @@ graph \cite{PRM}.
 \paragraph{AI-based algorithms} ~\\
 In recent years, deep reinforcement learning methods have been employed to
 address task allocation and path planning problems in autonomous vehicles
-\cite{RL-path-planning}. Multi-UAV path planning systems have been modeled as
+\cite{RL-path-planning}. Multi-UAV path planning systems have been deployed as
 multi-agent reinforcement learning problems \cite{SAC-path-planning}. Recent
 studies have merged the Soft-Actor-Critic (SAC) reinforcement learning algorithm
 with a sampling-based path planning algorithm to design adaptively informed
@@ -380,7 +380,7 @@ algorithms.
     \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
     % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
-        \item Guarantees shortest path if heuristic is admissible.
+        \item Guarantees shortest path if heuristic is accurate.
         \item Reduces the search space compared to Dijkstra.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -393,7 +393,6 @@ algorithms.
     & \textbf{Dijkstra} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
         \item Finds optimal path.
-        \item Works with any weighted graph.
         \item Simple to implement.
     \end{itemize} & 
     \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
@@ -447,9 +446,9 @@ algorithms.
 \paragraph{Decomposition-based algorithms} ~\\
 One of the primary reasons for using cell decomposition methods in our project
 is to cover fragmented areas in the vegetation environment. In cell
-decomposition methods, the robot's free space is subdivided into several
+decomposition methods, the robot's navigation space is divided into several
 regions, called cells \cite{Gasparetto2015}. The decomposition process can
-be explained as follows: subdivision of space into numbered polygons, creation
+be explained as follows: dividing the free space into several polygons, creation
 of a connectivity graph, identification of regions to be crossed, and generation
 of the path.  Figure \ref{fig:cell_decomposition} shows the detailed steps
 of the exact cell decomposition process. In our system, we utilize exact cell
@@ -646,13 +645,13 @@ varying lighting conditions that cause instability in camera-based methods.
 
 \subsubsection{LiDAR Odometry} 
 The accuracy of LiDAR odometry largely depends on how well point clouds are
-aligned, and it generally categorized into point-based and feature-based
+aligned, and it generally classified into point-based and feature-based
 approaches. In terms of point-based point cloud registration, iterative closest
 point (ICP) is considered one of the most well-known pointwise LiDAR odometry
 methods. It is a simple, modular algorithm that aligns two consecutive point
 clouds by establishing point-to-point correspondences and estimating the
 transformation that minimizes their distance error \cite{besl1992method}.
-However, a key limitation of ICP is its high computational cost when registering
+However, a key limitation of ICP is its high cost for computation when registering
 dense point clouds. Its accuracy relies strongly on the quality of the initial
 alignment due to the non-convex nature of the optimization, and the presence of
 outliers from moving objects can further complicate the process by adding extra
@@ -662,33 +661,32 @@ developed to improve its computational efficiency \cite{segal2009generalized,
 huang2022point}. 
 
 On the other hand, feature-based LiDAR odometry methods utilize a set of
-representative features from the point clouds to estimate the transformation
-\cite{rusu2009fast, salti2014shot}. Fast Point Feature Histograms (FPFH) is a
-feature-based point cloud matching method that looks at the distinct shape in
-point clouds (surface normals) and uses multidimensional histogram to label the
-geometric properties of each point \cite{rusu2009fast}. As FPFH is able to
-remain consistent even if the sensor is rotated or moved, it creates a robust
-tool for finding matches between different scans and can be used as an initial
-alignment of point clouds before handling it to other types of processors
-\cite{wu2020iterative}. However, creating complex descriptors for every point is
-computationally demanding which is not favorable for real time requirements
-\cite{doi:10.3233/AIC-230217}. 
+representative features of the point clouds to calculate the required
+transformation \cite{rusu2009fast, salti2014shot}. Fast Point Feature Histograms
+(FPFH) is a feature-based point cloud matching method that looks at the distinct
+shape in point clouds (surface normals) and uses multidimensional histogram to
+label the geometric properties of each point \cite{rusu2009fast}. As FPFH is
+able to remain consistent even if the sensor is rotated or moved, it creates a
+robust tool for finding matches between different scans and can be used as an
+initial alignment of point clouds before handling it to other types of
+processors \cite{wu2020iterative}. However, creating complex descriptors for
+every point is computationally expensive which is not favorable for real time
+requirements \cite{doi:10.3233/AIC-230217}. 
 
 In the meantime, LOAM uses more efficient way to carry out feature-based LiDAR
 odometry. It is done by extracting features and edges within the point clouds
-based on the smoothness of a small region near a given feature point
-\cite{huang2022point}. Unlike conventional ICP methods that compare consecutive
-scans directly, LOAM matches these extracted features against a continuously
-updated map of dense edge features, creating a scan-to-map correspondence
-system. Since feature-based methods process only a small fraction of the
-original point cloud data rather than all raw points, they require substantially
-less computational power for matching compared to G-ICP and NDT optimization
-processes. Feature-based methods rely less on the accuracy of the
-initial pose estimate than point-wise methods, but this reduced dependence often
-results in noticeable drift along the altitude axis. \cite{koide2021voxelized,
-shan2018lego}. In this case, LOAM variants such as Lightweight and ground
-optimized (LeGO)-LOAM \cite{shan2018lego} are proposed to counter the drifting
-in altitude direction.
+based on the smoothness of the point cloud clusters \cite{huang2022point}.
+Unlike conventional ICP methods that compare consecutive scans directly, LOAM
+matches these extracted features against a continuously updated map of dense
+edge features, creating a scan-to-map correspondence system. Since feature-based
+methods process only a small fraction of the original point cloud data rather
+than all raw points, they require substantially less computational power for
+matching compared to G-ICP and NDT optimization processes. Feature-based methods
+rely less on the accuracy of the initial pose estimate than point-wise methods,
+but this reduced dependence often results in noticeable drift along the altitude
+axis. \cite{koide2021voxelized, shan2018lego}. In this case, LOAM variants such
+as Lightweight and ground optimized (LeGO)-LOAM \cite{shan2018lego} are proposed
+to counter the drifting in altitude direction.
 
 \subsubsection{Simultaneous Localization and Mapping (SLAM)}
 While odometry provides the foundation for estimating local motion through
@@ -733,9 +731,9 @@ cross-sensor correlations \cite{oh2010symmetrical}.
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/EKF SLAM.png}
     \caption{The figure depicts a spring network analogy to visualize how EKF
-SLAM works. The landmarks are connected by springs describing correlations
-between landmarks. As the robot passes a landmark more than once, these
-correlations increase, which makes the red spring thicker
+SLAM works. The landmarks are connected by red lines to describe the
+correlations between landmarks. As the robot passes a landmark more than once,
+these correlations increase, which makes the red spring thicker
 \cite{stachniss2016simultaneous}.}
 \end{figure}
 
@@ -902,7 +900,7 @@ algorithm.
     \textbf{Sampling-based} & \textbf{RRT} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Fast exploration of high-dimensional spaces.
-        \item Perform well in unknown or partially known maps.
+        \item Perform well in unknown maps.
     \end{itemize} & 
     \begin{itemize}[leftmargin=*, noitemsep, topsep=0pt]
         \item Does not guarantee the optimal path.
@@ -985,7 +983,7 @@ The cost function $f(n)$ for each node $n$ is calculated as follows:
 where:
 \begin{itemize}
     \item $g(n)$ is the cost from the starting node to the current node $n$.
-    \item $h(n)$ is the estimated heuristic cost from node $n$ to the goal node.
+    \item $h(n)$ is the estimated cost from node $n$ to the goal node.
     \item $f(n)$ is the total estimated cost of the shortest path node $n$.
 \end{itemize}
 In this project, the cost $g(n)$ (the cost from starting node to end node) is calculated as the Euclidean distance
@@ -1068,13 +1066,13 @@ according to the following steps:
     \item Initialize the grid, convert the start and end coordinates to grid
     indices, and adjust the indices if the start and end nodes are inside
     obstacles.
-    \item Initialize the heapfile to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
+    \item Initialize the array to store the exploring nodes, check the node with lowest $f(n)$, skip if already explored.
     \item Move to the next node, check if the current node is the goal node. If so, backtrack and reconstruct the path.
     \item If not, check the neighboring nodes, calculate their tentative costs, and add them to the open set if they are not already explored.
     \item If a node is already in the open set, but a better path is found,
     update the parent node, adjust the $g(n)$ to the lowest cost, and add to
     the queue again with  new priority.
-    \item Repeat steps 2-5 until the goal node is reached or no path is found.
+    \item Repeat steps 2-5 till reach the goal, or no path is found.
 \end{enumerate}
 
 Below is the flow chart illustrating the core logic of A* algorithm:
@@ -1110,9 +1108,10 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 \end{figure}
 
 \paragraph{Normalized Difference Vegetation Index} ~\\
-Normalized Difference Vegetation Index (NDVI) is a quantified vegetation index that measures
-the difference between near-infrared (which vegetation strongly reflects) and
-red light (which vegetation absorbs) \cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
+The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
+measures the difference between red light, which is absorbed by trees, and
+near-infrared light, which is strongly reflected by vegetation
+\cite{GISGeography_NDVI}. Below is the equation to calculate NDVI:
 \begin{equation}
     \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
     \label{eq:ndvi}
@@ -1188,8 +1187,8 @@ Figure \ref{fig:out_event} illustrates an example of an OUT event:
         \label{fig:out_event}
         \end{figure}
 \end{itemize}
-Following the decomposition phase, the algorithm visits the resulting adjacent
-cells, typically employing a Depth-First Search (DFS) strategy. To guarantee
+After the decomposition phase, the algorithm visits the resulting adjacent
+cells, typically using a Depth-First Search (DFS) strategy. To guarantee
 complete coverage, a backtracking mechanism is utilized to ensure all connected
 cells are visited. When visiting each cell, the algorithm generates a sweeping
 path based on the given parameters, such as the sweeping direction and sweep
@@ -1492,7 +1491,7 @@ LightGBM uses a leaf-wise growth strategy as can be seen in the figure below \ci
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Included_Images/LightGBM.png}
-    \caption{Leaf-wise tree growth strategy.}
+    \caption{Leaf-wise strategy for tree growth}
 \end{figure}
 It expands the leaf with the maximum variance gain at each step, as shown in the formula below:
 \begin{equation}
@@ -1508,7 +1507,7 @@ of data that could introduce bias.
 
 \subsubsection{Model Training}
 In order to train the LightGBM model, the dataset was first split into training,
-testing, and validation sets with a ratio of 60:20:20 respectively. A total of 70,125 
+testing, and validation sets. The ratio for dataset division was 60:20:20 respectively. A total of 70,125 
 labeled samples were used for training the model. The training features included pseudorange, 
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
@@ -1548,7 +1547,6 @@ random\_state & 42 \\
 \end{tabular}
 \caption{Hyperparameters for LGBM Classifier}
 \end{table}
-
 As can be seen from the table above, a multi-class objective function was used
 to classify the signals into three classes. This is because the dataset contains
 three classes of signals: direct signals, signals reflected from ground and
@@ -1594,10 +1592,10 @@ The model converged well and the loss curves for training and validation sets ar
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Included_Images/LossCurve.png}
-    \caption{Loss curves for training and validation sets.}
+    \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
-From the figure above, it is clear that the model did not overfit as the training and validation 
-loss curves are close to each other and decrease steadily. Further performance assessment results 
+From the figure above, it is clear that the model did not overfit as the loss curves for 
+training and validation are close to each other and decrease steadily. Further performance assessment results 
 of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
 mapping and localization.
 
@@ -1611,16 +1609,16 @@ point clouds to create an odometry of the environment.
 Iterative Extended Kalman Filter (IEKF) follows the core of Bayesian Recursion
 to estimate the state of the robot through the prediction and measurement update
 step. In the prediction step, IEKF assumes that the state of the system at time
-$k$ evolved from the prior state at time $k-1$ is shown as follows:
+$k$ evolved from the prior state at time $k-1$, and it is shown as follows:
 \begin{equation}
     x_k = f(x_{k-1},u_k) + w_{k} 
 \end{equation}
 
-Where $x_k$ is the state vector containing the terms of interest for the system
-at time $k$. The $f(.)$ represents a non-linear state function that is used to
-forecast current state data from prior state data $x_{k-1}$ and $u_k$ is a control vector. We can approximate $w_{k-1}$ as
-$N(0,Q_k)$ where it has a zero-mean Gaussian distribution with covariance matrix
-$Q_k$.
+Where $x_k$ is the state vector of the system's terms of interest at time $k$.
+The $f(.)$ represents a non-linear state function that is used to forecast
+current state data from prior state data $x_{k-1}$ and $u_k$ is a control
+vector. We can approximate $w_{k-1}$ as $N(0,Q_k)$ where it has a zero-mean
+Gaussian distribution with covariance matrix $Q_k$.
 
 To know the uncertainty of the prediction model, error covariance matrix $P^f_k$
 is defined as shown:
@@ -1632,7 +1630,7 @@ is defined as shown:
 
 Where $e$ is the prediction error, $F$ is the Jacobian matrix of the linearized
 state transition function $f(.)$ evaluated at the previous estimate
-$x_{k-1}$, and $Q$ is the process noise covariance matrix representing the
+$x_{k-1}$, and $Q$ is the noise covariance matrix that describes the
 uncertainty of the physical model.
 
 Even so, the predicted state alone is prone to errors due to various
@@ -1661,7 +1659,7 @@ $|x^a_{k,K+1} - x^a_{k,K}|$ falls below threshold $\epsilon$.
 As actual measurements from sensors will typically differ from this prediction
 due to sensor noise and model inaccuracies, it is incorporated into the state
 estimate by computing the difference between the actual measurements and the
-predicted measurement based on the current iterative estimate $K$:
+predicted measurement at the current iterative estimate $K$:
 \begin{equation}
     z_{k, K} = z_k - h(x^a_{k, K})
 \end{equation}
@@ -1715,9 +1713,10 @@ predicted state.
 As LiDAR odometry is used in the front end to provide high-rate local pose
 estimates without global constrains, iSAM2 pose graph optimization architecture
 is used for the back end to further optimize the point cloud map for higher
-accuracy. This technique is rooted in factor graph optimization algorithm
-where Maximum A Posteriori (MAP) is also used to factorize the joint posterior
-probability of the robot trajectory X as shown  \cite{wen2021factor}:
+accuracy. This technique is rooted in factor graph optimization algorithm where
+Maximum A Posteriori (MAP) is also used to factorize the the collective
+posterior distribution of the trajectory state X as shown
+\cite{wen2021factor}:
 
 \begin{equation} 
     P(X|Z, U) \propto P(x_0) \prod_{k} P(z_k|x_k) \prod_{k} P(x_k|x_{k-1}, u_{k-1}) 
@@ -1762,7 +1761,7 @@ $e(\mathcal{X})$ as shown:
 To solve the non-linear least squares problem defined by $e(\mathcal{X})$, the
 system iteratively refines the trajectory estimate to find the optimal solution
 $\hat{\mathcal{X}}$. The error function is linearized using a first-order Taylor
-expansion around the current estimate $\mathcal{X}^{(i)}$ where the state is
+expansion at the current estimate $\mathcal{X}^{(i)}$ where the state is
 then uploaded incrementally:
 \begin{equation}
     \mathcal{X}^{(i+1)} = \mathcal{X}^{(i)} + \Delta \mathcal{X}
@@ -2418,33 +2417,33 @@ As classification of the reflected and direct signals is required for robust GNS
 implementation, the LightGBM model is trained to classify the signals based on
 the features extracted from both antennas. The data collection, dataset preparation, and model
 selection have been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including accuracy, precision, recall, and F1-score. The subsections
+evaluated based on various metrics including F1-score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
-The F1-score is a mean of precision and recall of a classification model. Precision of a model indicates
-the ability of a model to not label a negative sample as positive and recall indicates the ability of a model to 
-find all the positive samples. The F1-score is calculated as follows from precision and recall:
+The F1-score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
+the ability of a model to not label a negative sample as positive. On the other hand, recall indicates the ability of a model to 
+find all the positive samples. The F1-score is calculated using the following equation:
 \begin{equation}
     F1 = 2 \cdot \frac{Precision \cdot Recall}{Precision + Recall}
 \end{equation}
 The F1-score for the LightGBM model on the test dataset is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/F1.png}
+    \includegraphics[width=0.65\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
 From the figure above, it is observed that the LightGBM model achieves an F1 score of approximately
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-A confusion matrix is used to describe the performance of a classification model on a set of test data
-for which the true values are known. The diagonal elements of a confusion matrix represent correctly classified samples,
-while the off-diagonal values indicate misclassified ones. The confusion matrix for our signal classification 
-LightGBM model is shown in the figure below.
+A confusion matrix is a technique to visualize the performance of a classification model on a set of test data. 
+The diagonal elements of the matrix represent correctly classified samples,
+while the off-diagonal values indicate misclassified ones. The confusion matrix for the LightGBM signal classification 
+model is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
-    \caption{Confusion matrix for LightGBM model on test dataset}
+    \caption{Confusion matrix for LightGBM model}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
 of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
@@ -2452,10 +2451,10 @@ tree reflection. As can be observed from the confusion matrix, 1110 and 1008 sam
 signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
-\subsubsection{Receiver Operating Characteristic (ROC) Curve}
-A Receiver Operating Characteristic (ROC) curve is a graphical representation that illustrates the performance of a 
-binary classification model at various threshold settings. It plots the True Positive Rate (TPR) against the False Positive
-Rate (FPR) and helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
+\subsubsection{ROC Curve}
+A ROC curve is a technique to graphically represent the performance of a 
+binary classification model at various threshold settings. It generally plots the True Positive Rate (TPR) against the False Positive
+Rate (FPR). This technique helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
 closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
 0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
 the ROC curve is shown in the figure below.
@@ -2468,14 +2467,14 @@ The figure indicates that the LightGBM model has a ROC value of over 0.95 for al
 that the model has high ability to distinguish between signal classes.
 \subsubsection{Feature Importance}
 Feature importance is a technique in machine learning used to identify and rank the most relevant features
-in a model. A feature importance analysis was performed on the LightGBM model to identify the most significant features for
-our signal classification task. The feature importance plot is shown in the figure below.
+in a model. A feature importance analysis was performed on the LightGBM model to identify the most crucial features for
+ signal classification task. The feature importance plot is shown in the figure below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/feature_importance.png}
     \caption{Feature importance plot for LightGBM model}
 \end{figure}
-The figure indicates that the top three most important features for the LightGBM model are:
+The figure indicates that the top three features for the LightGBM model are:
 \begin{itemize}
     \item Pseudorange 
     \item Doppler measurement
