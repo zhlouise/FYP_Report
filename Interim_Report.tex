@@ -1511,7 +1511,7 @@ labeled samples were used for training the model. The training features included
 Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
 hyperparameters are shown in the table below. 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \label{tab:lgbm-hyperparams}
 \renewcommand{\arraystretch}{1.2} % Increase row height for better readability
@@ -2415,11 +2415,11 @@ in the following section.
 As classification of the reflected and direct signals is required for robust GNSS-R
 implementation, the LightGBM model is trained to classify the signals based on
 the features extracted from both antennas. The data collection, dataset preparation, and model
-selection have been explained in the methodology section. The performance of the model is
-evaluated based on various metrics including F1-score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
+selection have been explained in the methodology section. The performance evaluation of the model is done
+based on various metrics including F1 score, confusion matrix and Receiver Operating Characteristic (ROC) curve. The subsections
 below present the evaluation results and discussion.
 \subsubsection{F1-score}
-The F1-score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
+The F1 score is the mean of two performance indicators: precision and recall of a classification model. Precision of a model indicates
 the ability of a model to not label a negative sample as positive. On the other hand, recall indicates the ability of a model to 
 find all the positive samples. The F1-score is calculated using the following equation:
 \begin{equation}
@@ -2435,10 +2435,10 @@ From the figure above, it is observed that the LightGBM model achieves an F1 sco
 0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
-A confusion matrix is a technique to visualize the performance of a classification model on a set of test data. 
-The diagonal elements of the matrix represent correctly classified samples,
-while the off-diagonal values indicate misclassified ones. The confusion matrix for the LightGBM signal classification 
-model is shown in the figure below.
+Confusion matrix can help to visualize the performance of a classification model on a set of test data for which
+the true values are already known. The elements which are present diagonally in the matrix 
+represent correctly classified samples and the rest of the elements indicate the number of incorrect classified samples. 
+The confusion matrix for the LightGBM model is shown below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
@@ -2451,8 +2451,8 @@ signals respectively are misclassified as tree reflected signals. This could be 
 signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
 \subsubsection{ROC Curve}
-A ROC curve is a technique to graphically represent the performance of a 
-binary classification model at various threshold settings. It generally plots the True Positive Rate (TPR) against the False Positive
+A ROC curve is a way to graphically represent how well a binary classifier is performing at different threshold settings. 
+It generally plots the True Positive Rate (TPR) against the False Positive
 Rate (FPR). This technique helps to visualize the trade-off between sensitivity and specificity of the model. If the ROC value is
 closer to 1, it indicates that the model can effectively distinguish between classes, while a value near
 0.5 indicates little discrimination ability. For the LightGBM model trained for classification of signals,
