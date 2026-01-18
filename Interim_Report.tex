@@ -1317,9 +1317,10 @@ be calculated as the following \cite{yu2021theory}:
 \end{equation}
 To calculate the location of the FFZ center, a local coordinate system is
 defined. The origin is the receiver's ground projection, while the y-axis aligns
-with the ground projection of the receiver-to-satellite vector. The z-axis
-follows the local East-North-Up (ENU) "up" direction, and the x-axis completes
-the coordinate system by remaining orthogonal to both x and y axes. 
+with the ground projection of the vector from the receiver to the satellite. The
+z-axis follows the up direction of the local East-North-Up (ENU) coordinates,
+and the x-axis completes the coordinate system by remaining orthogonal to both x
+and y axes. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
@@ -2315,10 +2316,9 @@ potentially distinguish tree-reflected signals for identifying vegetated areas,
 it also highlights a critical assumption that must be validated. Up to this
 point, it was assumed that the zenith antenna receives only direct signals while
 the nadir antenna receives only reflected signals. However, Figure \ref{Pr_Error
-Distribution} has already demonstrated that this assumption is invalid. To
-investigate further, the distribution of the difference between the absolute
-pseudorange errors of the nadir and zenith antennas is plotted in Figure
-\ref{Pr_Error Difference}.
+Distribution} has already challenged this assumption. To investigate further,
+the distribution of the difference between the absolute pseudorange errors of
+the nadir and zenith antennas is plotted in Figure \ref{Pr_Error Difference}.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
@@ -2341,7 +2341,7 @@ with similar pseudorange errors. Two possible scenarios explain this phenomenon:
 \end{enumerate}
 Furthermore, Figure \ref{Pr_Error Difference} shows observations where the
 zenith pseudorange error significantly exceeds the nadir pseudorange error,
-indicating that the zenith antenna receives reflected signals. Since the zenith
+indicating that the zenith antenna can receive reflected signals. Since the zenith
 antenna is RHCP and the nadir antenna is LHCP, this also indicates that a GNSS
 RHCP antenna is able to receive LHCP signals and vice versa. To further
 investigate this observation, both antenna are tested in an open sky environment
@@ -2370,7 +2370,7 @@ Testing Open Sky}.
 Assuming all signals received in the open sky environment are non-reflected and
 thus RHCP, the LHCP antenna (shown in orange) can indeed receive RHCP signals,
 just at lower $C/N_0$ values compared to the RHCP antenna due to lower antenna
-gains. This phenomenon is more pronounced in a subsequent experiment, where both
+gains. This phenomenon is further demonstrated in a subsequent experiment, where both
 antennas were elevated midair. During the first five minutes, both antennas
 faced upward; during the final five minutes, both antennas faced downward. The
 corresponding $C/N_0$ values received are plotted against observation time in
