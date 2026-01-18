@@ -89,7 +89,7 @@
 \section{Abstract}
 \begin{itshape}
 Vegetation monitoring is essential for environmental sustainability, yet
-conventional sensing methods are often limited by high costs, weather
+conventional sensing methods often face the limitations of high costs, weather
 dependency, and low spatial resolution. This project explores an alternative
 solution through developing an intelligent Unmanned Aerial Vehicle (UAV) system
 that integrates Global Navigation Satellite System Reflectometry (GNSS-R) remote
@@ -132,33 +132,33 @@ methods are highly dependent on the available expertise and resources, as the
 site assessments often required the assessor to possess reasonable levels of
 field knowledge prior to surveying \cite{Parkes2003}. To address the limitations
 of manual assessments and to accommodate for the increasing large-scale
-monitoring demands, remote sensing systems emerged as an essential tool for
-ecological monitoring \cite{Li2023}. 
+monitoring demands, remote sensing systems emerged as essential tools for
+ecological surveying \cite{Li2023}. 
 
-Remote sensing refers to the acquisition of an object's information through
-measurements obtained without coming into direct contact with said object,
-effectively minimizing the need for manual involvement on-site
-\cite{campbell2011introduction}. Specifically, remote sensing relies on
-information derived from different measurements of energy reflected from the
-object of interest \cite{campbell2011introduction}. In the context of surveying
-terrestrial vegetation, the remote sensing methods could be classified into two
-categories based on the distance between the target object and the measurement
-sensor: 1) space-borne and 2) airborne remote sensing. Space-borne remote
-sensing involves the use of instruments onboard orbiting satellites, including
-spectral and hyperspectral cameras \cite{Qian2022}, synthetic aperture radar
-(SAR) \cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the
-wide coverage and availability of space-borne data, large-scale terrestrial
-changes over time could be captured, enabling the continuous monitoring of
-macro-scale ecosystems \cite{Khan2024}. Compared to space-borne systems,
-airborne remote sensing can provide significantly improved spatial resolution
-and assessment flexibility through the integration of sensors onboard manned
-aircraft or UAVs \cite{Khan2024}. Although limited by coverage area, airborne
-remote sensing can provide timely information for addressing regional
-emergencies such as pest \cite{Wulder2006} or wildfire \cite{Arroyo2008}
-outspreads since the systems could be deployed on-demand. In UAV-based remote
-sensing particularly, this temporal flexibility is further complemented with the
-benefit of low operational cost, rendering it an ideal platform for monitoring
-regional and urban vegetation \cite{Tang2015}. 
+Remote sensing can be defined as the acquisition of an object's measurements
+without coming into direct contact with said object, effectively minimizing the
+need for manual involvement on-site \cite{campbell2011introduction}.
+Specifically, remote sensing relies on information derived from different
+measurements of energy reflected from the object of interest
+\cite{campbell2011introduction}. In the context of surveying terrestrial
+vegetation, the remote sensing methods could be classified into two categories
+based on the distance between the target object and the measurement sensor: 1)
+space-borne and 2) airborne remote sensing. Space-borne remote sensing involves
+the use of instruments onboard orbiting satellites, including spectral and
+hyperspectral cameras \cite{Qian2022}, synthetic aperture radar (SAR)
+\cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the wide
+coverage and availability of space-borne data, large-scale terrestrial changes
+over time could be captured, enabling the continuous monitoring of macro-scale
+ecosystems \cite{Khan2024}. Compared to space-borne systems, airborne remote
+sensing can provide significantly improved spatial resolution and assessment
+flexibility through the integration of sensors onboard manned aircraft or UAVs
+\cite{Khan2024}. Although limited by coverage area, airborne remote sensing can
+provide timely information for addressing regional emergencies such as pest
+\cite{Wulder2006} or wildfire \cite{Arroyo2008} outspreads since the systems
+could be deployed on-demand. In UAV-based remote sensing particularly, this
+temporal flexibility is further complemented with the benefit of low operational
+cost, rendering it an ideal platform for monitoring regional and urban
+vegetation \cite{Tang2015}. 
 
 Conventionally, UAV remote sensing platforms carry similar instruments to that
 of other remote sensing systems, including radar, LiDAR, and multi-spectral or
@@ -245,7 +245,7 @@ works, and Section 9 summarizes project management details.
 To achieve the project objectives, this literature review comprehensively examines
 the contemporary research in four domains, each associated with one project
 objective. First, existing path planning methodologies are reviewed to identify
-suitable algorithms for autonomous UAV navigation in vegetated environments.
+suitable algorithms for autonomously navigating an UAV in vegetated environments.
 Subsequently, the existing techniques of GNSS-R are explored, with a focus on
 its prior applications in vegetation parameter retrieval. Then, machine learning
 based techniques are investigated for the purpose of classification of reflected
@@ -512,13 +512,14 @@ between signal attenuation and vegetation water content \cite{Camps2016}.
 Additionally, the interference pattern between direct and reflected GNSS signals
 from the Earth's surface was used in estimating vegetation height and land
 topography \cite{RodriguezAlvarez2011}. Using a Soil Moisture
-Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, the
-power of the direct and reflected signals was coherently added, in which the
-resulting power oscillations due to interference present notches that are
-correlated to vegetation layer thickness and the reflection geometry (Figure
-\ref{SMIGOL}) \cite{RodriguezAlvarez2011}. As a result, an RMSE of 3-5 cm in
-estimating the height of vegetation with simple geometrical structures (barley
-and wheat) could be achieved \cite{RodriguezAlvarez2011}.
+Interference-pattern GNSS Observations at L-band (SMIGOL) reflectometer, which
+receives both the direct and reflected signals simultaneously, the power of the
+received signals was coherently added. As a result, the recorded power
+oscillations due to interference present notches that are correlated to
+vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
+\cite{RodriguezAlvarez2011}. Ultimately, an RMSE of 3-5 cm in estimating the
+height of vegetation with simple geometrical structures (barley and wheat) could
+be achieved \cite{RodriguezAlvarez2011}.
 
 \begin{figure}[H]
     \centering
@@ -1322,7 +1323,7 @@ and y axes.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
-    \caption{Schematic diagram of the local coordinate system defined.}
+    \caption{Schematic diagram of the local coordinate axes defined.}
 \end{figure}
 In this coordinate system, the location of the FFZ center could be expressed as
 $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
@@ -2059,8 +2060,8 @@ summarized in Table \ref{Experiment-Summary}.
 
 % --- Results and Discussion ---
 \section{Results and Discussion}
-This section presents the results obtained from the four different
-implementations of this project. It includes path planning, GNSS-R signal
+In this section, the results obtained from the four different implementations of
+this project will be presented, which includes path planning, GNSS-R signal
 analysis, machine learning classification, and LiDAR SLAM. The results are
 analyzed to evaluate the effectiveness of each subsystem, and discuss how
 autonomous navigation enables reliable data collection, how GNSS-R measurements
@@ -2681,10 +2682,10 @@ robust modular LiDAR SLAM system.
 
 % --- Future Works ---
 \section{Future Works}
-In this section, we present the limitations of each component at its current
-stage, followed by proposed solutions. The frameworks discussed include path
+In this section, the proposed solutions to the limitations of each component at
+its current stage will be presented. The frameworks discussed include path
 planning, GNSS-R, machine learning, and LiDAR SLAM. The discussed solutions will
-be operated in the next stage of our project. 
+be executed in the next stage of our project. 
 
 \subsection{Path Planning}
 For the path planning framework, so far, most results have been conducted in a
@@ -2906,14 +2907,15 @@ strong long-distance communication telemetry types and will be replacing the
 current hardware in the next stage. 
 
 \subsubsection{GNSS-R}
-Through processing the data collected during the first half of this project, one of the 
-most important issue that arose was the fact that some results did not indicate obvious
-conclusions. For example, as demonstrated in Figure \ref{GNSS-R Confusing Result}, the
-FFZs of $C/N_0$ ratios do not display clear and conclusive results, as opposed to the
-observations shown in the Results and Discussion section of the report. This is partially
-caused by the fact that not all the FFZs shown here actually exist due to non-reflected
-signals received by the bottom antenna assumed to be reflected from the ground. To solve 
-this issue, machine learning approaches will be employed to extract only the reflected
+Through processing the data collected during the first half of this project, one
+of the most important issue that arose was the fact that some results did not
+indicate obvious conclusions. For example, as demonstrated in Figure \ref{GNSS-R
+Confusing Result}, the FFZs of $C/N_0$ ratios do not display clear and
+conclusive results, as opposed to the observations shown in the Results and
+Discussion section of the report. Particularly, this is due to the fact that not
+all the FFZs shown here actually exist due to non-reflected signals received by
+the bottom antenna assumed to be reflected from the ground. To solve this issue,
+machine learning approaches will be employed to extract only the reflected
 signals from the nadir antenna observations.
 \begin{figure}[H]
     \centering
