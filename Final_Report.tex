@@ -200,7 +200,7 @@ spatial reference to validate any vegetation parameters obtained through the
 GNSS-R framework.
 
 In summary, this project will integrate the technologies of autonomous
-navigation, GNSS-R, machine learning, and LiDAR SLAM to achieve an intelligent
+navigation, LiDAR SLAM, GNSS-R, and machine learning, to achieve an intelligent
 and structured remote sensing system for vegetation monitoring. The main
 objectives of this project are as follows:
 \begin{enumerate}
@@ -209,6 +209,18 @@ platform for optimized GNSS-R remote sensing. The framework aims to identify
 potential vegetation areas and generate accurate trajectories for navigation
 during data collection. Consequently, the proposed system enables the UAV to
 autonomously acquire high-quality GNSS raw data for environmental monitoring.
+\item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
+spatial validation reference for the 2D vegetation features detected by GNSS-R.
+This involves creating a modular SLAM system, incorporating LiDAR odometry as the 
+front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a result, 
+an accurate vegetation map could be generated to complement the GNSS-R vegetation 
+monitoring system.
+\item To classify signals reflected by vegetation and predict vegetation parameters
+based on raw GNSS data using a machine-learning-based approach. The classification 
+task will help to identify tree reflected signals which will be sent to GNSS-R framework, while the regression task will help to predict vegetation parameters and validate GNSS-R framework. Classification part will be mainly based on gradient boosting and
+decision tree based models while the regression part will make use of advanced neural
+network architectures. Ultimately, the machine learning part will complement the GNSS-R
+framework to enhance the robustness of vegetation parameter prediction.
 \item To analyze and model the correlations between signal propagation
 parameters retrieved through GNSS-R and ground vegetation conditions. This
 involves collecting and post-processing raw GNSS data, extracting GNSS signal
@@ -217,28 +229,9 @@ regions reflecting the signal. Ultimately, such correlations would be modelled
 both quantitatively and qualitatively such that the ground vegetation conditions
 could be effectively predicted from the GNSS signal properties received onboard
 the UAV.
-\item To classify signals reflected by vegetation and predict vegetation parameters
-based on raw GNSS data using a machine-learning-based approach. The classification 
-task will help to identify tree reflected signals which will be sent to GNSS-R framework, 
-while the regression task will help to predict vegetation parameters and validate GNSS-R framework. 
-Classification part will be mainly based on gradient boosting and
-decision tree based models while the regression part will make use of advanced neural
-network architectures. Ultimately, the machine learning part will complement the GNSS-R
-framework to enhance the robustness of vegetation parameter prediction.
-\item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
-spatial validation reference for the 2D vegetation features detected by GNSS-R.
-This involves creating a modular SLAM system, incorporating LiDAR odometry as the 
-front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a result, 
-an accurate vegetation map could be generated to complement the GNSS-R vegetation 
-monitoring system.
 \end{enumerate}
 
-\hl{This report is structured as follows: Section 3 reviews contemporary research in
-UAV path planning, GNSS-R, machine learning, and LiDAR SLAM, while Section 4
-outlines the project's methodologies. The subsequent sections cover the
-experiments conducted (Section 5), a discussion of current results (Section 6),
-and the project conclusions (Section 7). Finally, Section 8 explores future
-works, and Section 9 summarizes project management details. }
+The report bgins with a section on system architecture. It is followed by four core sections covering UAV path planning, LiDAR SLAM, GNSS-R, and machine learning respectively. Within each of these four sections includes literature review, methodology, results, and discussion to clearly present the work completed in each area. The report then concludes with sections on experiments conducted, case study of selected experiments, conclusion, and project management.
 
 
 % --- System Architecture ---
