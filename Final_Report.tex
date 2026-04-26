@@ -1405,25 +1405,62 @@ Since LiDAR based SLAM system relies on relative measurements to estimate motion
 
 To counter this issue, GPS is added to the pose graph optimization SLAM system to provide absolute global positioning by detecting receiver’s location relative to a known Earth-centered reference coordinate system from satellite signals. The presence of GPS will then acts as an anchor to avoid the LiDAR SLAM from drifting due to relative positioning errors.
 
-In order to incorporate GPS into the pose graph optimization SLAM, GPS measurements is treated as a constraint on a single node where error $\mathbf{e}_k$ for GPS measurements at time instant $k$ is obtained by taking the difference between the robot estimated position $\mathbf{p}_k$ and the GPS measurement $\mathbf{z}^{\mathrm{gps}}_k$:
+For the purpose of incorporating GPS into the pose graph optimization SLAM, GPS measurements is treated as a constraint on a single node where error $\mathbf{h}_k$ for GPS measurements at time instant $k$ is obtained by taking the difference between the robot estimated position $\mathbf{p}_k$ and the GPS measurement $\mathbf{z}^{\mathrm{gps}}_k$:
 \begin{equation}
-\mathbf{e}_k = \mathbf{z}^{\mathrm{gps}}_k - \mathbf{p}_k
+\mathbf{h}_k(x_k) = \mathbf{z}^{\mathrm{gps}}_k - \mathbf{p}_k
 \end{equation}
 
-Where $\mathbf{x}_k$ is the status of the robot at time $k$ and $\mathbf{z}^{\mathrm{gps}}_k$ is the GPS position measurement in the local frame. The error $\mathbf{e}_k$ is then used to obtain the cost function $F(X)$ of the pose graph optimization system which evaluates the total error score between the LiDAR trajectory and the GPS trajectory: 
+Where $x_k$ is the status of the robot at time $k$ and $\mathbf{z}^{\mathrm{gps}}_k$ is the GPS position measurement in the local frame. The error $\mathbf{h}_k$ is then used to obtain the cost function $F(X)$ of the pose graph optimization system which evaluates how well the estimated robot trajectory agrees with botht the relative LiDAR constraints and the absolute GPS measurements: 
 \begin{equation}
 F(X)=\sum_i \left\| h_{i,i+1} \right\|^2_{\Omega_{odom}}
 \;+\;
 \sum_k \left\| z_k^{gps} - p_k \right\|^2_{\Omega_{gps}}
 \end{equation}
 
-Letting $\mathbf{h}_{i,i+1}$ denote the error between the LiDAR measurement and the robot's estimation. Meanwhile, $\Omega_{odom}$ is the information matrix representing the uncertainty of LiDAR odometry and $\Omega_{gps}$ is the information matrix of GPS uncertainty. These matrices determine how much influence each measurement source has in the optimization process based on its level of uncertainty. Measurements with lower uncertainty are given higher influence during optimization, while noisier measurements contribute less to the final solution. 
+Letting $\mathbf{e}_{i,i+1}$ denote the error between the LiDAR measurement and the robot's estimation. Meanwhile, $\Omega_{odom}$ is the information matrix representing the uncertainty of LiDAR odometry and $\Omega_{gps}$ is the information matrix of GPS uncertainty. These matrices determine how much influence each measurement source has in the optimization process based on its level of uncertainty. Measurements with lower uncertainty are given higher influence during optimization, while noisier measurements contribute less to the final solution. 
 
-Since the total cost function $F(X)$ is generally nonlinear with respect to the robot states, iterative nonlinear least-squares methods are used to solve this problem. In each iteration, the nonlinear error function is linearized around the current state estimate and an increment $\Delta X$ is computed to update the pose estimate until convergence is achieved.
+Since the total cost function $F(X)$ is generally nonlinear with respect to the robot states, iterative nonlinear least-squares methods are used to solve this problem. Based on that, Levenberg-Marquardt algorithm is a standard optimization method used to iteratively solve for the trajectory update using the Jacobian matrix \cite{ranganathan2004levenberg}. In each iteration, the nonlinear error function is linearized around the current state estimate and an increment $\Delta X$ is computed to update the pose estimate until convergence is achieved. The state update $\Delta X$ can be expressed as:
+\begin{equation}
+\Delta X = -(J^T \Omega J + \lambda \text{diag}(J^T \Omega J))^{-1} J^T \Omega e
+\end{equation}
 
+Where the residual $e$ denotes the error between the LiDAR odometry and GPS measurement, the Jacobian $J$ denotes the first-order partial derivatives of the residuals $e$ with respect to state variable $X$, the information matrix $\Omega$ represents the global stacked information matrix containing all measurement weights, and the damping factor $\lambda$ is used to regulate the update step by balancing the behavior between the Gauss-Newton method and gradient descent. Once the state update $\Delta X$ is calculated, it can be used to calculate the new state estimate, resulting in higher SLAM accuracy.
+\begin{equation}
+X^{(t+1)} = X^{(t)} + \Delta X.
+\end{equation}
 
+Even though Levenberg-Marquardt algorithm is able to solve the whole robot's trajectory at once, the matrices can get too large to invert in real-time if the robot continues to drive. Therefore, the actual implementation uses iSAM2 which converts the mathematical problem into Bayes Tree to perform incremental updates in real time more efficiently \cite{kaess2012isam2}.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{Included_Images/gps_correction.png}
+    \caption{Flowchart showcasing the iterative optimization loop for updating the robot state estimate}
+\end{figure}
 
+\subsubsection{Frame Transformation}
+With the aim of performing GPS correction in a pose graph SLAM system, LiDAR and GPS must be in the same coordinate frame in order to enable consistent comparison and fusion of their measurements during optimization. However, since the LiDAR sensor and GPS antenna are mounted at different physical location on the UAV, the relative transformation between the LiDAR and GPS coordinate frames must first be determined so that their measurements can be transformed into a common reference frame before GPS constraints are incorporated into the pose graph optimization process.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/lidar_pos.png}
+    \caption{Illustration of the sensors' location on UAV}
+\end{figure}
+
+Frame transformation consist of rotational and translational components that describe the relative orientation and positional offset between two coordinate frames. As the translational difference between LiDAR and GPS are at centimeter level which is insignificant within the SLAM system, only rotational transformation will be focused in this case. 
+
+To effectively perform frame transformation between two sensors, it is first necessary to determine how the coordinate frame axes are defined within the system. This was achieved by applying rotational offsets independently about each principal axis then observe the resulting change in sensor orientation. By isolating each rotational component, the direction and convention of rotation for each axis could be identified as shown in Figure \ref{fig:SLAM_axis}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Included_Images/SLAM_axis.png}
+    \caption{Illustration of the direction of principal axis within the SLAM system}
+    \label{fig:SLAM_axis}
+\end{figure}
+
+Meanwhile, as GPS only provide translational data such as longitude, latitude, and altitude, additional IMU which is located at the same position as the GPS antenna, is used to provide the rotational information for GPS measurement, creating a complete 6-DoF pose representation required for accurate frame transformation. Based on that, extrinsic calibration is carried out between the GPS/IMU system and LiDAR/IMU to obtain the relative rotation between two sensor frames. The calibration results indicate that there is a rotational offset of $145.98^\circ$ about the X-axis, $90.0^\circ$ about the Z-axis, and no rotational offset about the Y-axis between the GPS and LiDAR frames. 
+
+In an effort to implement the calibration results into the SLAM framework, the absolute initial heading of the LiDAR must be determined at the start of the system. This is because the LiDAR odometry defines its origin as $0^\circ$ based on the initial orientation of the UAV. Conversely, the GPS/IMU system operates in a global reference frame which is aware of the heading of East, West, North, and South, resulting in the initial orientation of GPS/IMU generally being nonzero. This creates an unknown rotational offset between the LiDAR local frame and the global navigation frame.
+
+To bridge this gap, initial IMU's global orientation from the GPS is captured at system startup representing as a quaternion $Q_{imu_global}$. Even so, given that GPS/IMU is rigidly attached to the LiDAR sensor via a known extrinsic calibration, its orientation must be corrected by the previously determined fixed transformation between the IMU and LiDAR frames where the transformation is represented as $Q_{imu_to_lidar}$.
 
 
 \subsubsection{System Architecture}
