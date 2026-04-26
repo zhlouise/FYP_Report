@@ -1,4 +1,4 @@
-## Interdepartmental FYP Interim Report (AAE Group) ##
+## Interdepartmental FYP Report (AAE Group) ##
 
 ### IMPORTANT! Please only commit the .tex, .bib file and any included images/figures. DO NOT COMMIT THE PDF as it will make the final merging difficult! ###
 
