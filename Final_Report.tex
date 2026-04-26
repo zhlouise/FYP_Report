@@ -231,7 +231,7 @@ could be effectively predicted from the GNSS signal properties received onboard
 the UAV.
 \end{enumerate}
 
-The report bgins with a section on system architecture. It is followed by four core sections covering UAV path planning, LiDAR SLAM, GNSS-R, and machine learning respectively. Within each of these four sections includes literature review, methodology, results, and discussion to clearly present the work completed in each area. The report then concludes with sections on experiments conducted, case study of selected experiments, conclusion, and project management.
+The report begins with a section on system architecture. It is followed by four core sections covering UAV path planning, LiDAR SLAM, GNSS-R, and machine learning respectively. Within each of these four sections includes literature review, methodology, results, and discussion to clearly present the work completed in each area. The report then concludes with sections on experiments conducted, case study of selected experiments, conclusion, and project management.
 
 
 % --- System Architecture ---
@@ -1398,7 +1398,31 @@ for $\Delta \mathcal{X}$ through the normal equations using the Gauss-Newton
 method. Unlike the IEKF, which only iterates on the current state at time $k$,
 this graph-based optimization allows the system to re-linearize the entire
 trajectory history to ensure local sensor noise does not lead to permanent
-global map distortion 
+global map distortion. 
+
+\subsubsection{GPS Correction}
+Since LiDAR based SLAM system relies on relative measurements to estimate motion, this method is prone to trajectory drift if errors such as inaccuracy in pose incrementation and accumulation of non-collective uncertainty occurs during the computation \cite{cwian2021large, chen2022slam}. 
+
+To counter this issue, GPS is added to the pose graph optimization SLAM system to provide absolute global positioning by detecting receiver’s location relative to a known Earth-centered reference coordinate system from satellite signals. The presence of GPS will then acts as an anchor to avoid the LiDAR SLAM from drifting due to relative positioning errors.
+
+In order to incorporate GPS into the pose graph optimization SLAM, GPS measurements is treated as a constraint on a single node where error $\mathbf{e}_k$ for GPS measurements at time instant $k$ is obtained by taking the difference between the robot estimated position $\mathbf{p}_k$ and the GPS measurement $\mathbf{z}^{\mathrm{gps}}_k$:
+\begin{equation}
+\mathbf{e}_k = \mathbf{z}^{\mathrm{gps}}_k - \mathbf{p}_k
+\end{equation}
+
+Where $\mathbf{x}_k$ is the status of the robot at time $k$ and $\mathbf{z}^{\mathrm{gps}}_k$ is the GPS position measurement in the local frame. The error $\mathbf{e}_k$ is then used to obtain the cost function $F(X)$ of the pose graph optimization system which evaluates the total error score between the LiDAR trajectory and the GPS trajectory: 
+\begin{equation}
+F(X)=\sum_i \left\| h_{i,i+1} \right\|^2_{\Omega_{odom}}
+\;+\;
+\sum_k \left\| z_k^{gps} - p_k \right\|^2_{\Omega_{gps}}
+\end{equation}
+
+Letting $\mathbf{h}_{i,i+1}$ denote the error between the LiDAR measurement and the robot's estimation. Meanwhile, $\Omega_{odom}$ is the information matrix representing the uncertainty of LiDAR odometry and $\Omega_{gps}$ is the information matrix of GPS uncertainty. These matrices determine how much influence each measurement source has in the optimization process based on its level of uncertainty. Measurements with lower uncertainty are given higher influence during optimization, while noisier measurements contribute less to the final solution. 
+
+Since the total cost function $F(X)$ is generally nonlinear with respect to the robot states, iterative nonlinear least-squares methods are used to solve this problem. In each iteration, the nonlinear error function is linearized around the current state estimate and an increment $\Delta X$ is computed to update the pose estimate until convergence is achieved.
+
+
+
 
 
 
