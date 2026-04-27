@@ -1066,12 +1066,9 @@ methods above.
 In recent years, autonomous robots have been widely implemented to carry out
 repetitive tasks or take part in site surveys to ensure human safety or even
 reduce operational cost. To carry out remote sensing via UAV, mapping is
-essential to allow robots to create a spatial understanding of the site in order
-to create efficient flight paths as well as avoid obstacles. 
+essential for generating accurate three-dimensional representations of the environment. For tree canopy monitoring, 3D point cloud mapping provides additional spatial reference information by capturing canopy structure, height, and surface geometry, thereby complementing conventional remote sensing observations.
 
-The common way for remote sensing robots to carry out mapping is by using
-sensors such as camera or LiDAR to create an odometry. This allows the robots to
-estimate their position and movement over time by measuring the changes in each
+The common way to carry out mapping is by using sensors such as camera or LiDAR to create an odometry. This allows the robots to estimate their position and movement over time by measuring the changes in each
 frame of the sensors. In practice, the common approaches to frame-to-frame
 odometry are visual odometry or LiDAR odometry. Visual odometry estimates motion
 by tracking distinct features in each image frame through gradients and textures
@@ -1452,15 +1449,38 @@ To effectively perform frame transformation between two sensors, it is first nec
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/SLAM_axis.png}
-    \caption{Illustration of the direction of principal axis within the SLAM system}
+    \caption{Illustration of the direction of principal axis within SLAM system}
     \label{fig:SLAM_axis}
 \end{figure}
 
-Meanwhile, as GPS only provide translational data such as longitude, latitude, and altitude, additional IMU which is located at the same position as the GPS antenna, is used to provide the rotational information for GPS measurement, creating a complete 6-DoF pose representation required for accurate frame transformation. Based on that, extrinsic calibration is carried out between the GPS/IMU system and LiDAR/IMU to obtain the relative rotation between two sensor frames. The calibration results indicate that there is a rotational offset of $145.98^\circ$ about the X-axis, $90.0^\circ$ about the Z-axis, and no rotational offset about the Y-axis between the GPS and LiDAR frames. 
+Meanwhile, as GPS only provide translational data such as longitude, latitude, and altitude, additional IMU which is located at the same position as the GPS antenna, is used to provide the rotational information for GPS measurement, creating a complete 6-DoF pose representation required for accurate frame transformation. Based on that, extrinsic calibration is carried out between the GPS/IMU and LiDAR/IMU systems to obtain the relative rotation between two sensor frames \cite{lidar_imu_init}. The calibration results indicate that there is a rotational offset of $145.98^\circ$ in roll, $90.0^\circ$ in yaw, and no rotational offset in pitch between the GPS and LiDAR frames. 
 
 In an effort to implement the calibration results into the SLAM framework, the absolute initial heading of the LiDAR must be determined at the start of the system. This is because the LiDAR odometry defines its origin as $0^\circ$ based on the initial orientation of the UAV. Conversely, the GPS/IMU system operates in a global reference frame which is aware of the heading of East, West, North, and South, resulting in the initial orientation of GPS/IMU generally being nonzero. This creates an unknown rotational offset between the LiDAR local frame and the global navigation frame.
 
-To bridge this gap, initial IMU's global orientation from the GPS is captured at system startup representing as a quaternion $Q_{imu_global}$. Even so, given that GPS/IMU is rigidly attached to the LiDAR sensor via a known extrinsic calibration, its orientation must be corrected by the previously determined fixed transformation between the IMU and LiDAR frames where the transformation is represented as $Q_{imu_to_lidar}$.
+To bridge this gap, initial IMU's global orientation from the GPS is captured at system startup and its represented as quaternion $Q_{imu\_global}$. Even so, given that GPS/IMU is rigidly attached to the LiDAR sensor via a known extrinsic calibration, its orientation must be corrected by the previously determined fixed transformation between the IMU and LiDAR frames where the transformation is represented as $Q_{imu\_to\_lidar}$. Thus, the absolute orientation of LiDAR with respect to global coordinate frame $Q_{lidar\_global}$ is therefore computed via quaternion multiplication chain:
+\begin{equation}
+Q_{lidar\_global} = Q_{imu\_global} \otimes Q_{imu\_to\_lidar}
+\end{equation}
+
+Once the absolute global orientation of the LiDAR is calculated, the system isolates the yaw heading component. Isolating the yaw is critical because pitch and roll are typically constrained by the IMU's gravity vector, meaning both the LiDAR/IMU and GPS/IMU systems have near-zero pitch and roll during initialization. This leaves the yaw heading as the primary unaligned degree of freedom between the local LiDAR frame and the global navigation frame.
+
+The extracted initial yaw offset is stored and combined with the calibrated roll offset to construct the transformation matrix between GPS and LiDAR frames. The complete rotational compensation is expressed as:
+\begin{equation}
+P_{lidar} = R_x(\theta_{roll})\,R_z(\theta_{yaw})\,P_{gps}
+\end{equation}
+where $R_x(\theta_{roll})$ is the fixed roll rotation of $145.98^\circ$ and $R_z(\theta_{yaw})$ is the initial yaw alignment between the global GPS frame and the local LiDAR frame. This transformation matrix is then applied to every incoming GPS measurement before it is introduced into the pose graph. As a result, all GPS positions are converted into the LiDAR local coordinate frame, allowing GPS factors to be consistently fused with LiDAR odometry during pose graph optimization.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/frame_trans.png}
+    \caption{Illustration of the frame transformation from GPS to LiDAR}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{Included_Images/transformation_result.png}
+    \caption{Comparison of SLAM system before and after frame transformation}
+\end{figure}
 
 
 \subsubsection{System Architecture}
