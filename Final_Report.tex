@@ -89,23 +89,13 @@
 \section{Abstract}
 \begin{itshape}
 Vegetation monitoring is essential for environmental sustainability, yet
-conventional sensing methods often face the limitations of high costs, weather
+conventional sensing methods often face the limitations of high costs, labor
 dependency, and low spatial resolution. This project explores an alternative
 solution through developing an intelligent Unmanned Aerial Vehicle (UAV) system
-that integrates Global Navigation Satellite System Reflectometry (GNSS-R) remote
-sensing, autonomous path planning algorithms, machine learning techniques, and
-Light Detection and Ranging (LiDAR) based mapping for robust vegetation
-monitoring. Currently, the system design implements A* and Boustrophedon
-algorithms for path planning, a dual antenna system with opposite polarization
-for GNSS signal reception, a LightGBM model for GNSS signal classification, and
-a modular LiDAR Simultaneous Localization and Mapping (SLAM) framework for
-generating canopy maps. In this interim report, preliminary experiments
-demonstrating successful data collection, GNSS signal feature extraction,
-analysis, and classification, as well as functional path planning and SLAM
-modules will be detailed. With the foundational platform developed, the ongoing
-works will focus on system integration, correlation modelling, and vegetation
-parameter prediction to establish a robust and intelligent vegetation monitoring
-technology.
+that integrates autonomous path planning algorithms, Light Detection and Ranging
+(LiDAR)-based mapping techniques, Global Navigation Satellite System
+Reflectometry (GNSS-R), and machine learning classification models for robust
+vegetation sensing and monitoring.
 \end{itshape}
 
 
@@ -164,13 +154,13 @@ Conventionally, UAV remote sensing platforms carry similar instruments to that
 of other remote sensing systems, including radar, LiDAR, and multi-spectral or
 hyperspectral imagery sensors \cite{Tang2015}. However, while imaging
 instruments are susceptible to the influence of lighting and weather
-\cite{Wu2024}, LiDAR devices tend to face difficulties penetrating through dense
-canopy \cite{Su2007}. Therefore, it is critical to explore a robust sensing
-technique that is suitable for UAVs in terms of payload and power consumption to
-complement the existing instruments. Recently, the technique of GNSS-R is
-receiving increasing interest in the field of remote sensing. GNSS-R exploits
-the L-band signals transmitted from Global Navigation Satellite Systems (GNSS)
-that are then scattered on different terrain surfaces of the Earth
+\cite{Wu2024}, LiDAR devices may occasionally face difficulties penetrating
+through dense canopy \cite{Su2007}. Therefore, it is critical to explore a
+robust sensing technique that is suitable for UAVs in terms of payload and power
+consumption to complement the existing instruments. Recently, the technique of
+GNSS-R is receiving increasing interest in the field of remote sensing. GNSS-R
+exploits the L-band signals transmitted from Global Navigation Satellite Systems
+(GNSS) that are then scattered on different terrain surfaces of the Earth
 \cite{Jin2024}. Then, the reception of reflected GNSS signals can provide
 information regarding the properties of the signal reflector on land
 \cite{Jin2024}. As signals of opportunity conventionally dedicated to
@@ -204,34 +194,43 @@ navigation, LiDAR SLAM, GNSS-R, and machine learning, to achieve an intelligent
 and structured remote sensing system for vegetation monitoring. The main
 objectives of this project are as follows:
 \begin{enumerate}
-\item To introduce an autonomous path planning framework onboard the UAV
-platform for optimized GNSS-R remote sensing. The framework aims to identify
-potential vegetation areas and generate accurate trajectories for navigation
-during data collection. Consequently, the proposed system enables the UAV to
-autonomously acquire high-quality GNSS raw data for environmental monitoring.
+\item To introduce an autonomous path planning framework dedicated for UAV-based
+GNSS-R remote sensing. The framework aims to identify potential vegetation
+areas, deduce optimal GNSS-R detection areas, and generate accurate trajectories
+for UAV navigation during data collection. Consequently, the proposed system
+enables the UAV to autonomously acquire high-quality GNSS raw data for
+environmental monitoring.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
-This involves creating a modular SLAM system, incorporating LiDAR odometry as the 
-front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a result, 
-an accurate vegetation map could be generated to complement the GNSS-R vegetation 
-monitoring system.
-\item To classify signals reflected by vegetation and predict vegetation parameters
-based on raw GNSS data using a machine-learning-based approach. The classification 
-task will help to identify tree reflected signals which will be sent to GNSS-R framework, while the regression task will help to predict vegetation parameters and validate GNSS-R framework. Classification part will be mainly based on gradient boosting and
-decision tree based models while the regression part will make use of advanced neural
-network architectures. Ultimately, the machine learning part will complement the GNSS-R
-framework to enhance the robustness of vegetation parameter prediction.
+This involves creating a modular SLAM system, incorporating LiDAR odometry as
+the front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a
+result, an accurate vegetation map could be generated to complement the GNSS-R
+vegetation monitoring system.
 \item To analyze and model the correlations between signal propagation
-parameters retrieved through GNSS-R and ground vegetation conditions. This
-involves collecting and post-processing raw GNSS data, extracting GNSS signal
+parameters retrieved through GNSS-R and ground parameters. This involves
+collecting and post-processing raw GNSS data, extracting GNSS signal
 measurements, and analyzing GNSS signal parameters with respect to ground
-regions reflecting the signal. Ultimately, such correlations would be modelled
-both quantitatively and qualitatively such that the ground vegetation conditions
-could be effectively predicted from the GNSS signal properties received onboard
-the UAV.
+regions reflecting the signal. Ultimately, such correlation models are used to
+deduce and inform ground vegetation conditions given the GNSS signal properties
+received onboard the UAV.
+\item To classify signals reflected by vegetation and predict vegetation
+boundaries based on raw GNSS data using a machine-learning-based approach.
+Through decision tree-based classification, tree-reflected signals and
+ground-reflected signals could be identified, which will be used to predict the
+vegetation boundary. At last, the predicted vegetation boundary could be used to
+cross-validate results obtained from the GNSS-R framework, enhancing the
+robustness of the vegetation monitoring system.
 \end{enumerate}
 
-The report begins with a section on system architecture. It is followed by four core sections covering UAV path planning, LiDAR SLAM, GNSS-R, and machine learning respectively. Within each of these four sections includes literature review, methodology, results, and discussion to clearly present the work completed in each area. The report then concludes with sections on experiments conducted, case study of selected experiments, conclusion, and project management.
+This report is structured as follows: Section 3 introduces the logical and
+physical system architecture adopted in this project, followed by four core
+sections covering UAV path planning (Section 4), LiDAR SLAM (Section 5), GNSS-R
+(Section 6), and machine learning (Section 7), respectively. Within each of the
+four core sections, literature review, methodology, result and discussion are
+included to clearly present the work completed in each area. This report then
+concludes with sections on experiments conducted (Section 8), case study of
+selected experiments (Section 9), conclusion (Section 10), and project
+management (Section 11).
 
 
 % --- System Architecture ---
@@ -239,41 +238,53 @@ The report begins with a section on system architecture. It is followed by four 
 
 \subsection{Logical Architecture}
 With regard to the project objectives, four key components comprise the system
-architecture: path planning, GNSS-R, machine learning, and LiDAR SLAM, as illustrated
-in Figure \ref{System Architecture}. Here, the path planning processes are indicated
-in green, GNSS-R processes in blue, machine learning processes in yellow, and
-LiDAR SLAM processes in orange.
+architecture: path planning, LiDAR SLAM, GNSS-R, and machine learning, as
+illustrated in Figure \ref{System Architecture}. Here, the path planning
+processes are indicated in green, LiDAR SLAM processes in orange, GNSS-R
+processes in blue, and machine learning processes in yellow.
 
-First, both waypoint-based and coverage-based path planning algorithms will be
-adopted to navigate the UAV platform for specific monitoring missions, while
-satellite imagery will be used to identify vegetated areas to achieve autonomous
-mission designs. With the planned trajectory designed, the ground control
-station will facilitate the mission execution to enable the collection of both
-GNSS raw data and LiDAR point cloud data. Then, both the zenith and nadir GNSS
-receiver's data will be post-processed into GNSS measurements, where they will
-be analyzed with respect to the Fresnel zones of ground reflections, while any
-correlations between the GNSS measurements and ground vegetation parameters will
-be systematically modelled. Additionally, machine learning methods will
-also be adopted to process the collected GNSS data. A trained LightGBM model
-will be used to classify the GNSS signals according to the signal reception
-scenarios: direct open sky reception, signals reflected from vegetation, and
-signals reflected from bare ground. The classification results will then be
-integrated with the GNSS-R framework for more accurate signal analysis, while
-regression models will also be trained for vegetation parameter prediction.
-Meanwhile, the LiDAR data will be synchronized with the timestamps obtained from
-the flight controller's GPS module. Then, both LiDAR and GPS data will be
-collected and used for the generation of a 3D vegetation map. This will be
-achieved through a modular LiDAR framework, utilizing LiDAR odometry as the
-front-end and pose graph optimization as the back-end. Together, the 3D
-vegetation map will be used to cross-validate any vegetation parameters
-retrieved by GNSS-R models and regression results, enabling a robust system for
-vegetation parameter retrieval.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/System_Architecture.png}
     \caption{System Architecture}
     \label{System Architecture}
 \end{figure}
+
+First, both waypoint-based and coverage-based path planning algorithms will be
+adopted to navigate the UAV platform for specific monitoring missions, while
+satellite imagery will be used for identifying vegetation area targets for
+sensing. Additionally, potential GNSS signal reflection regions will also be
+taken into consideration while designing the flight trajectory. Lastly, the
+ground control station will plan and execute the flight mission for collecting
+both the raw GNSS data and LiDAR point cloud data over the target vegetation
+area.
+
+After the flight, the LiDAR data will be synchronized with timestamps obtained
+from the flight controller's GPS module. Then, both LiDAR and GPS data will be
+collected and used for the generation of a 3D vegetation map. This will be
+achieved through a modular LiDAR framework, utilizing LiDAR odometry as the
+front-end and pose graph optimization as the back-end. As a result, the 3D
+vegetation map generated within the LiDAR environment can be used to
+cross-validate the ground parameters retrieved by GNSS-R and machine learning
+models.
+
+The raw GNSS data collected during the flight mission will be post-processed
+into two key measurements: 1) the signal's carrier to noise ratio (CNR), and 2)
+the excess pseudorange delay of the reflected signal after compensating for the
+delay caused by geometrical reflection. These measurements are then analyzed in
+correlation with the ground regions that the signals reflected off from - the
+First Fresnel Zones (FFZ), while any correlation between GNSS measurements and
+ground parameters will be modelled both quantitatively and qualitatively.
+Ultimately, such models will be used to retrieve highly correlated ground
+parameters from key GNSS signal measurements.
+
+Lastly, machine learning methods will be adopted to process the collected GNSS
+data. A trained LightGBM model will be used to classify the GNSS signals
+according to the signal reception scenarios: direct open sky reception, signals
+reflected from vegetation, and signals reflected from bare ground. The signal
+classification results, combined with the Fresnel Zone locations, will be used
+to detect vegetation boundary and cross-validate the ground parameters retrieved
+from the GNSS-R framework.
 
 \subsection{Physical Architecture}
 An integrated UAV platform is built and utilized for achieving each of the four
@@ -282,7 +293,7 @@ is built on a Holybro X650 drone frame, integrated with a Pixhawk 6C flight
 controller and a pair of SiK telemetry radio for ground control communication. A
 pair of Ublox F9P GNSS receivers with L1/L2 band antenna are installed onboard,
 with one upward-facing RHCP antenna (zenith) located at the top and one
-downward-facing RHCP antenna (nadir) located at the bottom. As a result, both
+downward-facing LHCP antenna (nadir) located at the bottom. As a result, both
 the direct RHCP signal and the ground-reflected LHCP signal could be received
 simultaneously for further analysis. Additionally, an onboard Nvidia Jetson Orin
 Nano serves as the primary computer responsible for the control and logging of
@@ -1060,7 +1071,7 @@ methods above.
 
 
 % --- LiDAR SLAM ---
-\section {LiDAR SLAM}
+\section{LiDAR SLAM}
 
 \subsection{Literature Review}
 In recent years, autonomous robots have been widely implemented to carry out
@@ -1602,7 +1613,7 @@ distortion.
 
 
 % --- GNSS-R ---
-\section {GNSS-R}
+\section{GNSS-R}
 
 \subsection{Literature Review}
 The concept of GNSS-R for remote sensing applications was first proposed in
@@ -2013,7 +2024,7 @@ in the following section.
 
 
 % --- Machine Learning ---
-\section {Machine Learning}
+\section{Machine Learning}
 
 \subsection{Literature Review}
 A part of this project will be to develop a deep learning based model that can
