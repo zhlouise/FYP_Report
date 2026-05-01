@@ -48,7 +48,7 @@
 \subsubsectionfont{\normalsize\it}
 \setlength{\parindent}{0pt}
 \urlstyle{same}
-
+\captionsetup[subfigure]{justification=centering}
 
 \begin{document}
 
@@ -269,14 +269,14 @@ cross-validate the ground parameters retrieved by GNSS-R and machine learning
 models.
 
 The raw GNSS data collected during the flight mission will be post-processed
-into two key measurements: 1) the signal's carrier to noise ratio (CNR), and 2)
-the excess pseudorange delay of the reflected signal after compensating for the
-delay caused by geometrical reflection. These measurements are then analyzed in
-correlation with the ground regions that the signals reflected off from - the
-First Fresnel Zones (FFZ), while any correlation between GNSS measurements and
-ground parameters will be modelled both quantitatively and qualitatively.
-Ultimately, such models will be used to retrieve highly correlated ground
-parameters from key GNSS signal measurements.
+into two key measurements: 1) the signal's carrier to noise ratio ($C/N_0$), and
+2) the excess pseudorange delay of the reflected signal after compensating for
+the delay caused by geometrical reflection. These measurements are then analyzed
+in correlation with the ground regions that the signals reflected off from - the
+First Fresnel Zones, while any correlation between GNSS measurements and ground
+parameters will be modelled both quantitatively and qualitatively. Ultimately,
+such models will be used to retrieve highly correlated ground parameters from
+key GNSS signal measurements.
 
 Lastly, machine learning methods will be adopted to process the collected GNSS
 data. A trained LightGBM model will be used to classify the GNSS signals
@@ -1605,7 +1605,7 @@ practical forest monitoring applications. However, since GNSS signals flip to
 LHCP upon reflection, a receiver capable of receiving LHCP signals is necessary
 to complete the RL polarization configuration \cite{Jia2018}. In another study,
 the polarization scattering properties of GNSS-R signals in forest canopies were
-modeled, where simulations revealed that tree trunk scattering effects would
+modelled, where simulations revealed that tree trunk scattering effects would
 dominate total scattering response, while satellite azimuth angles are
 significantly correlated to the signal polarization \cite{Wu2014}. 
 
@@ -1629,9 +1629,9 @@ receives both the direct and reflected signals simultaneously, the power of the
 received signals was coherently added. As a result, the recorded power
 oscillations due to interference present notches that are correlated to
 vegetation layer thickness and the reflection geometry (Figure \ref{SMIGOL})
-\cite{RodriguezAlvarez2011}. Ultimately, an RMSE of 3-5 cm in estimating the
-height of vegetation with simple geometrical structures (barley and wheat) could
-be achieved \cite{RodriguezAlvarez2011}.
+\cite{RodriguezAlvarez2011}. Ultimately, a Root Mean Square Error (RMSE) of 3-5
+cm in estimating the height of vegetation with simple geometrical structures
+(barley and wheat) could be achieved \cite{RodriguezAlvarez2011}.
 
 \begin{figure}[H]
     \centering
@@ -1663,9 +1663,10 @@ in vegetation monitoring applications:
     soil parameters, and tree size, with RL polarization being ideal for forest
     monitoring. \\
     \midrule
-    Rodríguez-Álvarez et al. (2011) & A SMIGOL reflectometer, which leverages GNSS signal
-    interference patterns to measure soil and vegetation conditions, is used to achieve
-    3-5 cm RMSE in estimating simple vegetation height. \\
+    Rodríguez-Álvarez et al. (2011) & A SMIGOL reflectometer, which leverages
+    GNSS signal interference patterns to measure soil and vegetation conditions,
+    can be used to achieve 3-5 cm RMSE in estimating simple vegetation height.
+    \\
     \midrule
     Wu et al. (2014) & Tree trunk scattering dominates the total GNSS-R
     response, while satellite azimuth angles are significantly correlated to
@@ -1685,112 +1686,175 @@ in vegetation monitoring applications:
 Yet, despite the effort in prior studies, the use of GNSS-R techniques in
 vegetation remote sensing and monitoring is far from developed. Most
 importantly, existing research relies heavily on space-borne or static
-ground-based platforms, while the use of high spatial resolution and flexibility
-platforms - such as a UAV - remains underexplored. Therefore, it is critical to
-develop a systematic framework for a UAV-based GNSS-R system, in which
-correlations between GNSS-R signal features and vegetation condition parameters
-are comprehensively assessed and modeled.
+ground-based platforms, while the use of high spatial resolution and high
+flexibility platforms - such as a UAV - remains underexplored. Therefore, it is
+critical to develop a systematic framework for a UAV-based GNSS-R system, in
+which correlations between GNSS-R signal features and vegetation condition
+parameters are comprehensively assessed and modelled.
 
 \subsection{Methodology}
-The GNSS-R framework takes in raw GNSS data collected from the onboard
-receivers, extracts raw GNSS measurements, and analyzes the characteristics of
-such measurements with respect to the ground features that falls within the
-Fresnel zones. Ultimately, the correlation between GNSS measurement features and
-vegetation properties would be systematically summarized and modeled. The method
-used for retrieving GNSS measurements and the Fresnel zone from collected raw data
-is briefly outlined in the following two sections, while the MATLAB code for the 
-GNSS-R framework is presented in the Appendix.
+In this project, a RL polarization system is adopted onboard the UAV: the zenith
+antenna receives the RHCP signals transmitted directly from the satellite, while
+the nadir antenna receives the LHCP signals after they have reflected off
+various ground features. A schematic representation of the RL polarization
+system, as well as the two types of GNSS signal polarization types, are shown in
+Figure \ref{RL System} below. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/RL_system.png}
+        \caption{RL Polarization System Used for Remote Sensing}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/RHCP.png}
+        \caption{Right-Hand Circular Polarization \\ (Direct GNSS Signal)}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/LHCP.png}
+        \caption{Left-Hand Circular Polarization \\ (Reflected GNSS Signal)}
+    \end{subfigure}
+    \caption{RL polarization system adopted for this project and GNSS signal polarization types.}
+    \label{RL System}
+\end{figure}
+
+The GNSS-R framework then takes in raw GNSS data collected from the onboard
+receivers, extracts GNSS measurements, and analyzes the characteristics of such
+measurements with respect to the ground features that falls within the First
+Fresnel Zones (FFZs) of reflection. Ultimately, the correlation between GNSS
+measurement features and vegetation properties would be systematically
+summarized and modelled. The following sections detail the GNSS measurement
+retrieval process, the calculation of FFZ location and geometry, as well as the
+quantitative modelling of correlations between GNSS parameters and ground
+features. Additionally, the open-source code repository developed for the GNSS-R
+framework of this project is presented in the Appendix.
 
 \subsubsection{GNSS Measurement Extraction}
 Two raw data sources are necessary for the extraction of key GNSS measurements
-used in this project: the raw binary GNSS data and the Pixhawk controller log.
+used for GNSS-R: the raw binary GNSS data and the Pixhawk controller log.
 First, the binary GNSS data is converted into readable observation files using
 RTKCONV \cite{takasu2009rtklib}, and together with the satellite ephemeris data
 downloaded from \url{https://cddis.nasa.gov/archive/gnss/data/}, measurements
 such as the satellite elevation angle, pseudorange, and carrier to noise ratio
 could be extracted using the MatRTKLIB library \cite{taroz:matrtklib}. From the
 Pixhawk controller log, the UAV position, which is a filtered positioning result
-from various onboard sensors, is obtained and regarded as the ground truth
-assuming that the positioning error is small. Ultimately, two major GNSS
-measurement are taken for further analysis: carrier to noise ratio ($C/N_0$) and
-pseudorange error. 
+from onboard sensor inputs, is obtained and regarded as the ground truth
+assuming that the positioning error is small. Then, two key GNSS measurement
+parameters are calculated for further analysis: carrier to noise ratio ($C/N_0$)
+and excess pseudorange delay. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
-    \caption{Flowchart of extracting GNSS measurements from raw data.}
+    \includegraphics[width=\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
+    \caption{Workflow of extracting GNSS measurements from raw data.}
 \end{figure}
 
 \paragraph{Carrier to Noise Ratio} ~\\
 Carrier to noise ratio refers to the power of received carrier signal relative
-to the noise power per unit bandwidth, usually with a unit of decibel-Hertz (dB-Hz)
-\cite{joseph2010gnss}. $C/N_0$ can be readily obtained from the receiver, and it 
-is calculated as the following:
+to the noise power per unit bandwidth, usually with a unit of decibel-Hertz
+(dB-Hz) \cite{joseph2010gnss}. $C/N_0$ can be readily obtained from the
+receiver, and it is calculated as the following:
 \begin{equation}
     C/N_0 = C - (N - BW)
 \end{equation}
-where $C$ refers to the carrier power in dBm or dBW; $N$ refers to the noise power
-in dBm or dBW; and $BW$ refers to the bandwidth of the signal in Hz.
+where $C$ refers to the carrier power in dBm or dBW; $N$ refers to the noise
+power in dBm or dBW; and $BW$ refers to the bandwidth of the signal in Hz. Since
+$C/N_0$ can be attenuated by scattering off from trees or by reflecting off from
+the ground, the attenuation profiles from different ground objects may carry key
+information that describes potential ground features. 
 
-\paragraph{Pseudorange Error} ~\\
+\paragraph{Excess Pseudorange Delay} ~\\
 In GNSS, pseudorange refers to the "apparent" distance between a satellite and a
-receiver, which includes the true geometric range plus various biases and delays.
-For the $i$th satellite, its pseudorange $\rho^i$ could be expressed as the following 
-\cite{kaplan2017understanding}:
+receiver, which includes the true geometric range plus various biases and
+delays. For a signal that directly propagates from the satellite to the zenith
+antenna in a straight line, its pseudorange $\rho_{direct}$ could be expressed
+as the following \cite{kaplan2017understanding}:
 \begin{equation}
-    \rho^i = R^i + \Delta t_r + \Delta t_s^i + I^i + T^i + \epsilon^i
+    \rho_{direct} = R_{direct} + \Delta t_{zenith} + \Delta t_s + I + T
 \end{equation}
-where $R^i$ refers to the true distance between the satellite and the receiver;
-$\Delta t_r$ refers to the receiver clock bias; $\Delta t_s^i$ refers to the satellite
-clock bias; $I^i$ refers to the ionospheric delay; $T^i$ refers to the tropospheric 
-delay; and $\epsilon^i$ refers to the pseudorange error, which is mainly
-introduced through signal reflections. Among all the signals received at a given
-instant, a satellite $m$ with the highest elevation angle is regarded as the
-'master satellite', where the assumption that the master satellite is free of reflections
-is applied \cite{hsu2018analysis}:
+where $R_{direct}$ refers to the true distance between the satellite and the
+receiver; $\Delta t_{zenith}$ refers to the zenith receiver clock bias; $\Delta
+t_s$ refers to the satellite clock bias; $I$ refers to the ionospheric delay;
+and $T$ refers to the tropospheric delay. \\
+For a signal that have reflected off the ground and received by the nadir
+antenna, its pseudorange $\rho_{reflected}$ can be expressed using a similar
+equation with two additional error terms:
 \begin{equation}
-    \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
+    \rho_{reflected} = R_{direct} + \Delta t_{nadir} + \Delta t_s + I + T + E_{reflection} + \epsilon
 \end{equation}
+where $\Delta t_{nadir}$ refers to the nadir receiver clock bias;
+$E_{reflection}$ refers to the delay caused by geometrical reflection; and
+$\epsilon$ refers to the excess pseudorange delay, which accounts for unmodelled
+errors such as scattering from vegetation. A diagram illustrating the direct and
+the reflected signal's propagation path is shown in Figure \ref{Excess Pseudorange Delay Diagram} below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/Pr_Error_Illustration.png}
-    \caption{Schematic diagram illustrating satellite $i$ and satellite $m$.}
+    \includegraphics[width=0.5\textwidth]{Included_Images/excess_pseudorange_delay.png}
+    \caption{Pseudoranges of the direct and the reflected signal in the adopted GNSS-R system.}
+    \label{Excess Pseudorange Delay Diagram}
 \end{figure}
-Assuming $\Delta t_s^i$ and $\Delta t_s^m$ can be effectively removed by 
-satellite-broadcasted parameters, $I^i$ and $I^m$ can be effectively removed by the
-Klobuchar model, and $T^i$ and $T^m$ can be effectively removed by the Saastamoinen model,
-the pseudorange equations can be approximated as \cite{kaplan2017understanding}:
+Since the distance between the satellite and the receiver is significantly
+larger than the distance between the receiver and the point of reflection on
+ground, the delay caused by geometrical reflection, $E_{reflection}$, could be estimated using the following expression:
 \begin{equation}
-    \rho^i = R^i + \Delta t_r + \epsilon^i,
-\label{ith satellite pseudorange}
+    E_{reflection} = \frac{2H}{sin(\theta)}
 \end{equation}
+where $\theta$ refers to the satellite's elevation angle and $H$ refers to the
+UAV's above ground altitude. Here, since the UAV true position is given in the
+global coordinate of latitude, longitude, and height (LLH) in the Pixhawk log
+data, the terrain height shall be subtracted to obtain the above ground
+altitude, $H$. This terrain height is obtained through the Hong Kong Digital
+Terrain Model
+(\url{https://data.gov.hk/en-data/dataset/hk-landsd-openmap-5m-grid-dtm}), which
+shows the topographical information in 5 meter by 5 meter grids with an accuracy
+of $\pm$ 5 meters \cite{dataDigitalTerrain}. \\
+Substituting $E_{reflection}$ into the pseudorange equation for the reflected
+signal while taking the difference between the direct signal and the reflected
+signal's pseudoranges, the true distance between the satellite and the receivers
+($R_{direct}$), satellite clock bias ($\Delta t_s$), ionospheric delay ($I$),
+and tropospheric delay ($T$) are effectively cancelled: 
 \begin{equation}
-    \rho^m = R^m + \Delta t_r.
-\label{master satellite pseudorange}
+    \rho_{reflected} - \rho_{direct} = \Delta t_{nadir} - \Delta t_{zenith} + \frac{2H}{sin(\theta)} + \epsilon
 \end{equation}
-Finally, taking the difference between \eqref{ith satellite pseudorange} and 
-\eqref{master satellite pseudorange} and rearranging the equation will result in the
-pseudorange error:
+In the equation above, the difference between the receiver clock biases, $\Delta
+t_{nadir} - \Delta t_{zenith}$, could be approximated as the mean of the
+residual pseudorange difference after compensating for the reflection delay
+($\rho_{reflected} - \rho_{direct} - \frac{2H}{sin(\theta)}$). This is valid
+because the residual pseudorange difference follows a normal distribution, as
+shown in Figure \ref{pr_diff-reflection_delay}, thus its mean provides the most
+likely value for the relatively constant hardware bias. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/pr_diff-reflection_delay.png}
+    \caption{Distribution of the residual pseudorange difference after compensating for the signal reflection delay.}
+    \label{pr_diff-reflection_delay}
+\end{figure}
+Ultimately, the excess pseudorange delay could be calculated:
 \begin{equation}
-    \epsilon^i = \rho^i - \rho^m - R^i + R^m.
+    \epsilon = \rho_{reflected} - \rho_{direct} - (\Delta t_{nadir} - \Delta t_{zenith}) - \frac{2H}{sin(\theta)}
 \end{equation}
+where its values may carry key information that describes the interaction
+between GNSS signals and various ground features.
 
-\subsubsection{Fresnel Zone Analysis}
+\subsubsection{First Fresnel Zone Calculation}
 Following the extraction of GNSS measurements observed onboard the UAV, the GNSS
-signal would be particularly analyzed with respect to the 2-dimensional ground region 
-that it is reflected from. Within this region, a specular reflection point could be found,
-where the angle of incidence is equal to the angle of reflection. 
+signals would be particularly analyzed with respect to the 2-dimensional ground
+region that it is reflected off from.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
-    \caption{Schematic diagram of GNSS-R signal scattering geometry.}
+    \includegraphics[width=0.75\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
+    \caption{Schematic diagram of GNSS-R signal reflection geometry with the First Fresnel Zone illustrated.}
 \end{figure}
-The primary scattering area around the specular point in which reflected signals
-arrive at the receiver in coherence is called the first Fresnel zone (FFZ). By
-definition, it is an ellipse for which the signal phase change across is within
-$\frac{\lambda}{2}$ radians, where $\lambda$ refers to the signal wavelength
-\cite{Jia2018}. Given the incidence angle $\theta$ and the height of the
-receiver $H$, the semi-major axis $a$ and the semi-minor axis $b$ of the FFZ can
-be calculated as the following \cite{yu2021theory}: 
+Within this region, a specular reflection point could be found, where the angle
+of incidence is equal to the angle of reflection. The primary scattering area
+around the specular point in which reflected signals arrive at the receiver in
+coherence is called the First Fresnel Zone (FFZ). By definition, it is an
+ellipse for which the signal phase change across is within $\frac{\lambda}{2}$
+radians, where $\lambda$ refers to the signal wavelength \cite{Jia2018}. Given
+the incidence angle $\theta$ and the height of the receiver $H$, the semi-major
+axis $a$ and the semi-minor axis $b$ of the FFZ can be calculated as the
+following \cite{yu2021theory}: 
 \begin{equation}
     a = \frac{\sqrt{\lambda H sin(\theta)+\frac{\lambda^2}{4}}}{(sin(\theta))^2},
 \end{equation}
@@ -1802,14 +1866,8 @@ defined. The origin is the receiver's ground projection, while the y-axis aligns
 with the ground projection of the vector from the receiver to the satellite. The
 z-axis follows the up direction of the local East-North-Up (ENU) coordinates,
 and the x-axis completes the coordinate system by remaining orthogonal to both x
-and y axes. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/Fresnel_Zone_Coordinates.png}
-    \caption{Schematic diagram of the local coordinate axes defined.}
-\end{figure}
-In this coordinate system, the location of the FFZ center could be expressed as
-$(x_c, y_c, z_c)$, where \cite{yu2021theory}:
+and y axes. In this coordinate system, the location of the FFZ center could be
+expressed as $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
 \begin{equation}
     x_c = 0
 \end{equation}
@@ -1819,24 +1877,10 @@ $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
 \begin{equation}
     z_c = 0
 \end{equation}
-The flowchart for calculating the FFZ shape and location is outlined in the
-figure below. Here, since the UAV true position is given in the global
-coordinate of latitude, longitude, and height (LLH) in the Pixhawk log data, the
-terrain height shall be subtracted to obtain the UAV height above ground, $H$.
-This terrain height is obtained through the Hong Kong Digital Terrain Model
-(\url{https://data.gov.hk/en-data/dataset/hk-landsd-openmap-5m-grid-dtm}), which
-shows the topographical information in 5 meter by 5 meter grids with an accuracy of
-$\pm$ 5 meters \cite{dataDigitalTerrain}. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/FFZ_Flow.png}
-    \caption{Flowchart of calculating FFZ shape and location from collected data.}
-\end{figure}
 
-One key issue for the GNSS-R is not being able to classify the received signals
-into direct signals and reflected signals. Therefore, in this project, machine
-learning techniques are employed to classify the received signals based on the
-extracted GNSS measurements, as outlined in the section below.
+\subsubsection{Correlation Modelling}
+
+
 
 \subsection{Results and Discussion}
 After successful execution of the path planning algorithms onboard the UAV, GNSS
@@ -2886,6 +2930,38 @@ aligns with different frameworks of this project. Specifically:
     \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
     \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
 \end{itemize}
+
+\subsubsection*{Calculating Pseudorange Errors}
+Among all the signals received at a given
+instant, a satellite $m$ with the highest elevation angle is regarded as the
+'master satellite', where the assumption that the master satellite is free of reflections
+is applied \cite{hsu2018analysis}:
+\begin{equation}
+    \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
+\end{equation}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/Pr_Error_Illustration.png}
+    \caption{Schematic diagram illustrating satellite $i$ and satellite $m$.}
+\end{figure}
+Assuming $\Delta t_s^i$ and $\Delta t_s^m$ can be effectively removed by 
+satellite-broadcasted parameters, $I^i$ and $I^m$ can be effectively removed by the
+Klobuchar model, and $T^i$ and $T^m$ can be effectively removed by the Saastamoinen model,
+the pseudorange equations can be approximated as \cite{kaplan2017understanding}:
+\begin{equation}
+    \rho^i = R^i + \Delta t_r + \epsilon^i,
+\label{ith satellite pseudorange}
+\end{equation}
+\begin{equation}
+    \rho^m = R^m + \Delta t_r.
+\label{master satellite pseudorange}
+\end{equation}
+Finally, taking the difference between \eqref{ith satellite pseudorange} and 
+\eqref{master satellite pseudorange} and rearranging the equation will result in the
+pseudorange error:
+\begin{equation}
+    \epsilon^i = \rho^i - \rho^m - R^i + R^m.
+\end{equation}
 
 \subsubsection*{LiDAR SLAM Pseudocode}
 This project builds upon an open-source implementation
