@@ -2118,9 +2118,22 @@ trees and bare ground.
 
 
 \subsubsection{Dataset Construction}
-Data was collected from multiple locations with different environmental settings, in order to have 
-a diverse dataset that captures the three classes of signals. The scenarios include:
-(1) Open Sky, (2) UAV hovering over bare ground, and (3) UAV hovering over trees.
+To train a robust model that can classify different signal types, constructin a clean 
+and reliable dataset was one of the most important aspect of this pipeline. In order to 
+do so, data was collected acrpss multiple real world conditions with distinct environmental
+features. The goal was to ensure the dataset captures the full diversity of GNSS-R signal 
+behaviour encountered during different UAV operations. Three collected scenarios were defined which 
+are listed below:
+\begin{enumerate}
+    \item \textbf{Open Sky}: The receiver was held in an unobstructed environment with a clear
+    Line-of-Sight (LOS) to the GNSS satellties. This was done to produce predominently direct LOS signals.
+    \item \textbf{UAV hovering over bare ground}: Signals captured in this scenario are dominated by specular 
+    reflections from the ground surface. This is a representative of non vegetated terrain or ground reflected
+    signals. 
+    \item\textbf{UAV hovering over trees}: This scenario introduces diffuse reflections caused by vegetations. 
+    This dataset can represent the qualitative change in signal characteristics due to scattering from vegetation which 
+    is different from that of bare ground reflected ones.
+\end{enumerate}
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.33\textwidth}
@@ -2139,10 +2152,20 @@ a diverse dataset that captures the three classes of signals. The scenarios incl
     \end{subfigure}
     \caption{Data collection scenarios.}
 \end{figure}
-The data was then labeled based on the collection scenarios, where data collected 
-from open sky mostly contains direct signals, data collected from UAV hovering over bare ground 
-mostly contains signals reflected from ground, and data collected from UAV hovering over trees
-mostly contains signals reflected from trees.
+
+Each scenario corresponds directly to one of the three target classes used in classification.
+Labelling was then done based on the known collection scenarios. Open sky data were assigned as 
+direct signals class, bare ground samples were assigned as ground reflected signals class and lastly the 
+data collected by hovering the UAV over trees were assigned as tree reflected signals class. This scenario based
+labelling strategy relies on the assumption that the dominant signal type in 
+each environment is consisted with the respective controlled environments. However, noise is inevitable in the collected datasets,
+for example, direct signals may occasionally be captured during ground hovering flights. Nonetheless, the approach is pragmatic and aligns with 
+the practical constraints of field data collection in real world. 
+
+The collected data comprised of 70,125 labelled samples drawn from all three scenarios. To address potential class 
+imbalance that could bias the model toward more frequently occurring signal types a balanaced class weight strategy was applied during training. This effectively
+upweights minority classes in the loss function. Overall, this multi environment data collection strategy ensures 
+that the model generalizes well across all three classes. This is a critical for deployment on a UAV operative across different terrain conditions.
 
 
 \subsubsection{Model Selection}
@@ -2267,13 +2290,42 @@ the model adds a new tree that predicts the negative gradients of the loss funct
 The model converged well and the loss curves for training and validation sets are shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\linewidth]{Included_Images/LossCurve.png}
+    \includegraphics[width=1\linewidth]{Included_Images/LossCurve.png}
     \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
-From the figure above, it is clear that the model did not overfit as the loss curves for 
-training and validation are close to each other and decrease steadily. Further performance assessment results 
-of the model are presented in the results and discussion section. The section below provides a detailed overview of the LiDAR SLAM framework used for
-mapping and localization.
+To gain insight into the LightGBM model's training process, two plots were 
+ploted: a convergence plot of the multi-class log loss as a function 
+over each iteration for the training and the validation sets, and the generalisation plot 
+that compares the difference between the validation loss and the training loss for each boosting iteration.
+
+\paragraph{Training Convergence}:
+The left plot shows the convergence of the multi class log loss over
+100000 boosting iterations for both the training and validation sets. Both the
+losses start around a value of 1. This basically indicates uncertainty of the 
+model before any training was done. As training starts for the first 1000 boosting rounds
+the loss decreases significantly. This is due to the fact that the gradient boosting 
+trees make the largest corrections to the model predictions. This is a typical characteristic of 
+gradient boosting models. After this, the rate of improvement slows down where each additional 
+tree makes smaller adjustments. Around 3000 to 4000 epochs the curves start to plateau and loss stabilizes below a 
+value of 0.1. The best iteration was 9968 which is markes with the dashed vertical line. 
+
+\paragraph{Generalization Plot}:
+The other plot on the right quantifies the generalization gap. This gap is defined as
+the pointwise difference between validation loss and training loss ($\mathcal{L}_{\text{val}} - 
+\mathcal{L}_{\text{train}}$) across iterations. The positive gap is expected since the model 
+has not seen the validation data during training and only beem optimized on the training set. The main 
+observation here is wheather this gap increases over training epoch or decreases. 
+
+Early in training process the gap rises from near zero to a peak value of 0.01-0.011 around iterations
+1500-2000. The initial rise of this value is due to the aggressive fast learning of the model where the model 
+is trying to fit the data. However, after this the gap norrows progressively and reaches an approximate value of 0.005-0.006
+by 10000 iterations. This is a positive indication as it means the model progressively generalize rather than simply 
+memorizing the training data. The shaded region in the plot is the overfitting zone and the magnitude is negligible. This does not 
+meaningfully comprise the model's performance on unseen data.
+
+Combined, both the panels affirm that the LightGBM model has converged and generalised well, 
+which is a formidable basis of the signal classification task. The additional quantitative testing of the classification 
+performance of the model is provided in the Results and Discussion section.
 
 \subsection{Results and Discussion}
 As classification of the reflected and direct signals is required for robust GNSS-R
