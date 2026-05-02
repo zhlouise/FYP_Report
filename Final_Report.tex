@@ -1729,25 +1729,60 @@ To test the point cloud alignments, the same experiment data is run on Fast-LIO 
 
 When comparing Figure \ref{fig:rosbag3_FL}, Figure \ref{fig:rosbag3_pgo_nogps}, and Figure \ref{fig:rosbag3_pgo} that represents three approaches evaluated mentioned above, it is observed that the point cloud alignments are similar to each other. This shows that LiDAR odometry alone is already capable of producing a reasonably consistent local map and the integration of pose graph optimization and GPS constraints does not alter the structural alignment of the point clouds significantly. Even though there is not much difference in terms of the point cloud improvements with the additional pose graph SLAM system, the inclusion of GPS helps to improve global consistency by reducing long-term drift especially over larger trajectories or extended operation periods.
 
-If the GPS trajectory and SLAM trajectory are not aligned, SLAM will consider GPS data to correct the SLAM poses, resulting the SLAM trajectory to align with the GPS trajectory. This can be investigated in the same dataset where we compare the PGO SLAM method that does not include GPS and the PGO SLAM method with GPS included. As illustrated in Fig. X and Fig. Y, the trajectory obtained from PGO SLAM without GPS shows a noticeable misalignment between the estimated SLAM trajectory and the GPS reference trajectory. In contrast, optimized SLAM trajectory is more aligned with GPS trajectory when GPS constraints are incorporated into the SLAM calculation. Even so, GPS data is not always trustworthy. Incorporating all GPS measurements directly into the SLAM framework may degrade performance if low-quality data are included. As a result, filtering the high quality GPS data is essential for the accuracy of SLAM calculation. 
+If the GPS trajectory and SLAM trajectory are not aligned, SLAM will consider GPS data to correct the SLAM poses, resulting the SLAM trajectory to align with the GPS trajectory. This can be investigated in the same dataset where we compare the PGO SLAM method that does not include GPS and the PGO SLAM method with GPS included. As illustrated in Figure \ref{fig:not_align} and Figure \ref{fig:align}, the trajectory obtained from PGO SLAM without GPS shows a noticeable misalignment between the estimated SLAM trajectory and the GPS reference trajectory. In contrast, optimized SLAM trajectory is more aligned with GPS trajectory when GPS constraints are incorporated into the SLAM calculation. Even so, GPS data is not always trustworthy. Incorporating all GPS measurements directly into the SLAM framework may degrade performance if low-quality data are included. As a result, filtering the high quality GPS data is essential for the accuracy of SLAM calculation. 
 
-*** add rosbag 3 with low covariacne and high covariance compare
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/rosbag3_drift.png}
+        \caption{Before including GPS data}
+        \label{fig:not_align}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/rosbag3_align.png}
+        \caption{After including GPS data}
+        \label{fig:align}
+    \end{subfigure}
+    \caption{Comparison of GPS inclusion in the pose graph SLAM system}
+\end{figure}
 
 \subsubsection{GPS Data Filtering}
 In order to only incorporate accurate GPS data for the SLAM calculation, a manually tuned covariance threshold is applied to filter out low-quality GPS data before they are added to the pose graph calculation. Thus, multiple covariance values are evaluated from a singular dataset (Data 2) to determine the appropriate threshold for the SLAM system. A lower threshold enforces stricter filtering, where it only retains high-confidence measurements. On the other hand, a higher threshold allows more GPS data to be incorporated with the risk of introducing noise.
 
-*** add all RMSE plot
-
-/// relationship between covariance threshold with the root mean square error (RMSE) between pose graph SLAM trajectory and GPS trajectory///
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/cov_0.01.png}
+        \caption{Covariance Threshold = 0.01}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/cov_0.03.png}
+        \caption{Covariance Threshold = 0.03}
+    \end{subfigure}
+        \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/cov_0.04.png}
+        \caption{Covariance Threshold = 0.04}
+    \end{subfigure}
+        \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/cov_0.1.png}
+        \caption{Covariance Threshold = 0.1}
+    \end{subfigure}
+    \caption{Relationship between covariance threshold and Root Mean Square Error (RMSE) between pose graph SLAM trajectory and GPS trajectory}
+\end{figure}
 
 Based on the Figure above, it is observed that the higher value of covariance threshold, the smaller the RMSE. This is because when more GPS data is being considered into the SLAM calculation, the total error score indicated in Equation \eqref{eq:error_score} will be used to correct the SLAM trajectory to the GPS trajectory.
 
-Additionally, instead of observing a gradual convergence of the SLAM trajectory toward the GPS trajectory with the increase of covariance threshold, a distinct threshold value is identified at which the pose graph SLAM solution abruptly shifts from being dominated by LiDAR odometry to aligning closely with the GPS trajectory. This behavior occurs because ...
+Additionally, instead of observing a gradual convergence of the SLAM trajectory toward the GPS trajectory with the increase of covariance threshold, a distinct threshold value is identified at which the pose graph SLAM solution abruptly shifts from being dominated by LiDAR odometry to aligning closely with the GPS trajectory. This behavior occurs because the GPS covariance threshold is used to determine when the data begin to meaningfully influence the optimization. As shown in Figure \ref{fig:data1_cov}, the mean horizontal covariance of the GPS data is approximately 0.039$m^2$. This indicates that large portion of the GPS data cluster around this value. When the covariance threshold is set below 0.04, most GPS measurements are rejected for not meeting the required accuracy. On the other hand, once the covariance threshold exceeds this critical value, a large portion of GPS measurements becomes admissible to the optimization process. The sudden abundance of GPS data thus provide large influence on the total cost error, which is why there is a rapid jump on the SLAM trajectory towards the GPS trajectory.
 
 \begin{figure} [H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/data1_cov.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/data1_cov.png}
     \caption{Plot for GPS covariance in Data 2}
+    \label{fig:data1_cov}
 \end{figure}
 
 However, the covariance (accuracy) of GPS is not consistent in different datasets as their accuracy varies continuously with environmental and system conditions \cite{vila2020survey}. In this case, the GPS covariance of all datasets are being plotted out to investigate the optimal covariance threshold for more versatile use cases. 
@@ -1814,7 +1849,6 @@ Although the incorporation of GPS provides global constraints that enable the SL
 \end{figure}
 
 This occurs because the pose graph SLAM framework consist of mathematical outlier rejection mechanisms that evaluate the residual between the LiDAR odometry estimates and the GPS measurements. If the distance grows unusually large between both sensors, the GPS measurements are classified as outliers and excluded from the optimization process. As a result, GPS data is not used to correct the trajectory in cases of significant odometry drift.
-
 
 % --- GNSS-R ---
 \section{GNSS-R}
@@ -3208,20 +3242,16 @@ vegetation.
 \end{figure}
 
 \subsubsection{LiDAR SLAM}
-For this dataset, LiDAR point clouds were processed using two techniques: the
-standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
-figures below, PGO+GPS has misaligned point clouds due to the GPS coordinate
-frame and transformation logic issues. In PGO+GPS, the green trajectory
-indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
+For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=0.95\textwidth]{Included_Images/KeyExperiment_FAST-LIO.png}
+        \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
         \caption{Fast-LIO}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_SCPGO_GPS.png}
+        \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
         \caption{PGO+GPS}
     \end{subfigure}
     \caption{LiDAR SLAM results using two different techniques.}
