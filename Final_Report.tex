@@ -1885,20 +1885,21 @@ which correlations between GNSS-R signal features and vegetation condition
 parameters are comprehensively assessed and modelled.
 
 \subsection{Methodology}
-In this project, a RL polarization system is adopted onboard the UAV: the zenith
-antenna receives the RHCP signals transmitted directly from the satellite, while
-the nadir antenna receives the LHCP signals after they have reflected off
-various ground features. A schematic representation of the RL polarization
-system, as well as the two types of GNSS signal polarization types, are shown in
-Figure \ref{RL System} below. 
+In this project, a RL polarization system is adopted onboard the UAV:
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.7\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/RL_system.png}
-        \caption{RL Polarization System Used for Remote Sensing}
-    \end{subfigure}
-    \vfill
+    \includegraphics[width=0.75\textwidth]{Included_Images/RL_system.png}
+    \caption{RL polarization system used for remote sensing.}
+\end{figure}
+
+Here, the zenith antenna receives the RHCP signals transmitted directly from the
+satellite, while the nadir antenna receives the LHCP signals after they have
+reflected off various ground features. A schematic representation of the two
+types of GNSS signal polarization are shown in Figure \ref{GNSS_polarization}
+below. 
+
+\begin{figure}[H]
     \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/RHCP.png}
         \caption{Right-Hand Circular Polarization \\ (Direct GNSS Signal)}
@@ -1908,8 +1909,8 @@ Figure \ref{RL System} below.
         \includegraphics[width=\textwidth]{Included_Images/LHCP.png}
         \caption{Left-Hand Circular Polarization \\ (Reflected GNSS Signal)}
     \end{subfigure}
-    \caption{RL polarization system adopted for this project and GNSS signal polarization types.}
-    \label{RL System}
+    \caption{Two GNSS signal polarization types within the RL polarization System.}
+    \label{GNSS_polarization}
 \end{figure}
 
 The GNSS-R framework then takes in raw GNSS data collected from the onboard
@@ -2135,123 +2136,180 @@ Ultimately, this modelled correlation will be used in reconstructing the CIR
 imagery information using GNSS measurement parameters. 
 
 \subsection{Results and Discussion}
+In this section, the correlations between GNSS signal parameters and ground
+features are qualitatively analyzed and quantitatively modelled from experiment
+data. Ultimately, the potential of the GNSS-R system for vegetation monitoring
+is demonstrated and discussed for further improvements. 
 
+\subsubsection{Correlating \texorpdfstring{$C/N_0$}{C/N0} Ratio with Ground
+Features} 
+After calculating the $C/N_0$ of both the direct and the reflected
+signals received onboard the UAV, the ratio of $\frac{C/N_{0, reflected
+signal}}{C/N_{0,direct signal}}$ is analyzed with respect to the FFZs of the
+reflected signal. This parameter of $C/N_0$ ratio describes the level of
+attenuation that the reflected signal experiences. Figure \ref{CNR Ratio FFZ}
+below shows the FFZs accumulated over an entire monitoring mission plotted over
+a satellite imagery base map, where the colors indicate the $C/N_0$ ratio
+between the reflected signal and the direct signal. In areas where multiple FFZs
+overlap, the color represents the mean $C/N_0$ ratio of all contributing
+signals.
 
-
-After successful execution of the path planning algorithms onboard the UAV, GNSS
-measurements from both the zenith and nadir antenna are recorded and
-post-processed. Specifically, the ratio of the nadir $C/N_0$ and the zenith
-$C/N_0$ is analyzed with respect to the FFZ locations. In the figure below, the
-FFZs from experiment (j) and (i) from Table \ref{Experiment-Summary} are plotted
-onto a satellite image map, with colors representing the ratio of $\frac{C/N_{0,
-reflected signal}}{C/N_{0,direct signal}}$.
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.75\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_1.png}
-        \caption{Experiment (j)}
+    \includegraphics[width=0.55\textwidth]{Included_Images/CNR_ratio_FFZ.png}
+    \caption{Received $C/N_0$ ratio of all signals received during a mission, plotted over the FFZs of the reflected signals.}
+    \label{CNR Ratio FFZ}
+\end{figure}
+
+From the above, it is evident that when the FFZ is over water or bare soil, the
+$C/N_0$ ratio between the reflected and direct signals tends to be higher. This
+indicates that stronger reflections occur over water and bare soil compared to
+vegetated areas. More importantly, Figure \ref{CNR Ratio FFZ} demonstrates the
+capability of $C/N_0$ ratio to clearly outline the boundary between water
+surfaces and vegetation canopy. 
+
+The Pearson correlation coefficients between $C/N_0$ ratios and RGB values of
+CIR imageries are then calculated. Among all experiments conducted, a consistent
+inverse correlation between $C/N_0$ ratio and CIR redness values could be
+observed, with the largest absolute value of the correlation coefficient being
+over $0.25$ (Figure \ref{CNR_corr}).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/CNR_ratio_corr_coeff.png}
+    \caption{Pearson correlation coefficient between $C/N_0$ ratio and the RGB values of CIR imagery.}
+    \label{CNR_corr}
+\end{figure}
+
+\subsubsection{Correlating Excess Pseudorange Delay with Ground Features}
+The excess pseudorange delay represents the additional, unmodelled signal delays
+of the reflected signal after the delay due to geometrical reflection have been
+effectively removed. This parameter majorly describes the interactions between
+the reflected GNSS signal and the ground features during its propagation. Figure
+\ref{Excess Pr Delay FFZ} below shows the FFZs accumulated over the entire
+mission for three of the key experiments conducted in this project. The colors
+indicate the excess pseudorange delay of the reflected signals, and the mean of
+all contributing signals are taken in areas where multiple FFZs overlap.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.55\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/shingmun_pr_delay.png}
+        \caption{Experiment Highlighting Bare Ground}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.75\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/CNR_Ratio_2.png}
-        \caption{Experiment (i)}
-    \end{subfigure}
-    \caption{Plot of FFZs on satellite imagery, colored by $C/N_0$ ratios.}
-\end{figure}
-From the above, it is evident that when the FFZ is over water or bare ground,
-the $C/N_0$ ratio between the reflected and direct signals tends to be higher.
-This indicates that stronger reflections occur over water and bare ground
-compared to vegetated areas.
-
-Conversely, when the UAV hovers over trees, more reflected signals are observed,
-as shown in Figure \ref{Pr_Error Distribution}. By definition, since pseudorange
-errors are primarily caused by signal reflections, signals received in an
-unobstructed open sky environment should exhibit near-zero mean pseudorange
-errors. However, the pseudorange error distribution of the zenith antenna
-reveals a small bump centered at large positive values, indicating that
-ground-reflected signals are being received. This bump is more pronounced in
-plot (b), suggesting more ground reflections when the UAV is hovering above 
-vegetation.
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.75\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/Bare_Ground_Pr_Error.png}
-        \caption{UAV hovering over bare ground.}
+    \begin{subfigure}{0.55\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/yuenlong_pr_delay.png}
+        \caption{Experiment Highlighting Bare Soil}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.75\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/Tree_Pr_Error.png}
-        \caption{UAV hovering over trees.}
+    \begin{subfigure}{0.55\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/mtdavis_pr_delay.png}
+        \caption{Experiment Highlighting Sparse Vegetation}
     \end{subfigure}
-    \caption{Normalized distributions of pseudorange errors for both antennas in 
-    two different flight scenarios.}
-    \label{Pr_Error Distribution}
+    \caption{Excess pseudorange delay of all reflected signals received during three different experiments, plotted over the FFZs of the reflected signals.}
+    \label{Excess Pr Delay FFZ}
 \end{figure}
 
-While the above analysis reveals key differences in GNSS measurements that could
-potentially distinguish tree-reflected signals for identifying vegetated areas,
-it also highlights a critical assumption that must be validated. Up to this
-point, it was assumed that the zenith antenna receives only direct signals while
-the nadir antenna receives only reflected signals. However, Figure \ref{Pr_Error
-Distribution} has already challenged this assumption. To investigate further,
-the distribution of the difference between the absolute pseudorange errors of
-the nadir and zenith antennas is plotted in Figure \ref{Pr_Error Difference}.
+The above results indicate that greater excess pseudorange delay could be
+observed when the GNSS signals are reflected over bare ground, bare soil, or
+sparse vegetation (grassy ground). Notably, the excess pseudorange delay over
+dense vegetation tends to be negative, suggesting that the calculation removes
+more geometrical reflection delay from the pseudorange than necessary.
+Conversely, this implies that the propagation path of the reflected signal is
+shorter than the originally expected path, where the signal propagates through
+the vegetation and reflects off the ground (Figure \ref{Reflected Signal
+Propagation Path}). Therefore, it is logical to conclude that GNSS signals tend
+to reflect off dense tree canopy instead of propagating through them.
+Additionally, this negative excess pseudorange delay could potentially serve as
+a key input for estimating the vegetation height, as the shortened signal path
+is geometrically related to the height of the tree canopy above ground.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/Pseudorange_Error_Difference.png}
-    \caption{Normalized distribution of difference between the absolute pseudorange errors of the 
-    nadir antenna and the zenith antenna.}
-    \label{Pr_Error Difference}
+    \includegraphics[width=0.5\textwidth]{Included_Images/expected_vs_actual_reflection_path.png}
+    \caption{Expected propagation path vs the actual propagation path of the reflected signal.}
+    \label{Reflected Signal Propagation Path}
 \end{figure}
-First, since many observations exhibit near-zero differences between nadir and
-zenith pseudorange errors, both nadir and zenith antenna may receive signals
-with similar pseudorange errors. Two possible scenarios explain this phenomenon:
-\begin{enumerate}
-    \item The zenith antenna receives ground-reflected signals, exhibiting
-    large pseudorange errors comparable to those of the nadir antenna. This
-    finding further validates the previous observations in Figure \ref{Pr_Error
-    Distribution}.
-    \item The nadir antenna receives direct propagated signals, exhibiting
-    small pseudorange errors comparable to those of the zenith antenna. Figure
-    \ref{Pr_Error Distribution} also supports this possibility, showing near-zero
-    pseudorange errors in the nadir antenna distribution plot.
-\end{enumerate}
-Furthermore, Figure \ref{Pr_Error Difference} shows observations where the
-zenith pseudorange error significantly exceeds the nadir pseudorange error,
-indicating that the zenith antenna can receive reflected signals. Since the zenith
-antenna is RHCP and the nadir antenna is LHCP, this also indicates that a GNSS
-RHCP antenna is able to receive LHCP signals and vice versa. To further
-investigate this observation, both antenna are tested in an open sky environment
-and their respective received $C/N_0$ values are plotted in Figure \ref{Antenna
-Testing Open Sky}.
+
+To quantify the observed correlations between ground features and the GNSS
+signal parameters, the Pearson correlation coefficients between the excess
+pseudorange delays and the RGB values of CIR imageries are calculated. Among all
+experiments conducted, a consistent positive correlation between the excess
+pseudorange delay and CIR greenness and blueness is observed, where both
+correlation coefficients are greater than 0.6 (Figure
+\ref{excess_pr_delay_corr}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/excess_pr_delay_corr_coeff.png}
+    \caption{Pearson correlation coefficient between excess pseudorange delay and the RGB values of CIR imagery.}
+    \label{excess_pr_delay_corr}
+\end{figure}
+
+\subsubsection{CIR Imagery Reconstruction}
+Through quantitatively modelling the correlations between GNSS signal parameters
+and ground features, a correlation could be found for all three RGB color
+channels of the reference CIR imagery. Therefore, the analysis results enabled
+the possibility of reconstructing the colors represented on the CIR imageries
+over FFZs. An example of the reconstructed CIR imagery is shown in Figure
+\ref{Example Reconstructed CIR} below. Here, the R values are the inverse of
+$C/N_0$ ratios, normalized between 0 and 1, while both the G and B values are
+$0.5$ times the excess pseudorange delay, normalized between 0 and 1. As a
+result, it is evident that both the water surface and the bare soil areas could
+be highlighted through the reconstructed CIR imagery, which further demonstrates
+the potential of GNSS as an alternative remote sensing system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/CIR_reconstruction_yuenlong.png}
+    \caption{Reconstructed CIR imagery color using GNSS measurements, plotted over the FFZs of the reflected signals.}
+    \label{Example Reconstructed CIR}
+\end{figure}
+
+However, it is also evident that the current approach introduces many noisy
+measurements into the sensing system, which may obscure further ground features
+that could be retrieved otherwise. To investigate the cause of such noisy measurements, the following experiment was designed and executed. 
+
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/Open_Sky_Setup.jpg}
-        \caption{Set up of antenna testing experiment.}
+        \caption{Experiment Set Up}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.49\textwidth}
         \centering
         \includegraphics[width=0.75\textwidth]{Included_Images/Open_Sky_Fisheye.png}
-        \caption{Fisheye view of the experiment environment.}
+        \caption{Fisheye View of the Experiment Environment}
     \end{subfigure}
-    \vfill
-    \begin{subfigure}{0.75\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/CNR_Distribution.png}
-        \caption{Normalized $C/N_0$ distributions of both antenna.}
-    \end{subfigure}
-    \caption{Antenna testing in open sky environment.}
-    \label{Antenna Testing Open Sky}
+    \caption{Antenna testing experiment in open sky environment.}
 \end{figure}
-Assuming all signals received in the open sky environment are non-reflected and
-thus RHCP, the LHCP antenna (shown in orange) can indeed receive RHCP signals,
-just at lower $C/N_0$ values compared to the RHCP antenna due to lower antenna
-gains. This phenomenon is further demonstrated in a subsequent experiment, where both
-antennas were elevated midair. During the first five minutes, both antennas
-faced upward; during the final five minutes, both antennas faced downward. The
+
+First, both the zenith RHCP antenna and the nadir LHCP antenna were detached
+from the UAV and brought under an open sky environment for testing. Since all
+directly transmitted GNSS signals are right-hand circular polarized, it could be
+assumed that all signals received under this open sky environment are RHCP
+signals. However, in post-processing, the distribution of $C/N_0$ of all signals
+received during the experiment reveals the reception of RHCP signals by the LHCP
+antenna, just at lower $C/N_0$ values compared to the RHCP antenna due to lower
+antenna gains (Figure \ref{CNR_distribution_test}). Therefore, it could be
+possible for the nadir LHCP antenna to receive direct signals during the flight
+missions, which introduces measurement noises to the dual-antenna system's data
+and thus the accuracy and clarity of the reconstructed CIR imagery.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/CNR_Distribution.png}
+    \caption{Normalized $C/N_0$ distributions of both antennae.}
+    \label{CNR_distribution_test}
+\end{figure}
+
+This phenomenon is further demonstrated in a subsequent experiment, where both
+antennae were elevated midair. During the first five minutes, both antennae
+faced upward; during the final five minutes, both antennae faced downward. The
 corresponding $C/N_0$ values received are plotted against observation time in
 the figure below.
+
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.8\textwidth}
@@ -2264,9 +2322,11 @@ the figure below.
         \includegraphics[width=\textwidth]{Included_Images/LHCP_CNR.png}
         \caption{LHCP Antenna}
     \end{subfigure}
-    \caption{Temporal plot of $C/N_0$s received by both antenna.}
+    \caption{Temporal plot of $C/N_0$s received by both antennae.}
 \end{figure}
+
 The above observations are qualitatively summarized in the table below:
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|c|c|c|}
@@ -2281,12 +2341,23 @@ The above observations are qualitatively summarized in the table below:
     \caption{Summary of $C/N_0$ behaviors for different antenna under different
     signal reception scenarios.}
 \end{table}
+
 Since both direct and reflected signals can be received by both the zenith RHCP
 antenna and the nadir LHCP antenna, and their signal properties differ based on
 signal polarization, it is critical to classify the received signals for
 distinguishing reflected signals from direct signals in a robust GNSS-R system.
-Machine learning approaches offer an effective solution, which will be detailed
-in the following section. 
+One possible method is to leverage the differences in $C/N_0$ values observed by
+different antenna polarizations and create a decision threshold to classify
+direct and reflected signals. However, as illustrated in Figure
+\ref{CNR_distribution_test}, the distribution of $C/N_0$ values of both antenna
+overlap each other, making it difficult to obtain a clear decision boundary.
+Therefore, multiple parameters may be necessary to conduct such classification
+tasks, such that machine learning approaches may offer a much more effective
+solution. The classification of signals and the detection of vegetation area
+boundaries using machine learning models is detailed in the section below, where
+the results in the machine learning pipeline will ultimately be used to
+cross-validate the results from the GNSS-R pipeline and demonstrated in the case
+study.
 
 
 % --- Machine Learning ---
