@@ -3051,12 +3051,13 @@ Barbecue Area. Photos showing the experiment locations are arranged in Figure
 
 
 % --- Case Study ---
-\section{Case Study: 2026 March 31, Mount Davis Experiment}
-In this case study, the results of Experiment (i) in Table
-\ref{Experiment-Summary} are discussed to demonstrate the current integrated
-system. Here, a survey flight mission was conducted to collect feature-extensive
-LiDAR and GNSS-R datasets above a canopy area consisted of mixed dense
-vegetation. 
+\section{Case Study}
+In this case study, the results of the experiment conducted at Mount Davis on
+March 31, 2026, are discussed to demonstrate the final integrated system. A
+total of four flights were executed (flights (u) - (x) in Table
+\ref{Experiment-Summary}) to collect feature-extensive LiDAR and GNSS-R datasets
+in an environment that contains both dense vegetation and ground with sparse
+vegetation (grass).
 
 \subsubsection{Path Planning and Execution}
 In this experiment, the trajectory is planned to ascend and maintain at an altitude of
@@ -3077,17 +3078,42 @@ plan is shown in the figure below.
     \caption{Path planning and execution results.}
 \end{figure}
 
-\subsubsection{GNSS-R Analysis}
-After the successful collection of GNSS data during the flight mission, the raw data
-was post-processed into measurement information. With the FFZs of the reflected GNSS 
-signals calculated, they were plotted onto the satellite image map. Here, the color
-of the FFZs indicates the $C/N_0$ ratio between the bottom and top antennas,
-and strong reflections over water and bare ground could be observed compared to those
-reflected from vegetation.
+\subsubsection{GNSS-R Analysis and Modelling}
+After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess psuedorange delay. Then, the FFZs of each reflected GNSS signals are calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
-    \caption{GNSS-R Fresnel zone analysis result.}
+    \begin{subfigure}{0.55\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/casestudy_CNR.png}
+        \caption{$C/N_0$ Ratio Over FFZs}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}{0.55\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/casestudy_excess_pr_delay.png}
+        \caption{Excess Pseudorange Delay Over FFZs}
+    \end{subfigure}
+    \caption{Received $C/N_0$ ratios and excess pseudorange delays during the case study experiment, plotted over the FFZs of the reflected signals.}
+    \label{CNR and Delay Case Study}
+\end{figure}
+
+While no clear boundaries exist in the plot of $C/N_0$ ratio since the
+difference in $C/N_0$ ratio mainly exists between vegetation and water surfaces,
+it is evident that the excess pseudorange delay of the signals reflecting off
+ground with grass tends to be greater than the excess pseudorange delay of the
+signals reflecting off vegetation. Additionally, given the fact that the excess
+pseudorange delay tends to be negative over vegetation, it can be implied that
+the signals reflected off the dense canopy rather than propagating through to
+reflect off from the ground.
+
+Using the correlations between GNSS measurement parameters and RGB values of CIR
+imageries summarized in Section 6.3, the CIR imagery color for this experiment
+were also reconstructed, as shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies and the FFZs over ground with sparse vegetation could be clearly distinguished, demonstrating the potentential of GNSS as an alternative remote sensing system.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/casestudy_CIR.png}
+    \caption{Reconstructed CIR imagery color using GNSS measurements, plotted over the FFZs of the reflected signals.}
+    \label{Case Study CIR}
 \end{figure}
 
 \subsubsection{Machine Learning Signal Classification}
