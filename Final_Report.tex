@@ -428,79 +428,79 @@ algorithms.
 
 \begin{table}[ht]
     \newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
-    \caption{Comparison of Waypoint-based Path Planning Algorithms} 
+    \caption{Comparison of Waypoint-based Path Planning Algorithms}
     \label{tab:algorithms_comparison}
     \centering
     \footnotesize
-    \begin{tabularx}{\linewidth}{@{} l l L L @{}} 
-    \toprule
-    \textbf{Category} & \textbf{Algorithm} & \textbf{Advantages} & \textbf{Disadvantages} \\ 
-    \midrule
+    \begin{tabularx}{\linewidth}{@{} l l L L @{}}
+        \toprule
+        \textbf{Category} & \textbf{Algorithm} & \textbf{Advantages} & \textbf{Disadvantages} \\
+        \midrule
 
-    % --- SEARCH BASED ---
-    \multirow{10}{*}{\textbf{Search-based}} & \textbf{A*} & 
-    % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet] 
-        \item Guarantees shortest path if heuristic is accurate.
-        \item Reduces the search space compared to Dijkstra.
-    \end{itemize} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item High computational cost in large spaces.
-        \item Needs accurate heuristics.
-        \item Poor performance in dynamic environments.
-    \end{itemize} \\ 
-    \addlinespace[4pt] % Adds a tiny gap between rows instead of a line
-    
-    & \textbf{Dijkstra} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Finds optimal path.
-        \item Simple to implement.
-    \end{itemize} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Computationally expensive.
-        \item Impractical for real-time UAVs.
-    \end{itemize} \\ 
-    \midrule
+        % --- SEARCH BASED ---
+        \multirow{2}{*}{\textbf{Search-based}} & \textbf{A*} &
+        % [nosep] removes all vertical space, [leftmargin=*] aligns bullets to text
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Guarantees shortest path if heuristic is accurate.
+            \item Reduces the search space compared to Dijkstra.
+        \end{itemize} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item High computational cost in large spaces.
+            \item Needs accurate heuristics.
+            \item Poor performance in dynamic environments.
+        \end{itemize} \\
+        \addlinespace[4pt] % Adds a tiny gap between rows instead of a line
 
-    % --- SAMPLING BASED ---
-    \multirow{10}{*}{\textbf{Sampling-based}} & \textbf{RRT} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Fast exploration of high-dim spaces.
-        \item Good for unknown maps.
-    \end{itemize} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item No guarantee of optimal path.
-        \item Paths are often jagged and require smoothing.
-    \end{itemize} \\ 
-    \addlinespace[4pt]
-    
-    & \textbf{RRT*} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Paths improve over time.
-        \item Handles complex spaces.
-        \item Retains the exploration ability of RRT.
-    \end{itemize} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Computational cost is higher than RRT.
-        \item Slower convergence.
-    \end{itemize} \\ 
-    \midrule
+        & \textbf{Dijkstra} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Finds optimal path.
+            \item Simple to implement.
+        \end{itemize} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Computationally expensive.
+            \item Impractical for real-time UAVs.
+        \end{itemize} \\
+        \midrule
 
-    % --- AI BASED ---
-    \multirow{10}{*}{\textbf{AI-based}} & \textbf{SAC} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Learns adaptive policies.
-        \item Handles continuous control.
-        \item Robust in dynamic, uncertain environments.
-        \item No explicit map needed.
-    \end{itemize} & 
-    \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
-        \item Requires large training data and simulation
-        \item Reward design is non-trivial.
-        \item No hard optimality guarantee.
-        \item Complex to implement
-    \end{itemize} \\ 
-    \bottomrule
+        % --- SAMPLING BASED ---
+        \multirow{2}{*}{\textbf{Sampling-based}} & \textbf{RRT} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Fast exploration of high-dim spaces.
+            \item Good for unknown maps.
+        \end{itemize} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item No guarantee of optimal path.
+            \item Paths are often jagged and require smoothing.
+        \end{itemize} \\
+        \addlinespace[4pt]
+
+        & \textbf{RRT*} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Paths improve over time.
+            \item Handles complex spaces.
+            \item Retains the exploration ability of RRT.
+        \end{itemize} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Computational cost is higher than RRT.
+            \item Slower convergence.
+        \end{itemize} \\
+        \midrule
+
+        % --- AI BASED ---
+        \multirow{1}{*}{\textbf{AI-based}} & \textbf{SAC} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Learns adaptive policies.
+            \item Handles continuous control.
+            \item Robust in dynamic, uncertain environments.
+            \item No explicit map needed.
+        \end{itemize} &
+        \begin{itemize}[nosep, leftmargin=*, label=\textbullet]
+            \item Requires large training data and simulation
+            \item Reward design is non-trivial.
+            \item No hard optimality guarantee.
+            \item Complex to implement
+        \end{itemize} \\
+        \bottomrule
     \end{tabularx}
 \end{table}
 
@@ -927,7 +927,7 @@ The proposed path planning workflow (Figure \ref{fig:path_planning_workflow}) co
 \end{enumerate}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/pathplanning_workflow.png}
+    \includegraphics[width=\textwidth]{Included_Images/pathplanning_workflow.png}
     \caption{Path Planning Workflow}
     \label{fig:path_planning_workflow}
 \end{figure}
@@ -3062,16 +3062,9 @@ intervals, with the turnaround buffer distance set at 5 meter. The result of the
 plan is shown in the figure below. 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.3\textwidth}
-        \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_Pathplanninglist.png}
-        \caption{Mission Planning List in QGroundControl}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.65\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
-        \caption{Planned Path Result}
-    \end{subfigure}
-    \caption{Path planning and execution results.}
+    \includegraphics[width=1.0\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
+    \caption{Mission Planning and Execution Results}
+    \label{fig:planned_path}
 \end{figure}
 
 \subsubsection{GNSS-R Analysis and Modelling}
@@ -3168,7 +3161,14 @@ generate efficient trajectories for the UAV to fly over vegetated and mixed
 environments. Moreover, the interactive path planner system provides the optimal
 detection area by clustering the Fresnel zones, which provides a suitable
 sweeping distance for coverage path planning. As a result, an optimizined survey
-mission can be planned in QGroundControl to fly the UAV over vegetation. 
+missions can be planned in QGroundControl to fly the UAV over vegetation. 
+
+In parallel, a modular LiDAR SLAM framework was developed to complement the
+ground parameters retrieved from GNSS-R analysis. It is found that the Pose
+Graph Optimization (PGO) SLAM demonstrates better point cloud alignment compared
+to Fast-LIO LiDAR odometry before the fusion of GPS data. The alignment between
+SLAM and GPS trajectories were succesfully achieved by calibrating the IMU unit
+in LiDAR and conducting LiDAR to GPS frame transformation.
 
 On the other hand, GNSS-R analysis discovered distinct signal behaviors when the
 UAV is hovering above bare ground, water, and vegetation. However, it is found
@@ -3181,33 +3181,30 @@ distinguish between direct, ground-reflected, and vegetation-reflected signals.
 To do this, a LightGBM-based machine learning model is used to classify signal
 types. The implementation of this machine learning model shows strong
 performance, where the model can effectively distinguish between direct,
-ground-reflected, and tree-reflected signals. This in turns provides a critical
-component for a reliable GNSS-R pipeline. 
-
-In parallel, a modular LiDAR SLAM framework was developed to cross-check the
-vegetation data from GNSS-R. It is found that the Pose Graph Optimization (PGO)
-SLAM demonstrates better point cloud alignment compared to Fast-LIO LiDAR
-odometry before the fusion of GPS data. However, it is found to have large point
-cloud misalignments after GPS is integrated into the PGO SLAM. Thus, this
-finding provides a clear direction for subsequent system refinement to create a
-robust modular LiDAR SLAM system.
-
+ground-reflected, and tree-reflected signals. The classification results
+perfectly cross-validate the results obtained from the GNSS reflected signals. 
 
 % --- Project Management ---
 \section{Project Management}
 The Final Year Project spans two semesters, with first semester focusing mainly
 on literature review, methodology development, finalizing connections between
 different parts of the project and conducting preliminary experiments for
-collecting data and testing developed methodologies. The second semester will
-focus on integrating developed systems for each individual parts, developing
-final models, conducting final experiments to collect more data and validate
-methodologies and writing final project report. 
+collecting data and testing developed methodologies.During the second semester,
+the team addressed the limitations and conducted final experiments to collect
+more robust data and achieved the project objectives.  
 
 The path planning part of the project is lead by GAMAGE Sashenka, who has been
 focusing on developing and testing the path planning algorithms in local mapping
-environment and QGround Control. So far, the path planning part has been
-progressing as per the timeline in the Gantt chart and future works mainly focus
-on conducting simulations in dynamic UAV environment and real world UAV testing. 
+environment and QGround Control. As a result, simulations were conducted to
+verify locally developed A* algorithm in dynamic UAV environment. Moreover, an
+interactive path planning system was developed in order to identify GNSS signal
+reflected areas to obtain stronger signals. 
+
+The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been
+developing a modular LiDAR SLAM framework which she has tested in both with and
+without GPS integration. The issues occured with the point cloud alignment were
+resolved by calibrating the IMU unit in LiDAR and conducting LiDAR to GPS frame
+transformation. 
 
 The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on
 conducting GNSS-R experiments and analyzing the collected data. So far, the
@@ -3225,24 +3222,18 @@ developing neural network based model to perform regression tasks to predict
 vegetation parameters. Sahat has also been responsible for piloting the drone
 during the experiments.
 
-The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been
-developing a modular LiDAR SLAM framework which she has tested in both with and
-without GPS integration. So far, the LiDAR SLAM part has been progressing as per
-the timeline in the Gantt chart. The future works will mainly focus on solving the
-point cloud alignment issues after GPS integration and fine-tuning the modular
-SLAM framework to improve robustness.
+As a result, the team was able to successfully integrate the four pillars of the
+project and demonstrate meaningful results. The path planning framework was able
+to provide optimal detection areas for the UAV to fly over vegetation. The LiDAR
+SLAM framework was able to develop SLAM by sucessfully integrating the GPS data
+into the SLAM system, follwing post graph optimization (PGO) SLAM. The GNSS-R
+analysis was able to identify the ground parameters from the GNSS-R data and the
+ML model was able to classify the signals into direct, ground-reflected, and
+tree-reflected signals. These results were able to cross-validate the results
+obtained from the GNSS-R analysis.
 
-Furthermore, the second semester will focus on integrating developed systems for
-each individual parts, developing final models, conducting final experiments to
-collect more data and validate methodologies and writing final project report.
-While much of the work will remain divided among team members, increased
-collaboration is expected in some key areas. For instance, ZHOU Jiayi and MAHMUD
-Md Sahat will work more closely on GNSS data classification, while GAMAGE
-Sashenka and TAN Qing Lin will collaborate on integrating the SLAM system into
-the path planning framework.
-
-
-The Gantt chart below summarizes the project timeline for each individual parts of the project.
+The Gantt chart below summarizes the project timeline for each individual parts
+of the project.
 
 \clearpage % Start a fresh page to ensure there is enough room
 \begin{minipage}{\textwidth}
@@ -3297,8 +3288,8 @@ The Gantt chart below summarizes the project timeline for each individual parts 
 \ganttbar[bar/.style={fill=pathcolor}]{Waypoint \& Coverage Planning}{2025-10-01}{2025-10-31} \\
 \ganttbar[bar/.style={fill=pathcolor}]{Image Processing}{2025-10-15}{2025-12-15} \\
 \ganttbar[bar/.style={fill=pathcolor}]{Integrate with Image Processing}{2026-01-31}{2026-02-15} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Dynamic Simulation (MATLAB/AirSim)}{2026-02-01}{2026-03-31} \\
-\ganttbar[bar/.style={fill=pathcolor}]{Real-World Navigation Application}{2026-03-01}{2026-04-30} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Dynamic Simulation (MATLAB)}{2026-02-01}{2026-03-31} \\
+\ganttbar[bar/.style={fill=pathcolor}]{Developing Fresnel Zone Interactive Planner}{2026-03-01}{2026-04-30} \\
 % GNSS-R
 \ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-10} \\
 \ganttbar[bar/.style={fill=gnsscolor}]{Data Post-Processing Code Development}{2025-10-01}{2025-10-30} \\
@@ -3338,11 +3329,14 @@ address them.
 In terms of project management, the issues that arose during the path-planning
 process were mainly related to hardware communication. During on-site
 experiments, the UAV's telemetry disconnected from the ground station, even
-though it was within the specified communication range. Since the mission
-planner in QGroundControl does not rely on real-time communication, the
-experiments were not disrupted. However, to solve this problem, we have analyzed
-strong long-distance communication telemetry types and will be replacing the
-current hardware in the next stage. 
+though it was within the specified communication range. However, to solve this
+problem, we have analyzed strong long-distance communication telemetry types and
+will be replacing the current hardware in the next stage. 
+
+Another limitation encountered is that not utilizing locally developed algorithms in
+real-world experiments. This requires extensive testing on UAV indoor navigation
+to ensure robust obtacle avoidance. However, due to the time limitations and
+hardware restrictions, the real-world testing was not conducted.
 
 \subsubsection{GNSS-R}
 Through processing the data obtained during the first half of this project, one
