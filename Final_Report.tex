@@ -208,7 +208,7 @@ environmental monitoring.
 \item To establish a detailed 3D canopy map using LiDAR-based SLAM, providing a
 spatial validation reference for the 2D vegetation features detected by GNSS-R.
 This involves creating a modular SLAM system, incorporating LiDAR odometry as
-the front-end and GPS-coupled pose graph optimization SLAM as the back-end. As a
+the front-end and GPS-coupled Pose Graph Optimization (PGO) SLAM as the back-end. As a
 result, an accurate vegetation map could be generated to complement the GNSS-R
 vegetation monitoring system.
 \item To analyze and model the correlations between signal propagation
@@ -268,7 +268,7 @@ After the flight, the LiDAR data will be synchronized with timestamps obtained
 from the flight controller's GPS module. Then, both LiDAR and GPS data will be
 collected and used for the generation of a 3D vegetation map. This will be
 achieved through a modular LiDAR framework, utilizing LiDAR odometry as the
-front-end and pose graph optimization as the back-end. As a result, the 3D
+front-end and Pose Graph Optimization (PGO) SLAM as the back-end. As a result, the 3D
 vegetation map generated within the LiDAR environment can be used to
 cross-validate the ground parameters retrieved by GNSS-R and machine learning
 models.
@@ -1387,7 +1387,7 @@ cross-sensor correlations \cite{oh2010symmetrical}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/EKF SLAM.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/EKF SLAM.png}
     \caption{The figure depicts a spring network analogy to visualize how EKF
 SLAM works, with the red lines showing the correlations between landmarks. As
 the robot passes a landmark more than once, these correlations increase, which
@@ -1419,7 +1419,7 @@ only connects to poses where it was observed without connecting to each other.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/pgo.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/pgo.png}
     \caption{Visualization of GraphSLAM with loop closure}
 \end{figure}
 
@@ -1431,11 +1431,10 @@ relative, allowing errors to accumulate over time. While recent work such as
 \cite{mailka2024efficient}has integrated additional sensors to improve SLAM
 accuracy, their applicability to UAV-based forest monitoring remains limited due
 to canopy interference, sparse LiDAR features, and computational trade-offs.
-This project investigates how such SLAM methods can be adapted and deployed for
-real-time forestry applications.
+As a result, this project investigates how the combination of filter-based odometry and graph-based SLAM with GPS constraints can be adapted and deployed for real-time forestry applications.
 
 \subsection{Methodology}
-This section describes the methodology adopted to develop the proposed GPS-aided modular SLAM system for UAV remote sensing with the aim to reduce trajectory drift. To achieve this, the methodology is divided into several key components. First, Fast-LIO is used as the front-end odometry to fuse LiDAR and IMU data using an Iterative Extended Kalman Filter (IEKF) for real-time pose estimation and local map generation. Second, back-end optimization SLAM is employed to carry out trajectory refinement and loop closure detection. Third, GPS measurements are incorporated as absolute positioning factors to prevent long-term drift. Fourth, since LiDAR and GPS measurements originate from different sensor frames, frame transformation is carried out to align both data sources into the same coordinate system. Lastly, the complete system architecture is outlined to illustrate how the sensing, front-end estimation, and back-end optimization modules are interacted within the Robotic Operating System (ROS).
+This section describes the methodology adopted to develop the proposed GPS-aided modular SLAM system for UAV remote sensing with the aim to reduce trajectory drift. To achieve this, the methodology is divided into several key components. First, Fast-LIO is used as the front-end odometry to fuse LiDAR and IMU data using an Iterative Extended Kalman Filter (IEKF) for real-time pose estimation and local map generation. Second, back-end optimization SLAM is employed to carry out trajectory refinement and loop closure detection with GPS measurements to provide constraints. Third, frame transformation between GPS and LiDAR is carried out to align both data sources into the same coordinate system. Lastly, the complete system architecture is outlined to illustrate how the sensing, front-end estimation, and back-end optimization modules are interacted within the Robotic Operating System (ROS).
 
 \subsubsection{LiDAR-Inertial Odometry}
 For the front end of the modular SLAM system, LiDAR-Inertial Odometry (Fast-LIO)
@@ -1564,7 +1563,7 @@ Assuming Gaussian noise, the odometry and observation factors can be expressed i
     P(x_k|x_{k-1},u_{k-1}) = \exp(-||f_k(x_{k-1}, u_k)-x_k||^2_{\Sigma_{u,k}})
 \end{equation}
 
-where $f_k(x_{k-1}, u_k)$ indicates the relative motion estimate from the front-end LiDAR odometry and $\Sigma_{u,k}$ represents its covariance. Similarly for the observation factor, which correspond to the GPS measurements can be written as:
+where $f_k(x_{k-1}, u_k)$ indicates the relative motion estimate from the front-end LiDAR odometry and $\Sigma_{u,k}$ is its covariance. Similarly for the observation factor, which correspond to the GPS measurements can be written as:
 \begin{equation}
     P(z_k^{gps}|x_k) = \exp\left(-\|p_k - z_k^{gps}\|^2_{\Sigma_{gps,k}}\right)
 \end{equation}
@@ -1705,91 +1704,37 @@ Pixhawk are passed to the back end pose graph optimization SLAM under
 \end{figure}
 
 \subsection{Results and Discussion}
-\subsubsection{Stage 1: Modular SLAM Implementation without GPS}
+\subsubsection{Point Clouds Comparison}
+To test the point cloud alignments, the same experiment data is run on Fast-LIO LiDAR Odometry, Pose Graph Optimization (PGO) SLAM without GPS, and PGO SLAM with GPS for comparison. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_fastlio.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_FL.png}
     \caption{Fast-LIO LiDAR Odometry}
-    \label{fig:stg1_fastlio}
+    \label{fig:rosbag3_FL}
 \end{figure}
+\vspace{-3pt}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/stg1_pgo.png}
-    \caption{PGO with FPFH and ICP}
-    \label{fig:stg1_pgo}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_pgo_nogps2.png}
+    \caption{Pose Graph Optimization SLAM without GPS}
+    \label{fig:rosbag3_pgo_nogps}
 \end{figure}
-The implementation of modular SLAM is first done without the integration of GPS
-to make sure the architecture works. When comparing \autoref{fig:stg1_fastlio}
-and \autoref{fig:stg1_pgo}, it is observed that there is less drifting in the
-point clouds in the PGO SLAM. This is because the PGO SLAM uses Fast Point
-Feature Histograms (FPFH) method to have an initial guess to align the point
-clouds and uses Iterative Closest Point (ICP) for further refinement. FPFH can
-effectively represent the local geometry around key points in a point cloud which
-makes it robust against changes in viewpoints. Since FPFH is better at aligning
-point clouds that are far away for global robustness, it is then passed to ICP
-for further precise refinement with millimeter-level precision
-\cite{song2025robotic}. 
-
-On the other hand, Fast-LIO only uses Iterated Extended Kalman Filter (IEKF) to
-align the point clouds. In this case, we can see that the dual layer of point
-cloud alignment in PGO further increase the accuracy in SLAM.
-
-\subsubsection{Stage 2: Modular SLAM Implementation with GPS}
+\vspace{-3pt}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/stg2_pgomis.png}
-    \caption{PGO SLAM after integration of GPS. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
-    \label{fig:stg2_pgo}
-\end{figure}
-Once GPS is being integrated to the PGO SLAM, we can see in
-\autoref{fig:stg2_pgo} that there are two different trajectories and the point
-clouds are very misaligned. Firstly, both trajectories are not aligned as the
-position of the LiDAR and the GPS on the drone itself are different, hence
-having two different frames. Second of all, the point clouds are misaligned as
-GPS has a high gain in the SLAM and some issues related to the transformation of
-the GPS to LiDAR odometry. 
-
-To solve the misalignments of both trajectories, extrinsic calibration is
-carried out between IMU from Pixhawk that is connected to the GPS and the LiDAR
-point clouds to align both frames together. In this case, HKU Mars calibration
-system is used for the extrinsic calibration:
-\url{https://github.com/hku-mars/LiDAR_IMU_Init/issues} 
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_fastlio.png}
-    \caption{Fast-LIO LiDAR Odometry}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/stg3_pgo.png}
-    \caption{PGO SLAM with GPS and odometry trajectory aligned. Green trajectory indicates LiDAR odometry, 3 axis trajectory indicates GPS trajectory}
-    \label{fig:stg3_pgo}
+    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_pgo.png}
+    \caption{Pose Graph Optimization SLAM with GPS}
+    \label{fig:rosbag3_pgo}
 \end{figure}
 
-Based on \autoref{fig:stg3_pgo}, despite both odometry and GPS trajectory and aligned, we can
-still observe that the point clouds in PGO are still misaligned. Aside from having high
-gain for GPS in the SLAM, the misalignment of point clouds is due to the issues regarding the coordinate
-frame rotation between GPS and LiDAR odometry, and GPS transformation logic which
-needs to be solved in later stage. 
+When comparing Figure \ref{fig:rosbag3_FL}, Figure \ref{fig:rosbag3_pgo_nogps}, and Figure \ref{fig:rosbag3_pgo}, which represents three approaches evaluated mentioned above, it can be observed that the point cloud alignments are similar to each other. This suggests that for the given dataset, LiDAR odometry alone is already capable of producing a reasonably consistent local map, and the incorporation of pose graph optimization and GPS constraints does not significantly alter the structural alignment of the reconstructed point clouds. However, while the local alignment appears consistent, the inclusion of GPS helps to improve global consistency by reducing long-term drift, particularly over larger trajectories or extended operation periods.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/withgps.png}
-    \caption{PGO with GPS integration}
-    \label{fig:withgps}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/nogps.png}
-    \caption{PGO without GPS integration}
-    \label{fig:nogps}
-\end{figure}
+If the GPS trajectory and SLAM trajectory are not aligned, SLAM will consider GPS data to correct the SLAM poses, resulting the SLAM trajectory to align with the GPS trajectory. This can be investigated in the same dataset where we compare the PGO SLAM method that does not include GPS and the PGO SLAM method with GPS included. As illustrated in Fig. X and Fig. Y, the trajectory obtained from PGO SLAM without GPS shows a noticeable misalignment between the estimated SLAM trajectory and the GPS reference trajectory. In contrast, optimized SLAM trajectory is more aligned with GPS trajectory when GPS constraints are incorporated into the SLAM calculation. Even so, GPS data is not always trustworthy. Incorporating all GPS measurements directly into the SLAM framework may degrade performance if low-quality data are included. As a result, filtering the high quality GPS data is essential for the accuracy of SLAM calculation. 
 
-\autoref{fig:withgps} and \autoref{fig:nogps} shows the difference between
-the PGO SLAM with and without GPS integration when using the same architecture. In
-this case we can confirm that GPS is the main issue that causes the point cloud
-distortion.
+\subsubsection{GPS Data Filtering}
+In order to filter out accurate GPS data for the SLAM calculation, A manually tuned covariance threshold is used to reject low-quality GPS measurements before they are added to the pose graph. In order to obtain the optimal covariance threshold value, several values are tested as shown to investigate the effects on the PGO SLAM system. 
+
+\subsubsection{Limitations}
 
 
 % --- GNSS-R ---
@@ -2599,7 +2544,7 @@ of data that could introduce bias.
 In order to train the LightGBM model, the dataset was first split into training,
 testing, and validation sets. The ratio for dataset division was 60:20:20 respectively. A total of 70,125 
 labeled samples were used for training the model. The training features included pseudorange, 
-Carrier to Noise Ratio, Doppler measurement and Carrier Phase.
+Carrier to Noise Ratio, Doppler measurement, Pseudorange Error and Carrier Phase.
 The tuning of hyperparameters was then performed using a grid search approach and the used 
 hyperparameters are shown in the table below. 
 \begin{table}[H]
@@ -2681,7 +2626,8 @@ the model adds a new tree that predicts the negative gradients of the loss funct
 The model converged well and the loss curves for training and validation sets are shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{Included_Images/LossCurve.png}
+    \includegraphics[width=1\linewidth]{Included_Images/LossCurve1.png}
+    \includegraphics[width=1\linewidth]{Included_Images/LossCurve2.png}
     \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
 To gain insight into the LightGBM model's training process, two plots were 
@@ -2735,11 +2681,11 @@ find all the positive samples. The F1-score is calculated using the following eq
 The F1-score for the LightGBM model on the test dataset is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.65\textwidth]{Included_Images/F1.png}
+    \includegraphics[width=1\textwidth]{Included_Images/F1.png}
     \caption{F1-score for LightGBM model on test dataset}
 \end{figure}
 From the figure above, it is observed that the LightGBM model achieves an F1 score of approximately
-0.9 on the test dataset. This indicates that the model has a proper balance between precision and recall and
+0.977 on the test dataset, where a value of 1 represents a perfect model. This indicates that the model has a proper balance between precision and recall and
 is effective in classifying different classes of signals. 
 \subsubsection{Confusion matrix}
 Confusion matrix can help to visualize the performance of a classification model on a set of test data for which
@@ -2748,14 +2694,14 @@ represent correctly classified samples and the rest of the elements indicate the
 The confusion matrix for the LightGBM model is shown below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/Confusion-matrix.png}
+    \includegraphics[width=1\textwidth]{Included_Images/Confusion-matrix.png}
     \caption{Confusion matrix for LightGBM model}
 \end{figure}
 From the confusion matrix above, it is observed that the LightGBM model has correctly classified a majority 
 of the samples in the test dataset. Primary confusion for the model occurs for direct and ground reflected signals being classified as 
-tree reflection. As can be observed from the confusion matrix, 1110 and 1008 samples of direct and ground reflected
+tree reflection. As can be observed from the confusion matrix, 119 and 139 samples of direct and ground reflected
 signals respectively are misclassified as tree reflected signals. This could be due to the similarity in the features of these
-signals. However, the model has performed well in classifying tree reflected signals with only 3 samples being misclassified. 
+signals. However, the model has performed well in classifying tree reflected signals with only 76 samples being misclassified. 
 These results are acceptable as the model will later be used primarily to identify vegetation-reflected signals.
 \subsubsection{ROC Curve}
 A ROC curve is a way to graphically represent how well a binary classifier is performing at different threshold settings. 
@@ -2766,7 +2712,7 @@ closer to 1, it indicates that the model can effectively distinguish between cla
 the ROC curve is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/ROC.png}
+    \includegraphics[width=1\textwidth]{Included_Images/ROC.png}
     \caption{ROC curve for LightGBM model on test dataset}
 \end{figure}
 The figure indicates that the LightGBM model has a ROC value of over 0.95 for all three classes of signals, meaning
@@ -2777,18 +2723,119 @@ in a model. A feature importance analysis was performed on the LightGBM model to
  signal classification task. The feature importance plot is shown in the figure below.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/feature_importance.png}
+    \includegraphics[width=1\textwidth]{Included_Images/feature_importance.png}
     \caption{Feature importance plot for LightGBM model}
 \end{figure}
 The figure indicates that the top three features for the LightGBM model are:
 \begin{itemize}
-    \item Pseudorange 
-    \item Doppler measurement
-    \item Elevation Angle
+    \item Doppler Measurement
+    \item Carrier to Noise Ratio
+    \item Pseudorange error
 \end{itemize}
 These features have the highest importance scores, indicating that they contribute significantly to the model's ability to classify
 the signals accurately. This insight can be useful for future feature engineering and model improvement efforts.
 
+\subsection{Prediction Confidence Analysis}
+To further evaluate the performance of the model and the reliability of the predictions, a 
+per satellite confidence analysis was conducted. The plot below shows confidence for the predictions
+for some selected satellites. For each of the prediction, the model outputs a probability distribution. This is done
+via the softmax function. The prediction confidence is defined as the maximum prediction probability. The calculation is done using the 
+following equation:
+\begin{equation}
+    \text{Conf.}_i = \max_{k \in \{1,2,3\}} \; p_{i,k},
+\end{equation}
+here, the predicted probabiloty of sample $i$ is denoted as $p_{i,k}$ which belongs to class $k$.
+A confidence of 1 means a fully decisive prediction. A value near 0.33 reflects maximum uncertainty.
+A threshold of 0.50 is set which is shown by the red dashed line. This threshold serves as a practical
+unreliability mark. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Included_Images/confidence_timeseries_p1.png}
+    \includegraphics[width=0.7\textwidth]{Included_Images/confidence_timeseries_p2.png}
+    \caption{Prediction confidence timeseries for selected satellites.}
+\end{figure}
+
+The figure above presents the confidence plot for some of the selected satellites. The flight duration
+for this experiment was around 4.5-5 minutes. In the plot, each of the dot reflects a measurement from that satellite and the colour
+reflects their predicted class. A blue coloured dot represents a direct signal, an orange dot reflects a ground reflected signal and lastly the green dot
+represents the tree reflected signals. A smoothed confidence curve is also plotted (in black) to represent the temporal trend. 
+
+Across all 16 satellites the mean confidence ranges from 0.85 to 0.98. This indicates that the classifier 
+consistently produces high confidence decisive predictions. Majority of the predictions lie above the threshold value. Galileo 
+consistently tend to achieve slightly higher mean confidenve than GPS which may be happening due to their consistent stronger signal quality.
+A consistent feature of the predictions that can be observed from the plots is the dip around 1.5-2.5 minute mark. This is visible in the smoothed confidence curve 
+for most of the satellites: G01, G02, G08, G14, G16, G17, G27, G30, E02, E18 etc. If closely examined, the curve dips first and then recovers towards 
+higher confidence in the later portion of the flight. During this dip, the scatter plots also show a higher degree of mixed predictions. This suggests that the model is model is 
+temporarily uncertain about the signal class. This temporal uncertainty is likely happening due to a transition 
+in the flight environment under the UAV. When the UAV flies between distinct terrain types the GNSS signal characteristic also changes that does not match clearly with the characteristic of any of the class. 
+During such transition, the feature values may exhibit mixed behavious resulting in an uncertainty for the model. 
+However, this uncertainty is a valuable insight for our project as one of the goals of the ML pipeline is to detect the vegitation boundary and the uncertainty exactly provides that information. 
+
+
+\subsection{Vegetation Boundary Plotting and Analysis}
+To provide a geospatial visualization of the vegetation boundary the prediction results were ploted on the map
+of the experiment site which can be seen from the figure below. First, the FFZs for each of the satellite was calculated and their centroids
+were overlaid on a satellite map. The FFZ centroid can be assumed as a point which is dominant for reflections from a certain satellite and UAV altitude. 
+In other words, it is the location on the ground where the reflections most likely originate from.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Included_Images/Veg_boundary.png}
+    \caption{Vegetation boundary plotting based on classified signals.}
+\end{figure}
+
+Each circle on the map represent a single satellites FFZ centroid which was enlarged by the mean confidence of the predicitons. 
+The colour definition is same as the one for confidence plots, where blue mean direct, orange means ground reflected and green represents tree
+reflected signals. The centroids are coloured according to the most dominant prediction class of that satellite. Looking at the spatial distribution and the terrain, the 
+predictions strongly align with the surface below. Satellites whose predictions falls over densely vegetated areas are predominantly classified as tree reflected signals. Same goes for the
+other prediction classes. 
+
+To further examine the spatial temporal relationship, two satellites are analysed below.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Included_Images/veg_boundary_G04.png}
+    \caption{Vegetation boundary plotting and G04 prediction confidence analysis.}
+\end{figure}
+
+The GPS satellite G04's FFZ centroid is positioned at a place that can be identified as bare ground. The confidence plot for G04 indicates that the
+predictions also converge quickly after the flight and remain stable. The dominant prediction class is observed to be ground reflected signal class (orange). The 
+class received near unity confidence beyond the 1 minute mark. The first minute is observed to slightly uncertain which might be due to unsettling geometry of the reflection when the UAV was
+moving to its operating altitude. However, once stabiliesed the model predicts the measurements to be ground reflection with a consistent confidence of 0.8-1. 
+The high mean confidence and a single class prediction demonstrates that the classifier correctly predicts the signal class or type when the FFZ falls over a clear and unambiguous terrain. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Included_Images/veg_boundary_R16.png}
+    \caption{Vegetation boundary plotting and R16 prediction confidence analysis.}
+\end{figure}
+
+However, if we examine the FFZ centroid location of R16, it is comparatively a challenging environment. The centroid
+of the FFZ for this satellite is located near the shoreline where a transition can be seen from water to vegetation.
+The signal characteristic is expected to be mixed in this region due to the underlying terrain. And it is also evident if you closely
+examine the confidence plot for this specific satellite. The confidence is high in the openning minute with reflection types predominently
+classified as tree reflected signals. However, a severe dip is noticed between the timestamp for 2-3.5 minutes. During this time, the confidence 
+collapses to as low as 0.3 which is below the threshold. This is consitent with the FFZ centroids movement near the terrain boundary. As the UAV moves the FFZ and the satellite 
+geometry also changes. This naturally means the same signal gets reflected from different surfaces througout the flight. After the 3.5 minute mark, the prediction confidence
+stabilises and recovers to near 1 value with tree reflected predictions. This suggests the reflection geometry has moved back to vegetation zone.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{Included_Images/veg_boundary_E27.png}
+    \caption{Vegetation boundary plotting and E27 prediction confidence analysis.}
+\end{figure}
+
+Satellite E27 also has its centroid near a boundary transition zone. It can be seen from the terrain on the map 
+that the centroid falls near the transition zone between bare ground and trees. And it is also observed from the confidence plot
+for this satellite. The confidence plot shows that the confidence in the first 1-1.5 minute is around 0.6-0.85 with
+mixed predictions of tree reflected and ground reflected signals. This early ambiguity is consistent with the edge location of the FFZ where the 
+reflection initially might be coming from both vegetated and open terrain. However, after 2 min mark, the confidence and the prediction pattern changes. The confidence
+stabilises with a value of over 0.9. The prediction class is also found to be dominantly ground reflected. E27 thereby represents an intemediate case between the stable high confidence behaviour 
+of G04 and severe confidence dips of R16. This sastellte also strengthens the fact that the prediction confidence lowers near the boudary transition zones making the confidence dips a important observation
+for vegetation boundary construction.
+
+So to conclude, the three cases illustrate the relationship between the terrain type and the prediction confidence. 
+Satellites with points of reflection that are on a uniform terrain result in constant, high-confidence 
+predictions over the flight. But those close to terrain boundaries have 
+temporary uncertainty which is to be explained physically not to denote 
+model failure.
 % --- Experiments ---
 \section{Experiments}
 In this project, an extensive series of field experiments were conducted, aiming
@@ -3130,7 +3177,7 @@ ground-reflected, and tree-reflected signals. This in turns provides a critical
 component for a reliable GNSS-R pipeline. 
 
 In parallel, a modular LiDAR SLAM framework was developed to cross-check the
-vegetation data from GNSS-R. It is found that the pose graph optimization (PGO)
+vegetation data from GNSS-R. It is found that the Pose Graph Optimization (PGO)
 SLAM demonstrates better point cloud alignment compared to Fast-LIO LiDAR
 odometry before the fusion of GPS data. However, it is found to have large point
 cloud misalignments after GPS is integrated into the PGO SLAM. Thus, this
