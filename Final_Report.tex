@@ -32,6 +32,7 @@
 \usepackage{pgfgantt}
 \usepackage{rotating}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{xurl}
 
 \definecolor{overallcolor}{RGB}{210, 180, 222}
 \definecolor{pathcolor}{RGB}{102,194,164}
@@ -1872,17 +1873,80 @@ expressed as $(x_c, y_c, z_c)$, where \cite{yu2021theory}:
     x_c = 0
 \end{equation}
 \begin{equation}
-    y_c = (\frac{\lambda}{2}+H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2}
+    y_c = (\frac{\lambda}{2}+ H sin(\theta))\frac{cos(\theta)}{(sin(\theta))^2}
 \end{equation}
 \begin{equation}
     z_c = 0
 \end{equation}
 
 \subsubsection{Correlation Modelling}
+After obtaining each received signal's $C/N_0$ ratio and excess pseudorange
+delay, any correlations between the GNSS measurement parameters and ground
+features within the FFZs would be qualitatively analyzed and quantitatively
+modelled. To model the correlations quantitatively, the open-sourced aerial
+Color-Infrared (CIR) image from the Hong Kong Lands Department
+(\url{https://www.landsd.gov.hk/en/survey-mapping/mapping/aerial-photo-photogrammetric-products/digital-aerial-photo.html})
+is used as the ground truth for ground features.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/example_CIR_image.jpg}
+    \caption{An example of the aerial CIR image obtained from the Lands Department \cite{HKLandsD_CIR_2024}.}
+\end{figure}
 
+CIR images are a common remote sensing tool used for extracting vegetation
+health data, where the color spectrum of each image is shifted rightward to
+display the infrared radiation invisible to the human eye
+\cite{campbell2011introduction}. Particularly, the infrared radiation from
+vegetation (which is displayed as red) is correlated to their chlorophyll
+content, where a vibrant red indicates dense vegetation while lighter red and
+pink indicates sparse vegetation. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/CIR_spectrum.png}
+    \caption{Actual colors vs the observed colors on a CIR image.}
+\end{figure}
+
+To leverage the CIR image for extracting ground features, the image is first
+geo-referenced to match each pixel to its corresponding longitude and latitude.
+This could be done through a projective transformation using the corner
+coordinates provided by the Lands Department to map the image pixels to their
+respective geographic locations, which is illustrated in Figure \ref{CIR
+Georeference} below. 
+
+\begin{figure}[H]
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/LandsDept_boundaryLLH.png}
+        \caption{Geo-referenced Image Boundary Provided by Lands Department}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/georeferenced_CIR.png}
+        \caption{Transformed and Geo-referenced CIR Image}
+    \end{subfigure}
+    \caption{Geo-referencing CIR imagery according to the provided image corner coordinates.}
+    \label{CIR Georeference}
+\end{figure}
+
+Using the longitude and latitude information associated with each pixel of the
+CIR imagery, the red, green, and blue (RGB) channel values of each pixel that
+lies within a FFZ could then be extracted. The Pearson correlation coefficients
+between the RGB values and the GNSS measurement parameters are then calculated
+to quantitatively model the correlations between the GNSS measurement parameters
+and ground features within the FFZs: 
+
+\begin{equation}
+    r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}
+\end{equation}
+
+Ultimately, this modelled correlation will be used in reconstructing the CIR
+imagery information using GNSS measurement parameters. 
 
 \subsection{Results and Discussion}
+
+
+
 After successful execution of the path planning algorithms onboard the UAV, GNSS
 measurements from both the zenith and nadir antenna are recorded and
 post-processed. Specifically, the ratio of the nadir $C/N_0$ and the zenith
