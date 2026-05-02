@@ -603,7 +603,6 @@ In this project, the focus will be on regular 8-way grids that connect nodes
 across 26 directions in 3-D space. Each node will be assigned a cost based on
 the starting and ending nodes of a given path. A 2-D path illustration of an A*
 algorithm is shown in Figure \ref{fig:astar}.
-
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{Included_Images/A-starmap.jpg}
@@ -668,9 +667,7 @@ The Euclidean distance can be calculated as follows:
 \end{equation}
 where $(x_n, y_n, z_n)$ are the coordinates of the current node $n$ and
 $(x_{start}, y_{start}, z_{start})$ are the coordinates of the starting node.
-
 The heuristic cost $h(n)$ is implemented using the diagonal heuristic function. The function has five key steps as follows:
-
 \begin{enumerate}
     \item Calculates the distance differences in each dimension ($dx$, $dy$, $dz$) between the current node and the goal node.
     \item Determines the direction with the minimum change in distance.
@@ -683,7 +680,6 @@ The heuristic cost $h(n)$ is implemented using the diagonal heuristic function. 
     the cost using a combination of 2D diagonal movement and straight-line
     movement for the remaining distances.
 \end{enumerate}
-
 Below is the pseudocode for the diagonal heuristic function:
 \begin{singlespace}
 \begin{algorithm}[H]
@@ -747,11 +743,10 @@ according to the following steps:
     the queue again with  new priority.
     \item Repeat steps 2-5 till reach the goal, or no path is found.
 \end{enumerate}
-
 Below is the flow chart illustrating the core logic of A* algorithm:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.45\linewidth]{Included_Images/Astar_flowchart.png}
+    \includegraphics[width=0.5\linewidth]{Included_Images/Astar_flowchart.png}
     \caption{A* Algorithm Core Logic Flowchart}
     \label{fig:astar_flowchart}
 \end{figure}
@@ -857,7 +852,7 @@ pipeline can be described in the following steps:
 Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\linewidth]{Included_Images/densecanopy_map.png}
+    \includegraphics[width=0.8\linewidth]{Included_Images/densecanopy_map.png}
     \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
     \label{fig:dense_canopy_map}
 \end{figure}
@@ -892,14 +887,14 @@ areas suitable for GNSS reflectometry-based sensing.
 
 \subsubsection{Path planning workflow} 
 \paragraph{Fresnel Zone Identification} ~\\
-To determine the Fresnel zone locations, NASA ephemeris data is utilized for a
-specified geographic location and time instance. The MATLAB simulation framework
-developed in this study computes and visualizes the Fresnel zones for a desired
-latitude, longitude, and time instance. 
-The generated Fresnel zones are represented as ellipsoids corresponding to the
-GNSS signal reflection areas, along with their respective center coordinates.
-These center locations are subsequently used as reference points for determining
-the detection area and survey planning.  Figure
+To determine the Fresnel zone locations, NASA Broadcast Ephemeris Data Product
+\cite{NASA_BroadcastEphemeris} is utilized for a specified geographic location
+and time instance. The MATLAB simulation framework developed in this study
+computes and visualizes the Fresnel zones for a desired latitude, longitude, and
+time instance. The generated Fresnel zones are represented as ellipsoids
+corresponding to the GNSS signal reflection areas, along with their respective
+center coordinates. These center locations are subsequently used as reference
+points for determining the detection area and survey planning.  Figure
 \ref{fig:fresnel_zone_identification} shows the Fresnel zones plotted at Mount
 Davis Park in Hong Kong on 2026-03-26 at 12:00:00.
 \begin{figure}[H]
@@ -925,7 +920,7 @@ The proposed path planning workflow (Figure \ref{fig:path_planning_workflow}) co
 \end{enumerate}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/path_planning_workflow.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/pathplanning_workflow.png}
     \caption{Path Planning Workflow}
     \label{fig:path_planning_workflow}
 \end{figure}
@@ -946,14 +941,19 @@ is selected to include approximately the closest 40\% of Fresnel zones, allowing
 closer adjacent zones to be grouped into clusters. If multiple clusters are
 identified, the algorithm selects the cluster that is closest to the global
 center. The selected cluster is then designated as the primary region of
-interest, also known as the detection area. 
-
-Figure \ref{fig:fresnel_cluster} shows a selected Fresnel zone cluster
-for experiment conducted at Mount Davis Park in Hong Kong. 
-
+interest, also known as the detection area. Figure \ref{fig:clustering_algo}
+illustrates the flowchart of the neighbor distance clustering algorithm.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/fresnel_cluster.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/clustering_algo.png}
+    \caption{Neighbor Distance Clustering Algorithm}
+    \label{fig:clustering_algo}
+\end{figure}
+Figure \ref{fig:fresnel_cluster} shows a selected Fresnel zone cluster
+for experiment conducted at Mount Davis Park in Hong Kong. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Included_Images/fresnel_cluster.png}
     \caption{Fresnel Zone Cluster}
     \label{fig:fresnel_cluster}
 \end{figure}
@@ -961,7 +961,7 @@ for experiment conducted at Mount Davis Park in Hong Kong.
 \paragraph{Fresnel Cluster Boundary Determination} ~\\
 To address the complex geometry of the selected Fresnel zone cluster, it is
 necessary to bound the detection area with a simplified shape. To determine the
-region of interest (ROI), the selected Fresnel zone cluster must be enclosed
+region of interest (ROI), the selected Fresnel zones must be enclosed
 within an appropriate boundary.
 In this study, three boundary geometries are considered: square, circular, and
 triangular enclosures, as shown in Figure \ref{fig:boundries}. For each geometry, the algorithm generates an enclosure
@@ -1012,15 +1012,14 @@ illustrates the sweeping distance in coverage path planning.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/d_sweep.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/d_sweep.png}
     \caption{Sweeping distance in coverage path planning}
     \label{fig:d_sweep}
 \end{figure}
-
 To calculate the optimal distance between flight lines, $d_{\text{sweep}}$, the
 area of the selected detection region ($A$) and the geometric shape of the
 detection boundary are taken into account, as shown in Equation
-\ref{eq:sweep_distance}:
+\ref{eq:sweep_distance} \cite{DeWitt_2000}:
 \begin{equation}
     d_{\text{sweep}} = (1-o)\cdot k \cdot \sqrt{A}
     \label{eq:sweep_distance}
@@ -1032,7 +1031,6 @@ where:
     \item $k$ : Geometric shape factor
     \item $o$ : Overlap percentage between adjacent sweeps
 \end{itemize}
-
 The sweeping distance is calculated according to Equation
 \ref{eq:sweep_distance}, where the resulting gap varies proportionally with both
 the area and geometry of the detection region. Figure \ref{fig:d_sweep} shows
@@ -1040,11 +1038,24 @@ how detection area is used in coverage path planning with corresponding
 overlapping. To ensure sufficient sensing coverage between adjacent sweeps, a
 constant overlap factor of 20\% is applied in real-world experiments.
 
+Table \ref{tab:detection_area_comparison} presents a comparison of different
+detection areas with a triangular boundary. In this analysis,
+the overall survey area is considered to be constant. It can be observed that smaller
+detection areas result in shorter sweeping distances, whereas larger detection
+areas produce proportionally larger sweeping distances. However, in terms of
+energy consumption, smaller detection areas have a higher energy consumption
+since more sweeps are needed to achieve full coverage. In contrast, larger
+detection areas require fewer sweeps, resulting in lower energy consumption. The
+energy consumption values presented are estimated based on the
+battery capacity and operational characteristics of the Holybro X650 drone
+platform. Based on these results, a mid-range detection area is the most
+practical choice, as it balances operational efficiency, energy consumption, and
+coverage ratio. 
 \begin{table}[H]
     \centering
     \caption{Comparison of detection areas and sweeping distance}
     \label{tab:detection_area_comparison}
-    \renewcommand{\arraystretch}{2.2}
+    \renewcommand{\arraystretch}{2.0}
     
     \resizebox{\textwidth}{!}{
     \begin{tabular}{|p{5cm}|c|c|m{6cm}|}
@@ -1077,24 +1088,9 @@ constant overlap factor of 20\% is applied in real-world experiments.
     \end{tabular}
     }
 \end{table}
-
-Table \ref{tab:detection_area_comparison} presents a comparison of different
-detection areas with a triangular boundary. In this analysis,
-the overall survey area is considered to be constant. It can be observed that smaller
-detection areas result in shorter sweeping distances, whereas larger detection
-areas produce proportionally larger sweeping distances. However, in terms of
-energy consumption, smaller detection areas have a higher energy consumption
-since more sweeps are needed to achieve full coverage. In contrast, larger
-detection areas require fewer sweeps, resulting in lower energy consumption. The
-energy consumption values presented are estimated based on the
-battery capacity and operational characteristics of the Holybro 650X drone
-platform. Based on these results, a mid-range detection area is the most
-practical choice, as it balances operational efficiency, energy consumption, and
-coverage ratio. 
-
-This path planning workflow provides optimal detection and survey areas for the
-UAV to fly above vegetation and collect reflected GNSS signals and dynamic LiDAR
-data to support SLAM. 
+To summarize, this path planning workflow provides optimal detection and survey
+areas for the UAV to fly above vegetation and collect reflected GNSS signals and
+dynamic LiDAR data to support SLAM. 
 
 \subsection{Results and Discussion}
 \subsubsection{Waypoint-based Navigation Results}
@@ -1112,16 +1108,14 @@ Figure \ref{fig:forest_path} shows two different start and end points, and how
 the A* algorithm finds the shortest path between them in a dense forest canopy.
 Here, the image processing filter is designed to identify darker shades of
 green. Therefore, the algorithm fits precisely to predict the paths in the dense
-area. The output of the figure \ref{fig:forest_path} waypoints is shown in the
-below output:
-
+area.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/forest_path.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/forest_path.png}
     \caption{A* path planning in dense forest canopy}
     \label{fig:forest_path}
 \end{figure}
-Similarly, figures \ref{fig:grassland_path} and \ref{fig:mixed_path} show how
+Similarly, Figure \ref{fig:grassland_path} and Figure \ref{fig:mixed_path} show how
 the A* algorithm determines the path to a grassland and to a combination of land
 and dense canopy. Since the filter is designed to filter out light shades of
 green color, the dense vegetation is considered occupied. Therefore, the
@@ -1141,7 +1135,7 @@ algorithm will avoid converging on paths that lead to dense vegetation.
 
 In order to analyze the dynamic behavior of the locally developed A* algorithm,
 simulation studies were conducted in MATLAB. The simulations were implemented
-using the MATLAB UAV Simulator, with the locally developed A* algorithm
+using the MATLAB UAV Simulator \cite{MathWorks_UAV_Delivery}, with the locally developed A* algorithm
 integrated into the UAV control pipeline. Figure \ref{fig:control_pipeline}
 shows the integration of A* algorithm into the UAV control pipeline, and Figure
 \ref{fig:simulation_results} shows UAV flying autonomously in an urban environment.
@@ -1159,22 +1153,21 @@ shows the integration of A* algorithm into the UAV control pipeline, and Figure
 \end{figure}
 
 \paragraph{QGroundControl Waypoint-based Navigation} ~\\
-In QGroundControl, we defined the important parameters, such as flying
-waypoints, flying speed, and flying altitude, using the Graphical User Interface
-in QGroundControl. Then, the coordinates were uploaded and the data to the Pixhawk
-flight controller using telemetry. The figure shows the settings and the
-successful execution of a mission. 
+In QGroundControl, the trajectory is designed by utilizing the parameters such
+as waypoints, flying speed, and flying altitude. Then, the plan of waypoints,
+also known as the mission, can be uploaded to the Pixhawk flight controller via
+telemetry. Figure \ref{fig:qgc_mission} shows the settings and the successful execution of a
+mission. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/gqc_mission.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/gqc_mission.png}
     \caption{Waypoint-based navigation mission planning in QGroundControl}
     \label{fig:qgc_mission}
 \end{figure}
-
 \subsubsection{Coverage Path Planning Results}
-Similar to waypoint-based navigation, the coverage-based path planning results
-are divided into two segments: a locally implemented boustrophedon algorithm and
-coverage mission planning in QGroundControl. 
+The coverage-based path planning results are divided into three segments: a
+locally implemented boustrophedon algorithm, fresnel zone clustering and
+detection area generation, and coverage mission planning in QGroundControl.
 \paragraph{Boustrophedon Implementation Results} ~\\
 The algorithm results were obtained by running the ROS (Robot Operating System) \cite{ROS_website}
 package developed by the Autonomous Systems Lab at ETH Zurich \cite{B_hnemann_2021}. The experiments
@@ -1185,7 +1178,7 @@ polygon, the sweep distance, and the altitude. An example of result
 interpretation for a polygon shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/cpp_result.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/cpp_result.png}
     \caption{Coverage path planning result interpretation}
     \label{fig:cpp_result}  
 \end{figure}
@@ -1203,17 +1196,16 @@ environment is illustrated in Figure \ref{fig:env_obstacles}, in this case,
 algorithm detected 7 polygons, with 72 nodes. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.3\textwidth]{Included_Images/env_obstacles.png}
+    \includegraphics[width=0.5\textwidth]{Included_Images/env_obstacles.png}
     \caption{Coverage path planning environment with obstacles}
     \label{fig:env_obstacles}   
-
 \end{figure}
 
 \paragraph{Fresnel Zone Clustering and Detection Area Generation} ~\\
 This section presents the results of the path-planning workflow obtained by
-running the interactive path planner. The interactive path planner is developed
+executing the interactive path planner. The interactive path planner is developed
 to achieve the optimal detection area and the desired sweeping distance, in
-order to obtain the optimal coverage during the survey mission.
+order to obtain the optimal coverage during the survey mission. 
 
 \begin{figure}[H]
     \centering
@@ -1245,19 +1237,19 @@ order to obtain the optimal coverage during the survey mission.
 
 The process of obtaining the optimal detection area is illustrated from Figure \ref{fig:fresnel_zone_clustering} to
 Figure \ref{fig:boundary}. In this example, the detection area is calculated for
-all three shapes, and the corresponding boundary is determined based on coverage
+all three shapes, and the optimal boundary is determined based on coverage
 ratios. Among the three shapes, the triangle achieves the highest coverage ratio
 of 0.354. Therefore, the algorithm selects the triangular boundary as the optimal
 detection area.
 
 \paragraph{Coverage Path Planning in QGroundControl} ~\\
-First we defined the important parameters, such as waypoints, speed, trigger
-distance and altitude, using the Graphical User Interface in QGroundControl.
-The trigger distance is a parameter that specifies the space between each sweep
-line. For coverage path planning, we also defined the geo-fence and the rally
-point (an alternative landing point). We then uploaded the mission to the
-Pixhawk flight controller via telemetry. The figure shows the settings and the
-successful execution of the mission. 
+The mission is defined by the parameters, such as the survey type, speed, space
+and altitude, in QGroundControl. The space is the parameter that specifies the
+sweeping distance. In addition, it is necessary to define the geo-fence and the
+rally point (an alternative landing point)to ensure safety during the flight.
+Then the mission can be uploaded to the Pixhawk flight controller via telemetry.
+Figure \ref{fig:gqc_coverage} shows successful execution of the mission
+conducted at Mount Davis Park in Hong Kong. 
 
 \begin{figure}[H]
     \centering
@@ -1268,15 +1260,16 @@ successful execution of the mission.
 
 In summary, waypoint-based navigation experiments were conducted primarily to
 hover the UAV above a tree or vegetation and above bare ground without trees.
-This is mainly to assist in obtaining the differences  between the GNSS-R signals
-in two scenarios and conduct an analysis on the reflected signals from the
-trees. 
-Additionally, coverage path planning was implemented to obtain dynamic UAV
-movement data, which enables the development of LiDAR SLAM in our system. LiDAR
-SLAM is crucial in the system to cross-validate the data obtained through GNSS-R
-analysis and the Machine Learning pipeline. The section below discusses the
-GNSS-R results obtained from the experiments conducted using the path planning
-methods above.
+This is mainly to assist in obtaining the differences in GNSS reflection over
+vegetation and bare ground. Moreover, fresnel zone clustering and coverage
+path planning was implemented to achieve a reliable path planning workflow to
+collect stronger GNSS reflected signals
+
+In addition, coverage path planning was implemented to obtain dynamic UAV
+movement data, which enables the development of LiDAR SLAM in our system. In our
+system, LiDAR SLAM is developed to complement the GNSS-R analysis and Machine
+Learning results. The section below discusses the LiDAR SLAM pipeline and the
+results obtained from the real-world experiments.
 
 
 % --- LiDAR SLAM ---
@@ -3061,14 +3054,15 @@ indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajec
 \section{Conclusion}
 In conclusion, our preliminary results show the successful establishment of a
 comprehensive UAV-based framework that integrates autonomous path planning,
-GNSS-Reflectometry (GNSS-R), machine learning, and LiDAR SLAM for vegetation
+LiDAR SLAM GNSS-Reflectometry (GNSS-R), and machine learning for vegetation
 analysis. 
 
 The path planning results confirm that both A* and boustrophedon algorithms can
 generate efficient trajectories for the UAV to fly over vegetated and mixed
-environments. Besides that, QGroundControl is successfully implemented to
-conduct high-level mission planning for the UAV to carry out vegetation data
-collection. 
+environments. Moreover, the interactive path planner system provides the optimal
+detection area by clustering the Fresnel zones, which provides a suitable
+sweeping distance for coverage path planning. As a result, an optimizined survey
+mission can be planned in QGroundControl to fly the UAV over vegetation. 
 
 On the other hand, GNSS-R analysis discovered distinct signal behaviors when the
 UAV is hovering above bare ground, water, and vegetation. However, it is found
@@ -3084,8 +3078,8 @@ performance, where the model can effectively distinguish between direct,
 ground-reflected, and tree-reflected signals. This in turns provides a critical
 component for a reliable GNSS-R pipeline. 
 
-In parallel, a modular LiDAR SLAM framework was developed to cross-check the
-vegetation data from GNSS-R. It is found that the pose graph optimization (PGO)
+In parallel, a modular LiDAR SLAM framework was developed to complement the
+ground parameters retrieved from GNSS-R analysis. It is found that the pose graph optimization (PGO)
 SLAM demonstrates better point cloud alignment compared to Fast-LIO LiDAR
 odometry before the fusion of GPS data. However, it is found to have large point
 cloud misalignments after GPS is integrated into the PGO SLAM. Thus, this
