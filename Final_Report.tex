@@ -33,6 +33,8 @@
 \usepackage{rotating}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{xurl}
+\usepackage{ltablex}
+\usepackage{array}
 
 \definecolor{overallcolor}{RGB}{210, 180, 222}
 \definecolor{pathcolor}{RGB}{102,194,164}
@@ -50,6 +52,8 @@
 \setlength{\parindent}{0pt}
 \urlstyle{same}
 \captionsetup[subfigure]{justification=centering}
+\keepXColumns
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
 
 \begin{document}
 
@@ -2832,17 +2836,18 @@ executed. Ultimately, the collected data could be downloaded and post-processed 
 further analysis.
 
 \subsection{Summary of Experiments Conducted}
-A total of 24 successful mission flights were conducted for this project.
-They were carried out in five locations: Homantin Mountain, Tai Hang Tun Kite
-Flying Area, Nam Sang Wai, Mount Davis Service Reservoir Garden, and Upper Shing Mun Reservoir Barbecue Area. Photos showing the experiment locations are
-arranged in Figure \ref{Experiment Environment} and the experiments are
-summarized in Table \ref{Experiment-Summary}.
+A total of 24 successful mission flights were conducted for this project. They
+were carried out in five locations: Homantin, Tai Hang Tun Kite Flying Area, Nam
+Sang Wai, Mount Davis Service Reservoir Garden, and Upper Shing Mun Reservoir
+Barbecue Area. Photos showing the experiment locations are arranged in Figure
+\ref{Experiment Environment} and the experiments are summarized in Table
+\ref{Experiment-Summary}.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.32\textwidth}
         \includegraphics[width=\linewidth]{Included_Images/HomantinMountain.jpg}
-        \subcaption{Homantin Mountain}
+        \subcaption{Homantin}
     \end{subfigure}
     \hfill
     \begin{subfigure}{0.32\textwidth}
@@ -2868,107 +2873,121 @@ summarized in Table \ref{Experiment-Summary}.
     \label{Experiment Environment}
 \end{figure}
 
-\begin{longtable}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.1\textwidth}|m{0.25\textwidth}|m{0.4\textwidth}|}
+\begin{tabularx}{\textwidth}{|m{0.03\textwidth}|m{0.05\textwidth}|m{0.1\textwidth}|>{\raggedright\arraybackslash}X|>{\centering\arraybackslash}X|}
     \caption{Summary of Experiments Conducted}
     \label{Experiment-Summary}\\
     \hline
-    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight
+    & \textbf{Date} & \textbf{Location} & \textbf{Description} & \textbf{Flight
     Trajectory}\\ 
     \hline
     \endfirsthead
     \hline
-    & \textbf{Date} & \textbf{Location} & \textbf{Descriptions} & \textbf{Flight
+    & \textbf{Date} & \textbf{Location} & \textbf{Description} & \textbf{Flight
     Trajectory}\\ 
     \hline
     \endhead
     \hline
     \endfoot
-    (a) & 2025 Oct. 01 & Homantin Mountain & This experiment is carried out via
-    manual flight control where it flies above bare ground with grass for 1.5
-    minutes. &
+    (a) & 2025 Oct. 01 & Homantin & Manual flight over bare ground with grass. &
     \includegraphics[width=\linewidth]{Included_Images/HomantinMountainTrack.png}\\ 
     \hline
-    (b) & 2025 Oct. 12 & Tai Hang Tun & This experiment indicates the first
-    successful implementation of path planning where the UAV takes off, then
-    hovers over a specified waypoint above bare ground with grass for 8 minutes. &
+    (b) & 2025 Oct. 12 & Tai Hang Tun & Autonomous flight; UAV hovers over a
+    waypoint over bare ground with grass. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunGrass.png}\\ 
     \hline
-    (c) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via path
-    planning where the UAV takes off, then hovers over a specified waypoint
-    above trees for 7 minutes. &
+    (c) & 2025 Oct. 12 & Tai Hang Tun & Autonomous flight; UAV hovers over a
+    waypoint over dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunTree.png}\\ 
     \hline
-    (d) & 2025 Oct. 12 & Tai Hang Tun & This experiment is carried out via
-    manual flight control. However, due to large wind velocity, the UAV drifts
-    significantly and manual control became difficult, hence resulting in
-    irregular flight path. &
+    (d) & 2025 Oct. 12 & Tai Hang Tun & Manual flight with dynamic trajectory
+    over both bare ground and vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/TaiHangTunDynamic.png}\\ 
     \hline
-    (e) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
-    planning, where the UAV takes off and hovers over bare ground with grass for
-    a total of 11 minutes. &
+    (e) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV hovers over a
+    waypoint over bare soil. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai094324.png}\\ 
     \hline
-    (f) & 2025 Nov. 09 & Nam Sang Wai & This experiment is carried out via path
-    planning, where the UAV takes off and hovers over trees for a total of 11
-    minutes. &
+    (f) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV hovers over a
+    waypoint over dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai101211.png}\\ 
     \hline
-    (g) & 2025 Nov. 09 & Nam Sang Wai & This experiment is conducted by manually
-    assigning multiple waypoints in QGroundControl to perform path planning. The
-    UAV hovers above each waypoint for half a minute, with a total of 12 waypoints
-    assigned in the mission. &
+    (g) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV hovers multiple
+    waypoints over dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai103755.png}\\    
     \hline
-    (h) & 2025 Nov. 09 & Nam Sang Wai & This experiment indicates the first
-    implementation of using the surveying function from QGroundControl to carry out
-    coverage path planning. The UAV is going back and forth between bare ground
-    with grass and tree clusters. &
+    (h) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai113425.png}\\ 
     \hline
-    (i) & 2025 Nov. 09 & Nam Sang Wai & This experiment demonstrates wider-area
-    coverage through autonomous path planning, similar to (h) where it allows
-    the UAV to systematically fly over clusters of trees. &
+    (i) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai113830.png}\\ 
     \hline
-    (j) & 2025 Nov. 09 & Nam Sang Wai & This experiment was also carried out via
-    autonomous coverage path planning, but in the opposite direction compared to
-    experiment (h) and (i) when scanning tree clusters. &
+    (j) & 2025 Nov. 09 & Nam Sang Wai & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
     \includegraphics[width=\linewidth]{Included_Images/NamSangWai115109.png}\\ 
     \hline
-    (k) & 2026 Feb. 01 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis1_1.png}\\
+    (k) & 2026 Feb. 01 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers bare ground with grass. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis1_1.png}\\
     \hline
-    (l) & 2026 Feb. 01 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis1_2.png}\\
+    (l) & 2026 Feb. 01 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis1_2.png}\\
     \hline
-    (m) & 2026 Feb. 01 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis1_3.png}\\
+    (m) & 2026 Feb. 01 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis1_3.png}\\
     \hline
-    (n) & 2026 Feb. 01 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis1_4.png}\\
+    (n) & 2026 Feb. 01 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis1_4.png}\\
     \hline
-    (o) & 2026 Feb. 01 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis1_5.png}\\
+    (o) & 2026 Feb. 01 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis1_5.png}\\
     \hline
-    (p) & 2026 Mar. 08 & Shing Mun & BS & \includegraphics[width=\linewidth]{Included_Images/Shingmun1.png}\\
+    (p) & 2026 Mar. 08 & Shing Mun & Autonomous flight; UAV flies over a survey
+    area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/Shingmun1.png}\\
     \hline
-    (q) & 2026 Mar. 08 & Shing Mun & BS & \includegraphics[width=\linewidth]{Included_Images/Shingmun2.png}\\
+    (q) & 2026 Mar. 08 & Shing Mun & Autonomous flight; UAV flies over a survey
+    area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/Shingmun2.png}\\
     \hline
-    (r) & 2026 Mar. 08 & Shing Mun & BS & \includegraphics[width=\linewidth]{Included_Images/Shingmun3.png}\\
+    (r) & 2026 Mar. 08 & Shing Mun & Autonomous flight; UAV flies over a survey
+    area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/Shingmun3.png}\\
     \hline
-    (s) & 2026 Mar. 08 & Shing Mun & BS & \includegraphics[width=\linewidth]{Included_Images/Shingmun4.png}\\
+    (s) & 2026 Mar. 08 & Shing Mun & Autonomous flight; UAV flies over a survey
+    area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/Shingmun4.png}\\
     \hline
-    (t) & 2026 Mar. 08 & Shing Mun & BS & \includegraphics[width=\linewidth]{Included_Images/Shingmun5.png}\\
+    (t) & 2026 Mar. 08 & Shing Mun & Autonomous flight; UAV hovers over 2
+    different waypoints over dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/Shingmun5.png}\\
     \hline
-    (u) & 2026 Mar. 31 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis2_1.png}\\
+    (u) & 2026 Mar. 31 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers bare ground with grass. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis2_1.png}\\
     \hline
-    (v) & 2026 Mar. 31 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis2_2.png}\\
+    (v) & 2026 Mar. 31 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers bare ground with grass. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis2_2.png}\\
     \hline
-    (w) & 2026 Mar. 31 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis2_3.png}\\
+    (w) & 2026 Mar. 31 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis2_3.png}\\
     \hline
-    (x) & 2026 Mar. 31 & Mount Davis & BS & \includegraphics[width=\linewidth]{Included_Images/MtDavis2_4.png}\\
+    (x) & 2026 Mar. 31 & Mount Davis & Autonomous flight; UAV flies over a
+    survey area that covers dense vegetation. &
+    \includegraphics[width=\linewidth]{Included_Images/MtDavis2_4.png}\\
     \hline
-\end{longtable} 
+\end{tabularx} 
 
 
 % --- Case Study ---
-\section{Case Study: Experiment (i)}
+\section{Case Study: 2026 March 31, Mount Davis Experiment}
 In this case study, the results of Experiment (i) in Table
 \ref{Experiment-Summary} are discussed to demonstrate the current integrated
 system. Here, a survey flight mission was conducted to collect feature-extensive
