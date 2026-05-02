@@ -841,7 +841,7 @@ The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
 algorithm are discussed in the results and discussion section. 
 
-\subsubsection{Image Processing and Vegetation Classification} ~\\
+\subsubsection{Image Processing}
 To execute the waypoint-based navigation and coverage path planning, image
 processing was used to identify potential vegetation areas in a satellite imagery. The maps were
 obtained using QGroundControl \cite{QGroundControl_PlanView} software from
@@ -897,14 +897,14 @@ areas suitable for GNSS reflectometry-based sensing.
 \subsubsection{Path planning workflow} 
 \paragraph{Fresnel Zone Identification} ~\\
 To determine the Fresnel zone locations, NASA ephemeris data is utilized for a
-specified geographic location and time instance. By providing the desired
-latitude, longitude, and timestamp as inputs, the MATLAB simulation framework
-developed in this study computes and visualizes the corresponding Fresnel zones.
+specified geographic location and time instance. The MATLAB simulation framework
+developed in this study computes and visualizes the Fresnel zones for a desired
+latitude, longitude, and time instance. 
 The generated Fresnel zones are represented as ellipsoids corresponding to the
 GNSS signal reflection areas, along with their respective center coordinates.
 These center locations are subsequently used as reference points for determining
 the detection area and survey planning.  Figure
-\ref{fig:fresnel_zone_identification} shows the Fresnel zones plotted in Mount
+\ref{fig:fresnel_zone_identification} shows the Fresnel zones plotted at Mount
 Davis Park in Hong Kong on 2026-03-26 at 12:00:00.
 \begin{figure}[H]
     \centering
@@ -944,13 +944,23 @@ survey area. Subsequently, pairwise distances between all Fresnel zones are
 calculated, and a distance distribution is generated to analyze their spatial
 relationships. 
 
-Based on this distribution, a clustering threshold is defined to
-identify neighboring Fresnel zones that are closely aligned. In this study, the
-threshold is selected to include approximately the closest 40\% of Fresnel
-zones, allowing closer adjacent zones to be grouped into clusters. If multiple
-clusters are identified, the final cluster selection is determined by the
-distance of each cluster to the computed global center. The selected cluster is
-then designated as the primary region of interest for detection. 
+Based on this distribution, a clustering threshold is defined to identify
+neighboring Fresnel zones that are closely aligned. In this study, the threshold
+is selected to include approximately the closest 40\% of Fresnel zones, allowing
+closer adjacent zones to be grouped into clusters. If multiple clusters are
+identified, the algorithm selects the cluster that is closest to the global
+center. The selected cluster is then designated as the primary region of
+interest, also known as the detection area. 
+
+Figure \ref{fig:fresnel_cluster} shows a selected Fresnel zone cluster
+for experiment conducted at Mount Davis Park in Hong Kong. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/fresnel_cluster.png}
+    \caption{Fresnel Zone Cluster}
+    \label{fig:fresnel_cluster}
+\end{figure}
 
 \paragraph{Fresnel Cluster Boundary Determination} ~\\
 To address the complex geometry of the selected Fresnel zone cluster, it is
@@ -972,8 +982,8 @@ most suitable detection region.
 \end{figure}
 
 
-To optimize the area of interest, a parameter termed the
-\textit{coverage ratio} is introduced. The coverage ratio is defined as the ratio
+To optimize the area of interest, the algorithm calculates the
+\textit{coverage ratio} for each shape. The coverage ratio is defined as the ratio
 between the total area occupied by the selected Fresnel zones and the area of
 the corresponding enclosure, as shown in Equation \ref{eq:coverage_ratio}:
 
@@ -982,12 +992,11 @@ the corresponding enclosure, as shown in Equation \ref{eq:coverage_ratio}:
     \label{eq:coverage_ratio}
 \end{equation}
 
-where $A_{\text{Fresnel Zones}}$ represents the total area covered by the
+Where $A_{\text{Fresnel Zones}}$ represents the total area covered by the
 selected Fresnel zone ellipsoids, and $A_{\text{Enclosure}}$ denotes the area
 of the generated boundary.
 
-In addition, the unused or empty area within the enclosure can be calculated as:
-
+In addition, the area without fresnel zones (empty area) within the enclosure can be calculated as:
 \begin{equation}
     A_{\text{Empty}} = A_{\text{Enclosure}} - A_{\text{Fresnel Zones}}
     \label{eq:empty_area}
@@ -995,8 +1004,8 @@ In addition, the unused or empty area within the enclosure can be calculated as:
 
 The optimal detection area is selected by choosing the enclosure with the
 highest coverage ratio, corresponding to the smallest empty area. This ensures
-that the final detection area maximizes coverage efficiency while minimizing
-unnecessary survey space.             
+that the final detection area maximizes coverage efficiency and obtain strong
+GNSS reflected signals.             
 
 \paragraph{Detection Area Evaluation} ~\\
 For coverage path planning, it is necessary to define the sweeping distance,
@@ -1016,14 +1025,11 @@ To calculate the optimal distance between flight lines, $d_{\text{sweep}}$, the
 area of the selected detection region ($A$) and the geometric shape of the
 detection boundary are taken into account, as shown in Equation
 \ref{eq:sweep_distance}:
-
 \begin{equation}
     d_{\text{sweep}} = (1-o)\cdot k \cdot \sqrt{A}
     \label{eq:sweep_distance}
 \end{equation}
-
 where:
-
 \begin{itemize}
     \item $d_{\text{sweep}}$ :Spacing parameter in QGroundControl
     \item $A$ : Area of the selected detection boundary
@@ -1076,6 +1082,24 @@ constant overlap factor of 20\% is applied in real-world experiments.
     }
 \end{table}
 
+Table \ref{tab:detection_area_comparison} presents a comparison of different
+detection areas with a triangular boundary. In this analysis,
+the overall survey area is considered to be constant. It can be observed that smaller
+detection areas result in shorter sweeping distances, whereas larger detection
+areas produce proportionally larger sweeping distances. However, in terms of
+energy consumption, smaller detection areas have a higher energy consumption
+since more sweeps are needed to achieve full coverage. In contrast, larger
+detection areas require fewer sweeps, resulting in lower energy consumption. The
+energy consumption values presented are estimated based on the
+battery capacity and operational characteristics of the Holybro 650X drone
+platform. Based on these results, a mid-range detection area is the most
+practical choice, as it balances operational efficiency, energy consumption, and
+coverage ratio. 
+
+This path planning workflow provides optimal detection and survey areas for the
+UAV to fly above vegetation and collect reflected GNSS signals and dynamic LiDAR
+data to support SLAM. 
+
 \subsection{Results and Discussion}
 \subsubsection{Waypoint-based Navigation Results}
 The results of the waypoint-based navigation can be divided into two platforms,
@@ -1094,11 +1118,7 @@ Here, the image processing filter is designed to identify darker shades of
 green. Therefore, the algorithm fits precisely to predict the paths in the dense
 area. The output of the figure \ref{fig:forest_path} waypoints is shown in the
 below output:
-\begin{lstlisting}[frame=single, basicstyle=\ttfamily\small, breaklines=true, caption={Path Planning Execution Output}, label={lst:path_output}]
-Planning UAV path...
-Search stats: {'iterations': 156, 'nodes_explored': 146, 'path_length': 57, 'time': 0.05894970893859863}
-Path found! Length: 57 waypoints
-\end{lstlisting}
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/forest_path.png}
@@ -1123,6 +1143,25 @@ algorithm will avoid converging on paths that lead to dense vegetation.
     \label{fig:mixed_path}
 \end{figure}
 
+In order to analyze the dynamic behavior of the locally developed A* algorithm,
+simulation studies were conducted in MATLAB. The simulations were implemented
+using the MATLAB UAV Simulator, with the locally developed A* algorithm
+integrated into the UAV control pipeline. Figure \ref{fig:control_pipeline}
+shows the integration of A* algorithm into the UAV control pipeline, and Figure
+\ref{fig:simulation_results} shows UAV flying autonomously in an urban environment.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Included_Images/control_pipeline.png}
+    \caption{Integration of A* algorithm into the UAV control pipeline}
+    \label{fig:control_pipeline}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/simulation_results.png}
+    \caption{UAV flying autonomously in an urban environment}
+    \label{fig:simulation_results}
+\end{figure}
+
 \paragraph{QGroundControl Waypoint-based Navigation} ~\\
 In QGroundControl, we defined the important parameters, such as flying
 waypoints, flying speed, and flying altitude, using the Graphical User Interface
@@ -1143,50 +1182,19 @@ coverage mission planning in QGroundControl.
 \paragraph{Boustrophedon Implementation Results} ~\\
 The algorithm results were obtained by running the ROS (Robot Operating System) \cite{ROS_website}
 package developed by the Autonomous Systems Lab at ETH Zurich \cite{B_hnemann_2021}. The experiments
-were conducted in an Ubuntu 22.2 Linux environment. The figure \ref{fig:cpp_gui}
-shows the graphical user interface of the coverage path planner. 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{Included_Images/cpp_gui.png}
-    \caption{Coverage path planning GUI}
-    \label{fig:cpp_gui}
-\end{figure}
-
-At first, the map was specified as a polygon in the GUI. Once giving the input, 
-the algorithm will determine the coordinates of the polygon, the sweep
-distance, and the altitude. An example of result interpretation for a polygon
-shown in Figure \ref{fig:cpp_result} is as follows: 
+were conducted in an Ubuntu 22.2 Linux environment. 
+At first, the map was specified as a polygon in the graphical user interface.
+Once giving the input, the algorithm will determine the coordinates of the
+polygon, the sweep distance, and the altitude. An example of result
+interpretation for a polygon shown in Figure \ref{fig:cpp_result} is as follows: 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{Included_Images/cpp_result.png}
     \caption{Coverage path planning result interpretation}
     \label{fig:cpp_result}  
 \end{figure}
-\begin{lstlisting}[
-    frame=single, 
-    basicstyle=\ttfamily\scriptsize, % Used scriptsize because logs are wide
-    breaklines=true, 
-    caption={Coverage Planner (Boustrophedon) Execution Log}, 
-    label={lst:ros_log}
-]
-[ INFO] [1762353101.697507684]: Successfully loaded polygon.
-[ INFO] [1762353101.697518253]: Altitude: 3 m
-[ INFO] [1762353101.697524727]: Global frame: world
-[ INFO] [1762353101.697541062]: Polygon: 6 48.7642 63.1467 69.111 63.589 73.7554 75.7529 61.3704 85.9262 39.4755 84.8204 33.9465 74.8682 0
-[ INFO] [1762353101.698284610]: Sensor model: frustum
-[ INFO] [1762353101.698308756]: Lateral FOV: 0.84
-[ INFO] [1762353101.698322562]: Altitude: 3
-[ INFO] [1762353101.698376220]: Lateral overlap: 0.6
-[ INFO] [1762353101.698389550]: Sweep distance: 1.07177
-[ INFO] [1762353101.699355168]: Start creating sweep plan graph.
-[ INFO] [1762353101.706477515]: Successfully created boustrophedon decomposition with 1 polygon(s).
-[ INFO] [1762353101.770296130]: Created sweep plan graph with 6 nodes and 0 edges.
-[ INFO] [1762353101.770459306]: Initially created 24 nodes.
-[ INFO] [1762353101.770476268]: Pruned 18 nodes.
-[ INFO] [1762353101.770542355]: Finished creating the sweep planner.
-[ INFO] [1762353101.770556488]: Sending visualization messages.
-\end{lstlisting}
-As shown in the command-line output, the polygon is considered to be 3 meters
+
+For the Figure \ref{fig:cpp_result}, the polygon is considered to be 3 meters
 high in altitude. This simulates a camera or a sensor flying at 3m height with a
 field of view. The sweeps are spaced 1.07177m apart to ensure 60 percent overlap
 between consecutive passes. The Boustrophedon algorithm divides the polygon
@@ -1195,8 +1203,8 @@ generated 24 possible sweep patterns across the cell.
 
 Following the initial polygon path planning tests, the system was further
 evaluated in an environment containing polygonal obstacles. The simulation
-environment is illustrated in Figure \ref{fig:env_obstacles}, while the
-corresponding execution log is presented in Listing \ref{lst:output_log}.
+environment is illustrated in Figure \ref{fig:env_obstacles}, in this case,
+algorithm detected 7 polygons, with 72 nodes. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.3\textwidth]{Included_Images/env_obstacles.png}
@@ -1204,38 +1212,47 @@ corresponding execution log is presented in Listing \ref{lst:output_log}.
     \label{fig:env_obstacles}   
 
 \end{figure}
-\begin{lstlisting}[
-    frame=single, 
-    basicstyle=\ttfamily\scriptsize, % Keeps the long lines from wrapping too much
-    breaklines=true, 
-    caption={Path Planning with Polygonal Obstacles Execution Log}, 
-    label={lst:output_log}
-]
-[ INFO] [1762354993.019431606]: Reset planner.
-[ INFO] [1762354993.016887499]: Sensor model: frustum
-[ INFO] [1762354993.017337497]: Lateral FOV: 0.84
-[ INFO] [1762354993.017813480]: Altitude: 4
-[ INFO] [1762354993.017922272]: Lateral overlap: 0.6
-[ INFO] [1762354993.017982320]: Sweep distance: 1.42903
-[ INFO] [1762354993.019739225]: Start creating sweep plan graph.
-[ INFO] [1762354993.048630096]: Successfully created boustrophedon decomposition with 7 polygon(s).
-[ INFO] [1762354993.192612591]: Created sweep plan graph with 30 nodes and 768 edges.
-[ INFO] [1762354993.192705705]: Initially created 72 nodes.
-[ INFO] [1762354993.192714347]: Pruned 42 nodes.
-[ INFO] [1762354993.192781320]: Finished creating the sweep planner.
-[ INFO] [1762355001.110867717]: Selecting START from RVIZ PublishPoint tool.
-[ INFO] [1762355008.224192732]: Selecting GOAL from RVIZ PublishPoint tool.
-[ INFO] [1762355008.224279349]: Start solving.
-[ INFO] [1762355008.224302797]: Start solving GTSP using GK MA.
-[ INFO] [1762355008.225939482]: The adjacency matrix scale is: 1901.533171685
-[ INFO] [1762355008.247250514]: Start solving GTSP.
-[ INFO] [1762355008.291611215]: Finished solving GTSP.
-[ INFO] [1762355008.292001969]: Finished plan.
-\end{lstlisting}
-As shown in the output log, seven polygons were initially created with 72 nodes.
-The algorithm then pruned the number of nodes to 42. In summary, the
-boustrophedon decomposition was tested locally on polygonal maps with and
-without obstacles. 
+
+\paragraph{Fresnel Zone Clustering and Detection Area Generation} ~\\
+This section presents the results of the path-planning workflow obtained by
+running the interactive path planner. The interactive path planner is developed
+to achieve the optimal detection area and the desired sweeping distance, in
+order to obtain the optimal coverage during the survey mission.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/command_line.png}
+    \caption{Command-line output of the path-planning workflow}
+    \label{fig:fresnel_zone_clustering}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/cluster.png}
+    \caption{Fresnel zone cluster}
+    \label{fig:cluster}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/area_calculation.png}
+    \caption{Area calculation}
+    \label{fig:detection_area}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/boundary.png}
+    \caption{Determined boundary}
+    \label{fig:boundary}
+\end{figure}
+
+The process of obtaining the optimal detection area is illustrated from Figure \ref{fig:fresnel_zone_clustering} to
+Figure \ref{fig:boundary}. In this example, the detection area is calculated for
+all three shapes, and the corresponding boundary is determined based on coverage
+ratios. Among the three shapes, the triangle achieves the highest coverage ratio
+of 0.354. Therefore, the algorithm selects the triangular boundary as the optimal
+detection area.
 
 \paragraph{Coverage Path Planning in QGroundControl} ~\\
 First we defined the important parameters, such as waypoints, speed, trigger
