@@ -1253,7 +1253,7 @@ detection area.
 The mission is defined by the parameters, such as the survey type, speed, space
 and altitude, in QGroundControl. The space is the parameter that specifies the
 sweeping distance. In addition, it is necessary to define the geo-fence and the
-rally point (an alternative landing point)to ensure safety during the flight.
+rally point (an alternative landing point) to ensure safety during the flight.
 Then the mission can be uploaded to the Pixhawk flight controller via telemetry.
 Figure \ref{fig:gqc_coverage} shows successful execution of the mission
 conducted at Mount Davis Park in Hong Kong. 
@@ -3056,10 +3056,11 @@ in an environment that contains both dense vegetation and ground with sparse
 vegetation (grass).
 
 \subsubsection{Path Planning and Execution}
-In this experiment, the trajectory is planned to ascend and maintain at an altitude of
-35 meters during the survey mission. The paths in the survey area are spaced at 2 meter
-intervals, with the turnaround buffer distance set at 5 meter. The result of the flight
-plan is shown in the figure below. 
+In this experiment, the trajectory is planned to ascend and maintain at an
+altitude of 35 meters during the survey mission. The paths in the survey area
+are spaced at 2 meter intervals, with the turnaround buffer distance set at 5
+meter. Figure \ref{fig:planned_path} shows real time flight path execution on
+the QGround Control as well as in the real-world environment.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{Included_Images/KeyExperiment_Plannedpath.png}
@@ -3326,17 +3327,36 @@ specific problems observed along with the strategies proposed or adopted to
 address them.
 
 \subsubsection{Path Planning}
-In terms of project management, the issues that arose during the path-planning
-process were mainly related to hardware communication. During on-site
-experiments, the UAV's telemetry disconnected from the ground station, even
-though it was within the specified communication range. However, to solve this
-problem, we have analyzed strong long-distance communication telemetry types and
-will be replacing the current hardware in the next stage. 
+In terms of project management, the issues that arose during the first semester
+were mainly related to hardware communication. During on-site experiments, the
+UAV's telemetry disconnected from the ground station, even though it was within
+the specified communication range. However, to solve this problem, we used
+strong long-distance communication telemetry types.
 
 Another limitation encountered is that not utilizing locally developed algorithms in
 real-world experiments. This requires extensive testing on UAV indoor navigation
 to ensure robust obtacle avoidance. However, due to the time limitations and
 hardware restrictions, the real-world testing was not conducted.
+
+
+\subsubsection{LiDAR SLAM}
+One of the problems faced during this project is the point clouds produced by
+Pose Graph Optimization (PGO) SLAM. Based on Figure \ref{debug_pc}, we can see that there are
+two types of point cloud clusters. One of which is the purple point cloud
+clusters and the other is the yellow point cloud clusters. To solve this issue,
+the source code was debugged and revealed that the yellow point cloud clusters
+are a loop-closure debug visualization in which the algorithm compares the
+current scan against local history to verify a loop closure. Because the point
+clouds are distorted due to GPS integration, these debug point clouds are
+temporarily commented out to allow focus on the overall alignment of point
+clouds in PGO SLAM.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/debug_pc.png}
+    \caption{PGO SLAM with two types of point clouds}
+    \label{debug_pc}
+\end{figure}
 
 \subsubsection{GNSS-R}
 Through processing the data obtained during the first half of this project, one
@@ -3369,25 +3389,6 @@ This could be leading to some mislabelling of the training data and thus affecti
 as observed in the confusion matrix section. To solve this issue, more controlled data collection will be 
 performed to ensure the quality of the training dataset. Advanced data cleaning techniques will also be explored to 
 improve the labelling accuracy of the dataset. 
-
-\subsubsection{LiDAR SLAM}
-One of the problems faced during this project is the point clouds produced by
-Pose Graph Optimization (PGO) SLAM. Based on Figure \ref{debug_pc}, we can see that there are
-two types of point cloud clusters. One of which is the purple point cloud
-clusters and the other is the yellow point cloud clusters. To solve this issue,
-the source code was debugged and revealed that the yellow point cloud clusters
-are a loop-closure debug visualization in which the algorithm compares the
-current scan against local history to verify a loop closure. Because the point
-clouds are distorted due to GPS integration, these debug point clouds are
-temporarily commented out to allow focus on the overall alignment of point
-clouds in PGO SLAM.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/debug_pc.png}
-    \caption{PGO SLAM with two types of point clouds}
-    \label{debug_pc}
-\end{figure}
 
 
 % --- Appendix ---
@@ -3515,6 +3516,32 @@ that integrates Fast-LIO with PGO for GPS-aided SLAM:
     \end{algorithmic}
     \end{algorithm}
 }
+
+\subsubsection*{Path Planning}
+
+\paragraph{Geometric Shape Factors} ~\\
+
+\paragraph{Geometric Shape Factors ($k$)} ~\\
+
+Depending on the boundary shape selected by the algorithm, the corresponding
+geometric shape factor is applied to determine the sweeping width:
+
+\begin{table}[H]
+    \centering
+    \caption{Geometric shape factors used for sweeping distance calculation}
+    \label{tab:shape_factors}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Boundary Shape} & \textbf{Geometric Shape Factor ($k$)} \\
+        \hline
+        Square   & 1.00 \\
+        \hline
+        Circle   & 0.89 \\
+        \hline
+        Triangle & 0.65 \\
+        \hline
+    \end{tabular}
+\end{table}
 
 % --- References ---
 \newpage
