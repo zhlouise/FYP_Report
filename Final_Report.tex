@@ -299,7 +299,7 @@ An integrated UAV platform is built and utilized for achieving each of the four
 project objectives. As shown in Figure \ref{UAV Platform Diagram}, the platform
 is built on a Holybro X650 drone frame, integrated with a Pixhawk 6C flight
 controller and a pair of SiK telemetry radio for ground control communication. A
-pair of Ublox F9P GNSS receivers with L1/L2 band antenna are installed onboard,
+pair of U-blox F9P GNSS receivers with L1/L2 band antenna are installed onboard,
 with one upward-facing RHCP antenna (zenith) located at the top and one
 downward-facing LHCP antenna (nadir) located at the bottom. As a result, both
 the direct RHCP signal and the ground-reflected LHCP signal could be received
@@ -999,7 +999,7 @@ Where $A_{\text{Fresnel Zones}}$ represents the total area covered by the
 selected Fresnel zone ellipsoids, and $A_{\text{Enclosure}}$ denotes the area
 of the generated boundary.
 
-In addition, the area without fresnel zones (empty area) within the enclosure can be calculated as:
+In addition, the area without Fresnel zones (empty area) within the enclosure can be calculated as:
 \begin{equation}
     A_{\text{Empty}} = A_{\text{Enclosure}} - A_{\text{Fresnel Zones}}
     \label{eq:empty_area}
@@ -1007,7 +1007,7 @@ In addition, the area without fresnel zones (empty area) within the enclosure ca
 
 The optimal detection area is selected by choosing the enclosure with the
 highest coverage ratio, corresponding to the smallest empty area. This ensures
-that the final detection area maximizes coverage efficiency and obtain strong
+that the final detection area maximizes coverage efficiency and obtains strong
 GNSS reflected signals.             
 
 \paragraph{Detection Area Evaluation} ~\\
@@ -1599,7 +1599,7 @@ where the residual $e$ denotes the error between the LiDAR odometry and GPS meas
 
 Even though Levenberg-Marquardt algorithm is able to solve the whole robot's trajectory at once, the matrices can get too large to invert in real-time if the robot continues to drive. Therefore, the actual implementation uses iSAM2 which converts the mathematical problem into Bayes Tree to perform incremental updates in real time more efficiently \cite{kaess2012isam2}. With that, only the affected portions of the factor graph are updated when new LiDAR odometry, GPS observations, or loop closure constraints are introduced, thereby reducing computational complexity while preserving estimation accuracy during real-time operation.
 
-The iterative optimization process described above is summarized in Figure \ref{fig:pgo_framework}. Starting from the current trajectory estimate, the total residual error is evaluated and nonlinear system is linearized around the operating point. A correction term is then solved and used to update the state estimate. This procedure is repeated until convergence is achieved to form a progressively refined trajectory.
+The iterative optimization process described above is summarized in Figure \ref{fig:pgo_framework}. Starting from the current trajectory estimate, the total residual error is evaluated, and the nonlinear system is linearized around the operating point. A correction term is then solved and used to update the state estimate. This procedure is repeated until convergence is achieved to form a progressively refined trajectory.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{Included_Images/gps_correction.png}
@@ -1618,7 +1618,7 @@ With the aim of performing GPS correction in a pose graph SLAM system, LiDAR and
     \caption{Illustration of the sensors' location on UAV}
 \end{figure}
 
-Frame transformation consist of rotational and translational components that describe the relative orientation and positional offset between two coordinate frames. As the translational difference between LiDAR and GPS are at centimeter level which is insignificant within the SLAM system, only rotational transformation will be focused in this case. 
+Frame transformation consist of rotational and translational components that describe the relative orientation and positional offset between two coordinate frames. As the translational difference between LiDAR and GPS are at centimeter level which is insignificant within the SLAM system, only rotational transformation will be focused on in this case. 
 
 To effectively perform frame transformation between two sensors, it is first necessary to determine how the coordinate frame axes are defined within the system. This was achieved by applying rotational offsets independently about each principal axis then observe the resulting change in sensor orientation. By isolating each rotational component, the direction and convention of rotation for each axis could be identified as shown in Figure \ref{fig:SLAM_axis}.
 \begin{figure}[H]
@@ -1688,7 +1688,7 @@ The sensor data is then passed to the front-end LiDAR odometry (Fast-LIO) in the
     \item \texttt{/cloud\_registered\_body}: Point clouds in the body frame.
 \end{itemize}
 
-Afterwards, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
+Afterward, topics including /Odometry and /path from Fast-LIO LiDAR Odometry,
 /cloud\_ registered\_body from /laserMapping, and GPS and IMU information from
 Pixhawk are passed to the back end pose graph optimization SLAM under
 /laserPGO\_gps namespace. The optimized results are published as:
@@ -2429,10 +2429,10 @@ signal reflected from trees are clearly distinguishable from those reflected
 from bare ground. For the case of bare ground, the Doppler values for up and
 down antenna are almost identical. However, for the case of UAV hovering over
 vegetation, the Doppler distribution is more spread out, ranging from
-approximately -5000 dbHz to 4000 dbHz. This indicates that reflections caused by
-trees introduce additional frequency shifts in the received signals. The figure
-below illustrates the distribution of Doppler values for signals reflected from
-trees and bare ground.
+approximately -5000 dB-Hz to 4000 dB-Hz. This indicates that reflections caused
+by trees introduce additional frequency shifts in the received signals. The
+figure below illustrates the distribution of Doppler values for signals
+reflected from trees and bare ground.
 \begin{figure}[H]
     \centering
     \includegraphics[width= 1\textwidth]{Included_Images/doppler.png}
@@ -2457,15 +2457,15 @@ trees and bare ground.
 
 
 \subsubsection{Dataset Construction}
-To train a robust model that can classify different signal types, constructin a clean 
+To train a robust model that can classify different signal types, constructing a clean 
 and reliable dataset was one of the most important aspect of this pipeline. In order to 
-do so, data was collected acrpss multiple real world conditions with distinct environmental
+do so, data was collected across multiple real world conditions with distinct environmental
 features. The goal was to ensure the dataset captures the full diversity of GNSS-R signal 
-behaviour encountered during different UAV operations. Three collected scenarios were defined which 
+behavior encountered during different UAV operations. Three collected scenarios were defined which 
 are listed below:
 \begin{enumerate}
     \item \textbf{Open Sky}: The receiver was held in an unobstructed environment with a clear
-    Line-of-Sight (LOS) to the GNSS satellties. This was done to produce predominently direct LOS signals.
+    Line-of-Sight (LOS) to the GNSS satellites. This was done to produce predominantly direct LOS signals.
     \item \textbf{UAV hovering over bare ground}: Signals captured in this scenario are dominated by specular 
     reflections from the ground surface. This is a representative of non vegetated terrain or ground reflected
     signals. 
@@ -2502,8 +2502,8 @@ for example, direct signals may occasionally be captured during ground hovering 
 the practical constraints of field data collection in real world. 
 
 The collected data comprised of 70,125 labelled samples drawn from all three scenarios. To address potential class 
-imbalance that could bias the model toward more frequently occurring signal types a balanaced class weight strategy was applied during training. This effectively
-upweights minority classes in the loss function. Overall, this multi environment data collection strategy ensures 
+imbalance that could bias the model toward more frequently occurring signal types a balanced class weight strategy was applied during training. This effectively
+upweights minority classes in the loss function. Overall, this multienvironment data collection strategy ensures 
 that the model generalizes well across all three classes. This is a critical for deployment on a UAV operative across different terrain conditions.
 
 
@@ -2634,8 +2634,8 @@ The model converged well and the loss curves for training and validation sets ar
     \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
 To gain insight into the LightGBM model's training process, two plots were 
-ploted: a convergence plot of the multi-class log loss as a function 
-over each iteration for the training and the validation sets, and the generalisation plot 
+plotted: a convergence plot of the multi-class log loss as a function 
+over each iteration for the training and the validation sets, and the generalization plot 
 that compares the difference between the validation loss and the training loss for each boosting iteration.
 
 \paragraph{Training Convergence}:
@@ -2647,23 +2647,23 @@ the loss decreases significantly. This is due to the fact that the gradient boos
 trees make the largest corrections to the model predictions. This is a typical characteristic of 
 gradient boosting models. After this, the rate of improvement slows down where each additional 
 tree makes smaller adjustments. Around 3000 to 4000 epochs the curves start to plateau and loss stabilizes below a 
-value of 0.1. The best iteration was 9968 which is markes with the dashed vertical line. 
+value of 0.1. The best iteration was 9968 which is marked with the dashed vertical line. 
 
 \paragraph{Generalization Plot}:
 The other plot on the right quantifies the generalization gap. This gap is defined as
 the pointwise difference between validation loss and training loss ($\mathcal{L}_{\text{val}} - 
 \mathcal{L}_{\text{train}}$) across iterations. The positive gap is expected since the model 
-has not seen the validation data during training and only beem optimized on the training set. The main 
-observation here is wheather this gap increases over training epoch or decreases. 
+has not seen the validation data during training and only been optimized on the training set. The main 
+observation here is whether this gap increases over training epoch or decreases. 
 
 Early in training process the gap rises from near zero to a peak value of 0.01-0.011 around iterations
 1500-2000. The initial rise of this value is due to the aggressive fast learning of the model where the model 
-is trying to fit the data. However, after this the gap norrows progressively and reaches an approximate value of 0.005-0.006
+is trying to fit the data. However, after this the gap narrows progressively and reaches an approximate value of 0.005-0.006
 by 10000 iterations. This is a positive indication as it means the model progressively generalize rather than simply 
 memorizing the training data. The shaded region in the plot is the overfitting zone and the magnitude is negligible. This does not 
 meaningfully comprise the model's performance on unseen data.
 
-Combined, both the panels affirm that the LightGBM model has converged and generalised well, 
+Combined, both the panels affirm that the LightGBM model has converged and generalized well, 
 which is a formidable basis of the signal classification task. The additional quantitative testing of the classification 
 performance of the model is provided in the Results and Discussion section.
 
@@ -2747,7 +2747,7 @@ following equation:
 \begin{equation}
     \text{Conf.}_i = \max_{k \in \{1,2,3\}} \; p_{i,k},
 \end{equation}
-here, the predicted probabiloty of sample $i$ is denoted as $p_{i,k}$ which belongs to class $k$.
+here, the predicted probability of sample $i$ is denoted as $p_{i,k}$ which belongs to class $k$.
 A confidence of 1 means a fully decisive prediction. A value near 0.33 reflects maximum uncertainty.
 A threshold of 0.50 is set which is shown by the red dashed line. This threshold serves as a practical
 unreliability mark. 
@@ -2755,29 +2755,29 @@ unreliability mark.
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/confidence_timeseries_p1.png}
     \includegraphics[width=0.7\textwidth]{Included_Images/confidence_timeseries_p2.png}
-    \caption{Prediction confidence timeseries for selected satellites.}
+    \caption{Prediction confidence time series for selected satellites.}
 \end{figure}
 
 The figure above presents the confidence plot for some of the selected satellites. The flight duration
-for this experiment was around 4.5-5 minutes. In the plot, each of the dot reflects a measurement from that satellite and the colour
-reflects their predicted class. A blue coloured dot represents a direct signal, an orange dot reflects a ground reflected signal and lastly the green dot
+for this experiment was around 4.5-5 minutes. In the plot, each of the dot reflects a measurement from that satellite and the color
+reflects their predicted class. A blue colored dot represents a direct signal, an orange dot reflects a ground reflected signal and lastly the green dot
 represents the tree reflected signals. A smoothed confidence curve is also plotted (in black) to represent the temporal trend. 
 
 Across all 16 satellites the mean confidence ranges from 0.85 to 0.98. This indicates that the classifier 
 consistently produces high confidence decisive predictions. Majority of the predictions lie above the threshold value. Galileo 
-consistently tend to achieve slightly higher mean confidenve than GPS which may be happening due to their consistent stronger signal quality.
+consistently tends to achieve slightly higher mean confidence than GPS which may be happening due to their consistent stronger signal quality.
 A consistent feature of the predictions that can be observed from the plots is the dip around 1.5-2.5 minute mark. This is visible in the smoothed confidence curve 
 for most of the satellites: G01, G02, G08, G14, G16, G17, G27, G30, E02, E18 etc. If closely examined, the curve dips first and then recovers towards 
-higher confidence in the later portion of the flight. During this dip, the scatter plots also show a higher degree of mixed predictions. This suggests that the model is model is 
+higher confidence in the latter portion of the flight. During this dip, the scatter plots also show a higher degree of mixed predictions. This suggests that the model is 
 temporarily uncertain about the signal class. This temporal uncertainty is likely happening due to a transition 
-in the flight environment under the UAV. When the UAV flies between distinct terrain types the GNSS signal characteristic also changes that does not match clearly with the characteristic of any of the class. 
-During such transition, the feature values may exhibit mixed behavious resulting in an uncertainty for the model. 
-However, this uncertainty is a valuable insight for our project as one of the goals of the ML pipeline is to detect the vegitation boundary and the uncertainty exactly provides that information. 
+in the flight environment under the UAV. When the UAV flies between distinct terrain types the GNSS signal characteristic also changes that does not match clearly with the characteristic of any of the classes. 
+During such transition, the feature values may exhibit mixed behaviors resulting in an uncertainty for the model. 
+However, this uncertainty is a valuable insight for our project as one of the goals of the ML pipeline is to detect the vegetation boundary and the uncertainty exactly provides that information. 
 
 
 \subsection{Vegetation Boundary Plotting and Analysis}
-To provide a geospatial visualization of the vegetation boundary the prediction results were ploted on the map
-of the experiment site which can be seen from the figure below. First, the FFZs for each of the satellite was calculated and their centroids
+To provide a geospatial visualization of the vegetation boundary the prediction results were plotted on the map
+of the experiment site which can be seen from the figure below. First, the FFZs for each of the satellite was calculated, and their centroids
 were overlaid on a satellite map. The FFZ centroid can be assumed as a point which is dominant for reflections from a certain satellite and UAV altitude. 
 In other words, it is the location on the ground where the reflections most likely originate from.
 \begin{figure}[H]
@@ -2786,13 +2786,13 @@ In other words, it is the location on the ground where the reflections most like
     \caption{Vegetation boundary plotting based on classified signals.}
 \end{figure}
 
-Each circle on the map represent a single satellites FFZ centroid which was enlarged by the mean confidence of the predicitons. 
-The colour definition is same as the one for confidence plots, where blue mean direct, orange means ground reflected and green represents tree
-reflected signals. The centroids are coloured according to the most dominant prediction class of that satellite. Looking at the spatial distribution and the terrain, the 
-predictions strongly align with the surface below. Satellites whose predictions falls over densely vegetated areas are predominantly classified as tree reflected signals. Same goes for the
+Each circle on the map represent a single satellites FFZ centroid which was enlarged by the mean confidence of the predictions. 
+The color definition is same as the one for confidence plots, where blue mean direct, orange means ground reflected and green represents tree
+reflected signals. The centroids are colored according to the most dominant prediction class of that satellite. Looking at the spatial distribution and the terrain, the 
+predictions strongly align with the surface below. Satellites whose predictions fall over densely vegetated areas are predominantly classified as tree reflected signals. The same goes for the
 other prediction classes. 
 
-To further examine the spatial temporal relationship, two satellites are analysed below.
+To further examine the spatial temporal relationship, two satellites are analyzed below.
 \begin{figure}[H]
     \centering
     \includegraphics[width=1\textwidth]{Included_Images/veg_boundary_G04.png}
@@ -2801,8 +2801,8 @@ To further examine the spatial temporal relationship, two satellites are analyse
 
 The GPS satellite G04's FFZ centroid is positioned at a place that can be identified as bare ground. The confidence plot for G04 indicates that the
 predictions also converge quickly after the flight and remain stable. The dominant prediction class is observed to be ground reflected signal class (orange). The 
-class received near unity confidence beyond the 1 minute mark. The first minute is observed to slightly uncertain which might be due to unsettling geometry of the reflection when the UAV was
-moving to its operating altitude. However, once stabiliesed the model predicts the measurements to be ground reflection with a consistent confidence of 0.8-1. 
+class received near unity confidence beyond the 1-minute mark. The first minute is observed to slightly uncertain which might be due to unsettling geometry of the reflection when the UAV was
+moving to its operating altitude. However, once stabilised the model predicts the measurements to be ground reflection with a consistent confidence of 0.8-1. 
 The high mean confidence and a single class prediction demonstrates that the classifier correctly predicts the signal class or type when the FFZ falls over a clear and unambiguous terrain. 
 \begin{figure}[H]
     \centering
@@ -2813,11 +2813,11 @@ The high mean confidence and a single class prediction demonstrates that the cla
 However, if we examine the FFZ centroid location of R16, it is comparatively a challenging environment. The centroid
 of the FFZ for this satellite is located near the shoreline where a transition can be seen from water to vegetation.
 The signal characteristic is expected to be mixed in this region due to the underlying terrain. And it is also evident if you closely
-examine the confidence plot for this specific satellite. The confidence is high in the openning minute with reflection types predominently
+examine the confidence plot for this specific satellite. The confidence is high in the opening minute with reflection types predominantly
 classified as tree reflected signals. However, a severe dip is noticed between the timestamp for 2-3.5 minutes. During this time, the confidence 
-collapses to as low as 0.3 which is below the threshold. This is consitent with the FFZ centroids movement near the terrain boundary. As the UAV moves the FFZ and the satellite 
-geometry also changes. This naturally means the same signal gets reflected from different surfaces througout the flight. After the 3.5 minute mark, the prediction confidence
-stabilises and recovers to near 1 value with tree reflected predictions. This suggests the reflection geometry has moved back to vegetation zone.
+collapses to as low as 0.3 which is below the threshold. This is consistent with the FFZ centroids movement near the terrain boundary. As the UAV moves the FFZ and the satellite 
+geometry also changes. This naturally means the same signal gets reflected from different surfaces throughout the flight. After the 3.5 minute mark, the prediction confidence
+stabilizes and recovers to near 1 value with tree reflected predictions. This suggests the reflection geometry has moved back to vegetation zone.
 
 \begin{figure}[H]
     \centering
@@ -2830,8 +2830,8 @@ that the centroid falls near the transition zone between bare ground and trees. 
 for this satellite. The confidence plot shows that the confidence in the first 1-1.5 minute is around 0.6-0.85 with
 mixed predictions of tree reflected and ground reflected signals. This early ambiguity is consistent with the edge location of the FFZ where the 
 reflection initially might be coming from both vegetated and open terrain. However, after 2 min mark, the confidence and the prediction pattern changes. The confidence
-stabilises with a value of over 0.9. The prediction class is also found to be dominantly ground reflected. E27 thereby represents an intemediate case between the stable high confidence behaviour 
-of G04 and severe confidence dips of R16. This sastellte also strengthens the fact that the prediction confidence lowers near the boudary transition zones making the confidence dips a important observation
+stabilizes with a value of over 0.9. The prediction class is also found to be dominantly ground reflected. E27 thereby represents an intermediate case between the stable high confidence behavior 
+of G04 and severe confidence dips of R16. This satellite also strengthens the fact that the prediction confidence lowers near the boundary transition zones making the confidence dips an important observation
 for vegetation boundary construction.
 
 So to conclude, the three cases illustrate the relationship between the terrain type and the prediction confidence. 
@@ -3082,7 +3082,7 @@ plan is shown in the figure below.
 \end{figure}
 
 \subsubsection{GNSS-R Analysis and Modelling}
-After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess psuedorange delay. Then, the FFZs of each reflected GNSS signals are calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
+After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess pseudorange delay. Then, the FFZs of each reflected GNSS signals are calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
 
 \begin{figure}[H]
     \centering
@@ -3110,7 +3110,7 @@ reflect off from the ground.
 
 Using the correlations between GNSS measurement parameters and RGB values of CIR
 imageries summarized in Section 6.3, the CIR imagery color for this experiment
-were also reconstructed, as shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies and the FFZs over ground with sparse vegetation could be clearly distinguished, demonstrating the potentential of GNSS as an alternative remote sensing system.
+were also reconstructed, as shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies and the FFZs over ground with sparse vegetation could be clearly distinguished, demonstrating the potential of GNSS as an alternative remote sensing system.
 
 \begin{figure}[H]
     \centering
@@ -3120,9 +3120,9 @@ were also reconstructed, as shown in Figure \ref{Case Study CIR} below. Here, th
 \end{figure}
 
 \subsubsection{Machine Learning Signal Classification and Vegetation Boundary Detection}
-Figure below shows the FFZ centroids for all the satelllites tracked during the experiment. The spatial distribution
+Figure below shows the FFZ centroids for all the satellites tracked during the experiment. The spatial distribution
 of the predictions align well with the visible terrain on the map. For example, satellite E21, E34 are classified as tree reflected
-and their centroids also fall over the vegetated area predominently.
+while their centroids also fall over the vegetated area predominantly.
 
 The per satellite confidence plots are also shown below. The show that the classifier performs
 well overall with mean confidence ranging from 0.77 to 0.99. Lower confidence satellites are also observed (E27, E30). However, their
@@ -3134,8 +3134,8 @@ FFZs fall near the boundary transition zones which explains the ambiguity.
     \caption{Confidence and FFZ centroid plotting for the experiment.}
 \end{figure}
 
-The classification results from the ML pipeline was further valifated by the GNSS-R results. The figure below shows the
-comparson. The calssfication results clearly aligns with the results from the GNSS-R pipeline meaning that that the prediction
+The classification results from the ML pipeline was further validated by the GNSS-R results. The figure below shows the
+comparison. The classification results clearly align with the results from the GNSS-R pipeline meaning that the prediction
 results are trustworthy and can be used to remove any noise from the dataset for better processing of the GNSS-R pipeline.
 \begin{figure}[H]
     \centering
