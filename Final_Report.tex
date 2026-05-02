@@ -756,50 +756,6 @@ Below is the flow chart illustrating the core logic of A* algorithm:
     \label{fig:astar_flowchart}
 \end{figure}
 
-\paragraph{Evaluating the A* Algorithm Performance} ~\\
-To evaluate the algorithm's performance, a series of test runs conducted
-using vegetation density maps in different categories. The maps were obtained
-using QGroundControl \cite{QGroundControl_PlanView} software from satellite imagery and then imported into an
-image processing pipeline. The pipeline can be described in the following steps:
-\begin{enumerate}
-    \item Convert the satellite imagery to grayscale images.
-    \item Use HSV (Hue, Saturation, Value) color space conversion and RGB
-    Conversion to identify greenery, and NDVI Index to measure vegetation
-    health.
-    \item The images are categorized into three vegetation types: Dense tree
-    canopy, grassland and short vegetation, and cropland and agricultural fields.
-    \item Apply edge detection such as canny detection \cite{ding2001canny} to identify buildings and non vegetation areas.
-    \item Plot the series of processed images as occupancy grid maps.
-\end{enumerate}
-
-Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\linewidth]{Included_Images/densecanopy_map.png}
-    \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
-    \label{fig:dense_canopy_map}
-\end{figure}
-
-\paragraph{Normalized Difference Vegetation Index} ~\\
-The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
-measures the difference between near-infrared light and red light. This provides
-the difference between strongly reflected by vegetation signals and signals
-absorbed by vegetation \cite{GISGeography_NDVI}. Below is the equation to
-calculate NDVI:
-\begin{equation}
-    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
-    \label{eq:ndvi}
-\end{equation}
-The Normalized Difference Vegetation Index is calculated using Equation
-\ref{eq:ndvi}, where \text{NIR} represents the near-infrared band and \text{Red}
-represents the red visible light band.
-
-If a vegetation is healthy it reflects more near-infrared and green light
-(chlorophyll), while absorbing more red and blue lights.
-
-A detailed overview of the A* algorithm performance evaluation is presented in
-the results and discussion section. 
-
 \subsubsection{Coverage Path Planning}
 Coverage Path Planning (CPP) is essential for surveying in dense vegetation
 areas and for obtaining dynamic data for LiDAR SLAM. In this research,
@@ -880,6 +836,241 @@ distance defines the separation between parallel tracks. Figure
 The practical implications of the algorithm's use are shown in the experiment
 setup section, and the detailed results of the Boustrophedon Cell Decomposition
 algorithm are discussed in the results and discussion section. 
+
+\subsubsection{Image Processing and Vegetation Classification} ~\\
+To execute the waypoint-based navigation and coverage path planning, image
+processing was used to identify potential vegetation areas in a satellite imagery. The maps were
+obtained using QGroundControl \cite{QGroundControl_PlanView} software from
+satellite imagery and then imported into an image processing pipeline. The
+pipeline can be described in the following steps:
+
+\begin{enumerate}
+    \item Converting the satellite imagery to grayscale images.
+    \item Using HSV (Hue, Saturation, Value) color space conversion and RGB
+    Conversion to identify greenery, and NDVI Index to measure vegetation
+    health. The images are categorized into three vegetation types: Dense tree
+    canopy, grassland and short vegetation, and cropland and agricultural fields.
+    \item Applying edge detection such as canny detection \cite{ding2001canny} to identify buildings and non vegetation areas.
+    \item Plotting the series of processed images as occupancy grid maps.
+\end{enumerate}
+
+Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Included_Images/densecanopy_map.png}
+    \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
+    \label{fig:dense_canopy_map}
+\end{figure}
+
+\paragraph{Normalized Difference Vegetation Index} ~\\
+The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
+measures the difference between near-infrared light and red light. This provides
+the difference between strongly reflected by vegetation signals and signals
+absorbed by vegetation \cite{GISGeography_NDVI}. Below is the equation to
+calculate NDVI:
+\begin{equation}
+    \text{NDVI} = \frac{\text{NIR} - \text{Red}}{\text{NIR} + \text{Red}}
+    \label{eq:ndvi}
+\end{equation}
+The Normalized Difference Vegetation Index is calculated using Equation
+\ref{eq:ndvi}, where \text{NIR} represents the near-infrared band and \text{Red}
+represents the red visible light band. 
+
+If vegetation is healthy, it reflects more near-infrared and green light
+(associated with chlorophyll) while absorbing more red and blue light.
+Therefore, this image processing pipeline enables filtering and identifying
+greenery while categorizing vegetation into different types based on hue,
+saturation, and intensity characteristics. 
+
+However, in practical applications, identifying vegetation solely from satellite
+imagery is insufficient. To determine potential vegetation regions, it is also
+necessary to account for the GNSS signal reflection areas, known as the Fresnel
+zones. These areas define the ellipsoidal detection region where reflected
+satellite signals can be captured. Hence, the vegetation analysis is further
+constrained by the spatial extent of these Fresnel zones to identify potential
+areas suitable for GNSS reflectometry-based sensing.
+
+\subsubsection{Path planning workflow} 
+\paragraph{Fresnel Zone Identification} ~\\
+To determine the Fresnel zone locations, NASA ephemeris data is utilized for a
+specified geographic location and time instance. By providing the desired
+latitude, longitude, and timestamp as inputs, the MATLAB simulation framework
+developed in this study computes and visualizes the corresponding Fresnel zones.
+The generated Fresnel zones are represented as ellipsoids corresponding to the
+GNSS signal reflection areas, along with their respective center coordinates.
+These center locations are subsequently used as reference points for determining
+the detection area and survey planning.  Figure
+\ref{fig:fresnel_zone_identification} shows the Fresnel zones plotted in Mount
+Davis Park in Hong Kong on 2026-03-26 at 12:00:00.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Included_Images/fresnel_zone_identification.png}
+    \caption{Fresnel Zone Identification}
+    \label{fig:fresnel_zone_identification}
+\end{figure}
+
+However, these Fresnel zones exhibit irregular geometries and complex spatial
+boundaries, making it difficult to cover the area of interest. Therefore, a path
+planning framework is required to cluster and organize groups of Fresnel zones
+into detectable regions that can be effectively covered by the UAV platform
+during the survey mission. 
+
+The proposed path planning workflow (Figure \ref{fig:path_planning_workflow}) consists of the following stages:
+\begin{enumerate}
+    \item Launching the interactive path planner and importing the simulated Fresnel zone locations. 
+    \item Performing automatic clustering of Fresnel zones using a nearest-neighbor distance-based algorithm. 
+    \item Determining the region of interest (ROI) by extracting the boundary of the generated detection area. 
+    \item Computing the required sweeping distance for coverage path planning. 
+    \item Configuring and deploying the final survey mission through the ground control system.
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Included_Images/path_planning_workflow.png}
+    \caption{Path Planning Workflow}
+    \label{fig:path_planning_workflow}
+\end{figure}
+
+\paragraph{Fresnel Zone Clustering} ~\\
+In this system, automatic clustering of Fresnel zones is performed using a
+nearest-neighbor distance-based clustering method. Initially, all simulated
+Fresnel zone locations, including their corresponding center coordinates, are
+imported into the interactive path planner. A global center is then computed to
+represent the overall spatial distribution of the Fresnel zones within the
+survey area. Subsequently, pairwise distances between all Fresnel zones are
+calculated, and a distance distribution is generated to analyze their spatial
+relationships. 
+
+Based on this distribution, a clustering threshold is defined to
+identify neighboring Fresnel zones that are closely aligned. In this study, the
+threshold is selected to include approximately the closest 40\% of Fresnel
+zones, allowing closer adjacent zones to be grouped into clusters. If multiple
+clusters are identified, the final cluster selection is determined by the
+distance of each cluster to the computed global center. The selected cluster is
+then designated as the primary region of interest for detection. 
+
+\paragraph{Fresnel Cluster Boundary Determination} ~\\
+To address the complex geometry of the selected Fresnel zone cluster, it is
+necessary to bound the detection area with a simplified shape. To determine the
+region of interest (ROI), the selected Fresnel zone cluster must be enclosed
+within an appropriate boundary.
+In this study, three boundary geometries are considered: square, circular, and
+triangular enclosures, as shown in Figure \ref{fig:boundries}. For each geometry, the algorithm generates an enclosure
+based on the spatial coordinates of the selected Fresnel zone ellipsoids,
+ensuring that all ellipsoids are fully contained within the boundary. Once the
+three areas are established, their enclosed areas are computed to evaluate the
+most suitable detection region.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/boundries.png}
+    \caption{Fresnel cluster boundary determination}
+    \label{fig:boundries}
+\end{figure}
+
+
+To optimize the area of interest, a parameter termed the
+\textit{coverage ratio} is introduced. The coverage ratio is defined as the ratio
+between the total area occupied by the selected Fresnel zones and the area of
+the corresponding enclosure, as shown in Equation \ref{eq:coverage_ratio}:
+
+\begin{equation}
+    \text{Coverage Ratio} = \frac{A_{\text{Fresnel Zones}}}{A_{\text{Enclosure}}}
+    \label{eq:coverage_ratio}
+\end{equation}
+
+where $A_{\text{Fresnel Zones}}$ represents the total area covered by the
+selected Fresnel zone ellipsoids, and $A_{\text{Enclosure}}$ denotes the area
+of the generated boundary.
+
+In addition, the unused or empty area within the enclosure can be calculated as:
+
+\begin{equation}
+    A_{\text{Empty}} = A_{\text{Enclosure}} - A_{\text{Fresnel Zones}}
+    \label{eq:empty_area}
+\end{equation}
+
+The optimal detection area is selected by choosing the enclosure with the
+highest coverage ratio, corresponding to the smallest empty area. This ensures
+that the final detection area maximizes coverage efficiency while minimizing
+unnecessary survey space.             
+
+\paragraph{Detection Area Evaluation} ~\\
+For coverage path planning, it is necessary to define the sweeping distance,
+which represents the spacing between adjacent sweeps during the survey mission.
+In this system, the sweeping distance is determined based on the detection area
+obtained from the previous boundary determination step. Figure \ref{fig:d_sweep}
+illustrates the sweeping distance in coverage path planning. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/d_sweep.png}
+    \caption{Sweeping distance in coverage path planning}
+    \label{fig:d_sweep}
+\end{figure}
+
+To calculate the optimal distance between flight lines, $d_{\text{sweep}}$, the
+area of the selected detection region ($A$) and the geometric shape of the
+detection boundary are taken into account, as shown in Equation
+\ref{eq:sweep_distance}:
+
+\begin{equation}
+    d_{\text{sweep}} = (1-o)\cdot k \cdot \sqrt{A}
+    \label{eq:sweep_distance}
+\end{equation}
+
+where:
+
+\begin{itemize}
+    \item $d_{\text{sweep}}$ :Spacing parameter in QGroundControl
+    \item $A$ : Area of the selected detection boundary
+    \item $k$ : Geometric shape factor
+    \item $o$ : Overlap percentage between adjacent sweeps
+\end{itemize}
+
+The sweeping distance is calculated according to Equation
+\ref{eq:sweep_distance}, where the resulting gap varies proportionally with both
+the area and geometry of the detection region. Figure \ref{fig:d_sweep} shows
+how detection area is used in coverage path planning with corresponding
+overlapping. To ensure sufficient sensing coverage between adjacent sweeps, a
+constant overlap factor of 20\% is applied in real-world experiments.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparison of detection areas and sweeping distance}
+    \label{tab:detection_area_comparison}
+    \renewcommand{\arraystretch}{2.2}
+    
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{|p{5cm}|c|c|m{6cm}|}
+    \hline
+    \textbf{Detection Area} & \textbf{Sweeping Distance (m)} & \textbf{Energy Consumed (J)} & \textbf{Comparison} \\
+    \hline
+    
+    \includegraphics[width=5cm]{Included_Images/detection_area_1.png}\newline
+    89.00m$^2$
+    & 14.33
+    & 4000
+    & High coverage ratio, High energy consumption.
+    \\
+    \hline
+    
+    \includegraphics[width=5cm]{Included_Images/detection_area_2.png}\newline
+    140.00m$^2$
+    & 17.89
+    & 3190
+    & Provides a balanced efficiency with a higher coverage ratio. In practice, this is the optimal detection area. \\
+    \hline
+    
+    \includegraphics[width=5cm]{Included_Images/detection_area_3.png}\newline
+    264.00m$^2$
+    & 24.70
+    & 2322
+    & Low coverage ratio, Low energy consumption.\\
+    \hline
+    
+    \end{tabular}
+    }
+\end{table}
 
 \subsection{Results and Discussion}
 \subsubsection{Waypoint-based Navigation Results}
