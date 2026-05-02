@@ -3145,18 +3145,29 @@ reflected from vegetation.
     \caption{GNSS-R Fresnel zone analysis result.}
 \end{figure}
 
-\subsubsection{Machine Learning Signal Classification}
-For this dataset, a trained LGBM classification model was used to classify the
-GNSS signals into the categories of tree-reflected, ground-reflected, and direct
-signals, with the results shown in the figure below. Here, the majority of the
-signals are classified as tree-reflected since the survey was conducted over 
-vegetation. 
+\subsubsection{Machine Learning Signal Classification and Vegetation Boundary Detection}
+Figure below shows the FFZ centroids for all the satelllites tracked during the experiment. The spatial distribution
+of the predictions align well with the visible terrain on the map. For example, satellite E21, E34 are classified as tree reflected
+and their centroids also fall over the vegetated area predominently.
+
+The per satellite confidence plots are also shown below. The show that the classifier performs
+well overall with mean confidence ranging from 0.77 to 0.99. Lower confidence satellites are also observed (E27, E30). However, their
+FFZs fall near the boundary transition zones which explains the ambiguity.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/KeyExperiment_ML.png}
-    \caption{LGBM-based signal classification result.}
+    \includegraphics[width=0.8\textwidth]{Included_Images/mtdavis_confidence.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/mtdavis_ffzcon.png}
+    \caption{Confidence and FFZ centroid plotting for the experiment.}
 \end{figure}
 
+The classification results from the ML pipeline was further valifated by the GNSS-R results. The figure below shows the
+comparson. The calssfication results clearly aligns with the results from the GNSS-R pipeline meaning that that the prediction
+results are trustworthy and can be used to remove any noise from the dataset for better processing of the GNSS-R pipeline.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/ML-FFZ.png}
+    \caption{Comparison between ML classification results and GNSS-R results.}
+\end{figure}
 \subsubsection{LiDAR SLAM}
 For this dataset, LiDAR point clouds were processed using two techniques: the
 standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the
