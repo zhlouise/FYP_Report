@@ -517,7 +517,7 @@ decomposition, specifically boustrophedon decomposition, for coverage path
 planning. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/cell_decomposition.png}
+    \includegraphics[width=\linewidth]{Included_Images/cell_decomposition.png}
     \caption{Exact Cell Decomposition Process \cite{choset2005principles}}
     \label{fig:cell_decomposition}
 \end{figure}
@@ -612,7 +612,7 @@ the starting and ending nodes of a given path. A 2-D path illustration of an A*
 algorithm is shown in Figure \ref{fig:astar}.
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.75\linewidth]{Included_Images/A-starmap.jpg}
+    \includegraphics[width=\linewidth]{Included_Images/A-starmap.jpg}
     \caption{Map Highlighting Shortest Path from Node A to Node K}
     \label{fig:astar}
 \end{figure}
@@ -773,7 +773,7 @@ using the framework developed by the Autonomous Systems Lab at ETH Zurich
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\linewidth]{Included_Images/boustrophedon_path.png}
+    \includegraphics[width=0.5\linewidth]{Included_Images/boustrophedon_path.png}
     \caption{Boustrophedon Cell Decomposition Path Planning Example
     \cite{Choset-1997-16422}}
     \label{fig:boustrophedon}
@@ -795,7 +795,7 @@ The algorithm decomposes the map (polygonal area) into cells based on three key 
 Figure \ref{fig:in_event} illustrates an example of an IN event:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.6\linewidth]{Included_Images/in_event.png}
+        \includegraphics[width=0.65\linewidth]{Included_Images/in_event.png}
         \caption{Boustrophedon Cell Decomposition IN Event Example \cite{Choset-1997-16422}}
         \label{fig:in_event}
     \end{figure}
@@ -830,7 +830,7 @@ distance defines the separation between parallel tracks. Figure
 \ref{fig:sweep_parameters} illustrates boustrophedon path in each cell. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{Included_Images/sweep_parameters.png}
+    \includegraphics[width=0.4\linewidth]{Included_Images/sweep_parameters.png}
     \caption{Boustrophedon Cell Decomposition Sweeping \cite{Choset-1997-16422}}
     \label{fig:sweep_parameters}
 \end{figure}
@@ -859,7 +859,7 @@ pipeline can be described in the following steps:
 Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps for a dense canopy vegetation:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Included_Images/densecanopy_map.png}
+    \includegraphics[width=0.9\linewidth]{Included_Images/densecanopy_map.png}
     \caption{Processed Occupancy Grid Map for Dense Canopy Vegetation}
     \label{fig:dense_canopy_map}
 \end{figure}
@@ -906,7 +906,7 @@ points for determining the detection area and survey planning.  Figure
 Davis Park in Hong Kong on 2026-03-26 at 12:00:00.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Included_Images/fresnel_zone_identification.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/fresnel_zone_identification.png}
     \caption{Fresnel Zone Identification}
     \label{fig:fresnel_zone_identification}
 \end{figure}
@@ -979,11 +979,10 @@ most suitable detection region.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/boundries.png}
+    \includegraphics[width=\textwidth]{Included_Images/boundries.png}
     \caption{Fresnel cluster boundary determination}
     \label{fig:boundries}
 \end{figure}
-
 
 To optimize the area of interest, the algorithm calculates the
 \textit{coverage ratio} for each shape. The coverage ratio is defined as the ratio
@@ -1203,7 +1202,7 @@ environment is illustrated in Figure \ref{fig:env_obstacles}, in this case,
 algorithm detected 7 polygons, with 72 nodes. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/env_obstacles.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/env_obstacles.png}
     \caption{Coverage path planning environment with obstacles}
     \label{fig:env_obstacles}   
 \end{figure}
@@ -1237,7 +1236,7 @@ order to obtain the optimal coverage during the survey mission.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/boundary.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/boundary.png}
     \caption{Determined boundary}
     \label{fig:boundary}
 \end{figure}
@@ -1260,7 +1259,7 @@ conducted at Mount Davis Park in Hong Kong.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{Included_Images/gqc_coverage.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/gqc_coverage.png}
     \caption{Coverage path planning mission in QGroundControl}
     \label{fig:gqc_coverage}
 \end{figure}
@@ -1268,7 +1267,7 @@ conducted at Mount Davis Park in Hong Kong.
 In summary, waypoint-based navigation experiments were conducted primarily to
 hover the UAV above a tree or vegetation and above bare ground without trees.
 This is mainly to assist in obtaining the differences in GNSS reflection over
-vegetation and bare ground. Moreover, fresnel zone clustering and coverage
+vegetation and bare ground. Moreover, Fresnel zone clustering and coverage
 path planning was implemented to achieve a reliable path planning workflow to
 collect stronger GNSS reflected signals
 
@@ -1607,7 +1606,7 @@ As a result, the proposed loosely coupled LiDAR-GPS graph-based SLAM framework c
 With the aim of performing GPS correction in a pose graph SLAM system, LiDAR and GPS must be in the same coordinate frame in order to enable consistent comparison and fusion of their measurements during optimization. However, since the LiDAR sensor and GPS antenna are mounted at different physical location on the UAV, the relative transformation between the LiDAR and GPS coordinate frames must first be determined so that their measurements can be transformed into a common reference frame before GPS constraints are incorporated into the pose graph optimization process.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/lidar_pos.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/lidar_pos.png}
     \caption{Illustration of the sensors' location on UAV}
 \end{figure}
 
@@ -1704,21 +1703,21 @@ Pixhawk are passed to the back end pose graph optimization SLAM under
 To test the point cloud alignments, the same experiment data is run on Fast-LIO LiDAR Odometry, Pose Graph Optimization (PGO) SLAM without GPS, and PGO SLAM with GPS for comparison. 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_FL.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_FL.png}
     \caption{Fast-LIO LiDAR Odometry}
     \label{fig:rosbag3_FL}
 \end{figure}
 \vspace{-3pt}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_pgo_nogps2.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_pgo_nogps2.png}
     \caption{Pose Graph Optimization SLAM without GPS}
     \label{fig:rosbag3_pgo_nogps}
 \end{figure}
 \vspace{-3pt}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/rosbag3_pgo.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_pgo.png}
     \caption{Pose Graph Optimization SLAM with GPS}
     \label{fig:rosbag3_pgo}
 \end{figure}
@@ -1729,13 +1728,13 @@ If the GPS trajectory and SLAM trajectory are not aligned, SLAM will consider GP
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/rosbag3_drift.png}
         \caption{Before including GPS data}
         \label{fig:not_align}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.4\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/rosbag3_align.png}
         \caption{After including GPS data}
         \label{fig:align}
@@ -1748,22 +1747,26 @@ In order to only incorporate accurate GPS data for the SLAM calculation, a manua
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/cov_0.01.png}
         \caption{Covariance Threshold = 0.01}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/cov_0.03.png}
         \caption{Covariance Threshold = 0.03}
     \end{subfigure}
-        \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \phantomcaption
+\end{figure}
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/cov_0.04.png}
         \caption{Covariance Threshold = 0.04}
     \end{subfigure}
-        \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \hfill
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/cov_0.1.png}
         \caption{Covariance Threshold = 0.1}
     \end{subfigure}
@@ -1811,22 +1814,22 @@ By referring to the mean covariance from all dataset, covariance threshold is se
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/data5_pgo.png}
         \caption{Data 3}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/data7_pgo.png}
         \caption{Data 4}
     \end{subfigure}
         \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/data8_pgo.png}
         \caption{Data 5}
     \end{subfigure}
         \hfill
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/rosbag1_pgo.png}
         \caption{Data 6}
     \end{subfigure}
@@ -1837,9 +1840,9 @@ By referring to the mean covariance from all dataset, covariance threshold is se
 \subsubsection{Limitations}
 Although the incorporation of GPS provides global constraints that enable the SLAM system to correct and align its trajectory, this correction is not always applied. If the SLAM trajectory deviates significantly from the GPS trajectory, the system will not consider the GPS data in the SLAM optimization. This can be observed in Figure \ref{fig:pgo_drift}, where the SLAM trajectory drifts due to accumulated errors from LiDAR odometry. In the figure, the GPS measurements remain in their correct global positions, while the SLAM trajectory continues to follow the drifted path.
 
-\begin{figure} [H]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{Included_Images/pgo_drift.png}
+    \includegraphics[width=0.9\textwidth]{Included_Images/pgo_drift.png}
     \caption{Pose graph SLAM system with drifted trajectory}
     \label{fig:pgo_drift}
 \end{figure}
@@ -1903,7 +1906,7 @@ cm in estimating the height of vegetation with simple geometrical structures
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/SMIGOL_reflectometer.png}
+        \includegraphics[width=0.8\textwidth]{Included_Images/SMIGOL_reflectometer.png}
         \caption{SMIGOL Reflectometer Setup}
     \end{subfigure}
     \hfill
@@ -1916,8 +1919,7 @@ cm in estimating the height of vegetation with simple geometrical structures
     \label{SMIGOL}
 \end{figure}
 
-The following table summarizes the contemporary research and analysis of GNSS-R 
-in vegetation monitoring applications:
+The following table summarizes several contemporary research on GNSS-R remote sensing:
 
 \begin{table}[H]
     \centering
@@ -1930,22 +1932,19 @@ in vegetation monitoring applications:
     soil parameters, and tree size, with RL polarization being ideal for forest
     monitoring. \\
     \midrule
-    Rodríguez-Álvarez et al. (2011) & A SMIGOL reflectometer, which leverages
-    GNSS signal interference patterns to measure soil and vegetation conditions,
-    can be used to achieve 3-5 cm RMSE in estimating simple vegetation height.
-    \\
+    Rodríguez-Álvarez et al. (2011) & A SMIGOL reflectometer can be used to
+    achieve 3-5 cm RMSE in estimating simple vegetation height. \\
     \midrule
     Wu et al. (2014) & Tree trunk scattering effects dominate the total GNSS-R
-    response, while satellite azimuth angles are significantly correlated to
-    signal polarization. \\
+    response, while satellite azimuth angles are correlated to signal
+    polarization. \\
     \midrule
     Camps et al. (2016) & Vegetation attenuation of GNSS-R signals reduces soil
     moisture retrieval sensitivity, but this effect can be effectively
     compensated using NDVI data, indicating a correlation. \\
     \midrule
-    Yueh et al. (2022) & CYGNSS satellite data demonstrates a near-linear
-    relationship between vegetation water content and GNSS-R signal attenuation.
-    \\
+    Yueh et al. (2022) & CYGNSS data demonstrates linear relationship between
+    vegetation water content and GNSS-R signal attenuation. \\
     \bottomrule
     \end{tabularx}
 \end{table}
@@ -2018,7 +2017,7 @@ carrier to noise ratio and excess pseudorange delay.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
+    \includegraphics[width=0.85\textwidth]{Included_Images/GNSS_Measurement_Flow.png}
     \caption{Workflow of extracting GNSS measurements from raw data.}
 \end{figure}
 
@@ -2123,7 +2122,7 @@ regions that they reflect off from.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/Fresnel_Zone_Illustration.png}
     \caption{Schematic diagram of GNSS-R signal reflection geometry with the First Fresnel Zone illustrated.}
 \end{figure}
 
@@ -2174,7 +2173,7 @@ is used as the ground truth for quantifying ground features.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{Included_Images/example_CIR_image.jpg}
+    \includegraphics[width=0.8\textwidth]{Included_Images/example_CIR_image.jpg}
     \caption{An example of the aerial CIR image obtained from the Lands Department \cite{HKLandsD_CIR_2024}.}
 \end{figure}
 
@@ -2250,7 +2249,7 @@ signals.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/CNR_ratio_FFZ.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/CNR_ratio_FFZ.png}
     \caption{$C/N_0$ ratio of all signals received during a mission, plotted over the FFZs of the reflected signals.}
     \label{CNR Ratio FFZ}
 \end{figure}
@@ -2270,7 +2269,7 @@ observed, with the largest absolute value of the correlation coefficient being
 over $0.25$ (Figure \ref{CNR_corr}).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/CNR_ratio_corr_coeff.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/CNR_ratio_corr_coeff.png}
     \caption{Pearson correlation coefficient between $C/N_0$ ratio and the RGB values of CIR image pixels that fall within the FFZs.}
     \label{CNR_corr}
 \end{figure}
@@ -2289,12 +2288,12 @@ where multiple FFZs overlap.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.8\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/shingmun_pr_delay.png}
         \caption{Experiment Highlighting Bare Ground Region}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.8\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/yuenlong_pr_delay.png}
         \caption{Experiment Highlighting Bare Soil Region}
     \end{subfigure}
@@ -2304,7 +2303,7 @@ where multiple FFZs overlap.
 \begin{figure}[H]
     \ContinuedFloat
     \centering
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.8\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/mtdavis_pr_delay.png}
         \caption{Experiment Highlighting Sparse Vegetation Region}
     \end{subfigure}
@@ -2328,7 +2327,7 @@ is geometrically related to the height of the tree canopy above ground.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/expected_vs_actual_reflection_path.png}
+    \includegraphics[width=0.55\textwidth]{Included_Images/expected_vs_actual_reflection_path.png}
     \caption{Expected propagation path vs the actual propagation path of the reflected signal.}
     \label{Reflected Signal Propagation Path}
 \end{figure}
@@ -2343,7 +2342,7 @@ observed, where both correlation coefficients are greater than 0.6 (Figure
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/excess_pr_delay_corr_coeff.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/excess_pr_delay_corr_coeff.png}
     \caption{Pearson correlation coefficient between excess pseudorange delay and the RGB values of CIR image pixels that fall within the FFZs.}
     \label{excess_pr_delay_corr}
 \end{figure}
@@ -2365,7 +2364,7 @@ system.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{Included_Images/CIR_reconstruction_yuenlong.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/CIR_reconstruction_yuenlong.png}
     \caption{Reconstructed CIR image color using GNSS measurements, plotted over the FFZs of the reflected signals.}
     \label{Example Reconstructed CIR}
 \end{figure}
