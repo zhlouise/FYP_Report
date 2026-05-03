@@ -2979,11 +2979,11 @@ model failure.
 % --- Experiments ---
 \section{Experiments}
 In this project, an extensive series of field experiments were conducted, aiming
-to demonstrate the functionality of the UAV platform and collect data necessary
-for further analysis. Over twenty unique flight missions were executed across
-three different locations in Hong Kong and diverse flight scenarios, including
-static hovering, dynamic surveying, and manually controlled flight. The
-following subsections present the experimental setups and summarize the
+to demonstrate the functionality of the UAV platform and collect the data
+necessary for further analysis. Over twenty unique flight missions were executed
+across three different locations in Hong Kong and diverse flight scenarios,
+including static hovering, dynamic surveying, and manually controlled flight.
+The following subsections present the experimental setups and summarize the
 experiments conducted.
 
 \subsection{Experimental Setup}
@@ -2992,19 +2992,21 @@ configured and remote connections with the onboard computer should be establishe
 
 \subsubsection{Ground Control Setup}
 To set up the ground control station, the 433 MHz radio telemetries are first
-paired up to establish the connection between the onboard controller and the
+paired up to establish remote connection between the onboard controller and the
 ground control computer. This is facilitated through the QGroundControl (QGC)
 software, which is a full-featured flight control and mission planning platform
 for MAVLink-enabled drones \cite{QGroundControl_PlanView}. For all the
 non-manual flights conducted, QGC is used to set up and execute flight missions,
 where a set of waypoints could be selected in the plan view, including takeoff
 and landing positions (Figure \ref{fig:qgc_plan_view}).
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/qgc_planview.jpg}
     \caption{QGroundControl Plan View}
     \label{fig:qgc_plan_view}
 \end{figure}
+
 In addition to the waypoint locations, the altitude and speed at each waypoint
 will be specified through the mission command list to meet the mission
 requirements. For instance, for hovering missions, a speed of 2 m/s will be
@@ -3029,22 +3031,22 @@ log GNSS data from the two onboard receivers can be executed.
 
 On the other hand, SLAM data including LiDAR point clouds, IMU, and GPS data are
 collected into a .bag file from Robot Operating System (ROS). To do so,
-Nomachine is used to create remote access from Jetson Orin with the
+Nomachine is used to create remote access to the Jetson Orin with the
 pre-established ZeroTier connection. This method enables access to multiple
 terminals from Jetson Orin so that all the required sensor drivers can be
 launched to carry out data collection.
 
 With the trajectory plan uploaded onto the onboard Pixhawk controller and the
 onboard computer configured to initialize data collection, the mission could be
-executed. Ultimately, the collected data could be downloaded and post-processed for
+executed. Ultimately, the collected data is downloaded and post-processed for
 further analysis.
 
 \subsection{Summary of Experiments Conducted}
 A total of 24 successful mission flights were conducted for this project. They
-were carried out in five locations: Homantin, Tai Hang Tun Kite Flying Area, Nam
-Sang Wai, Mount Davis Service Reservoir Garden, and Upper Shing Mun Reservoir
-Barbecue Area. Photos showing the experiment locations are arranged in Figure
-\ref{Experiment Environment} and the experiments are summarized in Table
+were carried out in five locations: Homantin Mountain, Tai Hang Tun Kite Flying
+Area, Nam Sang Wai, Mount Davis Service Reservoir Garden, and Upper Shing Mun
+Reservoir Barbecue Area. Photos showing the experiment locations are arranged in
+Figure \ref{Experiment Environment} and the experiments are summarized in Table
 \ref{Experiment-Summary}.
 
 \begin{figure}[H]
@@ -3212,17 +3214,33 @@ the QGround Control as well as in the real-world environment.
     \label{fig:planned_path}
 \end{figure}
 
+\subsubsection{LiDAR SLAM}
+For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
+        \caption{Fast-LIO}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
+        \caption{PGO+GPS}
+    \end{subfigure}
+    \caption{LiDAR SLAM results using two different techniques.}
+\end{figure}
+
 \subsubsection{GNSS-R Analysis and Modelling}
-After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess pseudorange delay. Then, the FFZs of each reflected GNSS signals are calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
+After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess pseudorange delay. Then, the FFZ of each reflected GNSS signal is calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.55\textwidth}
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/casestudy_CNR.png}
         \caption{$C/N_0$ Ratio Over FFZs}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.55\textwidth}
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/casestudy_excess_pr_delay.png}
         \caption{Excess Pseudorange Delay Over FFZs}
     \end{subfigure}
@@ -3230,7 +3248,7 @@ After the successful collection of GNSS data during the flight missions, GNSS me
     \label{CNR and Delay Case Study}
 \end{figure}
 
-While no clear boundaries exist in the plot of $C/N_0$ ratio since the
+While no clear boundaries are present in the plot of $C/N_0$ ratio since the
 difference in $C/N_0$ ratio mainly exists between vegetation and water surfaces,
 it is evident that the excess pseudorange delay of the signals reflecting off
 ground with grass tends to be greater than the excess pseudorange delay of the
@@ -3239,14 +3257,17 @@ pseudorange delay tends to be negative over vegetation, it can be implied that
 the signals reflected off the dense canopy rather than propagating through to
 reflect off from the ground.
 
-Using the correlations between GNSS measurement parameters and RGB values of CIR
-imageries summarized in Section 6.3, the CIR imagery color for this experiment
-were also reconstructed, as shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies and the FFZs over ground with sparse vegetation could be clearly distinguished, demonstrating the potential of GNSS as an alternative remote sensing system.
+Using the correlations between GNSS measurement parameters and the RGB values of
+CIR image pixels that fall within the FFZs (summarized in Section 6.3), the CIR
+image colors within each FFZ of this experiment were also reconstructed, as
+shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies
+and the FFZs over ground with sparse vegetation could be clearly distinguished,
+demonstrating the potential of GNSS as an alternative remote sensing system.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/casestudy_CIR.png}
-    \caption{Reconstructed CIR imagery color using GNSS measurements, plotted over the FFZs of the reflected signals.}
+    \caption{Reconstructed CIR image color using GNSS measurements, plotted over the FFZs of the reflected signals.}
     \label{Case Study CIR}
 \end{figure}
 
@@ -3273,57 +3294,56 @@ results are trustworthy and can be used to remove any noise from the dataset for
     \includegraphics[width=0.8\textwidth]{Included_Images/ML-FFZ.png}
     \caption{Comparison between ML classification results and GNSS-R results.}
 \end{figure}
-\subsubsection{LiDAR SLAM}
-For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
-        \caption{Fast-LIO}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
-        \caption{PGO+GPS}
-    \end{subfigure}
-    \caption{LiDAR SLAM results using two different techniques.}
-\end{figure}
 
 
 % --- Conclusion ---
 \section{Conclusion}
-In conclusion, our preliminary results show the successful establishment of a
-comprehensive UAV-based framework that integrates autonomous path planning,
-LiDAR SLAM GNSS-Reflectometry (GNSS-R), and machine learning for vegetation
-analysis. 
+In conclusion, this project successfully established a comprehensive UAV-based
+framework for remote sensing, which integrates autonomous path planning for
+optimized vegetation coverage, LiDAR SLAM for accurate canopy mapping, GNSS-R
+for ground feature sensing, and machine learning for vegetation detection. 
 
-The path planning results confirm that both A* and boustrophedon algorithms can
-generate efficient trajectories for the UAV to fly over vegetated and mixed
-environments. Moreover, the interactive path planner system provides the optimal
-detection area by clustering the Fresnel zones, which provides a suitable
-sweeping distance for coverage path planning. As a result, an optimizined survey
-missions can be planned in QGroundControl to fly the UAV over vegetation. 
+The path planning framework leverages both waypoint-based navigation and
+coverage path planning to enable autonomous UAV navigation for efficient
+vegetation sensing. First, the satellite images of the mission location are
+processed to obtain greenery regions for survey missions. The interactive path
+planner system developed within this pipeline will then identify the optimal
+detection area through clustering the potential First Fresnel Zones of
+reflection, such that a suitable sweeping distance for coverage path planning
+can be derived. Ultimately, an optimized survey mission can be planned and
+executed through QGroundControl, which enables the collection of LiDAR and GNSS
+data.
 
-In parallel, a modular LiDAR SLAM framework was developed to complement the
-ground parameters retrieved from GNSS-R analysis. It is found that the Pose
-Graph Optimization (PGO) SLAM demonstrates better point cloud alignment compared
-to Fast-LIO LiDAR odometry before the fusion of GPS data. The alignment between
-SLAM and GPS trajectories were succesfully achieved by calibrating the IMU unit
-in LiDAR and conducting LiDAR to GPS frame transformation.
+The LiDAR data collected during the flight missions is used to generate 3D
+canopy maps within a point cloud environment. This is achieved through an
+initial time synchronization between the LiDAR sensor data and the Pixhawk
+internal clock. Afterward, LiDAR odometry is applied in the front end while pose
+graph optimization SLAM is applied in the back end. Through additional LiDAR IMU
+calibrations and frame transformations, the alignment between SLAM and GPS
+trajectories was achieved, which results in accurate 3D point cloud maps for
+complementing the 2D ground features retrieved from the GNSS-R pipeline.
 
-On the other hand, GNSS-R analysis discovered distinct signal behaviors when the
-UAV is hovering above bare ground, water, and vegetation. However, it is found
-that the assumption of the zenith antenna receiving only direct signals and the
-nadir antenna only reflected signals is shown to be invalid, as the antenna
-orientation alone only attenuates satellite signals of non-matching
-polarization. Therefore, robust signal classification is required to
-distinguish between direct, ground-reflected, and vegetation-reflected signals. 
+The GNSS-R framework presented qualitatively analyzed and quantitatively
+modelled correlations between ground features and GNSS measurement parameters.
+Particularly, the parameter of $C/N_0$ ratio demonstrated the capability of
+clearly distinguishing water surfaces and vegetation canopy, while the parameter
+of excess pseudorange delay can be used for highlighting bare ground, bare soil,
+and sparse vegetation regions. Through quantified correlations between GNSS
+measurement parameters and the RGB values of CIR image pixels that fall within
+the FFZs, the CIR image color could be reconstructed from GNSS measurement
+parameters and mapped over the FFZs of the reflected signals. As a result, the
+potential of GNSS as an alternative remote sensing system is demonstrated. 
 
-To do this, a LightGBM-based machine learning model is used to classify signal
-types. The implementation of this machine learning model shows strong
-performance, where the model can effectively distinguish between direct,
-ground-reflected, and tree-reflected signals. The classification results
-perfectly cross-validate the results obtained from the GNSS reflected signals. 
+To further improve and complement the vegetation sensing system developed in
+this project, a LightGBM-based machine learning model is trained to classify the
+received GNSS signals into three classes: 1) ground-reflected, 2) directly
+propagated, and 3) vegetation-reflected. When relating each signal to its FFZ
+location on ground, the classification results are used to separate vegetation
+regions from other ground regions, effectively forming an alternative approach
+in vegetation boundary detection. Furthermore, the classification results
+greatly agrees with the ground regions highlighted in the GNSS-R framework,
+which demonstrates the robustness of the developed system.
+
 
 % --- Project Management ---
 \section{Project Management}
