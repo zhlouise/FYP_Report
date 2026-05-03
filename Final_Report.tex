@@ -26,6 +26,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{ragged2e}
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{colortbl}
 \usepackage{xcolor}
@@ -2229,9 +2230,10 @@ that the reconstructed CIR image could also inform various ground conditions.
 
 \subsection{Results and Discussion}
 In this section, the correlations between GNSS signal parameters and ground
-features are qualitatively analyzed and quantitatively modelled from experiment
-data. Ultimately, the potential of the GNSS-R system for vegetation monitoring
-is demonstrated and discussed for further improvements. 
+features are qualitatively analyzed and quantitatively modelled from real
+experiment data. Ultimately, the potential of the GNSS-R system developed in
+this project for vegetation monitoring is demonstrated and discussed for further
+improvements. 
 
 \subsubsection{Correlating \texorpdfstring{$C/N_0$}{C/N0} Ratio with Ground
 Features} 
@@ -2248,8 +2250,8 @@ signals.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.55\textwidth]{Included_Images/CNR_ratio_FFZ.png}
-    \caption{Received $C/N_0$ ratio of all signals received during a mission, plotted over the FFZs of the reflected signals.}
+    \includegraphics[width=0.75\textwidth]{Included_Images/CNR_ratio_FFZ.png}
+    \caption{$C/N_0$ ratio of all signals received during a mission, plotted over the FFZs of the reflected signals.}
     \label{CNR Ratio FFZ}
 \end{figure}
 
@@ -2260,43 +2262,51 @@ vegetated areas. More importantly, Figure \ref{CNR Ratio FFZ} demonstrates the
 capability of $C/N_0$ ratio to clearly outline the boundary between water
 surfaces and vegetation canopy. 
 
-The Pearson correlation coefficients between $C/N_0$ ratios and RGB values of
-CIR imageries are then calculated. Among all experiments conducted, a consistent
+Following the qualitative analysis and discussion, the Pearson correlation
+coefficient between $C/N_0$ ratio and the RGB values of the CIR image pixels
+within each FFZ is calculated. Among all experiments conducted, a consistent
 inverse correlation between $C/N_0$ ratio and CIR redness values could be
 observed, with the largest absolute value of the correlation coefficient being
 over $0.25$ (Figure \ref{CNR_corr}).
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/CNR_ratio_corr_coeff.png}
-    \caption{Pearson correlation coefficient between $C/N_0$ ratio and the RGB values of CIR imagery.}
+    \caption{Pearson correlation coefficient between $C/N_0$ ratio and the RGB values of CIR image pixels that fall within the FFZs.}
     \label{CNR_corr}
 \end{figure}
 
 \subsubsection{Correlating Excess Pseudorange Delay with Ground Features}
-The excess pseudorange delay represents the additional, unmodelled signal delays
-of the reflected signal after the delay due to geometrical reflection have been
-effectively removed. This parameter majorly describes the interactions between
-the reflected GNSS signal and the ground features during its propagation. Figure
-\ref{Excess Pr Delay FFZ} below shows the FFZs accumulated over the entire
-mission for three of the key experiments conducted in this project. The colors
-indicate the excess pseudorange delay of the reflected signals, and the mean of
-all contributing signals are taken in areas where multiple FFZs overlap.
+The excess pseudorange delay is also analyzed with respect to the FFZs of the
+reflected signal. It represents the additional, unmodelled signal delays of the
+reflected signal after the delay due to geometric reflection is effectively
+removed. This parameter of excess pseudorange delay primarily describes the
+interactions between the reflected GNSS signal and the ground features during
+its propagation. Figure \ref{Excess Pr Delay FFZ} below shows the FFZs
+accumulated over the entire mission for three of the key experiments conducted
+in this project. The colors indicate the excess pseudorange delay of the
+reflected signals, and the mean of all contributing signals are taken in areas
+where multiple FFZs overlap.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.55\textwidth}
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/shingmun_pr_delay.png}
-        \caption{Experiment Highlighting Bare Ground}
+        \caption{Experiment Highlighting Bare Ground Region}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.55\textwidth}
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/yuenlong_pr_delay.png}
-        \caption{Experiment Highlighting Bare Soil}
+        \caption{Experiment Highlighting Bare Soil Region}
     \end{subfigure}
-    \vfill
-    \begin{subfigure}{0.55\textwidth}
+    \phantomcaption
+\end{figure}
+
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/mtdavis_pr_delay.png}
-        \caption{Experiment Highlighting Sparse Vegetation}
+        \caption{Experiment Highlighting Sparse Vegetation Region}
     \end{subfigure}
     \caption{Excess pseudorange delay of all reflected signals received during three different experiments, plotted over the FFZs of the reflected signals.}
     \label{Excess Pr Delay FFZ}
@@ -2308,8 +2318,8 @@ sparse vegetation (grassy ground). Notably, the excess pseudorange delay over
 dense vegetation tends to be negative, suggesting that the calculation removes
 more geometrical reflection delay from the pseudorange than necessary.
 Conversely, this implies that the propagation path of the reflected signal is
-shorter than the originally expected path, where the signal propagates through
-the vegetation and reflects off the ground (Figure \ref{Reflected Signal
+shorter than the originally expected path, in which the signal propagates
+through the vegetation and reflects off the ground (Figure \ref{Reflected Signal
 Propagation Path}). Therefore, it is logical to conclude that GNSS signals tend
 to reflect off dense tree canopy instead of propagating through them.
 Additionally, this negative excess pseudorange delay could potentially serve as
@@ -2324,43 +2334,47 @@ is geometrically related to the height of the tree canopy above ground.
 \end{figure}
 
 To quantify the observed correlations between ground features and the GNSS
-signal parameters, the Pearson correlation coefficients between the excess
-pseudorange delays and the RGB values of CIR imageries are calculated. Among all
-experiments conducted, a consistent positive correlation between the excess
-pseudorange delay and CIR greenness and blueness is observed, where both
-correlation coefficients are greater than 0.6 (Figure
+signal parameters, the Pearson correlation coefficient between excess
+pseudorange delay and the RGB values of the CIR image pixels within each FFZ is
+calculated. Among all experiments conducted, a consistent positive correlation
+between the excess pseudorange delay and CIR greenness and blueness could be
+observed, where both correlation coefficients are greater than 0.6 (Figure
 \ref{excess_pr_delay_corr}).
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/excess_pr_delay_corr_coeff.png}
-    \caption{Pearson correlation coefficient between excess pseudorange delay and the RGB values of CIR imagery.}
+    \caption{Pearson correlation coefficient between excess pseudorange delay and the RGB values of CIR image pixels that fall within the FFZs.}
     \label{excess_pr_delay_corr}
 \end{figure}
 
 \subsubsection{CIR Imagery Reconstruction}
-Through quantitatively modelling the correlations between GNSS signal parameters
-and ground features, a correlation could be found for all three RGB color
-channels of the reference CIR imagery. Therefore, the analysis results enabled
-the possibility of reconstructing the colors represented on the CIR imageries
-over FFZs. An example of the reconstructed CIR imagery is shown in Figure
-\ref{Example Reconstructed CIR} below. Here, the R values are the inverse of
-$C/N_0$ ratios, normalized between 0 and 1, while both the G and B values are
-$0.5$ times the excess pseudorange delay, normalized between 0 and 1. As a
-result, it is evident that both the water surface and the bare soil areas could
-be highlighted through the reconstructed CIR imagery, which further demonstrates
-the potential of GNSS as an alternative remote sensing system.
+Through quantitatively modelling the correlations between GNSS measurement
+parameters and ground features, a correlation could be found for all three RGB
+color channels of the reference CIR image. Therefore, the analysis results
+enabled the possibility of reconstructing the colors represented in the original
+CIR image from GNSS measurement parameters. An example of the reconstructed CIR
+image color over FFZs is shown in Figure \ref{Example Reconstructed CIR} below.
+Here, the R values are the inverse of $C/N_0$ ratios, normalized between 0 and
+1, while both the G and B values are $0.5$ times the excess pseudorange delay,
+normalized between 0 and 1. ($0.5$ is chosen as an arbitrary weighting factor.)
+As a result, it is evident that both the water surface and the bare soil areas
+could be highlighted through the reconstructed CIR color map over FFZs, which
+further demonstrates the potential of GNSS as an alternative remote sensing
+system.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/CIR_reconstruction_yuenlong.png}
-    \caption{Reconstructed CIR imagery color using GNSS measurements, plotted over the FFZs of the reflected signals.}
+    \caption{Reconstructed CIR image color using GNSS measurements, plotted over the FFZs of the reflected signals.}
     \label{Example Reconstructed CIR}
 \end{figure}
 
-However, it is also evident that the current approach introduces many noisy
-measurements into the sensing system, which may obscure further ground features
-that could be retrieved otherwise. To investigate the cause of such noisy measurements, the following experiment was designed and executed. 
+However, it is also clear that the current approach introduces many noisy
+measurements into the sensing system, which may further obscure ground features
+that could be retrieved using the GNSS-R system otherwise, such as vegetation
+density and height. To investigate the cause of such noisy measurements, the
+following experiment was designed and executed. 
 
 \begin{figure}[H]
     \centering
@@ -2384,43 +2398,45 @@ assumed that all signals received under this open sky environment are RHCP
 signals. However, in post-processing, the distribution of $C/N_0$ of all signals
 received during the experiment reveals the reception of RHCP signals by the LHCP
 antenna, just at lower $C/N_0$ values compared to the RHCP antenna due to lower
-antenna gains (Figure \ref{CNR_distribution_test}). Therefore, it could be
-possible for the nadir LHCP antenna to receive direct signals during the flight
-missions, which introduces measurement noises to the dual-antenna system's data
-and thus the accuracy and clarity of the reconstructed CIR imagery.
+antenna gains (Figure \ref{CNR_distribution_test}). Therefore, it is possible
+that the nadir LHCP antenna received direct signals during the flight missions,
+which introduced measurement noises to the dual-antenna system's data and thus
+undermined the accuracy and clarity of the reconstructed CIR color map.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/CNR_Distribution.png}
-    \caption{Normalized $C/N_0$ distributions of both antennae.}
+    \caption{Normalized $C/N_0$ distributions of both antennas.}
     \label{CNR_distribution_test}
 \end{figure}
 
 This phenomenon is further demonstrated in a subsequent experiment, where both
-antennae were elevated midair. During the first five minutes, both antennae
-faced upward; during the final five minutes, both antennae faced downward. The
+antennas were elevated midair. During the first five minutes, both antennas
+faced upward; during the final five minutes, both antennas faced downward. The
 corresponding $C/N_0$ values received are plotted against observation time in
 the figure below.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.8\textwidth}
+    \begin{subfigure}{\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/RHCP_CNR.png}
         \caption{RHCP Antenna}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.8\textwidth}
+    \begin{subfigure}{\textwidth}
         \centering
         \includegraphics[width=\textwidth]{Included_Images/LHCP_CNR.png}
         \caption{LHCP Antenna}
     \end{subfigure}
-    \caption{Temporal plot of $C/N_0$s received by both antennae.}
+    \caption{$C/N_0$ values received by both antennas during the experiment.}
 \end{figure}
 
-The above observations are qualitatively summarized in the table below:
+The above observations are then qualitatively summarized in the table below:
 
 \begin{table}[H]
     \centering
+    \caption{Summary of $C/N_0$ behaviors for both antennas under different
+    signal reception scenarios.}
     \begin{tabular}{|c|c|c|}
     \hline
      & \textbf{Direct Signal} & \textbf{Reflected Signal} \\
@@ -2430,26 +2446,24 @@ The above observations are qualitatively summarized in the table below:
     \textbf{LHCP Antenna} & Low $C/N_0$ & High $C/N_0$ \\
     \hline
     \end{tabular}
-    \caption{Summary of $C/N_0$ behaviors for different antenna under different
-    signal reception scenarios.}
 \end{table}
 
 Since both direct and reflected signals can be received by both the zenith RHCP
 antenna and the nadir LHCP antenna, and their signal properties differ based on
-signal polarization, it is critical to classify the received signals for
-distinguishing reflected signals from direct signals in a robust GNSS-R system.
-One possible method is to leverage the differences in $C/N_0$ values observed by
-different antenna polarizations and create a decision threshold to classify
+signal polarization, it is critical to classify all received signals to
+distinguish reflected signals from direct signals in a robust GNSS-R system. One
+possible method is to leverage the differences in $C/N_0$ values observed by
+different antenna polarizations and create a decision threshold to separate
 direct and reflected signals. However, as illustrated in Figure
-\ref{CNR_distribution_test}, the distribution of $C/N_0$ values of both antenna
+\ref{CNR_distribution_test}, the distribution of $C/N_0$ values of both antennas
 overlap each other, making it difficult to obtain a clear decision boundary.
 Therefore, multiple parameters may be necessary to conduct such classification
 tasks, such that machine learning approaches may offer a much more effective
 solution. The classification of signals and the detection of vegetation area
 boundaries using machine learning models is detailed in the section below, where
 the results in the machine learning pipeline will ultimately be used to
-cross-validate the results from the GNSS-R pipeline and demonstrated in the case
-study.
+cross-validate the results from the GNSS-R pipeline, which is demonstrated in
+the case study.
 
 
 % --- Machine Learning ---
@@ -2966,11 +2980,11 @@ model failure.
 \section{Experiments}
 In this project, an extensive series of field experiments were conducted, aiming
 to demonstrate the functionality of the UAV platform and collect data necessary
-for further analysis. Over twenty unique flight missions were executed across three
-different locations in Hong Kong and diverse flight scenarios, including static
-hovering, dynamic surveying, and manually controlled flight. The following
-subsections present the experimental setups and summarize the experiments
-conducted.
+for further analysis. Over twenty unique flight missions were executed across
+three different locations in Hong Kong and diverse flight scenarios, including
+static hovering, dynamic surveying, and manually controlled flight. The
+following subsections present the experimental setups and summarize the
+experiments conducted.
 
 \subsection{Experimental Setup}
 Before the initiation of a flight mission, the ground control station must be
@@ -3531,38 +3545,6 @@ aligns with different frameworks of this project. Specifically:
     \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
     \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
 \end{itemize}
-
-\subsubsection*{Calculating Pseudorange Errors}
-Among all the signals received at a given
-instant, a satellite $m$ with the highest elevation angle is regarded as the
-'master satellite', where the assumption that the master satellite is free of reflections
-is applied \cite{hsu2018analysis}:
-\begin{equation}
-    \rho^m = R^m + \Delta t_r + \Delta t_s^m + I^m + T^m.
-\end{equation}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/Pr_Error_Illustration.png}
-    \caption{Schematic diagram illustrating satellite $i$ and satellite $m$.}
-\end{figure}
-Assuming $\Delta t_s^i$ and $\Delta t_s^m$ can be effectively removed by 
-satellite-broadcasted parameters, $I^i$ and $I^m$ can be effectively removed by the
-Klobuchar model, and $T^i$ and $T^m$ can be effectively removed by the Saastamoinen model,
-the pseudorange equations can be approximated as \cite{kaplan2017understanding}:
-\begin{equation}
-    \rho^i = R^i + \Delta t_r + \epsilon^i,
-\label{ith satellite pseudorange}
-\end{equation}
-\begin{equation}
-    \rho^m = R^m + \Delta t_r.
-\label{master satellite pseudorange}
-\end{equation}
-Finally, taking the difference between \eqref{ith satellite pseudorange} and 
-\eqref{master satellite pseudorange} and rearranging the equation will result in the
-pseudorange error:
-\begin{equation}
-    \epsilon^i = \rho^i - \rho^m - R^i + R^m.
-\end{equation}
 
 \subsubsection*{LiDAR SLAM Pseudocode}
 This project builds upon an open-source implementation
