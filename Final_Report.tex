@@ -3195,6 +3195,7 @@ Figure \ref{Experiment Environment} and the experiments are summarized in Table
 
 
 % --- Case Study ---
+\newpage
 \section{Case Study}
 In this case study, the results of the experiment conducted at Mount Davis on
 March 31, 2026, are discussed to demonstrate the final integrated system. A
@@ -3220,12 +3221,14 @@ the QGround Control as well as in the real-world environment.
 For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
         \caption{Fast-LIO}
     \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\textwidth}
+    
+    \par\medskip
+    
+    \begin{subfigure}{0.75\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
         \caption{PGO+GPS}
     \end{subfigure}
@@ -3237,19 +3240,18 @@ After the successful collection of GNSS data during the flight missions, GNSS me
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.7\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/casestudy_CNR.png}
         \caption{$C/N_0$ Ratio Over FFZs}
     \end{subfigure}
     \vfill
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.7\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/casestudy_excess_pr_delay.png}
         \caption{Excess Pseudorange Delay Over FFZs}
     \end{subfigure}
     \caption{Received $C/N_0$ ratios and excess pseudorange delays during the case study experiment, plotted over the FFZs of the reflected signals.}
     \label{CNR and Delay Case Study}
 \end{figure}
-
 While no clear boundaries are present in the plot of $C/N_0$ ratio since the
 difference in $C/N_0$ ratio mainly exists between vegetation and water surfaces,
 it is evident that the excess pseudorange delay of the signals reflecting off
@@ -3265,14 +3267,12 @@ image colors within each FFZ of this experiment were also reconstructed, as
 shown in Figure \ref{Case Study CIR} below. Here, the FFZs over dense canopies
 and the FFZs over ground with sparse vegetation could be clearly distinguished,
 demonstrating the potential of GNSS as an alternative remote sensing system.
-
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/casestudy_CIR.png}
     \caption{Reconstructed CIR image color using GNSS measurements, plotted over the FFZs of the reflected signals.}
     \label{Case Study CIR}
 \end{figure}
-
 \subsubsection{Machine Learning Signal Classification and Vegetation Boundary Detection}
 Figure below shows the FFZ centroids for all the satellites tracked during the experiment. The spatial distribution
 of the predictions align well with the visible terrain on the map. For example, satellite E21, E34 are classified as tree reflected
@@ -3283,8 +3283,8 @@ well overall with mean confidence ranging from 0.77 to 0.99. Lower confidence sa
 FFZs fall near the boundary transition zones which explains the ambiguity.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/mtdavis_confidence.png}
-    \includegraphics[width=0.8\textwidth]{Included_Images/mtdavis_ffzcon.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/mtdavis_confidence.png}
+    \includegraphics[width=0.75\textwidth]{Included_Images/mtdavis_ffzcon.png}
     \caption{Confidence and FFZ centroid plotting for the experiment.}
 \end{figure}
 
