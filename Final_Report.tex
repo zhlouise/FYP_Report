@@ -242,6 +242,7 @@ management (Section 11).
 
 
 % --- System Architecture ---
+\newpage
 \section{System Architecture}
 
 \subsection{Logical Architecture}
@@ -2771,10 +2772,14 @@ The model converged well and the loss curves for training and validation sets ar
     \includegraphics[width=1\linewidth]{Included_Images/LossCurve2.png}
     \caption{Training and Validation Loss Curves for LightGBM.}
 \end{figure}
-To gain insight into the LightGBM model's training process, two plots were 
-plotted: a convergence plot of the multi-class log loss as a function 
-over each iteration for the training and the validation sets, and the generalization plot 
-that compares the difference between the validation loss and the training loss for each boosting iteration.
+
+
+
+To gain insight into the LightGBM model's training process, two plots were
+plotted: a convergence plot of the multi-class log loss as a function over each
+iteration for the training and the validation sets, and the generalization plot
+that compares the difference between the validation loss and the training loss
+for each boosting iteration.
 
 \paragraph{Training Convergence}:
 The left plot shows the convergence of the multi class log loss over
@@ -2896,10 +2901,15 @@ unreliability mark.
     \caption{Prediction confidence time series for selected satellites.}
 \end{figure}
 
-The figure above presents the confidence plot for some of the selected satellites. The flight duration
-for this experiment was around 4.5-5 minutes. In the plot, each of the dot reflects a measurement from that satellite and the color
-reflects their predicted class. A blue colored dot represents a direct signal, an orange dot reflects a ground reflected signal and lastly the green dot
-represents the tree reflected signals. A smoothed confidence curve is also plotted (in black) to represent the temporal trend. 
+
+
+The figure above presents the confidence plot for some of the selected
+satellites. The flight duration for this experiment was around 4.5-5 minutes. In
+the plot, each of the dot reflects a measurement from that satellite and the
+color reflects their predicted class. A blue colored dot represents a direct
+signal, an orange dot reflects a ground reflected signal and lastly the green
+dot represents the tree reflected signals. A smoothed confidence curve is also
+plotted (in black) to represent the temporal trend. 
 
 Across all 16 satellites the mean confidence ranges from 0.85 to 0.98. This indicates that the classifier 
 consistently produces high confidence decisive predictions. Majority of the predictions lie above the threshold value. Galileo 
@@ -3001,6 +3011,13 @@ non-manual flights conducted, QGC is used to set up and execute flight missions,
 where a set of waypoints could be selected in the plan view, including takeoff
 and landing positions (Figure \ref{fig:qgc_plan_view}).
 
+In addition to the waypoint locations, the altitude and speed at each waypoint
+will be specified through the mission command list to meet the mission
+requirements. For instance, for hovering missions, a speed of 2 m/s will be
+assigned, where the UAV will be instructed to hold its position at the specific
+waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
+an example of a mission command list in QGC.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/qgc_planview.jpg}
@@ -3008,15 +3025,9 @@ and landing positions (Figure \ref{fig:qgc_plan_view}).
     \label{fig:qgc_plan_view}
 \end{figure}
 
-In addition to the waypoint locations, the altitude and speed at each waypoint
-will be specified through the mission command list to meet the mission
-requirements. For instance, for hovering missions, a speed of 2 m/s will be
-assigned, where the UAV will be instructed to hold its position at the specific
-waypoint for a specified period of time. Figure \ref{fig:qgc_mission_list} shows
-an example of a mission command list in QGC.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.25\textwidth]{Included_Images/qgc_mission_list.jpg}
+    \includegraphics[width=0.4\textwidth]{Included_Images/qgc_mission_list.jpg}
     \caption{QGroundControl Mission Command List}
     \label{fig:qgc_mission_list}
 \end{figure}
