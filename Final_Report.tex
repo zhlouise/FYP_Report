@@ -3347,27 +3347,27 @@ which demonstrates the robustness of the developed system.
 
 % --- Project Management ---
 \section{Project Management}
-The Final Year Project spans two semesters, with first semester focusing mainly
-on literature review, methodology development, finalizing connections between
-different parts of the project and conducting preliminary experiments for
-collecting data and testing developed methodologies. During the second semester,
-the team addressed the limitations and conducted final experiments to collect
-more robust data and achieved the project objectives.  
+The Final Year Project spans two semesters, with the first semester focusing mainly
+on the literature review, methodology development, finalizing connections between
+different parts of the project, and conducting preliminary experiments to
+collect data and test the developed methodologies. During the second semester,
+the team addressed limitations and conducted final experiments to collect
+more robust data and achieve the project objectives.
 
-The path planning part of the project is lead by GAMAGE Sashenka, who has been
-focusing on developing and testing the path planning algorithms in local mapping
-environment and QGround Control. As a result, simulations were conducted to
-verify locally developed A* algorithm in dynamic UAV environment. Moreover, an
-interactive path planning system was developed in order to identify GNSS signal
-reflected areas to obtain stronger data points. 
+The path planning component of the project is led by GAMAGE Sashenka, who has
+been focusing on developing and testing path planning algorithms in the local
+mapping environment and in QGround Control. As a result, simulations were
+conducted to verify the locally developed A* algorithm in a dynamic UAV
+environment. Moreover, an interactive path planning system was developed to
+identify areas with reflected GNSS signals and obtain stronger data points.
 
-The LiDAR SLAM part of the project is lead by TAN Qing Lin. She has been
+The LiDAR SLAM part of the project is led by TAN Qing Lin. She has been
 developing a modular LiDAR SLAM framework which she has tested in both with and
 without GPS integration. The issues occured with the point cloud alignment were
 resolved by calibrating the IMU unit in LiDAR and conducting LiDAR to GPS frame
 transformation. 
 
-The GNSS-R part of the project is lead by ZHOU Jiayi, who has been focusing on
+The GNSS-R part of the project is led by ZHOU Jiayi, who has been focusing on
 conducting GNSS-R experiments and analyzing the collected data. So far, the
 GNSS-R part has been progressing as per the timeline in the Gantt chart and
 future works mainly focus on integrating machine learning classification results
@@ -3375,7 +3375,7 @@ into the GNSS-R pipeline to classify between reflected and direct signals and
 exploring the sensitivity of GNSS carrier phase measurements for FFZs covering
 the trees.
 
-The ML part of the project is lead by MAHMUD Md Sahat, who has been working on
+The ML part of the project is led by MAHMUD Md Sahat, who has been working on
 developing a classification model using LightGBM to identify true tree reflected
 signals from the collected GNSS-R data. So far, the ML part has been progressing
 as per the timeline in the Gantt chart and future works will be focusing on
@@ -3493,10 +3493,11 @@ UAV's telemetry disconnected from the ground station, even though it was within
 the specified communication range. However, to solve this problem, we used
 strong long-distance communication telemetry types.
 
-Another limitation encountered is that not utilizing locally developed algorithms in
-real-world experiments. This requires extensive testing on UAV indoor navigation
-to ensure robust obtacle avoidance. However, due to the time limitations and
-hardware restrictions, the real-world testing was not conducted.
+Although the hardware limitations were addressed during the second semester, the
+remaining issue is the lack of use of locally developed algorithms in real-world
+experiments. This requires extensive testing of UAV indoor navigation to ensure
+robust obstacle avoidance. However, due to time limitations and hardware
+restrictions, real-world testing was not conducted.
 
 
 \subsubsection{LiDAR SLAM}
@@ -3647,10 +3648,7 @@ that integrates Fast-LIO with PGO for GPS-aided SLAM:
 
 \subsubsection*{Path Planning}
 
-\paragraph{Geometric Shape Factors} ~\\
-
 \paragraph{Geometric Shape Factors ($k$)} ~\\
-
 Depending on the boundary shape selected by the algorithm, the corresponding
 geometric shape factor is applied to determine the sweeping width:
 
