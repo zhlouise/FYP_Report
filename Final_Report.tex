@@ -3475,8 +3475,15 @@ of the project.
 \ganttbar[bar/.style={fill=mlcolor}]{Feature Analysis}{2025-10-01}{2025-11-31} \\
 \ganttbar[bar/.style={fill=mlcolor}]{Dataset Construction}{2025-10-01}{2025-11-31} \\
 \ganttbar[bar/.style={fill=mlcolor}]{Model Selection \& Training}{2025-11-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Feature Modelling}{2026-01-01}{2026-03-01} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Vegetation Boundary Analysis}{2026-01-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=mlcolor}]{NN Dev for Regression}{2026-01-01}{2026-03-01} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Dataset Expansion}{2026-01-01}{2026-04-10} \\
+% LiDAR SLAM
+\ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=slamcolor}]{LiDAR-Inertial Odom}{2025-11-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Graph-Based SLAM}{2025-12-01}{2026-01-31} \\
+\ganttbar[bar/.style={fill=slamcolor}]{GPS Integration to Graph-Based SLAM}{2026-01-01}{2026-03-15} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Frame Transformation}{2026-03-15}{2026-03-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{GPS Covariance Threshold Finetuning}{2026-03-30}{2026-04-30} \\
 \end{ganttchart}
 \end{sideways}
 \end{center}
@@ -3506,23 +3513,23 @@ restrictions, real-world testing was not conducted.
 
 
 \subsubsection{LiDAR SLAM}
-One of the problems faced during this project is the point clouds produced by
-Pose Graph Optimization (PGO) SLAM. Based on Figure \ref{debug_pc}, we can see that there are
-two types of point cloud clusters. One of which is the purple point cloud
-clusters and the other is the yellow point cloud clusters. To solve this issue,
-the source code was debugged and revealed that the yellow point cloud clusters
-are a loop-closure debug visualization in which the algorithm compares the
-current scan against local history to verify a loop closure. Because the point
-clouds are distorted due to GPS integration, these debug point clouds are
-temporarily commented out to allow focus on the overall alignment of point
-clouds in PGO SLAM.
+One of the problems faced during the second semester is to transform the GPS frame to the LiDAR frame. This problem arises when the fixed calibration matrix (i.e., a constant offset between the LiDAR and GPS) produced inconsistent transformation results across different datasets. To address this, coordinate frame transformations in robotics were studied in greater depth, including conventions such as ENU (East-North-Up) and NED (North-East-Down), which define the orientation of the robot’s principal axes.
 
+Further investigation into the sensor characteristics revealed that the Livox IMU does not provide orientation data, but only linear velocity and acceleration. This leads to the LiDAR odometry orientation varies based on the initial orientation where the data is being collected. In this case, the problem is solved by substituting Pixhawk IMU data that has orientation information to obtain initial orientation of the UAV. As a result, a dynamic transformation approach is adopted, where the initial orientation from the Pixhawk IMU is used to align the GPS trajectory with the LiDAR trajectory. This ensures a more consistent and accurate frame transformation across different datasets.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Included_Images/debug_pc.png}
-    \caption{PGO SLAM with two types of point clouds}
-    \label{debug_pc}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/align_is1.png}
+        \caption{Data 1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/align_is2.png}
+        \caption{Data 2}
+    \end{subfigure}
+    \caption{Inconsistencies when using fixed calibration information for frame transformation. Green trajectory indicates LiDAR trajectory while the 3-axis trajectory indicated the GPS trajectory.}
 \end{figure}
+
 
 \subsubsection{GNSS-R}
 The most common difficulty faced during the project was the inability of
