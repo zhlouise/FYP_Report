@@ -195,27 +195,18 @@ However, standalone LiDAR measurements are insufficient in a UAV-based applicati
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{Included_Images/Nuage_Lidar-003.png}
-    \caption{LiDAR point clouds of vegetation}
+    \caption{LiDAR point clouds of vegetation.}
 \end{figure}
 
 Despite being a relatively robust sensor for vegetation remote sensing, LiDAR devices may occasionally face difficulties penetrating through dense canopy \cite{Su2007}. Therefore, it is critical to explore a
 robust sensing technique that is suitable for UAVs in terms of payload and power
 consumption to complement the existing instruments. 
-
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{Included_Images/Spectral_camera_image.png}
-        \caption{Spectral Imagery}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.49\textwidth}
-        \centering
-        \includegraphics[width=0.8\textwidth]{Included_Images/LiDARIntro.jpg}
-        \caption{LiDAR Point Clouds}
-    \end{subfigure}
-    \caption{Two types of common remote sensing instruments found on UAV platforms.}
+    \includegraphics[width=0.7\linewidth]{Included_Images/Spectral_camera_image.png}
+    \caption{Spectral Imagery as one of the common remote sensing instruments found on UAV platforms.}
 \end{figure}
+
 
 Recently, the technique of GNSS-R is receiving increasing interest in the field
 of remote sensing. GNSS-R exploits the L-band signals transmitted from Global
@@ -714,7 +705,7 @@ algorithm is shown in Figure \ref{fig:astar}.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=\linewidth]{Included_Images/A-starmap.jpg}
-    \caption{Map Highlighting Shortest Path from Node A to Node K}
+    \caption{Map Highlighting Shortest Path from Node A to Node K.}
     \label{fig:astar}
 \end{figure}
 
@@ -1517,7 +1508,7 @@ only connects to poses where it was observed without connecting to each other.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/pgo.png}
-    \caption{Visualization of GraphSLAM with loop closure}
+    \caption{Visualization of GraphSLAM with loop closure.}
 \end{figure}
 
 Although GraphSLAM is more robust than EKF-SLAM and both approaches have
@@ -1697,7 +1688,7 @@ The iterative optimization process described above is summarized in Figure \ref{
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.4\textwidth]{Included_Images/gps_correction.png}
-    \caption{Flowchart showcasing the iterative optimization loop for updating the robot state estimate}
+    \caption{Flowchart showcasing the iterative optimization loop for updating the robot state estimate.}
     \label{fig:pgo_framework}
 \end{figure}
 
@@ -1709,7 +1700,7 @@ With the aim of performing GPS correction in a pose graph SLAM system, LiDAR and
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/lidar_pos.png}
-    \caption{Illustration of the sensors' location on UAV}
+    \caption{Illustration of the sensors' location on UAV.}
 \end{figure}
 
 Frame transformation consist of rotational and translational components that describe the relative orientation and positional offset between two coordinate frames. As the translational difference between LiDAR and GPS are at centimeter level which is insignificant within the SLAM system, only rotational transformation will be focused on in this case. 
@@ -1718,7 +1709,7 @@ To effectively perform frame transformation between two sensors, it is first nec
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{Included_Images/SLAM_axis.png}
-    \caption{Illustration of the direction of principal axis within SLAM system}
+    \caption{Illustration of the direction of principal axis within SLAM system.}
     \label{fig:SLAM_axis}
 \end{figure}
 
@@ -1728,7 +1719,7 @@ In an effort to implement the calibration results into the SLAM framework, the a
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/frame_trans.png}
-    \caption{Illustration of the frame reference frame of GPS and LiDAR}
+    \caption{Illustration of the frame reference frame of GPS and LiDAR.}
 \end{figure}
 
 To bridge this gap, initial IMU's global orientation from the GPS is captured at system startup and its represented as quaternion $Q_{imu\_global}$. Even so, given that GPS/IMU is rigidly attached to the LiDAR sensor via a known extrinsic calibration, its orientation must be corrected by the previously determined fixed transformation between the IMU and LiDAR frames where the transformation is represented as $Q_{imu\_to\_lidar}$. Thus, the absolute orientation of LiDAR with respect to global coordinate frame $Q_{lidar\_global}$ is therefore computed via quaternion multiplication chain:
@@ -1747,7 +1738,7 @@ where $R_x(\theta_{roll})$ is the fixed roll rotation of $145.98^\circ$ and $R_z
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{Included_Images/transformation_result.png}
-    \caption{Comparison of SLAM system before and after frame transformation}
+    \caption{Comparison of SLAM system before and after frame transformation.}
 \end{figure}
 
 
@@ -1762,7 +1753,7 @@ In the meantime, GPS data is passed into PGO to provide constraints to the SLAM 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/SLAM flowchart.png}
-    \caption{Flowchart of the modular SLAM system}
+    \caption{Flowchart of the modular SLAM system.}
 \end{figure}
 
 
@@ -1796,7 +1787,7 @@ Pixhawk are passed to the back end pose graph optimization SLAM under
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/rqt_graph.png}
-    \caption{Interactions of different ROS topics in the SLAM system}
+    \caption{Interactions of different ROS topics in the SLAM system.}
     \label{fig:rqt}
 \end{figure}
 
@@ -1806,21 +1797,21 @@ To test the point cloud alignments, the same experiment data is run on Fast-LIO 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_FL.png}
-    \caption{Fast-LIO LiDAR Odometry}
+    \caption{Fast-LIO LiDAR Odometry.}
     \label{fig:rosbag3_FL}
 \end{figure}
 \vspace{-3pt}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_pgo_nogps2.png}
-    \caption{Pose Graph Optimization SLAM without GPS}
+    \caption{Pose Graph Optimization SLAM without GPS.}
     \label{fig:rosbag3_pgo_nogps}
 \end{figure}
 \vspace{-3pt}
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{Included_Images/rosbag3_pgo.png}
-    \caption{Pose Graph Optimization SLAM with GPS}
+    \caption{Pose Graph Optimization SLAM with GPS.}
     \label{fig:rosbag3_pgo}
 \end{figure}
 
@@ -1841,7 +1832,7 @@ If the GPS trajectory and SLAM trajectory are not aligned, SLAM will consider GP
         \caption{After including GPS data}
         \label{fig:align}
     \end{subfigure}
-    \caption{Comparison of GPS inclusion in the pose graph SLAM system}
+    \caption{Comparison of GPS inclusion in the pose graph SLAM system.}
 \end{figure}
 
 \subsubsection{GPS Data Filtering}
@@ -1872,7 +1863,7 @@ In order to only incorporate accurate GPS data for the SLAM calculation, a manua
         \includegraphics[width=\textwidth]{Included_Images/cov_0.1.png}
         \caption{Covariance Threshold = 0.1}
     \end{subfigure}
-    \caption{Relationship between covariance threshold and Root Mean Square Error (RMSE) between pose graph SLAM trajectory and GPS trajectory}
+    \caption{Relationship between covariance threshold and Root Mean Square Error (RMSE) between pose graph SLAM trajectory and GPS trajectory.}
 \end{figure}
 
 Based on the Figure above, it is observed that the higher value of covariance threshold, the smaller the RMSE. This is because when more GPS data is being considered into the SLAM calculation, the total error score indicated in Equation \eqref{eq:error_score} will be used to correct the SLAM trajectory to the GPS trajectory.
@@ -1909,7 +1900,7 @@ However, the covariance (accuracy) of GPS is not consistent in different dataset
         \includegraphics[width=\textwidth]{Included_Images/rosbag1_cov.png}
         \caption{Data 6}
     \end{subfigure}
-    \caption{GPS covariance comparison from different dataset}
+    \caption{GPS covariance comparison from different dataset.}
 \end{figure}
 
 By referring to the mean covariance from all dataset, covariance threshold is set to 0.1 to allow SLAM system to trust the GPS measurement while avoiding large GPS noises being included. Figure below shows the point clouds and trajectory from the pose graph SLAM system with GPS incorporated. 
@@ -1935,7 +1926,7 @@ By referring to the mean covariance from all dataset, covariance threshold is se
         \includegraphics[width=\textwidth]{Included_Images/rosbag1_pgo.png}
         \caption{Data 6}
     \end{subfigure}
-    \caption{Point cloud features and trajectories from pose graph SLAM with GPS}
+    \caption{Point cloud features and trajectories from pose graph SLAM with GPS.}
 \end{figure}
 
 With the combination of LiDAR odometry (Fast-LIO) and a pose graph SLAM system with GPS (PGO+GPS), distinct 3D point cloud features can be obtained in experimental areas where tree canopies and bare ground are well defined. In this case, the data can provide geometric reference for GNSS signals to cross validate whether the reflected signal from the satellite belongs to the ground, water surfaces, or tree canopies. 
@@ -1950,7 +1941,7 @@ With the combination of LiDAR odometry (Fast-LIO) and a pose graph SLAM system w
         \includegraphics[width=\textwidth]{Included_Images/SLAM_anno_pgo.png}
         \caption{PGO+GPS}
     \end{subfigure}
-    \caption{Odometry and pose graph SLAM results that capture distinguish features such as bare ground and tree canopies}
+    \caption{Odometry and pose graph SLAM results that capture distinguish features such as bare ground and tree canopies.}
 \end{figure}
 
 
@@ -1960,7 +1951,7 @@ Although the incorporation of GPS provides global constraints that enable the SL
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{Included_Images/pgo_drift.png}
-    \caption{Pose graph SLAM system with drifted trajectory}
+    \caption{Pose graph SLAM system with drifted trajectory.}
     \label{fig:pgo_drift}
 \end{figure}
 
@@ -3346,14 +3337,14 @@ the QGround Control as well as in the real-world environment.
 For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.5\textwidth}
+    \begin{subfigure}{0.6\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
         \caption{Fast-LIO}
     \end{subfigure}
     
     \par\medskip
     
-    \begin{subfigure}{0.5\textwidth}
+    \begin{subfigure}{0.6\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
         \caption{PGO+GPS}
     \end{subfigure}
