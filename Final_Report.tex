@@ -107,7 +107,7 @@ a GNSS-R pipeline to correlate signal parameters with surface characteristics an
 Machine Learning framework to classify reflection type to discard noise from GNSS-R dataset and detect vegetation boundary.
 \end{itshape}
 
-
+\newpage
 % --- Introduction ---
 \section{Introduction}
 Vegetation is a critical asset to the environment and the human civilization.
@@ -126,38 +126,54 @@ ecosystem preservation \cite{Zeng2022}, and climate change modeling
 Traditionally, methods of vegetation monitoring involved manual field
 assessments of site characteristics, extracting vegetation condition indicators
 such as species composition, geometrical structure, and biochemical activities
-\cite{Gibbons2006}. However, the accuracy and efficiency of such monitoring
-methods are highly dependent on the available expertise and resources, as the
-site assessments often required the assessor to possess reasonable levels of
-field knowledge prior to surveying \cite{Parkes2003}. To address the limitations
-of manual assessments and to accommodate for the increasing large-scale
-monitoring demands, remote sensing systems emerged as essential tools for
-ecological surveying \cite{Li2023}. 
+(Figure \ref{manual survey}) \cite{Gibbons2006}. However, the accuracy and
+efficiency of such monitoring methods are highly dependent on the available
+expertise and resources, as the site assessments often required the assessor to
+possess reasonable levels of field knowledge prior to surveying
+\cite{Parkes2003}. To address the limitations of manual assessments and to
+accommodate for the increasing large-scale monitoring demands, remote sensing
+systems emerged as essential tools for ecological surveying \cite{Li2023}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/manual_survey.png}
+    \caption{An example of manual survey questionnaires \cite{Gibbons2006}.}
+    \label{manual survey}
+\end{figure}
 
 Remote sensing can be defined as the acquisition of an object's measurements
 without coming into direct contact with said object, effectively minimizing the
 need for manual involvement on-site \cite{campbell2011introduction}.
 Specifically, remote sensing relies on information derived from different
 measurements of energy reflected from the object of interest
-\cite{campbell2011introduction}. In the context of surveying terrestrial
-vegetation, the remote sensing methods could be classified based on the distance
-between the target object and the measurement sensor into two categories: 1)
-space-borne and 2) airborne remote sensing. Space-borne remote sensing involves
-the use of instruments onboard orbiting satellites, including spectral and
-hyperspectral cameras \cite{Qian2022}, synthetic aperture radar (SAR)
-\cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the wide
-coverage and availability of space-borne data, large-scale terrestrial changes
-over time could be captured, enabling the continuous monitoring of macro-scale
-ecosystems \cite{Khan2024}. Compared to space-borne systems, airborne remote
-sensing can provide significantly improved spatial resolution and assessment
-flexibility through the integration of sensors onboard manned aircraft or UAVs
-\cite{Khan2024}. Although limited by coverage area, airborne remote sensing can
-provide timely information for addressing regional emergencies such as pest
-\cite{Wulder2006} or wildfire \cite{Arroyo2008} outspreads since the systems
-could be deployed on-demand. In UAV-based remote sensing particularly, this
-temporal flexibility is further complemented with the benefit of low operational
-cost, rendering it an ideal platform for monitoring regional and urban
-vegetation \cite{Tang2015}. 
+\cite{campbell2011introduction}. As a result, remote sensing methods enable
+efficient, large-scale monitoring of vegetation, with varied resolutions
+depending on the sensing platform used.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/remotesensing_schematic.png}
+    \caption{A schematic illustration of satellite remote sensing.}
+\end{figure}
+
+In the context of surveying terrestrial vegetation, the remote sensing methods
+could be classified based on the distance between the target object and the
+measurement sensor into two categories: 1) space-borne and 2) airborne remote
+sensing. Space-borne remote sensing involves the use of instruments onboard
+orbiting satellites, including spectral and hyperspectral cameras
+\cite{Qian2022}, synthetic aperture radar (SAR) \cite{Hu2025}, and space-borne
+LiDAR sensors \cite{Bergen2009}. Due to the wide coverage and availability of
+space-borne data, large-scale terrestrial changes over time could be captured,
+enabling the continuous monitoring of macro-scale ecosystems \cite{Khan2024}.
+Compared to space-borne systems, airborne remote sensing can provide
+significantly improved spatial resolution and assessment flexibility through the
+integration of sensors onboard manned aircraft or UAVs \cite{Khan2024}. Although
+limited by coverage area, airborne remote sensing can provide timely information
+for addressing regional emergencies such as pest \cite{Wulder2006} or wildfire
+\cite{Arroyo2008} outspreads since the systems could be deployed on-demand. In
+UAV-based remote sensing particularly, this temporal flexibility is further
+complemented with the benefit of low operational cost, rendering it an ideal
+platform for monitoring regional and urban vegetation \cite{Tang2015}. 
 
 Conventionally, UAV remote sensing platforms carry similar instruments to that
 of other remote sensing systems, including radar, LiDAR, and multi-spectral or
@@ -182,6 +198,12 @@ transmitter-receiver instruments that are crucial to mono-static radar systems
 reflected GNSS signals could be used for GNSS-R remote sensing, further
 demonstrating GNSS-R's applicability onboard low-cost remote sensing systems
 such as a UAV. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Included_Images/GNSS-R schematic.png}
+    \caption{A schematic illustration of signal propagation path within a UAV-based GNSS-R system.}
+\end{figure}
 
 Recent research has demonstrated the potential of integrating GNSS-R techniques
 with UAVs through a UAV-based GNSS-R system for water body detection and flood
@@ -229,6 +251,16 @@ vegetation boundary. At last, the predicted vegetation boundary could be used to
 cross-validate results obtained from the GNSS-R framework, enhancing the
 robustness of the vegetation monitoring system.
 \end{enumerate}
+
+Additionally, the code scripts of this project are organized in various GitHub
+repositories, which corresponds to the four objectives of this project.
+Specifically: 
+\begin{itemize}
+    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
+    \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
+    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
+\end{itemize}
 
 This report is structured as follows: Section 3 introduces the logical and
 physical system architecture adopted in this project, followed by four core
@@ -3552,16 +3584,6 @@ improve the labelling accuracy of the dataset.
 \newpage
 \addcontentsline{toc}{section}{Appendix}
 \section*{Appendix}
-
-\subsubsection*{GitHub Repositories}
-The code scripts of this project are organized in various GitHub repositories,
-which corresponds to the four frameworks of this project. Specifically: 
-\begin{itemize}
-    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
-    \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
-    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
-    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
-\end{itemize}
 
 \subsubsection*{LiDAR SLAM Pseudocode}
 This project builds upon an open-source implementation
