@@ -101,10 +101,23 @@ solution through developing an intelligent Unmanned Aerial Vehicle (UAV) system
 that integrates autonomous path planning algorithms, Light Detection and Ranging
 (LiDAR)-based mapping techniques, Global Navigation Satellite System
 Reflectometry (GNSS-R), and machine learning classification models for robust
-vegetation sensing and monitoring. The project was able to achieve an autonomous path planning framework
-for optimized data collection, a modular LiDAR SLAM system for accurate canopy mapping, 
-a GNSS-R pipeline to correlate signal parameters with surface characteristics and reconstruct CIR images, and a 
-Machine Learning framework to classify reflection type to discard noise from GNSS-R dataset and detect vegetation boundary.
+vegetation sensing and monitoring. The path planning framework integrates
+waypoint navigation and coverage path planning to enable autonomous UAV
+navigation and to efficiently optimize vegetation coverage for the collection of
+GNSS and LiDAR data. In post-processing, the LiDAR SLAM framework outputs
+precise vegetation canopy maps in point cloud environments to complement the
+outputs of GNSS-R and machine learning frameworks. On the other hand, both the
+direct and reflected GNSS signals received during the flight are correlated to
+ground features, such that the GNSS-R framework can sense vegetation, bare
+ground, and water surfaces. Ultimately, machine learning models trained on the
+GNSS-R data are used to detect vegetation boundaries, which successfully
+cross-validates the results obtained in the GNSS-R framework. Overall, this
+project was able to achieve an autonomous path planning framework for optimized
+data collection, a modular LiDAR SLAM system for accurate canopy mapping, a
+GNSS-R pipeline to correlate signal parameters with surface characteristics for
+sensing ground features, and a Machine Learning framework to classify reflection
+type to discard noise from GNSS-R dataset and detect vegetation boundary.
+
 \end{itshape}
 
 \newpage
