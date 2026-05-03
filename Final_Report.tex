@@ -1934,10 +1934,10 @@ However, the covariance (accuracy) of GPS is not consistent in different dataset
         \includegraphics[width=\textwidth]{Included_Images/rosbag1_cov.png}
         \caption{Data 6}
     \end{subfigure}
-    \caption{GPS covariance comparison from different dataset.}
+    \caption{GPS covariance comparison from different datasets.}
 \end{figure}
 
-By referring to the mean covariance from all dataset, covariance threshold is set to 0.1 to allow SLAM system to trust the GPS measurement while avoiding large GPS noises being included. Figure below shows the point clouds and trajectory from the pose graph SLAM system with GPS incorporated. 
+By referring to the mean covariance from all datasets, covariance threshold is set to 0.1 to allow SLAM system to trust the GPS measurement while avoiding large GPS noises being included. Figure below shows the point clouds and trajectory from the pose graph SLAM system with GPS incorporated. 
 
 \begin{figure}[H]
     \centering
@@ -3368,7 +3368,7 @@ the QGround Control as well as in the real-world environment.
 \end{figure}
 
 \subsubsection{LiDAR SLAM}
-For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
+For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) are able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.6\textwidth}
@@ -3430,10 +3430,10 @@ demonstrating the potential of GNSS as an alternative remote sensing system.
 \end{figure}
 \subsubsection{Machine Learning Signal Classification and Vegetation Boundary Detection}
 Figure below shows the FFZ centroids for all the satellites tracked during the experiment. The spatial distribution
-of the predictions align well with the visible terrain on the map. For example, satellite E21, E34 are classified as tree reflected
+of the predictions align well with the visible terrain on the map. For example, satellites E21, E34 are classified as tree reflected
 while their centroids also fall over the vegetated area predominantly.
 
-The per satellite confidence plots are also shown below. The show that the classifier performs
+The per satellite confidence plots are also shown below. They show that the classifier performs
 well overall with mean confidence ranging from 0.77 to 0.99. Lower confidence satellites are also observed (E27, E30). However, their
 FFZs fall near the boundary transition zones which explains the ambiguity.
 \begin{figure}[H]
@@ -3497,7 +3497,7 @@ propagated, and 3) vegetation-reflected. When relating each signal to its FFZ
 location on ground, the classification results are used to separate vegetation
 regions from other ground regions, effectively forming an alternative approach
 in vegetation boundary detection. Furthermore, the classification results
-greatly agrees with the ground regions highlighted in the GNSS-R framework,
+strongly agree with the ground regions highlighted in the GNSS-R framework,
 which demonstrates the robustness of the developed system.
 
 
@@ -3517,7 +3517,7 @@ by MAHMUD Md Sahat. Ultimately, the project team was able to integrate the four
 components and establish a comprehensive UAV-based framework for remote
 sensing.
 
-Even though the project is divided into four main components for work distribution, several responsibilities are shared among team members. For instance, ZHOU Jiayi serves as the group leader where she arranges data collection schedules and locations. TAN Qing Lin is responsible for procuring hardware and managing logistics for the UAV system. GAMAGE Sashenka oversees the planning of UAV flight trajectories for data collection, while MAHMUD Md Sahat is responsible for obtaining the UAV flight license and manually operating the drone. Aside from that, significant collaboration is during data collection as well as assembling setting up the UAV platform. Therefore, effective communication and teamwork are essential to ensure smooth coordination and the overall success of the project.
+Even though the project is divided into four main components for work distribution, several responsibilities are shared among team members. For instance, ZHOU Jiayi serves as the group leader where she arranges data collection schedules and locations. TAN Qing Lin is responsible for procuring hardware and managing logistics for the UAV system. GAMAGE Sashenka oversees the planning of UAV flight trajectories for data collection, while MAHMUD Md Sahat is responsible for obtaining the UAV flight license and manually operating the drone. Aside from that, significant collaboration is carried out during data collection as well as assembling and setting up the UAV platform. Therefore, effective communication and teamwork are essential to ensure smooth coordination and the overall success of the project.
 
 The Gantt chart below summarizes the project timeline.
 
@@ -3626,7 +3626,7 @@ restrictions, real-world testing was not conducted.
 
 
 \subsubsection{LiDAR SLAM}
-One of the problems faced during the second semester is to transform the GPS frame to the LiDAR frame. This problem arises when the fixed calibration matrix (i.e., a constant offset between the LiDAR and GPS) produced inconsistent transformation results across different datasets. To address this, coordinate frame transformations in robotics were studied in greater depth, including conventions such as ENU (East-North-Up) and NED (North-East-Down), which define the orientation of the robot’s principal axes.
+One of the problems faced during the second semester is to transform the GPS frame to the LiDAR frame. This problem arises when the fixed calibration matrix (i.e., a constant offset between the LiDAR and GPS) produced inconsistent transformation results across different datasets. To address this, coordinate frame transformations in robotics were studied in greater depth, including conventions such as ENU (East-North-Up) and NED (North-East-Down), which define the orientation of the robot's principal axes.
 
 Further investigation into the sensor characteristics revealed that the Livox IMU does not provide orientation data, but only linear velocity and acceleration. This leads to the LiDAR odometry orientation varies based on the initial orientation where the data is being collected. In this case, the problem is solved by substituting Pixhawk IMU data that has orientation information to obtain initial orientation of the UAV. As a result, a dynamic transformation approach is adopted, where the initial orientation from the Pixhawk IMU is used to align the GPS trajectory with the LiDAR trajectory. This ensures a more consistent and accurate frame transformation across different datasets.
 \begin{figure}[H]
@@ -3640,7 +3640,7 @@ Further investigation into the sensor characteristics revealed that the Livox IM
         \includegraphics[width=\textwidth]{Included_Images/align_is2.png}
         \caption{Data 2}
     \end{subfigure}
-    \caption{Inconsistencies when using fixed calibration information for frame transformation. Green trajectory indicates LiDAR trajectory while the 3-axis trajectory indicated the GPS trajectory.}
+    \caption{Inconsistencies when using fixed calibration information for frame transformation. Green trajectory indicates LiDAR trajectory while the 3-axis trajectory indicates the GPS trajectory.}
 \end{figure}
 
 
@@ -3686,7 +3686,7 @@ even when the UAV is hovering at low altitude over bare ground or trees. The sam
 can make the dataset noisy for this antenna. This mislabelling is a likely contributor to classification error observed in the confusion matrix. The problem persists particularly
 for the boundary cases which share similar characteristics between the classes. 
 
-Furthermore, the class imbalance was another present in the dataset. The data collection scenarios for the tree cases were not equal. The distribution of the satellite geometry also
+Furthermore, the class imbalance was another issue present in the dataset. The data collection scenarios for the tree cases were not equal. The distribution of the satellite geometry also
 skewed the dataset for each class. A strategy to balance class weight was applied through the pre-processing of the data. Although it mitigates the imbalance to some extent, it does not
 remove the skewness or the underlying distribution issue fully. This could make the model overly sensitive to the minority class samples. In the future, in order to mitigate the labelling issue
 fully, more rigorous data collection can be conducted. One method can be to operate the UAV for longer for data collection with same epoch size for each of the cases. Another strategy could
