@@ -120,7 +120,7 @@ and carbon cycles \cite{Richardson2013}. To the human society, vegetation is not
 only a consumable resource but also a key regulator of urban temperature and air
 quality \cite{OBrien2022}. Therefore, the continuous and accurate monitoring of
 vegetation is essential for sustainable resource management \cite{Wallace2006},
-ecosystem preservation \cite{Zeng2022}, and climate change modeling
+ecosystem preservation \cite{Zeng2022}, and climate change modelling
 \cite{Richardson2013}. 
 
 Traditionally, methods of vegetation monitoring involved manual field
@@ -201,7 +201,7 @@ such as a UAV.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{Included_Images/GNSS-R schematic.png}
+    \includegraphics[width=0.6\textwidth]{Included_Images/GNSS-R schematic.png}
     \caption{A schematic illustration of signal propagation path within a UAV-based GNSS-R system.}
 \end{figure}
 
@@ -218,14 +218,16 @@ for dense vegetation or for identifying complex GNSS signal-reflected areas
 in vegetation monitoring by providing optimized flight paths in order to
 retrieve ground parameters. Therefore, implementing coverage path planning (CPP)
 algorithms is necessary for autonomous navigation to survey the entire area of
-interest and consistently receive GNSS-R signals \cite{Cabreira2019}.
+interest and consistently receive GNSS-R signals that reflect off the target
+area \cite{Cabreira2019}.
 
 For GNSS-R applications specifically, the geometry of the reflected signal is
 highly dependent on the relative positions of the GNSS satellites and the
 receiver. Consequently, an optimized trajectory can be designed to navigate
-through these reflected signal areas. While existing UAV systems perform manual
-vegetation monitoring, having an autonomous system that detects reflected areas
-significantly increases the signal-to-noise ratio of the data. 
+through these specular reflection zones. While manual vegetation monitoring
+flights provide a straightforward solution, having an autonomous system that
+detects reflected areas significantly enhances data collection efficiency and
+enables real-time mission adaptation.
 
 The combination of autonomous path planning and remote sensing lays the
 groundwork for various data fusion methods. By utilizing LiDAR-based
