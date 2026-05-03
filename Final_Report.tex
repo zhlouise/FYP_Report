@@ -3353,53 +3353,20 @@ which demonstrates the robustness of the developed system.
 % --- Project Management ---
 \section{Project Management}
 The Final Year Project spans two semesters, with the first semester focusing mainly
-on the literature review, methodology development, finalizing connections between
+on literature review, methodology development, finalizing connections between
 different parts of the project, and conducting preliminary experiments to
 collect data and test the developed methodologies. During the second semester,
 the team addressed limitations and conducted final experiments to collect
 more robust data and achieve the project objectives.
 
-The path planning component of the project is led by GAMAGE Sashenka, who has
-been focusing on developing and testing path planning algorithms in the local
-mapping environment and in QGround Control. As a result, simulations were
-conducted to verify the locally developed A* algorithm in a dynamic UAV
-environment. Moreover, an interactive path planning system was developed to
-identify areas with reflected GNSS signals and obtain stronger data points.
+The work distribution of this project is as follows: the path planning component
+is led by GAMAGE Sashenka; the LiDAR SLAM component is led by TAN Qing Lin; the
+GNSS-R component is led by ZHOU Jiayi; and the machine learning component is led
+by MAHMUD Md Sahat. Ultimately, the project team was able to integrate the four
+components and establish a comprehensive UAV-based frame work for remote
+sensing.
 
-The LiDAR SLAM part of the project is led by TAN Qing Lin. She has been
-developing a modular LiDAR SLAM framework which she has tested in both with and
-without GPS integration. The issues occured with the point cloud alignment were
-resolved by calibrating the IMU unit in LiDAR and conducting LiDAR to GPS frame
-transformation. 
-
-The GNSS-R part of the project is led by ZHOU Jiayi, who has been focusing on
-conducting GNSS-R experiments and analyzing the collected data. So far, the
-GNSS-R part has been progressing as per the timeline in the Gantt chart and
-future works mainly focus on integrating machine learning classification results
-into the GNSS-R pipeline to classify between reflected and direct signals and
-exploring the sensitivity of GNSS carrier phase measurements for FFZs covering
-the trees.
-
-The ML part of the project is led by MAHMUD Md Sahat, who has been working on
-developing a classification model using LightGBM to identify true tree reflected
-signals from the collected GNSS-R data. So far, the ML part has been progressing
-as per the timeline in the Gantt chart and future works will be focusing on
-developing neural network based model to perform regression tasks to predict
-vegetation parameters. Sahat has also been responsible for piloting the drone
-during the experiments.
-
-As a result, the team was able to successfully integrate the four pillars of the
-project and demonstrate meaningful results. The path planning framework was able
-to provide optimal detection areas for the UAV to fly over vegetation. The LiDAR
-SLAM framework was able to develop SLAM by sucessfully integrating the GPS data
-into the SLAM system, follwing post graph optimization (PGO) SLAM. The GNSS-R
-analysis was able to identify the ground parameters from the GNSS-R data and the
-ML model was able to classify the signals into direct, ground-reflected, and
-tree-reflected signals. These results were able to cross-validate the results
-obtained from the GNSS-R analysis.
-
-The Gantt chart below summarizes the project timeline for each individual parts
-of the project.
+The Gantt chart below summarizes the project timeline.
 
 \clearpage % Start a fresh page to ensure there is enough room
 \begin{minipage}{\textwidth}
