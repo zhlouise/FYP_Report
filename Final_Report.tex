@@ -867,7 +867,7 @@ Figure \ref{fig:dense_canopy_map} is an example of processed occupancy grid maps
 \paragraph{Normalized Difference Vegetation Index} ~\\
 The Normalized Difference Vegetation Index (NDVI) is a vegetation index that
 measures the difference between near-infrared light and red light. This provides
-the difference between strongly reflected by vegetation signals and signals
+the difference between signals reflected by vegetation and signals
 absorbed by vegetation \cite{GISGeography_NDVI}. Below is the equation to
 calculate NDVI:
 \begin{equation}
@@ -887,10 +887,11 @@ saturation, and intensity characteristics.
 However, in practical applications, identifying vegetation solely from satellite
 imagery is insufficient. To determine potential vegetation regions, it is also
 necessary to account for the GNSS signal reflection areas, known as the Fresnel
-zones. These areas define the ellipsoidal detection region where reflected
-satellite signals can be captured. Hence, the vegetation analysis is further
-constrained by the spatial extent of these Fresnel zones to identify potential
-areas suitable for GNSS reflectometry-based sensing.
+zones (see Section \ref{sec:first_fresnel_zone_calculation}). These areas define
+the ellipsoidal detection region where reflected satellite signals can be
+captured. Hence, the vegetation analysis is further constrained by the spatial
+extent of these Fresnel zones to identify potential areas suitable for GNSS
+reflectometry-based sensing.
 
 \subsubsection{Path planning workflow} 
 \paragraph{Fresnel Zone Identification} ~\\
@@ -2117,6 +2118,7 @@ where its value may carry key information that describes the interaction
 between the reflected signals and various ground features.
 
 \subsubsection{First Fresnel Zone Calculation}
+\label{sec:first_fresnel_zone_calculation}
 Following the extraction of GNSS measurements observed onboard the UAV, the GNSS
 signals are particularly analyzed with respect to the 2-dimensional ground
 regions that they reflect off from.
