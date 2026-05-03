@@ -3221,14 +3221,14 @@ the QGround Control as well as in the real-world environment.
 For this dataset, LiDAR point clouds were processed using two techniques: the standard Fast-LIO odometry and PGO with GPS fusion (PGO+GPS). As shown in the figures below, both Fast-LIO and (PGO+GPS) is able to showcase point clouds of different features such as bare ground and tree canopies. In this case, the vegetation map generated can be used as a geometric reference for GNSS-R signals. In PGO+GPS, the green trajectory indicates the LiDAR odometry, and the 3-axis trajectory indicates the GPS trajectory. 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.5\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_FL.png}
         \caption{Fast-LIO}
     \end{subfigure}
     
     \par\medskip
     
-    \begin{subfigure}{0.75\textwidth}
+    \begin{subfigure}{0.5\textwidth}
         \includegraphics[width=\textwidth]{Included_Images/case_pgo.png}
         \caption{PGO+GPS}
     \end{subfigure}
@@ -3236,8 +3236,14 @@ For this dataset, LiDAR point clouds were processed using two techniques: the st
 \end{figure}
 
 \subsubsection{GNSS-R Analysis and Modelling}
-After the successful collection of GNSS data during the flight missions, GNSS measurements are extracted during post-processing to calculate the $C/N_0$ ratio and the excess pseudorange delay. Then, the FFZ of each reflected GNSS signal is calculated and plotted onto a satellite image map, where the colors of Figure \ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the reflected signal and the direct signal, while the colors of Figure \ref{CNR and Delay Case Study}(b) indicate the excess pseudorange delay of the reflected signals. 
-
+After the successful collection of GNSS data during the flight missions, GNSS
+measurements are extracted during post-processing to calculate the $C/N_0$ ratio
+and the excess pseudorange delay. Then, the FFZ of each reflected GNSS signal is
+calculated and plotted onto a satellite image map, where the colors of Figure
+\ref{CNR and Delay Case Study}(a) indicate the $C/N_0$ ratio between the
+reflected signal and the direct signal, while the colors of Figure \ref{CNR and
+Delay Case Study}(b) indicate the excess pseudorange delay of the reflected
+signals. 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.7\textwidth}
@@ -3260,7 +3266,6 @@ signals reflecting off vegetation. Additionally, given the fact that the excess
 pseudorange delay tends to be negative over vegetation, it can be implied that
 the signals reflected off the dense canopy rather than propagating through to
 reflect off from the ground.
-
 Using the correlations between GNSS measurement parameters and the RGB values of
 CIR image pixels that fall within the FFZs (summarized in Section 6.3), the CIR
 image colors within each FFZ of this experiment were also reconstructed, as
@@ -3287,11 +3292,10 @@ FFZs fall near the boundary transition zones which explains the ambiguity.
     \includegraphics[width=0.75\textwidth]{Included_Images/mtdavis_ffzcon.png}
     \caption{Confidence and FFZ centroid plotting for the experiment.}
 \end{figure}
-
 The classification results from the ML pipeline was further validated by the GNSS-R results. The figure below shows the
 comparison. The classification results clearly align with the results from the GNSS-R pipeline meaning that the prediction
 results are trustworthy and can be used to remove any noise from the dataset for better processing of the GNSS-R pipeline.
-\begin{figure}[H]
+ \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{Included_Images/ML-FFZ.png}
     \caption{Comparison between ML classification results and GNSS-R results.}
@@ -3453,27 +3457,27 @@ of the project.
 \ganttbar[bar/.style={fill=pathcolor}]{Integrate with Image Processing}{2026-01-31}{2026-02-15} \\
 \ganttbar[bar/.style={fill=pathcolor}]{Dynamic Simulation (MATLAB)}{2026-02-01}{2026-03-31} \\
 \ganttbar[bar/.style={fill=pathcolor}]{Developing Fresnel Zone Interactive Planner}{2026-03-01}{2026-04-30} \\
-% GNSS-R
-\ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-10} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{Data Post-Processing Code Development}{2025-10-01}{2025-10-30} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{Antenna Testing}{2025-10-01}{2025-10-31} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Sensitivity Analysis}{2025-10-31}{2026-03-01} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{ML Integration}{2026-02-01}{2026-02-28} \\
-\ganttbar[bar/.style={fill=gnsscolor}]{Correlation Modelling}{2026-03-01}{2026-04-10} \\
-% ML
-\ganttgroup[group/.style={fill=mlcolor}]{Machine Learning}{2025-10-01}{2026-04-10} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Feature Analysis}{2025-10-01}{2025-11-31} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Dataset Construction}{2025-10-01}{2025-11-31} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Model Selection \& Training}{2025-11-01}{2025-12-31} \\
-\ganttbar[bar/.style={fill=mlcolor}]{NN Dev for Regression}{2026-01-01}{2026-03-01} \\
-\ganttbar[bar/.style={fill=mlcolor}]{Dataset Expansion}{2026-01-01}{2026-04-10} \\
 % LiDAR SLAM
 \ganttgroup[group/.style={fill=slamcolor}]{LiDAR SLAM}{2025-11-01}{2026-04-10} \\
 \ganttbar[bar/.style={fill=slamcolor}]{LiDAR-Inertial Odom}{2025-11-01}{2025-12-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{Graph-Based SLAM}{2025-12-01}{2026-01-31} \\
 \ganttbar[bar/.style={fill=slamcolor}]{GPS Integration to Graph-Based SLAM}{2026-01-01}{2026-03-15} \\
-\ganttbar[bar/.style={fill=slamcolor}]{Improvements}{2026-03-15}{2026-03-30} \\
-\ganttbar[bar/.style={fill=slamcolor}]{Path Planning Integration}{2026-03-30}{2026-04-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Frame Transformation}{2026-03-15}{2026-03-30} \\
+\ganttbar[bar/.style={fill=slamcolor}]{Point Cloud Alignment}{2026-03-30}{2026-04-30} \\
+% GNSS-R
+\ganttgroup[group/.style={fill=gnsscolor}]{GNSS-R}{2025-10-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Data Post-Processing Code Development}{2025-10-01}{2025-10-30} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Antenna Testing}{2025-10-01}{2025-10-31} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{FFZ Sensitivity Analysis}{2025-10-31}{2026-03-01} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{Correlation Modelling}{2026-02-01}{2026-02-28} \\
+\ganttbar[bar/.style={fill=gnsscolor}]{CIR Image Reconstruction}{2026-03-01}{2026-04-10} \\
+% ML
+\ganttgroup[group/.style={fill=mlcolor}]{Machine Learning}{2025-10-01}{2026-04-10} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Feature Analysis}{2025-10-01}{2025-11-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Dataset Construction}{2025-10-01}{2025-11-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Model Selection \& Training}{2025-11-01}{2025-12-31} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Feature Modelling}{2026-01-01}{2026-03-01} \\
+\ganttbar[bar/.style={fill=mlcolor}]{Vegetation Boundary Analysis}{2026-01-01}{2026-04-10} \\
 \end{ganttchart}
 \end{sideways}
 \end{center}
