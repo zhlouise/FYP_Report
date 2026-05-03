@@ -107,7 +107,7 @@ a GNSS-R pipeline to correlate signal parameters with surface characteristics an
 Machine Learning framework to classify reflection type to discard noise from GNSS-R dataset and detect vegetation boundary.
 \end{itshape}
 
-
+\newpage
 % --- Introduction ---
 \section{Introduction}
 Vegetation is a critical asset to the environment and the human civilization.
@@ -120,32 +120,49 @@ and carbon cycles \cite{Richardson2013}. To the human society, vegetation is not
 only a consumable resource but also a key regulator of urban temperature and air
 quality \cite{OBrien2022}. Therefore, the continuous and accurate monitoring of
 vegetation is essential for sustainable resource management \cite{Wallace2006},
-ecosystem preservation \cite{Zeng2022}, and climate change modeling
+ecosystem preservation \cite{Zeng2022}, and climate change modelling
 \cite{Richardson2013}. 
 
 Traditionally, methods of vegetation monitoring involved manual field
 assessments of site characteristics, extracting vegetation condition indicators
 such as species composition, geometrical structure, and biochemical activities
-\cite{Gibbons2006}. However, the accuracy and efficiency of such monitoring
-methods are highly dependent on the available expertise and resources, as the
-site assessments often required the assessor to possess reasonable levels of
-field knowledge prior to surveying \cite{Parkes2003}. To address the limitations
-of manual assessments and to accommodate for the increasing large-scale
-monitoring demands, remote sensing systems emerged as essential tools for
-ecological surveying \cite{Li2023}. 
+(Figure \ref{manual survey}) \cite{Gibbons2006}. However, the accuracy and
+efficiency of such monitoring methods are highly dependent on the available
+expertise and resources, as the site assessments often required the assessor to
+possess reasonable levels of field knowledge prior to surveying
+\cite{Parkes2003}. To address the limitations of manual assessments and to
+accommodate for the increasing large-scale monitoring demands, remote sensing
+systems emerged as essential tools for ecological surveying \cite{Li2023}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Included_Images/manual_survey.png}
+    \caption{An example of manual survey questionnaires \cite{Gibbons2006}.}
+    \label{manual survey}
+\end{figure}
 
 Remote sensing can be defined as the acquisition of an object's measurements
 without coming into direct contact with said object, effectively minimizing the
 need for manual involvement on-site \cite{campbell2011introduction}.
 Specifically, remote sensing relies on information derived from different
 measurements of energy reflected from the object of interest
-\cite{campbell2011introduction}. In the context of surveying terrestrial
-vegetation, the remote sensing methods could be classified based on the distance
-between the target object and the measurement sensor into two categories: 1)
-space-borne and 2) airborne remote sensing. Space-borne remote sensing involves
-the use of instruments onboard orbiting satellites, including spectral and
-hyperspectral cameras \cite{Qian2022}, synthetic aperture radar (SAR)
-\cite{Hu2025}, and space-borne LiDAR sensors \cite{Bergen2009}. Due to the wide
+\cite{campbell2011introduction}. As a result, remote sensing methods enable
+efficient, large-scale monitoring of vegetation, with varied resolutions
+depending on the sensing platform used.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{Included_Images/remotesensing_schematic.png}
+    \caption{A schematic illustration of satellite remote sensing.}
+\end{figure}
+
+In the context of surveying terrestrial vegetation, the remote sensing methods
+could be classified based on the distance between the target object and the
+measurement sensor into two categories: 1) space-borne and 2) airborne remote
+sensing. Space-borne remote sensing involves the use of instruments onboard
+orbiting satellites, including spectral and hyperspectral cameras
+\cite{Qian2022}, synthetic aperture radar (SAR) \cite{Hu2025}, and space-borne
+Light Detection and Ranging (LiDAR) sensors \cite{Bergen2009}. Due to the wide
 coverage and availability of space-borne data, large-scale terrestrial changes
 over time could be captured, enabling the continuous monitoring of macro-scale
 ecosystems \cite{Khan2024}. Compared to space-borne systems, airborne remote
@@ -170,13 +187,29 @@ However, standalone LiDAR measurements are insufficient in a UAV-based applicati
 
 Despite being a relatively robust sensor for vegetation remote sensing, LiDAR devices may occasionally face difficulties penetrating through dense canopy \cite{Su2007}. Therefore, it is critical to explore a
 robust sensing technique that is suitable for UAVs in terms of payload and power
-consumption to complement the existing instruments. Recently, the technique of
-GNSS-R is receiving increasing interest in the field of remote sensing. GNSS-R
-exploits the L-band signals transmitted from Global Navigation Satellite Systems
-(GNSS) that are then scattered on different terrain surfaces of the Earth
-\cite{Jin2024}. Then, the reception of reflected GNSS signals can provide
-information regarding the properties of the signal reflector on land
-\cite{Jin2024}. As signals of opportunity conventionally dedicated to
+consumption to complement the existing instruments. 
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/Spectral_camera_image.png}
+        \caption{Spectral Imagery}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=0.8\textwidth]{Included_Images/LiDARIntro.jpg}
+        \caption{LiDAR Point Clouds}
+    \end{subfigure}
+    \caption{Two types of common remote sensing instruments found on UAV platforms.}
+\end{figure}
+
+Recently, the technique of GNSS-R is receiving increasing interest in the field
+of remote sensing. GNSS-R exploits the L-band signals transmitted from Global
+Navigation Satellite Systems (GNSS) that are then scattered on different terrain
+surfaces of the Earth \cite{Jin2024}. Then, the reception of reflected GNSS
+signals can provide information regarding the properties of the signal reflector
+on land \cite{Jin2024}. As signals of opportunity conventionally dedicated to
 Positioning, Navigation, and Timing (PNT) applications, GNSS is capable of
 providing real-time measurements regardless of time, location, and weather
 \cite{Jin2024}. Additionally, as a bi-static system where signal transmitters
@@ -187,15 +220,55 @@ reflected GNSS signals could be used for GNSS-R remote sensing, further
 demonstrating GNSS-R's applicability onboard low-cost remote sensing systems
 such as a UAV. 
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Included_Images/GNSS-R schematic.png}
+    \caption{A schematic illustration of signal propagation path within a UAV-based GNSS-R system.}
+\end{figure}
+
 Recent research has demonstrated the potential of integrating GNSS-R techniques
 with UAVs through a UAV-based GNSS-R system for water body detection and flood
 mapping \cite{app10010210}. Not only does this application demonstrate the
-capability of obtaining high-resolution, flexible measurements onboard
-low-altitude UAV platforms, but it also established UAV-mounted GNSS-R as a
-promising tool for monitoring dynamic environmental conditions. However, while
-existing systems are yet to be developed specifically for vegetation monitoring
-purposes, they also often lack fully autonomous navigation capabilities.
-Therefore, this project aims to address this gap through both the development of
+capability of obtaining high-resolution, but it also establishes UAV-mounted
+GNSS-R as a promising tool for monitoring dynamic environmental conditions.
+However, the effectiveness of UAV-based remote sensing is inherently tied to the
+efficiency of the UAV flight path. Traditionally, UAV remote sensing missions
+rely on predefined lawnmower patterns or manual piloting, which is not optimal
+for dense vegetation or for identifying complex GNSS signal-reflected areas
+\cite{GALCERAN20131258}. Consequently, path planning serves as a critical bridge
+in vegetation monitoring by providing optimized flight paths in order to
+retrieve ground parameters. Therefore, implementing coverage path planning (CPP)
+algorithms is necessary for autonomous navigation to survey the entire area of
+interest and consistently receive GNSS-R signals that reflect off the target
+area \cite{Cabreira2019}.
+
+For GNSS-R applications specifically, the geometry of the reflected signal is
+highly dependent on the relative positions of the GNSS satellites and the
+receiver. Consequently, an optimized trajectory can be designed to navigate
+through these specular reflection zones. While manual vegetation monitoring
+flights provide a straightforward solution, having an autonomous system that
+detects reflected areas significantly enhances data collection efficiency.
+Figure \ref{fig:cpp_over_vegetation} illustrates a coverage path planning result
+over a vegetation area after identifying the specular reflection zones.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/cpp_over_vegetation.png}
+    \caption{Coverage path planning result over a vegetation}
+    \label{fig:cpp_over_vegetation}
+\end{figure}
+
+The combination of autonomous path planning and remote sensing lays the
+groundwork for various data fusion methods. By utilizing LiDAR-based
+Simultaneous Localization and Mapping (SLAM), a UAV can simultaneously navigate
+an unknown canopy and generate a high-resolution map of the
+vegetation. This point cloud map provides the necessary context for interpreting
+GNSS-R signals, allowing researchers to correlate signal strengths with
+vegetation characteristics. Therefore, the development of an intelligent
+trajectory planning framework is not merely a logistic solution but also an
+innovative solution that aims to enhance terrestrial remote sensing.
+
+As a result, this project aims to address this gap through both the development of
 a robust GNSS-R framework for vegetation remote sensing and the integration of
 optimal trajectory planning and environment mapping. An additional LiDAR-based
 3D canopy map will also provide the critical spatial reference to validate any
@@ -233,6 +306,16 @@ vegetation boundary. At last, the predicted vegetation boundary could be used to
 cross-validate results obtained from the GNSS-R framework, enhancing the
 robustness of the vegetation monitoring system.
 \end{enumerate}
+
+Additionally, the code scripts of this project are organized in various GitHub
+repositories, which corresponds to the four objectives of this project.
+Specifically: 
+\begin{itemize}
+    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
+    \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
+    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
+\end{itemize}
 
 This report is structured as follows: Section 3 introduces the logical and
 physical system architecture adopted in this project, followed by four core
@@ -3571,16 +3654,6 @@ improve the labelling accuracy of the dataset.
 \newpage
 \addcontentsline{toc}{section}{Appendix}
 \section*{Appendix}
-
-\subsubsection*{GitHub Repositories}
-The code scripts of this project are organized in various GitHub repositories,
-which corresponds to the four frameworks of this project. Specifically: 
-\begin{itemize}
-    \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
-    \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
-    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
-    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
-\end{itemize}
 
 \subsubsection*{LiDAR SLAM Pseudocode}
 This project builds upon an open-source implementation
