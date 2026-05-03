@@ -3647,16 +3647,16 @@ of research and makes the entire journey as engaging as possible.
 One of the key challenges in developing the Machine Learning based signal classification model was not being able to provide true
 ground truth data for training the model. Since any signal level verification was not possible in field conditions the labels were assigned based 
 on the experimental scenarios. For example, signals collected in an open sky environment by facing the antenna upwards was labeled as direct signals to the antenna.
-However, this method has its own limitations. It introduces a inherent source of noise in the labeling because in practice, the nadir antenna may ocassionally receive direct signals
-even when the UAV is hovering at low altitude over bare ground or trees. Same might happen for the upward facing or the zenith antenna. Occassional signals reflected from the ground or trees
+However, this method has its own limitations. It introduces an inherent source of noise in the labeling because in practice, the nadir antenna may occasionally receive direct signals
+even when the UAV is hovering at low altitude over bare ground or trees. The same might happen for the upward facing or the zenith antenna. Occasional signals reflected from the ground or trees
 can make the dataset noisy for this antenna. This mislabelling is a likely contributor to classification error observed in the confusion matrix. The problem persists particularly
 for the boundary cases which share similar characteristics between the classes. 
 
 Furthermore, the class imbalance was another present in the dataset. The data collection scenarios for the tree cases were not equal. The distribution of the satellite geometry also
-skewed the dataset for each class. A strategy to balance class weight was applied through the pre processing of the data. Althoug it mitigates teh imbalance to some extent, it does not
-remove the skewness or the underlying distribution issue fully. This could made the model overly sensitive to the minority class samples. In future, in order to mitigate the labelling issue
+skewed the dataset for each class. A strategy to balance class weight was applied through the pre-processing of the data. Although it mitigates the imbalance to some extent, it does not
+remove the skewness or the underlying distribution issue fully. This could make the model overly sensitive to the minority class samples. In the future, in order to mitigate the labelling issue
 fully, more rigorous data collection can be conducted. One method can be to operate the UAV for longer for data collection with same epoch size for each of the cases. Another strategy could
-to stabilise the UAV fully in hovering mode before begining the data collection. 
+be to stabilize the UAV fully in hovering mode before beginning the data collection. 
 
 
 % --- Appendix ---
