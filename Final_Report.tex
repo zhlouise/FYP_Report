@@ -274,6 +274,27 @@ optimal trajectory planning and environment mapping. An additional LiDAR-based
 3D canopy map will also provide the critical spatial reference to validate any
 vegetation parameters obtained through the GNSS-R framework.
 
+The GNSS-R framework or approach can characterise the reflected signals 
+through observable parameters such as the carrier to Noise Ratio ($C/N_0$), however
+the relationship between measurements and the terrain type is complex and non-linear. This complex
+relationship makes purely traditional and analytical modelling approaches difficult to implement. 
+Therefore, a machine learning based approach can complement the GNSS-R framework to make more precise modelling of the measurements.
+Recent studies have shown that machine learning models are well suited to explore the multi dimensional nature of GNSS-R measurements.
+A recent study on neural network based approach for spaceborne GNSS-R data has demonstrated to achieve high prediction reslts for Vegetation Water Content (VWC) 
+when compared to reference values \cite{chen2024new}. This shows the potential to utilize Machine Learning based modelling for GNSS measurements in different
+scenarios. In the context of signal classification and vegetation boundary detection, Machine Learning remains an unexplored technique. Therefore, this
+project aims to utilize the power of machine learning based modelling or classification for the GNSS-R dataset. The raw GNSS signal features available from the 
+dual antenna setup constitutes a rich knowledge set that is suitable for training a machine learning model for classifying signal types and surface characteristics. The 
+figure below shows the difference in characteristics of signals collected with downward and upward facing antennas. Therefore, this project will incorporate a machine learning based 
+approach to classify received signal type and utilize it to detect vegetation boundary incorporation with the Fresnel Zone Locations.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/distibution1.png}
+    \includegraphics[width=0.8\textwidth]{Included_Images/distibution2.png}
+    \caption{Distribution of $C/N_0$ measurements collected with the downward-facing antenna (top) and upward-facing antenna (bottom).}
+\end{figure}
+
 In summary, this project will integrate the technologies of autonomous
 navigation, LiDAR SLAM, GNSS-R, and machine learning, to achieve an intelligent
 and structured remote sensing system for vegetation monitoring. The main
