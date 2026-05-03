@@ -226,8 +226,16 @@ highly dependent on the relative positions of the GNSS satellites and the
 receiver. Consequently, an optimized trajectory can be designed to navigate
 through these specular reflection zones. While manual vegetation monitoring
 flights provide a straightforward solution, having an autonomous system that
-detects reflected areas significantly enhances data collection efficiency and
-enables real-time mission adaptation.
+detects reflected areas significantly enhances data collection efficiency.
+Figure \ref{fig:cpp_over_vegetation} illustrates a coverage path planning result
+over a vegetation area after identifying the specular reflection zones.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Included_Images/cpp_over_vegetation.png}
+    \caption{Coverage path planning result over a vegetation}
+    \label{fig:cpp_over_vegetation}
+\end{figure}
 
 The combination of autonomous path planning and remote sensing lays the
 groundwork for various data fusion methods. By utilizing LiDAR-based
