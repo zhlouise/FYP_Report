@@ -159,12 +159,16 @@ temporal flexibility is further complemented with the benefit of low operational
 cost, rendering it an ideal platform for monitoring regional and urban
 vegetation \cite{Tang2015}. 
 
-Conventionally, UAV remote sensing platforms carry similar instruments to that
-of other remote sensing systems, including radar, LiDAR, and multi-spectral or
-hyperspectral imagery sensors \cite{Tang2015}. However, while imaging
-instruments are susceptible to the influence of lighting and weather
-\cite{Wu2024}, LiDAR devices may occasionally face difficulties penetrating
-through dense canopy \cite{Su2007}. Therefore, it is critical to explore a
+Conventionally, UAV remote sensing platforms carry similar instruments to that of other remote sensing systems, including radar, LiDAR, and multi-spectral or hyperspectral imagery sensors \cite{Tang2015}. Among these sensing methods, LiDAR is particularly suitable for vegetation monitoring as it is able to capture three-dimensional structural information about the environment. With that, valuable spatial data such as canopy height, density, and terrain structure, can be obtained for urban forestry management. Unlike imaging instruments which are susceptible to the influence of lighting and weather, LiDAR measurements are less sensitive to varying lighting conditions and more robust against visually repetitive scenes \cite{Wu2024, jiang2025gps}. Thereby providing reliable geometric reference of tree canopies. 
+
+However, standalone LiDAR measurements are insufficient in a UAV-based applications as the sensor is continuously moving and does not provide spatial context \cite{wang2026multi}. Therefore, it is necessary to integrate LiDAR sensing with a Simultaneous Localization and Mapping (SLAM) framework to estimate the UAV trajectory while incrementally constructing a 3D point cloud map of the environment. Even so, LiDAR-based SLAM primarily relies on relative motion between consecutive scans to estimate the object's trajectory. Given that, the 3D map is susceptible to cumulative drift over time especially in large-scale or long-duration operations. To address this limitation, external global references such as GPS measurements can be integrated into the SLAM framework to provide absolute positioning constraints. This fusion combines the global stability of GPS with the local accuracy of LiDAR, enabling the UAV to maintain robust localization while constructing accurate 3D representations of forest environments.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Included_Images/Nuage_Lidar-003.png}
+    \caption{LiDAR point clouds of vegetation}
+\end{figure}
+
+Despite being a relatively robust sensor for vegetation remote sensing, LiDAR devices may occasionally face difficulties penetrating through dense canopy \cite{Su2007}. Therefore, it is critical to explore a
 robust sensing technique that is suitable for UAVs in terms of payload and power
 consumption to complement the existing instruments. Recently, the technique of
 GNSS-R is receiving increasing interest in the field of remote sensing. GNSS-R
@@ -1836,6 +1840,21 @@ By referring to the mean covariance from all dataset, covariance threshold is se
         \caption{Data 6}
     \end{subfigure}
     \caption{Point cloud features and trajectories from pose graph SLAM with GPS}
+\end{figure}
+
+With the combination of LiDAR odometry (Fast-LIO) and a pose graph SLAM system with GPS (PGO+GPS), distinct 3D point cloud features can be obtained in experimental areas where tree canopies and bare ground are well defined. In this case, the data can provide geometric reference for GNSS signals to cross validate whether the reflected signal from the satellite belongs to the ground, water surfaces, or tree canopies. 
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SLAM_anno_FL.png}
+        \caption{Fast-LIO}
+    \end{subfigure}
+    \par\medskip
+    \begin{subfigure}{0.65\textwidth}
+        \includegraphics[width=\textwidth]{Included_Images/SLAM_anno_pgo.png}
+        \caption{PGO+GPS}
+    \end{subfigure}
+    \caption{Odometry and pose graph SLAM results that capture distinguish features such as bare ground and tree canopies}
 \end{figure}
 
 
