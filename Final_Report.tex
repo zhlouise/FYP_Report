@@ -186,12 +186,36 @@ such as a UAV.
 Recent research has demonstrated the potential of integrating GNSS-R techniques
 with UAVs through a UAV-based GNSS-R system for water body detection and flood
 mapping \cite{app10010210}. Not only does this application demonstrate the
-capability of obtaining high-resolution, flexible measurements onboard
-low-altitude UAV platforms, but it also established UAV-mounted GNSS-R as a
-promising tool for monitoring dynamic environmental conditions. However, while
-existing systems are yet to be developed specifically for vegetation monitoring
-purposes, they also often lack fully autonomous navigation capabilities.
-Therefore, this project aims to address this gap through both the development of
+capability of obtaining high-resolution, but it also establishes UAV-mounted
+GNSS-R as a promising tool for monitoring dynamic environmental conditions.
+However, the effectiveness of UAV-based remote sensing is inherently tied to the
+efficiency of the UAV flight path. Traditionally, UAV remote sensing missions
+rely on predefined lawnmower patterns or manual piloting, which is not optimal
+for dense vegetation or for identifying complex GNSS signal-reflected areas
+\cite{GALCERAN20131258}. Consequently, path planning serves as a critical bridge
+in vegetation monitoring by providing optimized flight paths in order to
+retrieve ground parameters. Therefore, implementing coverage path planning (CPP)
+algorithms is necessary for autonomous navigation to survey the entire area of
+interest and consistently receive GNSS-R signals \cite{Cabreira2019}.
+
+For GNSS-R applications specifically, the geometry of the reflected signal is
+highly dependent on the relative positions of the GNSS satellites and the
+receiver. Consequently, an optimized trajectory can be designed to navigate
+through these reflected signal areas. While existing UAV systems perform manual
+vegetation monitoring, having an autonomous system that detects reflected areas
+significantly increases the signal-to-noise ratio of the data. 
+
+The combination of autonomous path planning and remote sensing lays the
+groundwork for various data fusion methods. By utilizing LiDAR-based
+Simultaneous Localization and Mapping (SLAM), a UAV can simultaneously navigate
+an unknown canopy and generate a high-resolution map of the
+vegetation. This point cloud map provides the necessary context for interpreting
+GNSS-R signals, allowing researchers to correlate signal strengths with
+vegetation characteristics. Therefore, the development of an intelligent
+trajectory planning framework is not merely a logistic solution but also an
+innovative solution that aims to enhance terrestrial remote sensing.
+
+As a result, this project aims to address this gap through both the development of
 a robust GNSS-R framework for vegetation remote sensing and the integration of
 optimal trajectory planning and environment mapping. An additional LiDAR-based
 3D canopy map will also provide the critical spatial reference to validate any
