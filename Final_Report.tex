@@ -3520,26 +3520,37 @@ clouds in PGO SLAM.
 \end{figure}
 
 \subsubsection{GNSS-R}
-Through processing the data obtained during the first half of this project, one
-of the most important issue that arose was the fact that some results did not
-indicate obvious conclusions. For example, as demonstrated in Figure \ref{GNSS-R
-Confusing Result}, the FFZs of $C/N_0$ ratios do not display clear and
-conclusive results, as opposed to the observations shown in the Results and
-Discussion section. Particularly, this is due to the fact that not
-all the FFZs shown here actually exist due to non-reflected signals received by
-the bottom antenna assumed to be reflected from the ground. To solve this issue,
-machine learning approaches will be employed to extract only the reflected
-signals from the nadir antenna observations.
+The most common difficulty faced during the project was the inability of
+selected GNSS measurement parameters to yield conclusive results. Sometimes this
+is caused by the fact that the selected parameters are not sensitive enough to
+the ground features, while other times it is caused by noise present in the
+dataset. For example, as demonstrated in Figure \ref{GNSS-R Confusing Result},
+the plot of $C/N_0$ ratios over FFZs failed to show clear boundaries between
+water surfaces, bare soil, and vegetation canopy. This inconsistency with the
+clear correlations demonstrated previously in Results and Discussion is caused
+by the inclusion of many non-reflected signals received by the bottom antenna.
+Particularly, the data included for analysis was contaminated with GNSS signals
+received during takeoff and landing, where the proximity between the ground and
+the nadir antenna renders it almost impossible for the signals received to be
+ground-reflected. 
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{Included_Images/GNSS_R_FFZ_Confusing_Result.png}
-    \caption{Example of inconclusive results.}
+    \includegraphics[width=0.75\textwidth]{Included_Images/KeyExperiment_GNSSR.png}
+    \caption{Example of unclear correlations observed.}
     \label{GNSS-R Confusing Result}
 \end{figure}
-Another issue that occurred was the fact that some dataset was too large to be able to be
-plotted onto the satellite image map. Therefore, for such datasets, key moments will be 
-selected out for analysis individually, while the code for processing those datasets will
-also be optimized with the help of GenAI tools.
+
+After realizing this issue, the data collected during takeoff and landing were
+excluded from the GNSS-R processing framework, which ultimately resulted in the
+clear correlations demonstrated previously in Results and Discussion. 
+
+Beside the difficulties in obtaining conclusive results, this project was a
+continuous trial-and-error process in problem-solving, ranging from debugging
+data-processing codes to designing suitable GNSS measurement parameters.
+Although time and energy-consuming, this iterative process allowed the extensive
+practice of creative and critical thinking, which lies in the heart of the art
+of research and makes the entire journey as engaging as possible.
 
 \subsubsection{Machine Learning}
 One of the main difficulties currently in this project is not being able to collect true 
@@ -3558,13 +3569,13 @@ improve the labelling accuracy of the dataset.
 \section*{Appendix}
 
 \subsubsection*{GitHub Repositories}
-The code scripts of this project are organized in various GitHub repositories, which
-aligns with different frameworks of this project. Specifically: 
+The code scripts of this project are organized in various GitHub repositories,
+which corresponds to the four frameworks of this project. Specifically: 
 \begin{itemize}
-    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
-    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
     \item Path Planning: \url{https://github.com/sashenkagamage/canopix.ai} 
     \item LiDAR SLAM: \url{https://github.com/A4paper2003/catkin_scpgo_ws}
+    \item GNSS-R: \url{https://github.com/zhlouise/UAV_GNSS-R}
+    \item Machine Learning: \url{https://github.com/gd-Sahat/FYP-ML/tree/main}
 \end{itemize}
 
 \subsubsection*{LiDAR SLAM Pseudocode}
